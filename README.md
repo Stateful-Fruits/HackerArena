@@ -1,2 +1,0 @@
-# HackerArena
-Coding PvP
