@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './Styles/index.css';
 import App from './App';
 import About from './Components/About';
-import Home from './Components/Home'
+import Home from './Containers/Home'
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -41,6 +41,7 @@ ReactDOM.render(
       <App>
         <Route exact path="/" component={Home}/>
         <Route exact path="/About" component={About}/>
+        {/* <Route exact path="/GameRoom" component={GameRoom}/> */}
       </App>
     </ConnectedRouter>
   </Provider>,
