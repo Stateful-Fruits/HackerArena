@@ -1,0 +1,40 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css';
+#ace-editor { 
+  
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 50vw;
+  height: 500px;
+}
+
+#submit {
+  position: absolute;
+  top: 50%;
+  left: 500px;
+}
+#aceConsole {
+  list-style-type: none;
+  display : flex;
+  flex-direction: column;
+  /* list-style-position: outside; */
+  float: left;
+  right: 50%;
+  height: 500px;
+  width: 50vw;
+  background-color: black;
+  padding-top: 5px;
+  padding-left: 10px;
+  overflow: scroll;
+}
+li:before {
+  content: "\00BB \0020";
+}
+li {
+  color: greenyellow;
+  text-align: left;
+}
+button {
+  font-size: 15px;
+}
