@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './Styles/index.css';
 import App from './App';
+import About from './Components/About';
+import Home from './Components/Home'
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -31,20 +33,6 @@ const store = createStore(
 
 // Now you can dispatch navigation actions from anywhere!
 // store.dispatch(push('/foo'))
-
-const Home = (props) => (
-  <div>
-    <button onClick={ () => store.dispatch(push('/About')) }><h1>About</h1></button>
-    <h2>Welcome to Hacker Arena</h2>
-  </div>
-);
-
-const About = (props) => (
-  <div>
-    <button onClick={ () => store.dispatch(push('/')) }><h1>Home</h1></button>
-    <h2>This is a game for coders to compete against each other!</h2>
-  </div>
-);
 
 ReactDOM.render(
   <Provider store={store}>
