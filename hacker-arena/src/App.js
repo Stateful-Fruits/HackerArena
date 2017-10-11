@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
+import fire from './firebase';
+import fillDb from './fillDb'
 import './Styles/App.css';
 
 class App extends Component {
+
+  componentWillMount() {
+    // fillDb();
+  }
+
   render() {
     return (
       <div className="App">
