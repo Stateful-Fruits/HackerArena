@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-router-redux';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
-const GameRoomPreview = ({ gameRoom }) => (
+const GameRoomPreview = ({ dispatch, gameRoom }) => (
   <div>
     <h4>{ gameRoom.roomName }</h4>
-    This is a game room preview!!!
-    <button>Join Game</button>
+    <span> This is a game room preview!!! </span>
+    <button onClick={ () => dispatch(push('/About')) }>
+      <h3>Join Game</h3>
+    </button>
   </div>
 );
 
-export default GameRoomPreview;
+export default connect()(GameRoomPreview);
