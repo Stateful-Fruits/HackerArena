@@ -11,18 +11,18 @@ const sampleGameRooms = [
   {roomName: 'David\'s Game'},
 ];
 
-const Home = (props) => (
+const Home = ({ gameRooms, dispatch }) => (
   <div>
-    <button onClick={ () => props.dispatch(push('/About')) }><h1>About</h1></button>
+    <button onClick={ () => dispatch(push('/About')) }><h1>About</h1></button>
     <h2>Welcome to Hacker Arena</h2>
     <GameRoomList 
-      gameRooms={props.gameRooms || sampleGameRooms}
+      gameRooms={gameRooms}
     />
   </div>
 );
 
 const mapStateToProps = (state) => ({
-  gameRooms: state.gameRooms
+  gameRooms: sampleGameRooms
 });
 
 // const mapDispatchToProps = () => {
