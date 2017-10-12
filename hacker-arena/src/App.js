@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import fire from './Firebase/firebase';
 import populateDb from './Firebase/populateDb';
 import './Styles/App.css';
-
 import updateGameRooms from './Actions/updateGameRooms';
+import CodeEditor from './Containers/CodeEditor.js';
 
 class App extends Component {
 
