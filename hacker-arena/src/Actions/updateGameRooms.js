@@ -1,7 +1,7 @@
 const updateGameRooms = (gameRooms) => {
   return ({
     type: 'UPDATE_GAMEROOMS',
-    gameRooms 
+    payload: { gameRooms }
   })
 };
 
