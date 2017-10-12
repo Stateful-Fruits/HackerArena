@@ -23,7 +23,7 @@ class CodeEditor extends React.Component {
   handleSubmit(){
     //TEST SUITE
     // place here
-
+    
     // ACE CONSOLE
     let code = this.ace.editor.getValue();
     // Function to handle console.logs in the aceConsole
