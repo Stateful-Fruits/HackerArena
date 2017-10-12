@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-
+import GameRoom from './GameRoom'
 import GameRoomList from '../Components/GameRooms/GameRoomList';
 
 import updateGameRooms from '../Actions/updateGameRooms';
