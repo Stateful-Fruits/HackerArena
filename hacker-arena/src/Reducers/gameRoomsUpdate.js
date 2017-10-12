@@ -1,4 +1,4 @@
-const updateGameRooms = (state = [], action) => {
+const updateGameRooms = (state = {gameRooms: []}, action) => {
   console.log('state passed to reducer: ', state);
   switch(action.type) {
     case 'UPDATE_GAMEROOMS':

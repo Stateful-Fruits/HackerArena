@@ -17,7 +17,7 @@ class Home extends Component {
   componentWillMount() {
     console.log(this.props);
     let { updateGameRooms } = this.props;
-    updateGameRooms();
+    updateGameRooms(sampleGameRooms);
   }
 
   render() {
@@ -43,7 +43,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  updateGameRooms: () => dispatch(updateGameRooms(sampleGameRooms)),
+  updateGameRooms: (sampleGameRooms) => dispatch(updateGameRooms(sampleGameRooms)),
   navigateToAbout: () => dispatch(push('/About'))
 });
 
