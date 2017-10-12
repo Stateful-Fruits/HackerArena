@@ -4,7 +4,7 @@ import './Styles/index.css';
 import App from './App';
 import About from './Components/About';
 import Home from './Containers/Home';
-import GameRoom from './Components/GameRooms';
+import GameRoom from './Containers/GameRoom';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';

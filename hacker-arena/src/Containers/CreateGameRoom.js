@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 //import fire from '../firebase';
 import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
-import db from '../db';
+import db from '../Firebase/db';
 import { push } from 'react-router-redux';
 
 class CreateGameRoom extends React.Component {
@@ -24,7 +24,7 @@ class CreateGameRoom extends React.Component {
       const room = {
         challengerName: '',
         challengerTestsPassed: 0,
-        creatorName: this.props.user,
+        creatorName: 'ron' || this.props.user,
         creatorTestsPassed: 0,
         gameStarted: false,
         players: 1,
