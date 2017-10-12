@@ -3,6 +3,6 @@ const updateGameRooms = (gameRooms) => {
     type: 'UPDATE_GAMEROOMS',
     gameRooms 
   })
-}
+};
 
 export default updateGameRooms;
