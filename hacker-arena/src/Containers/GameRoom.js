@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CodeEditor from './CodeEditor.js'; //From Simon
-import Submit from '../Submit.js'; //From Simon
+import TestSuite from '../Components/TestSuite.js'; //From Simon
 
 const GameRoom = (props) => {
 
-  var message, editor, submit, testpassed;
+  var message, editor, testSuite, testpassed;
   var players = props.players || 1;
   if (players === 2) {
     message = 'COMPETE';
     editor = <CodeEditor/>;
-    submit = <Submit/>;
+    testSuite = <TestSuite/>;
     testpassed = (
       <div>
         <div>Challenger {props.challengerName} Passed {props.challengerTestPassed}</div>
@@ -20,7 +20,7 @@ const GameRoom = (props) => {
   } else {
     message = 'Waiting for one more player';
     editor = null;
-    submit = null;
+    testSuite = null;
     testpassed = null;
   }
 
@@ -28,7 +28,7 @@ const GameRoom = (props) => {
     <div>{message}</div>
     {testpassed}
     {editor}
-    {submit}
+    {testSuite}
   </div>
 }
 

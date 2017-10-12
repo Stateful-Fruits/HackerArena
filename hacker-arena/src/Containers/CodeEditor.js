@@ -2,11 +2,18 @@ import ReactAce from 'react-ace-editor';
 import React from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import runTestsOnUserAnswer from '../ToyProblemTesting/testUserAnswer.js';
+import Disruptions from '../Disruptions/disruptions';
+import updateTestSuite from '../Actions/updateTestSuite';
+
 import '../Styles/CodeEditor.css';
  
 class CodeEditor extends React.Component {
   constructor() {
     super();
+    this.state = {
+      testStatus: ""
+    }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
   }
@@ -22,16 +29,18 @@ class CodeEditor extends React.Component {
   // SET TEST RESULTS IN ROOM DATABASE 
 
   handleSubmit(){
+    let code = this.ace.editor.getValue();
     //TEST SUITE
     // place here
-    
+    // testStatus object// actual,expected,passed,inputs
+    this.setState({testStatus: runTestsOnUserAnswer(code,this.props.testCases)});
     // ACE CONSOLE
-    let code = this.ace.editor.getValue();
     // Function to handle console.logs in the aceConsole
     let newLog = function(...theArgs){
       let results = "";
       let args = [].slice.call(arguments);
       args.forEach( argument => {
+      // eslint-disable-next-line  
         results += eval("'" + argument + "'");
       })
       //Replace with append to aceConsole
@@ -77,4 +86,17 @@ class CodeEditor extends React.Component {
   }
 }
 
-export default CodeEditor;
+const mapStateToProps = (state) => {
+  console.log('mapped state to props', state);
+  return ({
+    // ROOM DATA? 
+    // room.testData
+    // testCases: state.gameRooms.testCases
+  })
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  updateTestSuite: () => dispatch(updateTestSuite(this.state.testStatus))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CodeEditor);
