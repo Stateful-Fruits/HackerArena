@@ -1,7 +1,7 @@
-const updateGameRooms = (state = {gameRooms: []}, action) => {
-  console.log('state passed to reducer: ', state);
+const updateGameRooms = (state = {}, action) => {
   switch(action.type) {
     case 'UPDATE_GAMEROOMS':
+      // return Object.assign({}, state, { gameRooms: action.gameRooms });
       return Object.assign({}, state, { gameRooms: action.gameRooms });
     default:
       return state;

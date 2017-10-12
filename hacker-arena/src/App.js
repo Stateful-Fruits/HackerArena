@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import fire from './Firebase/firebase';
 import populateDb from './Firebase/populateDb';
 import './Styles/App.css';
@@ -33,4 +34,4 @@ const mapDispatchToProps = (dispatch) => ({
   updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms))
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default withRouter(connect(null, mapDispatchToProps)(App));
