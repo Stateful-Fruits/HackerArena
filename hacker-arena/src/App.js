@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import fire from './firebase';
-import fillDb from './fillDb'
+import fire from './Firebase/firebase';
+import populateDb from './Firebase/populateDb';
 import './Styles/App.css';
 
 import updateGameRooms from './Actions/updateGameRooms';
@@ -9,7 +9,7 @@ import updateGameRooms from './Actions/updateGameRooms';
 class App extends Component {
 
   componentWillMount() {
-    // fillDb();
+    // populateDb();
   }
 
   render() {
