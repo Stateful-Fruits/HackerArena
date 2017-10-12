@@ -8,7 +8,8 @@ class GameRoom extends React.Component {
     var props = this.props;
     var message, editor, testSuite, testpassed;
     var players = this.props.players || 1;
-    if (players === 2) {
+    // if (players === 2) {
+    if (true) {
       message = 'COMPETE';
       editor = <CodeEditor/>;
       testSuite = <TestSuite/>;
@@ -33,15 +34,20 @@ class GameRoom extends React.Component {
     </div>
   }
 }
-const mapStateToProps = (state) => ({
-  challengerName: state.gameRoom.challengerName,
-  challengerTestsPassed: state.gameRoom.challengerTestsPassed,
-  creatorName: state.gameRoom.creatorName,
-  creatorTestsPassed: state.gameRoom.creatorTestsPassed,
-  gameStarted: state.gameRoom.gameStarted,
-  players: state.gameRoom.players,
-  problemID: state.gameRoom.problemID,
-  spectators: state.gameRoom.spectators
-})
-
+const mapStateToProps = (state) => {
+  console.log(`
+    state passed to GameRoom: ${JSON.stringify(state.updateCurrentRoom.currentRoom)}
+  `);
+  let current = state.updateCurrentRoom.currentRoom;
+  return ({
+  challengerName: current.challengerName,
+  challengerTestsPassed: current.challengerTestsPassed,
+  creatorName: current.creatorName,
+  creatorTestsPassed: current.creatorTestsPassed,
+  gameStarted: current.gameStarted,
+  players: current.players,
+  problemID: current.problemID,
+  spectators: current.spectators
+});
+};
 export default connect(mapStateToProps)(GameRoom);

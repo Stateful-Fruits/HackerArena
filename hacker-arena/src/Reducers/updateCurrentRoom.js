@@ -8,7 +8,7 @@
 //       return state;
 //   }
 // };
-const updateCurrentRoom = (state, action) => {
+const updateCurrentRoom = (state = {}, action) => {
   switch (action.type) {
     case 'UPDATE_GAME_ROOM':
       var newState = Object.assign({}, state);

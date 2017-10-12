@@ -4,8 +4,9 @@ import { push } from 'react-router-redux';
 
 import fire from '../Firebase/firebase';
 
-import GameRoom from './GameRoom'
+import GameRoom from './GameRoom';
 import GameRoomList from '../Components/GameRooms/GameRoomList';
+import CreateGameRoom from './CreateGameRoom';
 
 import updateGameRooms from '../Actions/updateGameRooms';
 
@@ -29,14 +30,15 @@ class Home extends Component {
   }
 
   render() {
-    let { gameRooms, navigateToAbout } = this.props;
+    let { gameRooms, navigateToAbout, navigateToGameRoom } = this.props;
     return gameRooms ? (
-       <div>
-         <button onClick={ navigateToAbout }><h1>About</h1></button>
+       <div>    
          <h2>Welcome to Hacker Arena</h2>
+         <CreateGameRoom />
          <GameRoomList 
            gameRooms={gameRooms}
            navigateToAbout={navigateToAbout}
+           navigateToGameRoom={navigateToGameRoom}
          />
        </div>
       ) : null;
@@ -52,7 +54,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   updateGameRooms: (sampleGameRooms) => dispatch(updateGameRooms(sampleGameRooms)),
-  navigateToAbout: () => dispatch(push('/About'))
+  navigateToAbout: () => dispatch(push('/About')),
+  navigateToGameRoom: () => dispatch(push('/GameRoom'))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

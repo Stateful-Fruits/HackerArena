@@ -6,6 +6,7 @@ import populateDb from './Firebase/populateDb';
 import './Styles/App.css';
 import updateGameRooms from './Actions/updateGameRooms';
 import CodeEditor from './Containers/CodeEditor.js';
+import { push } from 'react-router-redux';
 
 class App extends Component {
 
@@ -14,12 +15,18 @@ class App extends Component {
   }
 
   render() {
+    let { navigate } = this.props;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Welcome to Team Stateful Fruits</h1>
         </header>
-        <CodeEditor />
+        <button onClick={ () => navigate('/') }>
+          <h3>Home</h3>
+        </button>
+        <button onClick={ () => navigate('/About') }>
+          <h3>About</h3>
+        </button>
         <p className="App-intro">
           Hello Team!!!
         </p>
@@ -32,7 +39,8 @@ class App extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms))
+  updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms)),
+  navigate: (route) => dispatch(push(route))
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(App));
