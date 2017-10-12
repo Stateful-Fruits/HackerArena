@@ -7,7 +7,7 @@ const GameRoomList = ({ gameRooms, navigateToAbout }) => (
     { gameRooms.map((room, inx) => (
       <GameRoomPreview 
         gameRoom={room}
-        key={room.roomName + inx}
+        key={room.key + inx}
         navigateToAbout={navigateToAbout}
       />
     ))}
