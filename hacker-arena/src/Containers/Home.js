@@ -22,11 +22,7 @@ const Home = ({ gameRooms, dispatch }) => (
 );
 
 const mapStateToProps = (state) => ({
-  gameRooms: sampleGameRooms
+  gameRooms: state.gameRooms
 });
-
-// const mapDispatchToProps = () => {
-// };
-
 
 export default connect(mapStateToProps)(Home);

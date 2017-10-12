@@ -1,18 +1,10 @@
-// Put import all the reducers here
-
 import { combineReducers } from 'redux'
 
-const testReduer = (state = 'SHOW', action = {type: 'TEST', payload: 'success!'}) => {
-  switch(action.type) {
-    case 'TEST':
-      return state;
-    default:
-      return state;
-  }
-};
+// Import all of our reducers here
+import gameRoomsUpdate from './gameRoomsUpdate';
 
 const appReducers = combineReducers({
-  testReduer
+  gameRoomsUpdate
 });
 
 export default appReducers;
