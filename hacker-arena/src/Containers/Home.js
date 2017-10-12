@@ -4,6 +4,7 @@ import { push } from 'react-router-redux';
 
 import fire from '../Firebase/firebase';
 
+import GameRoom from './GameRoom'
 import GameRoomList from '../Components/GameRooms/GameRoomList';
 
 import updateGameRooms from '../Actions/updateGameRooms';

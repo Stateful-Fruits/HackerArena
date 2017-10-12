@@ -1,5 +1,5 @@
 import React from 'react';
-import './Styles/TestSuite.css';
+import '../Styles/TestSuite.css';
 
 const TestSuite = props => {
     return(
