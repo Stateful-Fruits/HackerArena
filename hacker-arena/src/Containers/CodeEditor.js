@@ -8,6 +8,7 @@ class CodeEditor extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClear =  this.handleClear.bind(this);
   }
 
   componentDidMount(){
@@ -55,6 +56,9 @@ class CodeEditor extends React.Component {
     // $("#ace-editor").css({"background": "black", "color": "black"})
   }
   
+  handleClear(){
+    $('#aceConsole').empty();
+  }
 
   render() {
     return (
@@ -67,6 +71,7 @@ class CodeEditor extends React.Component {
           />
         <button onClick={this.handleSubmit}> SUBMIT </button>
         <ul id="aceConsole"></ul>
+        <button onClick={this.handleClear}> CLEAR CONSOLE </button>
       </div>
     );
   }
