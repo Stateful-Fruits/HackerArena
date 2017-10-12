@@ -18,6 +18,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Welcome to Team Stateful Fruits</h1>
         </header>
+        <CodeEditor />
         <p className="App-intro">
           Hello Team!!!
         </p>
