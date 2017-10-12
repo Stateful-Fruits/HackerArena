@@ -4,6 +4,8 @@ import './Styles/index.css';
 import App from './App';
 import About from './Components/About';
 import Home from './Containers/Home'
+import User from './Containers/User'
+
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -41,6 +43,8 @@ ReactDOM.render(
       <App>
         <Route exact path="/" component={Home}/>
         <Route exact path="/About" component={About}/>
+        <Route exact path="/User" component={User}/>
+        
         {/* <Route exact path="/GameRoom" component={GameRoom}/> */}
       </App>
     </ConnectedRouter>

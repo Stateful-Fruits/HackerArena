@@ -14,6 +14,8 @@ const sampleGameRooms = [
 const Home = ({ gameRooms, dispatch }) => (
   <div>
     <button onClick={ () => dispatch(push('/About')) }><h1>About</h1></button>
+    <button onClick={ () => dispatch(push('/User')) }><h1>ADD A GAME</h1></button>
+
     <h2>Welcome to Hacker Arena</h2>
     <GameRoomList 
       gameRooms={gameRooms}
