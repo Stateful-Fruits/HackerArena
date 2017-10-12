@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import fire from '../firebase';
+//import fire from '../firebase';
 import db from '../db';
 import { push } from 'react-router-redux';
 
