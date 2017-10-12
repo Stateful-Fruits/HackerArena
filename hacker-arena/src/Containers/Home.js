@@ -10,7 +10,7 @@ import updateGameRooms from '../Actions/updateGameRooms';
 
 class Home extends Component {
   componentWillMount() {
-    let { updateGameRooms, gameRooms } = this.props;
+    let { updateGameRooms } = this.props;
     // reference to firebase db
     let roomsRef = fire.database().ref('rooms');
     // grab and listen for game rooms from firebase db
