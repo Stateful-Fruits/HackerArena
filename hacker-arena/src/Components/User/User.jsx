@@ -5,8 +5,10 @@ const defaultProps = {
     username: ''
 }
 const propTypes = {
+
     value: PropTypes.string.isRequired,
     changeValue: PropTypes.func.isRequired,
+    userSignupRequest: PropTypes.func.isRequired,
 }
 
 
@@ -35,4 +37,4 @@ class User extends Component {
 
 User.defaultProps = defaultProps;
 User.propTypes = propTypes;
-export default User;
+export default connect((state) => { return {} }, { userSignupRequest })(User);
