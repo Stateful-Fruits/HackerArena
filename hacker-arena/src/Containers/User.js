@@ -31,7 +31,7 @@ class User extends Component {
         e.preventDefault();
         let {username} = this.state;
         this.props.login(username);
-        this.setstate({
+        this.setState({
             username: ''
         })
     }
