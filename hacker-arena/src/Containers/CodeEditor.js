@@ -1,13 +1,16 @@
 import ReactAce from 'react-ace-editor';
 import React from 'react';
 import $ from 'jquery';
-import './Styles/CodeEditor.css';
+import { connect } from 'react-redux';
+import '../Styles/CodeEditor.css';
  
 class CodeEditor extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClear =  this.handleClear.bind(this);
   }
+
   componentDidMount(){
     // const editor = this.ace.editor;
     // editor.setTheme("ace/theme/monokai");
@@ -19,28 +22,44 @@ class CodeEditor extends React.Component {
   // SET TEST RESULTS IN ROOM DATABASE 
 
   handleSubmit(){
+    //TEST SUITE
+    // place here
+    
+    // ACE CONSOLE
     let code = this.ace.editor.getValue();
-    // console.log(code);
-    // let answer = (eval(code));
-    try { 
-      $('#aceConsole').append(`<li>${eval(code)}</li>`);
-      //console.log(eval(code));
-    } catch (e) {
-
-      $('#aceConsole').append(`<li>undefined</li>`);
-      // console.log(undefined);
+    // Function to handle console.logs in the aceConsole
+    let newLog = function(...theArgs){
+      let results = "";
+      let args = [].slice.call(arguments);
+      args.forEach( argument => {
+        results += eval("'" + argument + "'");
+      })
+      //Replace with append to aceConsole
+      // return results;
+      // console.log(results);
+      // return results;
+      $('#aceConsole').append(`<li id="log">${results}</li>`);
     }
+
+    let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
+    let newCode = consoleLogChange + code;
+
+    try { 
+      // eslint-disable-next-line
+      $('#aceConsole').append(`<li>${eval(newCode)}</li>`);
+    } catch (e) {
+      $('#aceConsole').append(`<li>undefined</li>`);
+    }
+    // DISRUPTION TESTS
     // $('#canvas').css({"filter": "blur(3px)"})
     // $("#canvas").css({"transform": "scaleX(-1)"});
     // $("#ace-editor").css({"background": "black", "color": "black"})
   }
+  
+  handleClear(){
+    $('#aceConsole').empty();
+  }
 
-  // onChange(newValue, e) {
-  //   console.log(newValue, e);
- 
-  //   const editor = this.ace.editor; // The editor object is from Ace's API
-  //   console.log(editor.getValue()); // Outputs the value of the editor
-  // }
   render() {
     return (
       <div>
@@ -52,7 +71,7 @@ class CodeEditor extends React.Component {
           />
         <button onClick={this.handleSubmit}> SUBMIT </button>
         <ul id="aceConsole"></ul>
-        
+        <button onClick={this.handleClear}> CLEAR CONSOLE </button>
       </div>
     );
   }

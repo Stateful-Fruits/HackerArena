@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CodeEditor from '../CodeEditor'; //From Simon
+import CodeEditor from './CodeEditor.js'; //From Simon
 import Submit from '../Submit.js'; //From Simon
 
 const GameRoom = (props) => {
