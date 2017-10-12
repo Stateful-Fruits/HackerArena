@@ -1,25 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
-=======
 //import fire from '../firebase';
 import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
 import db from '../db';
 import { push } from 'react-router-redux';
->>>>>>> gamecreator
 
 class CreateGameRoom extends React.Component {
   constructor (props) {
     super (props);
-<<<<<<< HEAD
-  }
-  render () {
-    let {Create} = this.props;
-    return (
-      <div>
-        <button onClick={Create}>Create Game Room</button>
-        
-=======
     this.createRoom = this.createRoom.bind(this);
   }
   createRoom () {
@@ -54,28 +42,10 @@ class CreateGameRoom extends React.Component {
     return (
       <div>
         <button onClick={this.createRoom}>Create Game Room</button>
->>>>>>> gamecreator
       </div>
     )
   }
 }
-<<<<<<< HEAD
-//snapshot.key
-const mapStateToProps = (state) => {
-  return {
-
-  }
-}
-
-const mapDispatcherToProps = (dispatcher) => {
-  return {
-
-  }
-}
-
-
-export default connect(mapStateToProps)(CreateGameRoom);
-=======
 const mapStateToProps = (state) => {
   return {
     user: state.user
@@ -89,7 +59,6 @@ const mapDispatcherToProps = (dispatch) => {
   }
 }
 export default connect(mapStateToProps, mapDispatcherToProps)(CreateGameRoom);
->>>>>>> gamecreator
 
 
 // function writeUserData(userId, name, email, imageUrl) {
