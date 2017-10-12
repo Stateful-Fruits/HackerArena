@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 const CreateGameRoom = (props) => {
   return (
     <div>
+      <button onClick={props.Submit}>Create Game Room</button>
 
     </div>
   )
