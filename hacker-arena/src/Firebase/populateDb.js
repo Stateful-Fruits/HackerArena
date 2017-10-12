@@ -2,7 +2,7 @@ import fire from './firebase';
 
 const db = fire.database();
 
-const fillDb = function() {
+const populateDb = function() {
   insertProblems();
   insertUsers();
   insertRooms();
@@ -95,7 +95,7 @@ const insertProblems = function() {
           [7, 8, 9, 1, 2, 3, 4, 5, 6],
           [8, 9, 1, 2, 3, 4, 5, 6, 7],
           [9, 1, 2, 3, 4, 5, 6, 7, 8]]), "Try again!")`]
-    } );
+    });
   
     db.ref('problems').push( {
         title:'Age in 2099',
@@ -168,4 +168,4 @@ const insertRooms = function() {
   rooms.forEach(room => db.ref('rooms').push(room))
 }
 
-export default fillDb;
+export default populateDb;
