@@ -2,8 +2,10 @@ import React from 'react';
 
 const GameRoomPreview = ({ dispatch, gameRoom, navigateToAbout }) => (
   <div>
-    <h4>{ gameRoom.roomName }</h4>
-    <span> This is a game room preview!!! </span>
+    <h4>Host: { gameRoom.creatorName }</h4>
+    <div>
+      Spectators: { gameRoom.spectators }
+    </div>
     <button onClick={ navigateToAbout }>
       <h3>Join Game</h3>
     </button>

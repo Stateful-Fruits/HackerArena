@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import fire from './firebase';
-import fillDb from './fillDb'
+import fillDb from './fillDb';
 import './Styles/App.css';
 
 import updateGameRooms from './Actions/updateGameRooms';
