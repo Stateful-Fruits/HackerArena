@@ -8,15 +8,15 @@
 //       return state;
 //   }
 // };
-const CreateGameRoom = (state, action) => {
+const updateCurrentRoom = (state, action) => {
   switch (action.type) {
-    case 'CREATE_GAME_ROOM':
+    case 'UPDATE_GAME_ROOM':
       var newState = Object.assign({}, state);
-      newState.gameRoom = action.payload;
+      newState.currentRoom = action.payload;
       return newState;
     default:
       return state;
   }
 }
 
-export default CreateGameRoom;
+export default updateCurrentRoom;

@@ -1,6 +1,7 @@
 // Put import all the reducers here
 
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import updateCurrentRoom from './updateCurrentRoom';
 
 const testReduer = (state = 'SHOW', action = {type: 'TEST', payload: 'success!'}) => {
   switch(action.type) {
@@ -12,7 +13,8 @@ const testReduer = (state = 'SHOW', action = {type: 'TEST', payload: 'success!'}
 };
 
 const appReducers = combineReducers({
-  testReduer
+  testReduer,
+  updateCurrentRoom
 });
 
 export default appReducers;
