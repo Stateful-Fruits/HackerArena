@@ -36,9 +36,8 @@ class GameRoom extends React.Component {
 }
 const mapStateToProps = (state) => {
   console.log(`
-    state passed to GameRoom: ${JSON.stringify(state.updateCurrentRoom.currentRoom)}
-  `);
-  let current = state.updateCurrentRoom.currentRoom;
+    state passed to GameRoom: `, state);
+  let current = state.currentRoom;
   return ({
   challengerName: current.challengerName,
   challengerTestsPassed: current.challengerTestsPassed,
