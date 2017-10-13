@@ -29,15 +29,7 @@ class Home extends Component {
     });
 
     db.Problems.once('value', data => {
-      const problemsData = data.val();
-      const problemKeys = Object.keys(problemsData);
-      const problems = problemKeys.map((problemKey) => {
-        const problemData = problemsData[problemKey];
-        problemData.key = problemKey;
-        return problemData
-      });
-
-    updateProblems(problems);  
+      updateProblems(data.val());  
     });
 
   }
@@ -60,7 +52,6 @@ class Home extends Component {
 const mapStateToProps = (state) => {
   console.log('map state to props state passed: ', state);
   return ({
-  problems: state.problems,
   gameRooms: state.gameRooms
 });
 };

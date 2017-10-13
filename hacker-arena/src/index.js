@@ -5,6 +5,11 @@ import App from './App';
 import About from './Components/About';
 import Home from './Containers/Home';
 import GameRoom from './Containers/GameRoom';
+<<<<<<< HEAD
+=======
+import User from './Containers/User'
+import SignUp from './Containers/SignUp'
+>>>>>>> dev
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
@@ -13,7 +18,7 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { Route } from 'react-router';
 
-import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
+import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 
 import reducers from './Reducers/index';
 
@@ -44,6 +49,8 @@ ReactDOM.render(
       <App>
         <Route exact path="/" component={Home}/>
         <Route exact path="/About" component={About}/>
+        <Route exact path="/User" component={User}/>
+        <Route exact path="/SignUp" component={SignUp}/>
         <Route exact path="/GameRoom/:roomId" component={GameRoom}/>
         <Route exact path="/Spectate/:roomId" component={SpectatorRoom} />
       </App>
