@@ -5,6 +5,8 @@ import TestSuite from '../Components/TestSuite.js'; //From Simon
 import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
 import fire from '../Firebase/firebase';
 
+import '../Styles/GameRoom.css';
+
 class GameRoom extends React.Component {
   componentWillMount () {
     fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
@@ -49,12 +51,14 @@ class GameRoom extends React.Component {
       testpassed = null;
     }
 
-      return <div>
-        <div>{message}</div>
-        {testpassed}
-        {editor}
-        {testSuite}
+    return <div>
+      <div>{message}</div>
+      {testpassed}
+      <div id="editorAndTestSuite">
+      {editor}
+      {testSuite}
       </div>
+    </div>
   }
 }
 const mapStateToProps = (state) => {
