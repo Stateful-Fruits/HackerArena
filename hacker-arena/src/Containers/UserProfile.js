@@ -6,7 +6,7 @@ class UserProfile extends React.Component {
     let props = this.props;
     return (
       <div>
-        <div>username: {props.username}</div>
+        <div>Username: {props.username}</div>
         <div>Won: {props.won}</div>
         <div>Lost: {props.lost}</div>
       </div>
