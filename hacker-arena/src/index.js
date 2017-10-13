@@ -51,15 +51,12 @@ ReactDOM.render(
         <Route exact path="/About" component={About}/>
         <Route exact path="/User" component={User}/>
         <Route exact path="/SignUp" component={SignUp}/>
-<<<<<<< HEAD
         <Route exact path="/GameRoom/:roomId" component={GameRoom}/>
         <Route exact path="/Spectate/:roomId" component={SpectatorRoom} />
-=======
         <Route exact path="/Login" component={Login}/>
 
         
         {/* <Route exact path="/GameRoom" component={GameRoom}/> */}
->>>>>>> mvp1.5
       </App>
     </ConnectedRouter>
   </Provider>,

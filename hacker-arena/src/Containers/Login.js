@@ -28,7 +28,7 @@ class SignUp extends React.Component {
             var email = this.state.email;
             var password = this.state.password
             firebase.auth().signInWithEmailAndPassword(email, password).then((val)=> {
-                navigate('/Gameroom')
+                navigate('/GameRoom')
             
             })
                 .catch(function(error) {
