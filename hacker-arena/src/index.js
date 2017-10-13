@@ -5,11 +5,8 @@ import App from './App';
 import About from './Components/About';
 import Home from './Containers/Home';
 import GameRoom from './Containers/GameRoom';
-<<<<<<< HEAD
-=======
 import User from './Containers/User'
 import SignUp from './Containers/SignUp'
->>>>>>> dev
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
