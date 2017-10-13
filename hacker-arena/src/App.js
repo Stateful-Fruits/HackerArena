@@ -31,9 +31,6 @@ class App extends Component {
         <button onClick={ () => navigate('/SignUp') }>
           <h3>SignUp/Login</h3>
         </button>
-        <p className="App-intro">
-          Hello Team!!!
-        </p>
         <div>
           { this.props.children }
         </div>

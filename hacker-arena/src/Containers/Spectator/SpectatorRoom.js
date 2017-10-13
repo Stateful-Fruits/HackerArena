@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import SpectatorChat from '../../Components/Spectator/SpectatorChat';
+import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDescription';
+import SpectatorNoGameRoomError from '../../Components/Spectator/SpectatorNoGameRoomError';
 
 class SpectatorRoom extends Component {
   componentWillMount() {
@@ -10,7 +12,8 @@ class SpectatorRoom extends Component {
   }
 
   render() {
-    return (
+    let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    return gameRoom ? (
       <div>
         {/* 
           - need to get the game room information from mapStateToProps
@@ -19,12 +22,16 @@ class SpectatorRoom extends Component {
           spectator to run that players code in the editor's console
           - have a chat for the spectators
         */}
-        <h1>Spectate a game here!!!</h1>
+        <SpectatorGameDescription
+          gameRoom={gameRoom} 
+        />
         <SpectatorEditors 
-          gameRoom={ this.props.gameRooms[this.props.gameRoomId] }
+          gameRoom={gameRoom}
         />
         <SpectatorChat />
       </div>
+    ) : (
+      <SpectatorNoGameRoomError />
     );
   }
 }
