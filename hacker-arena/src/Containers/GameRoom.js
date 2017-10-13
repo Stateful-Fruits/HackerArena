@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import CodeEditor from './CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
 
+import '../Styles/GameRoom.css';
+
 class GameRoom extends React.Component {
   render () {
     var props = this.props;
@@ -29,8 +31,10 @@ class GameRoom extends React.Component {
     return <div>
       <div>{message}</div>
       {testpassed}
+      <div id="editorAndTestSuite">
       {editor}
       {testSuite}
+      </div>
     </div>
   }
 }
