@@ -32,13 +32,10 @@ class GameRoom extends React.Component {
     console.log(this.props);
     let message, editor, testSuite, testpassed;
     let players = this.props.players || 1;
-    let problem = this.props.problem;
     if (players === 2) {
       message = 'COMPETE';
-      editor = <CodeEditor problem={problem}/>;
-      testSuite = <TestSuite problem={problem} 
-                    creatorTestStatus={props.creatorTestStatus}
-                    challengerTestStatus={props.challengerTestStatus}/>; //creatorTestStatus challengerTestStatus problem
+      editor = <CodeEditor currentRoom={props}/>;
+      testSuite = <TestSuite currentRoom={props}/>; //creatorTestStatus challengerTestStatus problem
       testpassed = (
         <div>
           <div>Challenger {props.challengerName} Passed {props.challengerTestPassed}</div>
