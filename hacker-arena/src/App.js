@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import fire from './Firebase/firebase';
-import populateDb from './Firebase/populateDb';
+import populateDb from './Firebase/dbFiller/populateDb';
 import './Styles/App.css';
 import updateGameRooms from './Actions/updateGameRooms';
 import CodeEditor from './Containers/CodeEditor.js';
