@@ -11,9 +11,7 @@
 const updateCurrentRoom = (state = {}, action) => {
   switch (action.type) {
     case 'UPDATE_GAME_ROOM':
-      var newState = Object.assign({}, state);
-      newState.currentRoom = action.payload;
-      return newState;
+      return action.payload;
     default:
       return state;
   }

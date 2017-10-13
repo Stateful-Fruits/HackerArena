@@ -3,7 +3,7 @@ import React from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import runTestsOnUserAnswer from '../ToyProblemTesting/testUserAnswer.js';
-import Disruptions from '../Disruptions/disruptions';
+import Disruptions from './Disruptions/disruptions';
 import updateTestSuite from '../Actions/updateTestSuite';
 
 import '../Styles/CodeEditor.css';

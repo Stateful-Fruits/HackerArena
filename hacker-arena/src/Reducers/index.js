@@ -1,12 +1,14 @@
 // Import all of our reducers here
 import gameRooms from './gameRoomsUpdate';
 import testStatus from './testSuiteUpdate';
-import updateCurrentRoom from './updateCurrentRoom';
+import currentRoom from './updateCurrentRoom';
+import problems from './updateProblems';
 
 const appReducers = ({
   gameRooms,
   testStatus,
-  updateCurrentRoom
+  currentRoom,
+  problems
 });
 
 export default appReducers;
