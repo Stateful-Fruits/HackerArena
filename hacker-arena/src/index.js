@@ -6,6 +6,7 @@ import About from './Components/About';
 import Home from './Containers/Home';
 import GameRoom from './Containers/GameRoom';
 import User from './Containers/User'
+import SignUp from './Containers/SignUp'
 
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
@@ -47,6 +48,7 @@ ReactDOM.render(
         <Route exact path="/About" component={About}/>
         <Route exact path="/GameRoom" component={GameRoom}/>
         <Route exact path="/User" component={User}/>
+        <Route exact path="/SignUp" component={SignUp}/>
         
         {/* <Route exact path="/GameRoom" component={GameRoom}/> */}
       </App>
