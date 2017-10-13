@@ -4,6 +4,7 @@ import {
 } from 'react-redux';
 // import { push } from 'react-router-redux';
 // import {login} from '../Actions/User.js';
+//this Component is for user who join the room without Login/Signup/
 const mapStateToProps = (state) => {
     return {
         isLoginSuccess: state.isLoginSuccess,

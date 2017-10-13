@@ -3,14 +3,10 @@ import ReactDOM from 'react-dom';
 import './Styles/index.css';
 import App from './App';
 import About from './Components/About';
-<<<<<<< HEAD
 import Home from './Containers/Home';
 import GameRoom from './Containers/GameRoom';
-=======
-import Home from './Containers/Home'
 import User from './Containers/User'
 
->>>>>>> mvp1.3
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
