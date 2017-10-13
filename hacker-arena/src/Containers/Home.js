@@ -7,7 +7,7 @@ import fire from '../Firebase/firebase';
 import GameRoom from './GameRoom';
 import GameRoomList from '../Components/GameRooms/GameRoomList';
 import CreateGameRoom from './CreateGameRoom';
-import SignUp from './SignUp';
+
 import updateGameRooms from '../Actions/updateGameRooms';
 
 class Home extends Component {

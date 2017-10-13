@@ -6,25 +6,35 @@ class SignUp extends React.Component {
         this.state = {
             username:''
         }
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onChange =this.onChange.bind(this);
     }
         onChange(e) {
-            this.setState({[e.targe.name]: e.target.value});
+            this.setState({[e.target.name]: e.target.value});
         }
         onSubmit(e) {
-
+console.log('haha')
         }
     render() {
         return (
-            <form onSumbmit= {this.onSumbit.bind(this)}>
+            <form onSumbmit= {this.onSumbit}>
                 <h1>Join in The Game Today!</h1>
                 <h1>SignUp to Create a Game Now!</h1>
                 <div>
                     <label>Username</label>
                     <input
                     value = {this.state.username}
-                    onChange= {this.onChange.bind(this)}
+                    onChange= {this.onChange}
                     type= 'text'
                     name= 'username'
+                    className = 'form-control'
+                    />
+                    <label>Password</label>
+                    <input
+                    value = {this.state.username}
+                    onChange= {this.onChange}
+                    type= 'text'
+                    name= 'password'
                     className = 'form-control'
                     />
                     </div>
