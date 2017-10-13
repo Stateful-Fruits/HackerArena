@@ -24,19 +24,44 @@ class CreateGameRoom extends React.Component {
       const room = {
         challengerName: '',
         challengerTestsPassed: 0,
-        creatorName: 'ron' || this.props.user,
+        creatorName: '', //'ron' || this.props.user,
         creatorTestsPassed: 0,
         gameStarted: false,
-        players: 1,
+        players: 0,
         problemID: selectedProblem.key,
         spectators: 0
       };
+      
       db.Rooms.push(room).then(added => {
         room.key = added.key;
         this.props.updateCurrentGameRoom(room);
-        this.props.navigateToGameRoom();
+        this.props.navigateToGameRoom(added.key);
       })
     })
+
+    /*
+    let allProblems = this.props.problems;
+    let keys = Object.keys(allProblems);
+    let random = Math.floor(Math.random() * keys.length);
+    let problem = allProblems[keys[random]];
+    const room = {
+      challengerName: '',
+      challengerTestsPassed: 0,
+      creatorName: '', //'ron' || this.props.user,
+      creatorTestsPassed: 0,
+      gameStarted: false,
+      players: 0,
+      problemID: keys[random],
+      problem: problem,
+      spectators: 0
+    };
+    db.Rooms.push(room).then(added => {
+      room.key = added.key;
+      this.props.updateCurrentGameRoom(room);
+      this.props.navigateToGameRoom(added.key);
+    })
+    */
+
   }
   render () {
     return (
@@ -48,14 +73,15 @@ class CreateGameRoom extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    problems: state.problems
   }
 }
 
 const mapDispatcherToProps = (dispatch) => {
   return {
     updateCurrentGameRoom: (room) => {dispatch(updateCurrentGameRoom(room))},
-    navigateToGameRoom: () => {dispatch(push('/GameRoom'))}
+    navigateToGameRoom: (id) => {dispatch(push('/GameRoom/' + id))}
   }
 }
 export default connect(mapStateToProps, mapDispatcherToProps)(CreateGameRoom);

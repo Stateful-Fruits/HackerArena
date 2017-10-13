@@ -43,7 +43,7 @@ ReactDOM.render(
       <App>
         <Route exact path="/" component={Home}/>
         <Route exact path="/About" component={About}/>
-        <Route exact path="/GameRoom" component={GameRoom}/>
+        <Route exact path="/GameRoom/:id" component={GameRoom}/>
       </App>
     </ConnectedRouter>
   </Provider>,
