@@ -43,15 +43,14 @@ class Home extends Component {
   }
 
   render() {
-    let { gameRooms, navigateToAbout, navigateToGameRoom } = this.props;
+    let { gameRooms, navigate } = this.props;
     return gameRooms ? (
        <div>    
          <h2>Welcome to Hacker Arena</h2>
          <CreateGameRoom />
          <GameRoomList 
            gameRooms={gameRooms}
-           navigateToAbout={navigateToAbout}
-           navigateToGameRoom={navigateToGameRoom}
+           navigate={navigate}
          />
        </div>
       ) : null;
@@ -69,8 +68,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms)),
   updateProblems: (problems) => dispatch(updateProblems(problems)),
-  navigateToAbout: () => dispatch(push('/About')),
-  navigateToGameRoom: () => dispatch(push('/GameRoom'))
+  navigate: (route) => dispatch(push(route)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

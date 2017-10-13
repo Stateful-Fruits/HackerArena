@@ -2,14 +2,13 @@ import React from 'react';
 
 import GameRoomPreview from './GameRoomPreview';
 
-const GameRoomList = ({ gameRooms, navigateToAbout, navigateToGameRoom }) => (
+const GameRoomList = ({ gameRooms, navigate}) => (
   <div>
     { gameRooms.map((room, inx) => (
       <GameRoomPreview 
         gameRoom={room}
         key={room.key + inx}
-        navigateToAbout={navigateToAbout}
-        navigateToGameRoom={navigateToGameRoom}
+        navigate={navigate}
       />
     ))}
   </div>
