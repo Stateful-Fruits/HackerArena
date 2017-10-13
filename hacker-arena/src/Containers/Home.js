@@ -17,15 +17,8 @@ class Home extends Component {
     let { updateGameRooms, updateProblems } = this.props;
     // grab and listen for game rooms from firebase db
     db.Rooms.on('value', data => {
-      const roomsData = data.val();
-      const roomKeys = Object.keys(roomsData);
-      const rooms = roomKeys.map((roomKey) => {
-        const roomData = roomsData[roomKey];
-        roomData.key = roomKey;
-        return roomData;
-      });
       // dispatch action to change game rooms array in store
-      updateGameRooms(rooms);
+      updateGameRooms(data.val());
     });
 
     db.Problems.once('value', data => {
