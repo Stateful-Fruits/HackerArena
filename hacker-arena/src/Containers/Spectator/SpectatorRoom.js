@@ -21,7 +21,7 @@ class SpectatorRoom extends Component {
         */}
         <h1>Spectate a game here!!!</h1>
         <SpectatorEditors 
-          gameRoom={ this.props.gameRooms.filter((room) => room.key === this.props.gameRoomId)[0] }
+          gameRoom={ this.props.gameRooms[this.props.gameRoomId] }
         />
         <SpectatorChat />
       </div>
