@@ -8,6 +8,9 @@ import GameRoom from './Containers/GameRoom';
 import User from './Containers/User'
 import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
+import Login from './Containers/Login'
+
+
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -50,6 +53,10 @@ ReactDOM.render(
         <Route exact path="/SignUp" component={SignUp}/>
         <Route exact path="/GameRoom/:roomId" component={GameRoom}/>
         <Route exact path="/Spectate/:roomId" component={SpectatorRoom} />
+        <Route exact path="/Login" component={Login}/>
+
+        
+        {/* <Route exact path="/GameRoom" component={GameRoom}/> */}
       </App>
     </ConnectedRouter>
   </Provider>,
