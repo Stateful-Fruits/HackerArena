@@ -8,12 +8,12 @@
 //       return state;
 //   }
 // };
-const updateCurrentRoom = (state = {}, action) => {
+const updateCurrentRoom = (currentRoom = {}, action) => {
   switch (action.type) {
     case 'UPDATE_GAME_ROOM':
       return action.payload;
     default:
-      return state;
+      return currentRoom;
   }
 }
 
