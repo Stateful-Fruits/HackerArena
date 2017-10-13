@@ -7,6 +7,8 @@ import fire from '../Firebase/firebase';
 
 import '../Styles/GameRoom.css';
 
+import '../Styles/GameRoom.css';
+
 class GameRoom extends React.Component {
   componentWillMount () {
     fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
