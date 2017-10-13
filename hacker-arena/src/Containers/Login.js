@@ -1,9 +1,7 @@
 import React from 'react';
 import firebase from '../Firebase/firebase';
-
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import {beforeAt} from '../Util'
 import { push } from 'react-router-redux';
 
 class SignUp extends React.Component {
@@ -23,26 +21,20 @@ class SignUp extends React.Component {
             
         }
         onSubmit(e) {
-            
             e.preventDefault();
-            // db.Users.once('users').then((val)=> {
-            //     console.log(val);
-            // }) 
+            let {navigate} = this.props;
+            console.log('adfaf',this.state.email)
+            console.log('adfaf',this.state.password)
             var email = this.state.email;
             var password = this.state.password
-            var db = firebase.database();
-            firebase.auth().createUserWithEmailAndPassword(email, password).then((res,b)=> {
-                const username = beforeAt(res.email); 
-                db.ref('users/'+username).set({
-                    id : res.uid,
-                    email: res.email
-                }
-                )
-                
-                  console.log(res.uid,res.email);
-              }).catch((err)=> {
-                  this.setState({errmsg: err.message})})
-                  console.log(this.state.errmsg)
+            firebase.auth().signInWithEmailAndPassword(email, password).then((val)=> {
+                navigate('/Gameroom')
+            
+            })
+                .catch(function(error) {
+                console.log(error)
+        
+              });
             
        
 
@@ -52,10 +44,9 @@ class SignUp extends React.Component {
         return (
             <div>
                 <h1>{this.state.errmsg}</h1>
-                <button onClick={() => navigate('/Login') }> Login </button>
+                <button onClick={() => navigate('/SignUp') }> SignUp </button>
             <form onSubmit= {this.onSubmit}>
-                <h1>Join in The Game Today!</h1>
-                <h1>SignUp to Create a Game Now!</h1>
+                <h1>Wanna Have Some Fun Today?</h1>
                 <div>
                     <label>email</label>
                     <input
@@ -76,7 +67,7 @@ class SignUp extends React.Component {
                     </div>
                     <div>
                         <button type = 'submit' value= 'submit'>
-                            Join</button>
+                            Start Now</button>
                             </div>
                             </form>
                             </div>
