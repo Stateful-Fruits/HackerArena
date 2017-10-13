@@ -1,9 +1,9 @@
-const updateGameRooms = (state = [], action) => {
+const updateGameRooms = (gameRooms = [], action) => {
   switch(action.type) {
     case 'UPDATE_GAMEROOMS':
-      return [...action.payload.gameRooms];
+      return action.payload;
     default:
-      return state;
+      return gameRooms;
   }
 };
 
