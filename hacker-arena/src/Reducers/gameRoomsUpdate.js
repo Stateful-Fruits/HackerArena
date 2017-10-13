@@ -1,8 +1,7 @@
-const updateGameRooms = (state = {}, action) => {
+const updateGameRooms = (state = [], action) => {
   switch(action.type) {
     case 'UPDATE_GAMEROOMS':
-      // return Object.assign({}, state, { gameRooms: action.gameRooms });
-      return Object.assign({}, state, { gameRooms: action.payload.gameRooms });
+      return [...action.payload.gameRooms];
     default:
       return state;
   }

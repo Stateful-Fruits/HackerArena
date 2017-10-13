@@ -48,7 +48,7 @@ class Home extends Component {
 const mapStateToProps = (state) => {
   console.log('map state to props state passed: ', state);
   return ({
-  gameRooms: state.gameRooms.gameRooms
+  gameRooms: state.gameRooms
 });
 };
 
