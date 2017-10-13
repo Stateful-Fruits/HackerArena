@@ -1,4 +1,4 @@
-const updateGameRooms = (gameRooms = [], action) => {
+const gameRoomsUpdate = (gameRooms = [], action) => {
   switch(action.type) {
     case 'UPDATE_GAMEROOMS':
       return action.payload;
@@ -7,4 +7,4 @@ const updateGameRooms = (gameRooms = [], action) => {
   }
 };
 
-export default updateGameRooms;
+export default gameRoomsUpdate;
