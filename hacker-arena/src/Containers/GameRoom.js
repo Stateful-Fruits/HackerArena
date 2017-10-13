@@ -2,17 +2,43 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CodeEditor from './CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
+import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
+import fire from '../Firebase/firebase';
 
 class GameRoom extends React.Component {
+  componentWillMount () {
+    fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
+      let gameRoom = snapshot.val();
+      gameRoom.key = this.props.Key;
+      console.log('snapshot of gameroom ',gameRoom, this.props.Key);
+      if (gameRoom.creatorName === '') {
+        gameRoom.creatorName = 'kai brown zsy';
+        gameRoom.players++;
+        fire.database().ref('rooms/' + this.props.Key).set(gameRoom);
+        this.props.updateCurrentGameRoom(gameRoom);
+      } else if (gameRoom.creatorName.length > 0 && gameRoom.challengerName.length === 0) {
+        gameRoom.challengerName = 'colin zheng';
+        gameRoom.players++;
+        fire.database().ref('rooms/' + this.props.Key).set(gameRoom);
+        this.props.updateCurrentGameRoom(gameRoom);
+      } else {
+        this.props.updateCurrentGameRoom(gameRoom);
+      }
+    });
+  } 
+
   render () {
-    var props = this.props;
-    var message, editor, testSuite, testpassed;
-    var players = this.props.players || 1;
-    // if (players === 2) {
-    if (true) {
+    let props = this.props;
+    console.log(this.props);
+    let message, editor, testSuite, testpassed;
+    let players = this.props.players || 1;
+    let problem = this.props.problem;
+    if (players === 2) {
       message = 'COMPETE';
-      editor = <CodeEditor/>;
-      testSuite = <TestSuite/>;
+      editor = <CodeEditor problem={problem}/>;
+      testSuite = <TestSuite problem={problem} 
+                    creatorTestStatus={props.creatorTestStatus}
+                    challengerTestStatus={props.challengerTestStatus}/>; //creatorTestStatus challengerTestStatus problem
       testpassed = (
         <div>
           <div>Challenger {props.challengerName} Passed {props.challengerTestPassed}</div>
@@ -26,27 +52,26 @@ class GameRoom extends React.Component {
       testpassed = null;
     }
 
-    return <div>
-      <div>{message}</div>
-      {testpassed}
-      {editor}
-      {testSuite}
-    </div>
+      return <div>
+        <div>{message}</div>
+        {testpassed}
+        {editor}
+        {testSuite}
+      </div>
   }
 }
 const mapStateToProps = (state) => {
-  console.log(`
-    state passed to GameRoom: `, state);
-  let current = state.currentRoom;
-  return ({
-  challengerName: current.challengerName,
-  challengerTestsPassed: current.challengerTestsPassed,
-  creatorName: current.creatorName,
-  creatorTestsPassed: current.creatorTestsPassed,
-  gameStarted: current.gameStarted,
-  players: current.players,
-  problemID: current.problemID,
-  spectators: current.spectators
-});
+  console.log(`state passed to GameRoom: `, state);
+  let id = state.router.location.pathname.split('/')[2];
+  let newRoom = Object.assign(state.currentRoom, {Key: id});
+  console.log('newRoom ', newRoom);
+  return newRoom;
 };
-export default connect(mapStateToProps)(GameRoom);
+
+const mapDispatcherToProps = (dispatch) => {
+  return {
+    updateCurrentGameRoom: (room) => {dispatch(updateCurrentGameRoom(room))},
+  }
+}
+
+export default connect(mapStateToProps, mapDispatcherToProps)(GameRoom);
