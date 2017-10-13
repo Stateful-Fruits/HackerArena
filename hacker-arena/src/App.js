@@ -6,6 +6,7 @@ import populateDb from './Firebase/populateDb';
 import './Styles/App.css';
 import updateGameRooms from './Actions/updateGameRooms';
 import CodeEditor from './Containers/CodeEditor.js';
+
 import { push } from 'react-router-redux';
 
 class App extends Component {
@@ -26,6 +27,9 @@ class App extends Component {
         </button>
         <button onClick={ () => navigate('/About') }>
           <h3>About</h3>
+        </button>
+        <button onClick={ () => navigate('/SignUp') }>
+          <h3>SignUp/Login</h3>
         </button>
         <p className="App-intro">
           Hello Team!!!
