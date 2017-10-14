@@ -38,7 +38,7 @@ class SignUp extends React.Component {
                     email: res.email
                 }
                 )
-                
+                this.props.navigate('/');
                   console.log(res.uid,res.email);
               }).catch((err)=> {
                   this.setState({errmsg: err.message})})

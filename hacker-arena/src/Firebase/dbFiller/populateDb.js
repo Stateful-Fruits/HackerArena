@@ -7,8 +7,8 @@ import rooms from './rooms';
 
 const populateDb = function() {
   insertProblems();
-  insertUsers();
-  insertRooms();
+  //insertUsers();
+  //insertRooms();
 }
 
 const insertProblems = function() {

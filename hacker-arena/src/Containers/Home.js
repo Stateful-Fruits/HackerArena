@@ -29,16 +29,16 @@ class Home extends Component {
 
   render() {
     let { gameRooms, navigate } = this.props;
-    return gameRooms ? (
+    return (
        <div>    
          <h2>Welcome to Hacker Arena</h2>
          <CreateGameRoom />
-         <GameRoomList 
+         {gameRooms ? <GameRoomList 
            gameRooms={gameRooms}
            navigate={navigate}
-         />
+         /> : null}
        </div>
-      ) : null;
+      );
   }
 }
 

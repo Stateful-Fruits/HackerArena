@@ -10,13 +10,14 @@ import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
 
-
+// To check Log in info
+import fire from './Firebase/firebase';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import createHistory from 'history/createBrowserHistory';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 
@@ -47,16 +48,19 @@ ReactDOM.render(
     { /* ConnectedRouter will use the store from Provider automatically */ }
     <ConnectedRouter history={history}>
       <App>
-        <Route exact path="/" component={Home}/>
-        <Route exact path="/About" component={About}/>
-        <Route exact path="/User" component={User}/>
-        <Route exact path="/SignUp" component={SignUp}/>
-        <Route exact path="/GameRoom/:roomId" component={GameRoom}/>
-        <Route exact path="/Spectate/:roomId" component={SpectatorRoom} />
-        <Route exact path="/Login" component={Login}/>
-
-        
-        {/* <Route exact path="/GameRoom" component={GameRoom}/> */}
+        {
+          (
+            <Switch>
+              <Route exact path="/" component={ Home }/>
+              <Route exact path="/About" component={About}/>
+              <Route exact path="/User" component={User}/>
+              <Route exact path="/GameRoom/:roomId" component={GameRoom}/>
+              <Route exact path="/Spectate/:roomId" component={SpectatorRoom}/>
+              <Route exact path="/SignUp" component={SignUp}/>
+              <Route exact path="/Login" component={Login}/>
+            </Switch>
+          )
+        }
       </App>
     </ConnectedRouter>
   </Provider>,

@@ -38,6 +38,28 @@ class GameRoom extends React.Component {
       this.props.updateSpecificRoom(gameRoom);
     } 
   } 
+
+  componentWillUnmount () {
+    var gameRoom = Object.assign({}, this.props.room);
+    let username = this.props.username;
+    if (gameRoom.players === 2) {
+      if (gameRoom.challengerName === username) {
+        console.log('challenger left');
+        gameRoom.challengerName = '';
+        gameRoom.players--;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      } else if (gameRoom.creatorName === username) {
+        console.log('creator left');
+        gameRoom.creatorName = '';
+        gameRoom.players--;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      }
+    } else if (gameRoom.players === 1) {
+      console.log(`room ${gameRoom.key} about to be destroyed`);
+      fire.database().ref('rooms/' + gameRoom.key).remove();
+    }
+  }
+
   
   render () {
     let props = this.props;
@@ -50,8 +72,8 @@ class GameRoom extends React.Component {
       testSuite = <TestSuite currentRoom={props.room}/>; //creatorTestStatus challengerTestStatus problem
       testpassed = (
         <div>
-          <div>Challenger {props.challengerName} Passed {props.challengerTestPassed}</div>
-          <div>Creator {props.creatorName} Passed {props.creatorTestPassed}</div>
+          <div>Challenger: {props.room.challengerName} | Passed: {props.challengerTestPassed}</div>
+          <div>Creator: {props.room.creatorName} | Passed: {props.creatorTestPassed}</div>
         </div>
       )
     } else {
