@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import swal from 'sweetalert2';
 
 import fire from '../Firebase/firebase';
@@ -17,12 +18,13 @@ class GameRoom extends React.Component {
   constructor (props) {
     super (props);
     this.handleLeave = this.handleLeave.bind(this);
+    // this.handleEnter = this.handleEnter.bind(this);
   }
 
-  componentWillUpdate() {
-    if (this.props.room) this.handleEnter();
-  }
-
+  // componentWillReceiveProps() {
+  //   if (this.props.room) this.handleEnter();
+  // }
+  
   componentDidMount () {
     if (this.props.room) window.addEventListener('beforeunload', this.handleLeave);
   }
@@ -36,14 +38,14 @@ class GameRoom extends React.Component {
     let username = this.props.username;
     if (gameRoom.players === 2) {
       if (gameRoom.challengerName === username) {
-        console.log('challenger left');
         gameRoom.challengerName = '';
         gameRoom.players--;
+        console.log('challenger left', gameRoom.players);
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       } else if (gameRoom.creatorName === username) {
-        console.log('creator left');
         gameRoom.creatorName = '';
         gameRoom.players--;
+        console.log('creator left', gameRoom.players);
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       }
     } else if (gameRoom.players === 1) {
@@ -52,31 +54,34 @@ class GameRoom extends React.Component {
     }
   }
 
-  handleEnter() {
+  componentWillMount () {
     // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
     //   let gameRoom = snapshot.val();
     //   gameRoom.key = this.props.Key;
     //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
     // });
     var gameRoom = Object.assign({}, this.props.room);
-    let creatorName = gameRoom.creatorName;
-    let challengerName = gameRoom.challengerName;
-    let username = this.props.username;
-    if (gameRoom.creatorName === '') {
-      gameRoom.creatorName = username;
-      gameRoom.players++;
-      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      this.props.updateSpecificRoom(gameRoom);
-    } else if (creatorName.length > 0 
-      && creatorName !==  username
-      && challengerName.length === 0) {
-      gameRoom.challengerName = username;
-      gameRoom.players++;
-      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      this.props.updateSpecificRoom(gameRoom);
-    } else {
-      this.props.updateSpecificRoom(gameRoom);
-    } 
+    if (gameRoom.players === 2 && gameRoom.creatorName !== this.props.username && gameRoom.creatorName !== this.props.challengerName) this.props.navigate(`/Spectate/${this.props.id}`);
+    else {
+      let creatorName = gameRoom.creatorName;
+      let challengerName = gameRoom.challengerName;
+      let username = this.props.username;
+      if (gameRoom.creatorName === '') {
+        gameRoom.creatorName = username;
+        gameRoom.players++;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+        //this.props.updateSpecificRoom(gameRoom);
+      } else if (creatorName.length > 0 
+        && creatorName !==  username
+        && challengerName.length === 0) {
+        gameRoom.challengerName = username;
+        gameRoom.players++;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+        //this.props.updateSpecificRoom(gameRoom);
+      } else {
+        //this.props.updateSpecificRoom(gameRoom);
+      } 
+    }
   } 
   
   render () {
@@ -103,12 +108,13 @@ const mapStateToProps = (state) => {
   let username = fire.auth().currentUser.email.split('@')[0];
   console.log('state is',state);
   console.log('Room ', room);
-  return {room, username};
+  return {room, username, id};
 };
 
 const mapDispatcherToProps = (dispatch) => {
   return {
-    updateSpecificRoom: (room) => {dispatch(updateSpecificRoom(room))}
+    updateSpecificRoom: (room) => dispatch(updateSpecificRoom(room)),
+    navigate: (route) => dispatch(push(route))
   }
 }
 
