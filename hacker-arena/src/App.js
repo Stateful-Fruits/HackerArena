@@ -6,6 +6,7 @@ import populateDb from './Firebase/dbFiller/populateDb';
 import './Styles/App.css';
 import updateGameRooms from './Actions/updateGameRooms';
 import CodeEditor from './Containers/CodeEditor.js';
+import UserButton from  './Components/User/UserButton.js';
 
 import { push } from 'react-router-redux';
 
