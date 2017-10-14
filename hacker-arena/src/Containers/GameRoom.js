@@ -9,6 +9,7 @@ import CodeEditor from './CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
 import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
+import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 
 import '../Styles/GameRoom.css';
 
@@ -18,16 +19,16 @@ class GameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
   }
 
-  componentWillMount() {
-    this.handleEnter();
+  componentWillRecieveProps() {
+    if (this.props.room) this.handleEnter();
   }
 
   componentDidMount () {
-    window.addEventListener('beforeunload', this.handleLeave);
+    if (this.props.room) window.addEventListener('beforeunload', this.handleLeave);
   }
 
   componentWillUnmount () {
-    this.handleLeave();
+    if (this.props.room) this.handleLeave();
   }
 
   handleLeave () {
@@ -85,7 +86,7 @@ class GameRoom extends React.Component {
     let isRoomFull = players === 2;
     return (
       <div>
-        <div>{isRoomFull ? 'COMPLETE' : 'Waiting for one more player'}</div>
+        <div>{isRoomFull ? 'COMPLETE' : <WaitingForPlayer />}</div>
         {isRoomFull ? <ProgressBar room={ room }/> : null}
         <div id="editorAndTestSuite">
         {isRoomFull ? <CodeEditor currentRoom={room}/> : null}
