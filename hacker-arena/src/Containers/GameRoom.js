@@ -5,7 +5,7 @@ import TestSuite from '../Components/TestSuite.js'; //From Simon
 //import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
 import updateSpecificRoom from '../Actions/updateSpecificRoom';
 import fire from '../Firebase/firebase';
-
+import swal from 'sweetalert2';
 import '../Styles/GameRoom.css';
 
 import '../Styles/GameRoom.css';
@@ -37,9 +37,8 @@ class GameRoom extends React.Component {
     } else {
       this.props.updateSpecificRoom(gameRoom);
     } 
-
   } 
-
+  
   render () {
     let props = this.props;
     console.log(this.props);
