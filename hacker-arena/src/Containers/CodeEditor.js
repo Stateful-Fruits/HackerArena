@@ -7,6 +7,7 @@ import fire from '../Firebase/firebase';
 import db from '../Firebase/db';
 import Disruptions from './Disruptions/disruptions';
 import updateTestSuite from '../Actions/updateTestSuite';
+import swal from 'sweetalert2';
 
 import '../Styles/CodeEditor.css';
  
@@ -67,7 +68,8 @@ class CodeEditor extends React.Component {
     // this.setState({testStatus: runTestsOnUserAnswer(code,this.props.testCases)});
     
     let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn)
-    console.log(testStatus);
+    console.log("the props in CodeEditor", this.props)
+    console.log("the TEST STATUS", testStatus);
     if(fire.auth().currentUser === this.props.currentRoom.creator) {
       fire.database().ref('rooms/' + this.props.currentRoom.Key).set({creatorTestStatus : testStatus})
     } else {

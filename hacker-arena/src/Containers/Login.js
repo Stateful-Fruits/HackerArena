@@ -58,11 +58,11 @@ class SignUp extends React.Component {
                     />
                     <label>Password</label>
                     <input
-                        value = {this.state.password}
-                        onChange= {this.onChange}
-                        type= 'text'
-                        name= 'password'
-                        className = 'form-control'
+                    value = {this.state.password}
+                    onChange= {this.onChange}
+                    type= 'password'
+                    name= 'password'
+                    className = 'form-control'
                     />
                     </div>
                     <div>
