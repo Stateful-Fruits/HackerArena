@@ -40,6 +40,17 @@ class GameRoom extends React.Component {
 
   } 
 
+  componentWillUnmount () {
+    var gameRoom = Object.assign({}, this.props.room);
+    let username = this.props.username;
+    if (gameRoom.players === 2) {
+      console.log('loserrrrrrrr')
+    } else if (gameRoom.players === 1) {
+      fire.database().ref('rooms/' + gameRoom.key).remove();
+    }
+
+  }
+
   render () {
     let props = this.props;
     console.log(this.props);
