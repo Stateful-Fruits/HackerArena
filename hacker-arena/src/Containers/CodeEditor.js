@@ -27,6 +27,9 @@ class CodeEditor extends React.Component {
   }
 
   componentDidMount(){
+
+    console.log(" THE CURRENT CREATOR", this.props.currentRoom.creatorName)
+    console.log(" THE CURRENT USER", fire.auth().currentUser)
     // const editor = this.ace.editor;
     // editor.setTheme("ace/theme/monokai");
     // editor.getSession().setMode("ace/mode/javascript");
@@ -38,10 +41,10 @@ class CodeEditor extends React.Component {
   
   liveInputs(){
     let liveInput = this.ace.editor.getValue();
-    if(fire.auth().currentUser === this.props.currentRoom.creator) {
-      fire.database().ref('rooms/' + this.props.currentRoom.Key).set({creatorLiveInput : liveInput})
+    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorLiveInput').set(liveInput)
     } else {
-      fire.database().ref('rooms/' + this.props.currentRoom.Key).set({challengerLiveInput : liveInput})
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerLiveInput').set(liveInput)
     }
   }
 
@@ -49,10 +52,10 @@ class CodeEditor extends React.Component {
     let func = prompt("What do you want to send?")
     let challengerDisruptions = this.props.currentRoom.challengerDisruptions.push(func);
     let creatorDisruptions = this.props.currentRoom.creatorDisruptions.push(func);
-    if(fire.auth().currentUser === this.props.currentRoom.creator) {
-      fire.database().ref('rooms/' + this.props.currentRoom.Key).set({challengerDisruptions: challengerDisruptions})
+    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set(challengerDisruptions)
     } else {
-      fire.database().ref('rooms/' + this.props.currentRoom.Key).set({creatorDisruptions : creatorDisruptions})
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorDisruptions').set(creatorDisruptions)
     }
   }
 
@@ -70,10 +73,10 @@ class CodeEditor extends React.Component {
     let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn)
     console.log("the props in CodeEditor", this.props)
     console.log("the TEST STATUS", testStatus);
-    if(fire.auth().currentUser === this.props.currentRoom.creator) {
-      fire.database().ref('rooms/' + this.props.currentRoom.Key).set({creatorTestStatus : testStatus})
+    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorTestStatus').set(testStatus)
     } else {
-      fire.database().ref('rooms/' + this.props.currentRoom.Key).set({challengerTestStatus : testStatus})
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerTestStatus').set(testStatus)
     }
     
 
