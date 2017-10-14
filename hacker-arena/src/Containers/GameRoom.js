@@ -11,33 +11,14 @@ import '../Styles/GameRoom.css';
 import '../Styles/GameRoom.css';
 
 class GameRoom extends React.Component {
-  componentWillMount () {
-    // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
-    //   let gameRoom = snapshot.val();
-    //   gameRoom.key = this.props.Key;
-    //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
-    
-    // });
-    var gameRoom = Object.assign({}, this.props.room);
-    let creatorName = gameRoom.creatorName;
-    let challengerName = gameRoom.challengerName;
-    let username = this.props.username;
-    if (gameRoom.creatorName === '') {
-      gameRoom.creatorName = username;
-      gameRoom.players++;
-      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      this.props.updateSpecificRoom(gameRoom);
-    } else if (creatorName.length > 0 
-      && creatorName !==  username
-      && challengerName.length === 0) {
-      gameRoom.challengerName = username;
-      gameRoom.players++;
-      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      this.props.updateSpecificRoom(gameRoom);
-    } else {
-      this.props.updateSpecificRoom(gameRoom);
-    } 
-  } 
+  constructor (props) {
+    super (props);
+    this.handleLeave = this.handleLeave.bind(this);
+  }
+
+  componentDidMount () {
+    window.addEventListener('beforeunload', this.handleLeave);
+  }
 
   componentWillUnmount () {
     var gameRoom = Object.assign({}, this.props.room);
@@ -60,6 +41,53 @@ class GameRoom extends React.Component {
     }
   }
 
+  handleLeave () {
+    var gameRoom = Object.assign({}, this.props.room);
+    let username = this.props.username;
+    if (gameRoom.players === 2) {
+      if (gameRoom.challengerName === username) {
+        console.log('challenger left');
+        gameRoom.challengerName = '';
+        gameRoom.players--;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      } else if (gameRoom.creatorName === username) {
+        console.log('creator left');
+        gameRoom.creatorName = '';
+        gameRoom.players--;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      }
+    } else if (gameRoom.players === 1) {
+      console.log(`room ${gameRoom.key} about to be destroyed`);
+      fire.database().ref('rooms/' + gameRoom.key).remove();
+    }
+  }
+
+  componentWillMount () {
+    // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
+    //   let gameRoom = snapshot.val();
+    //   gameRoom.key = this.props.Key;
+    //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
+    // });
+    var gameRoom = Object.assign({}, this.props.room);
+    let creatorName = gameRoom.creatorName;
+    let challengerName = gameRoom.challengerName;
+    let username = this.props.username;
+    if (gameRoom.creatorName === '') {
+      gameRoom.creatorName = username;
+      gameRoom.players++;
+      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      this.props.updateSpecificRoom(gameRoom);
+    } else if (creatorName.length > 0 
+      && creatorName !==  username
+      && challengerName.length === 0) {
+      gameRoom.challengerName = username;
+      gameRoom.players++;
+      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      this.props.updateSpecificRoom(gameRoom);
+    } else {
+      this.props.updateSpecificRoom(gameRoom);
+    } 
+  } 
   
   render () {
     let props = this.props;
@@ -77,17 +105,17 @@ class GameRoom extends React.Component {
       testpassed = (
         <div>
           <div>Challenger: {props.room.challengerName} | Passed: {props.challengerTestPassed}</div>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+          <div className="progress">
+            <div className="progress-bar" role="progressbar" aria-valuenow="70"
               aria-valuemin="0" aria-valuemax="100" style={{width: `${percent}%`}}>
-              <span class="sr-only">70% Complete</span>
+              <span className="sr-only">bobo Complete</span>
             </div>
           </div>
           <div>Creator: {props.room.creatorName} | Passed: {props.creatorTestPassed}</div>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+          <div className="progress">
+            <div className="progress-bar" role="progressbar" aria-valuenow="70"
               aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
-              <span class="sr-only">70% Complete</span>
+              <span className="sr-only">bobo Complete</span>
             </div>
           </div>
         </div>
