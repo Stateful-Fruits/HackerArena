@@ -13,8 +13,8 @@ import '../Styles/CodeEditor.css';
 
 
 class CodeEditor extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       testStatus: ""
     }
@@ -60,8 +60,6 @@ class CodeEditor extends React.Component {
   }
 
   handleSubmit(){
-    this.receiveDisruptions('Wipe');
-    this.receiveDisruptions('Fog');
     let code = this.ace.editor.getValue();
     //TEST SUITE LOGIC
     // place here
@@ -69,7 +67,7 @@ class CodeEditor extends React.Component {
     // this.setState({testStatus: runTestsOnUserAnswer(code,this.props.testCases)});
     
     let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn)
-  
+    console.log(testStatus);
     if(fire.auth().currentUser === this.props.currentRoom.creator) {
       fire.database().ref('rooms/' + this.props.currentRoom.Key).set({creatorTestStatus : testStatus})
     } else {
