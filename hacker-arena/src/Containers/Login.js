@@ -52,19 +52,11 @@ class SignUp extends React.Component {
                 <div>
                     <label>email</label>
                     <input
-<<<<<<< HEAD
-                        value = {this.state.email}
-                        onChange= {this.onChange}
-                        type= 'text'
-                        name= 'email'
-                        className = 'form-control'
-=======
                     value = {this.state.email}
                     onChange= {this.onChange}
                     type= 'email'
                     name= 'email'
                     className = 'form-control'
->>>>>>> changes
                     />
                     <label>Password</label>
                     <input
