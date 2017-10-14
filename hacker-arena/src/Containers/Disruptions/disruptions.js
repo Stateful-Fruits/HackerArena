@@ -1,11 +1,11 @@
 import $ from 'jquery';
 
+const getRandomInt = function(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
 const Disruptions = {
-  getRandomInt: function(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-  },
 	Wipe: function(editor){
     // Clear console 
 		editor.setValue("Sorry");
@@ -79,8 +79,8 @@ const Disruptions = {
   Move: function(){
   // Randomly move the console around
 	let movement = setInterval( function(){
-		var x = Math.round(this.getRandomInt(0, 800));
-		var y = Math.round(this.getRandomInt(0, 800));
+		var x = Math.round(getRandomInt(0, 800));
+		var y = Math.round(getRandomInt(0, 800));
 		 $("#ace-editor").css({
       "transition":"1s",
       "left":`${x}px`,
