@@ -10,14 +10,14 @@ const TestSuite = props => {
         <div id="description"> PROBLEM DESCRIPTION {props.currentRoom.problem.description}</div>
         {(props.currentRoom.creatorTestStatus && props.currentRoom.challengerTestStatus) ? 
           ((fire.auth().currentUser.email.split('@')[0] === props.currentRoom.creatorName) ? 
-          (<div> TESTS + TESTS PASSED {props.currentRoom.creatorTestStatus.map(tests => {
-            return <div>
+          (<div> TESTS + TESTS PASSED {props.currentRoom.creatorTestStatus.map((tests, i) => {
+            return <div key={tests.inputs + i}>
               <p>{tests.passed} Inputs: "{tests.inputs}" Expected: "{tests.expected}" Actual: "{tests.actual}"</p>
             </div>
           })}</div>)
           :
-          (<div> TESTS + TESTS PASSED {props.currentRoom.challengerTestStatus.map(tests => {
-            return <div>
+          (<div> TESTS + TESTS PASSED {props.currentRoom.challengerTestStatus.map((tests, i) => {
+            return <div key={tests.inputs+i}>
             <p>{tests.passed} Inputs: "{tests.inputs}" Expected: "{tests.expected}" Actual: "{tests.actual}"</p>
             </div>
           })}</div>)
