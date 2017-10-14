@@ -6,6 +6,7 @@ import './Styles/App.css';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import CodeEditor from './Containers/CodeEditor.js';
+import UserButton from  './Components/User/UserButton.js';
 
 import fire from './Firebase/firebase';
 import db from './Firebase/db';
