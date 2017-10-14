@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import SpectatorChat from '../../Components/Spectator/SpectatorChat';
 import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDescription';
-import SpectatorNoGameRoomError from '../../Components/Spectator/SpectatorNoGameRoomError';
+import SpectatorError from '../../Components/Spectator/SpectatorError';
 
 class SpectatorRoom extends Component {
   componentWillMount() {
@@ -31,7 +31,9 @@ class SpectatorRoom extends Component {
         <SpectatorChat />
       </div>
     ) : (
-      <SpectatorNoGameRoomError />
+      <SpectatorError 
+        errorMessage='You Need To Enter A Game Room First'
+      />
     );
   }
 }
