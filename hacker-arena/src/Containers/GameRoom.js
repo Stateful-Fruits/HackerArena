@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import swal from 'sweetalert2';
 
 import fire from '../Firebase/firebase';
@@ -17,6 +18,7 @@ class GameRoom extends React.Component {
   constructor (props) {
     super (props);
     this.handleLeave = this.handleLeave.bind(this);
+    this.handleEnter = this.handleEnter.bind(this);
   }
 
   componentWillReceiveProps() {
@@ -59,24 +61,27 @@ class GameRoom extends React.Component {
     //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
     // });
     var gameRoom = Object.assign({}, this.props.room);
-    let creatorName = gameRoom.creatorName;
-    let challengerName = gameRoom.challengerName;
-    let username = this.props.username;
-    if (gameRoom.creatorName === '') {
-      gameRoom.creatorName = username;
-      gameRoom.players++;
-      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      this.props.updateSpecificRoom(gameRoom);
-    } else if (creatorName.length > 0 
-      && creatorName !==  username
-      && challengerName.length === 0) {
-      gameRoom.challengerName = username;
-      gameRoom.players++;
-      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      this.props.updateSpecificRoom(gameRoom);
-    } else {
-      this.props.updateSpecificRoom(gameRoom);
-    } 
+    if (gameRoom.players === 2) this.props.navigate(`/Spectate/${this.props.id}`);
+    else {
+      let creatorName = gameRoom.creatorName;
+      let challengerName = gameRoom.challengerName;
+      let username = this.props.username;
+      if (gameRoom.creatorName === '') {
+        gameRoom.creatorName = username;
+        gameRoom.players++;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+        this.props.updateSpecificRoom(gameRoom);
+      } else if (creatorName.length > 0 
+        && creatorName !==  username
+        && challengerName.length === 0) {
+        gameRoom.challengerName = username;
+        gameRoom.players++;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+        this.props.updateSpecificRoom(gameRoom);
+      } else {
+        this.props.updateSpecificRoom(gameRoom);
+      } 
+    }
   } 
   
   render () {
@@ -108,7 +113,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatcherToProps = (dispatch) => {
   return {
-    updateSpecificRoom: (room) => {dispatch(updateSpecificRoom(room))}
+    updateSpecificRoom: (room) => dispatch(updateSpecificRoom(room)),
+    navigate: (route) => dispatch(push(route))
   }
 }
 
