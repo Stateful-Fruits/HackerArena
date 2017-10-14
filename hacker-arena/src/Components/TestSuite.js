@@ -6,8 +6,8 @@ import '../Styles/TestSuite.css';
 const TestSuite = props => {
     return(
       <div id="testSuite">
-        <div> PROBLEM TITLE{'Toy Problem Title Placeholder' || this.props.problem.title} </div>
-        <div id="description"> PROBLEM DESCRIPTION { 'Toy Problem Description Placeholder' || this.props.problem.description}</div>
+        <div> PROBLEM TITLE{props.currentRoom.problem.title} </div>
+        <div id="description"> PROBLEM DESCRIPTION {props.currentRoom.problem.description}</div>
         {fire.auth().currentUser === "" /* this.props.currentRoom.creatorName)*/ ? 
         (<div> TESTS + TESTS PASSED {'Toy Problem Passed Tests Placeholder' || this.props.creatorTestStatus}</div>)
         :
