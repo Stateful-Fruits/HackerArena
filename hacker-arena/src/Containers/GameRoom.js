@@ -66,6 +66,10 @@ class GameRoom extends React.Component {
     console.log(this.props);
     let message, editor, testSuite, testpassed;
     let players = this.props.room.players || 1;
+    let progress = props.room.creatorTestPassed;
+    let total = props.room.problem.tests.length;
+    let percent = (progress/total) * 100;
+    let challengerPercent = (props.room.challengerTestPassed/total) * 100;
     if (players === 2) {
       message = 'COMPETE';
       editor = <CodeEditor currentRoom={props.room}/>;
@@ -73,7 +77,19 @@ class GameRoom extends React.Component {
       testpassed = (
         <div>
           <div>Challenger: {props.room.challengerName} | Passed: {props.challengerTestPassed}</div>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+              aria-valuemin="0" aria-valuemax="100" style={{width: `${percent}%`}}>
+              <span class="sr-only">70% Complete</span>
+            </div>
+          </div>
           <div>Creator: {props.room.creatorName} | Passed: {props.creatorTestPassed}</div>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+              aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
+              <span class="sr-only">70% Complete</span>
+            </div>
+          </div>
         </div>
       )
     } else {
