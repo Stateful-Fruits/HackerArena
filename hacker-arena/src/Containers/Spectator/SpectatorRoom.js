@@ -17,7 +17,7 @@ class SpectatorRoom extends Component {
       <div>
         {/* 
           - include the list of disruptions and progress bar in 
-            the problem description
+            the problem description (progress bar of tests passed)
           - create a view for each player's editor and allow the 
           spectator to run that players code in the editor's console
           - have a chat for the spectators
