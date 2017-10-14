@@ -28,9 +28,17 @@ class App extends Component {
         <button onClick={ () => navigate('/About') }>
           <h3>About</h3>
         </button>
-        <button onClick={ () => navigate('/SignUp') }>
-          <h3>SignUp/Login</h3>
-        </button>
+        {
+          fire.auth().currentUser ? (
+          <button>
+            <h3>Hi { fire.auth().currentUser.email.split('@')[0] }</h3>
+          </button>
+          ) : (
+          <button onClick={ () => navigate('/SignUp') }>
+            <h3>SignUp/Login</h3>
+          </button>
+          )
+        }
         <div>
           { this.props.children }
         </div>
