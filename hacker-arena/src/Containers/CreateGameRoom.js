@@ -11,35 +11,33 @@ class CreateGameRoom extends React.Component {
     this.createRoom = this.createRoom.bind(this);
   }
   createRoom () {
-    db.Problems.once('value').then(snapshot => {
-      const allProblems = snapshot.val();
-      const problems = []; 
-      for (var key in allProblems) {
-        let problem = allProblems[key]
-        problem.key = key;
-        problems.push(problem);
-      }
-      const random = Math.floor(Math.random() * problems.length);
-      const selectedProblem = problems[random];
-      const room = {
-        challengerName: '',
-        challengerTestsPassed: 0,
-        creatorName: '', //'ron' || this.props.user,
-        creatorTestsPassed: 0,
-        gameStarted: false,
-        players: 0,
-        problemID: selectedProblem.key,
-        spectators: 0
-      };
+    // db.Problems.once('value').then(snapshot => {
+    //   const allProblems = snapshot.val();
+    //   const problems = []; 
+    //   for (var key in allProblems) {
+    //     let problem = allProblems[key]
+    //     problem.key = key;
+    //     problems.push(problem);
+    //   }
+    //   const random = Math.floor(Math.random() * problems.length);
+    //   const selectedProblem = problems[random];
+    //   const room = {
+    //     challengerName: '',
+    //     challengerTestsPassed: 0,
+    //     creatorName: '', //'ron' || this.props.user,
+    //     creatorTestsPassed: 0,
+    //     gameStarted: false,
+    //     players: 0,
+    //     problemID: selectedProblem.key,
+    //     spectators: 0
+    //   };
       
-      db.Rooms.push(room).then(added => {
-        room.key = added.key;
-        this.props.updateCurrentGameRoom(room);
-        this.props.navigateToGameRoom(added.key);
-      })
-    })
-
-    /*
+    //   db.Rooms.push(room).then(added => {
+    //     room.key = added.key;
+    //     this.props.updateCurrentGameRoom(room);
+    //     this.props.navigateToGameRoom(added.key);
+    //   })
+    // })
     let allProblems = this.props.problems;
     let keys = Object.keys(allProblems);
     let random = Math.floor(Math.random() * keys.length);
@@ -51,18 +49,8 @@ class CreateGameRoom extends React.Component {
       creatorTestsPassed: 0,
       gameStarted: false,
       players: 0,
-
-      creatorTestStatus: 
-{
-  inputs:
-  actual:
-  expected:
-  passed:
-}
-
-
-      challengerTestStatus: 
-
+      // creatorTestStatus: 
+      // challengerTestStatus: 
       problemID: keys[random],
       problem: problem,
       spectators: 0
@@ -72,7 +60,7 @@ class CreateGameRoom extends React.Component {
       this.props.updateCurrentGameRoom(room);
       this.props.navigateToGameRoom(added.key);
     })
-    */
+  
 
   }
   render () {

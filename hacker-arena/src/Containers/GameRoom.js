@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CodeEditor from './CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
-import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
+//import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
+import updateSpecificRoom from '../Actions/updateSpecificRoom';
 import fire from '../Firebase/firebase';
 
 import '../Styles/GameRoom.css';
@@ -11,31 +12,39 @@ import '../Styles/GameRoom.css';
 
 class GameRoom extends React.Component {
   componentWillMount () {
-    fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
-      let gameRoom = snapshot.val();
-      gameRoom.key = this.props.Key;
-      console.log('snapshot of gameroom ',gameRoom, this.props.Key);
-      if (gameRoom.creatorName === '') {
-        gameRoom.creatorName = 'kai brown zsy';
-        gameRoom.players++;
-        fire.database().ref('rooms/' + this.props.Key).set(gameRoom);
-        this.props.updateCurrentGameRoom(gameRoom);
-      } else if (gameRoom.creatorName.length > 0 && gameRoom.challengerName.length === 0) {
-        gameRoom.challengerName = 'colin zheng';
-        gameRoom.players++;
-        fire.database().ref('rooms/' + this.props.Key).set(gameRoom);
-        this.props.updateCurrentGameRoom(gameRoom);
-      } else {
-        this.props.updateCurrentGameRoom(gameRoom);
-      }
-    });
+    // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
+    //   let gameRoom = snapshot.val();
+    //   gameRoom.key = this.props.Key;
+    //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
+    
+    // });
+    var gameRoom = Object.assign({}, this.props.room);
+    let creatorName = gameRoom.creatorName;
+    let challengerName = gameRoom.challengerName;
+    let username = this.props.username;
+    if (gameRoom.creatorName === '') {
+      gameRoom.creatorName = username;
+      gameRoom.players++;
+      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      this.props.updateSpecificRoom(gameRoom);
+    } else if (creatorName.length > 0 
+      && creatorName !==  username
+      && challengerName.length === 0) {
+      gameRoom.challengerName = username;
+      gameRoom.players++;
+      fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      this.props.updateSpecificRoom(gameRoom);
+    } else {
+      this.props.updateSpecificRoom(gameRoom);
+    } 
+
   } 
 
   render () {
     let props = this.props;
     console.log(this.props);
     let message, editor, testSuite, testpassed;
-    let players = this.props.players || 1;
+    let players = this.props.room.players || 1;
     if (players === 2) {
       message = 'COMPETE';
       editor = <CodeEditor currentRoom={props}/>;
@@ -64,16 +73,18 @@ class GameRoom extends React.Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log(`state passed to GameRoom: `, state);
+  console.log(`state passed to GameRoom: `, state, fire.auth().currentUser);
   let id = state.router.location.pathname.split('/')[2];
-  let newRoom = Object.assign(state.currentRoom, {Key: id});
-  console.log('newRoom ', newRoom);
-  return newRoom;
+  let room = state.gameRooms[id];
+  let username = fire.auth().currentUser.email.split('@')[0];
+  console.log('state is',state);
+  console.log('Room ', room);
+  return {room, username};
 };
 
 const mapDispatcherToProps = (dispatch) => {
   return {
-    updateCurrentGameRoom: (room) => {dispatch(updateCurrentGameRoom(room))},
+    updateSpecificRoom: (room) => {dispatch(updateSpecificRoom(room))}
   }
 }
 
