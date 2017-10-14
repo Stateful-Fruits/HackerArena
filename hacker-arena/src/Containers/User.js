@@ -37,7 +37,7 @@ class User extends Component {
         })
     }
     render() {
-        let {username} = this.state; 
+        // let {username} = this.state; 
    return (
       
             <div>
