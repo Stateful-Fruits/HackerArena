@@ -7,13 +7,18 @@ class SpectatorGameDescription extends Component {
     let { challengerName, creatorName, problem } = gameRoom;
     return (
       <div>
-        <h2>{ creatorName } VS { challengerName }</h2>
         {
           problem ? (
             <div>
-              Problem Title: { problem.title || 'No Problem Title' }
-              Problem Difficulty: { problem.difficulty || 'No Problem Difficulty' }
-              Problem Description: { problem.description || 'No Problem Description' }
+              <div>
+                <h2>Problem Title:</h2> { problem.title || 'No Problem Title' }
+              </div>
+              <div>
+                <h2>Problem Difficulty:</h2> { problem.difficulty || 'No Problem Difficulty' }
+              </div>
+              <div>
+                <h2>Problem Description:</h2> { problem.description || 'No Problem Description' }
+              </div>
             </div>
           ) : (
             <SpectatorError 
@@ -21,6 +26,7 @@ class SpectatorGameDescription extends Component {
             />
           )
         }
+        <h2>{ creatorName } VS { challengerName }</h2>
       </div>
     )
   }
