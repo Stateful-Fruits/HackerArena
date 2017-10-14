@@ -19,7 +19,7 @@ class GameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
   }
 
-  componentWillRecieveProps() {
+  componentWillReceiveProps() {
     if (this.props.room) this.handleEnter();
   }
 
