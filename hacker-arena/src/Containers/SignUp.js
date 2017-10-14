@@ -54,12 +54,14 @@ class SignUp extends React.Component {
         return (
             <div>
                 <h1>{this.state.errmsg}</h1>
-                <button onClick={() => navigate('/Login') }> Login </button>
+                <div className="container">
             <form onSubmit= {this.onSubmit}>
-                <h1>Join in The Game Today!</h1>
-                <h1>SignUp to Create a Game Now!</h1>
+            <div className='header'>
+                <h2>Join in The Game Today!</h2>
+                <h2>SignUp to Create a Game Now!</h2>
+                </div>
                 <div>
-                    <label>email</label>
+                    <label className='header'>email</label>
                     <input
                     value = {this.state.email}
                     onChange= {this.onChange}
@@ -67,7 +69,7 @@ class SignUp extends React.Component {
                     name= 'email'
                     className = 'form-control'
                     />
-                    <label>Password</label>
+                    <label className='header'>Password</label>
                     <input
                     value = {this.state.password}
                     onChange= {this.onChange}
@@ -76,11 +78,14 @@ class SignUp extends React.Component {
                     className = 'form-control'
                     />
                     </div>
+                <a onClick={() => navigate('/Login') }> Login </a>
                     <div>
-                        <button type = 'submit' value= 'submit'>
+                        
+                        <button type = 'submit' value= 'submit' className="btn-login">
                             Join</button>
                             </div>
                             </form>
+                            </div>
                             </div>
         )
     }
