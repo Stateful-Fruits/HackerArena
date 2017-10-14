@@ -11,14 +11,22 @@ const TestSuite = props => {
         {(props.currentRoom.creatorTestStatus && props.currentRoom.challengerTestStatus) ? 
           ((fire.auth().currentUser.email.split('@')[0] === props.currentRoom.creatorName) ? 
           (<div> TESTS + TESTS PASSED {props.currentRoom.creatorTestStatus.map((tests, i) => {
+            let passing = "PASSED!"
+            if(!tests.passed){
+              passing = "FAILED!"
+            }
             return <div key={tests.inputs + i}>
-              <p>{tests.passed} Inputs: "{tests.inputs}" Expected: "{tests.expected}" Actual: "{tests.actual}"</p>
+              <p>{`${passing} Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</p>
             </div>
           })}</div>)
           :
           (<div> TESTS + TESTS PASSED {props.currentRoom.challengerTestStatus.map((tests, i) => {
-            return <div key={tests.inputs+i}>
-            <p>{tests.passed} Inputs: "{tests.inputs}" Expected: "{tests.expected}" Actual: "{tests.actual}"</p>
+            let passing = "PASSED!"
+            if(!tests.passed){
+              passing = "FAILED!"
+            }
+            return <div key={tests.inputs + i}>
+              <p>{`${passing} Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</p>
             </div>
           })}</div>)
           )

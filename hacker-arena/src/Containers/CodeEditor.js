@@ -7,7 +7,7 @@ import fire from '../Firebase/firebase';
 import db from '../Firebase/db';
 import Disruptions from './Disruptions/disruptions';
 import updateTestSuite from '../Actions/updateTestSuite';
-import swal from 'sweetalert2';
+// import swal from 'sweetalert2';
 
 import '../Styles/CodeEditor.css';
  
@@ -35,6 +35,15 @@ class CodeEditor extends React.Component {
   }
 
   componentWillUpdate(){
+    if(this.props.currentRoom.winner !== "" && this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0]){
+      window.swal({
+        title: `The Winner is ${this.props.currentRoom.winner}!`,
+        width: 600,
+        padding: 100,
+        background: '#fff url(//bit.ly/1Nqn9HU)'
+      })
+    }
+
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
       console.log(fire.auth().currentUser.email.split('@')[0])
       if(this.props.currentRoom.creatorDisruptions){
@@ -103,14 +112,28 @@ class CodeEditor extends React.Component {
   }
 
   handleSubmit(){
-    this.receiveDisruptions("Sublime")
     let code = this.ace.editor.getValue();
     //TEST SUITE LOGIC
     // place here
     // testStatus object// actual,expected,passed,inputs
     // this.setState({testStatus: runTestsOnUserAnswer(code,this.props.testCases)});
-    
-    let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn)
+    let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn);
+    if(testStatus.every(item => {
+      return item.passed === true;
+    })) {
+      window.swal(
+        'Good job!',
+        'You passed all the tests!',
+        'success'
+      )
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(fire.auth().currentUser.email.split('@')[0])
+    } else {
+      window.swal(
+        'Oops...',
+        'Something went wrong!',
+        'error'
+      )
+    }
     console.log("the props in CodeEditor", this.props)
     console.log("the TEST STATUS", testStatus);
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
@@ -118,12 +141,9 @@ class CodeEditor extends React.Component {
     } else {
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerTestStatus').set(testStatus)
     }
-    
-
+  
     // ACE CONSOLE
     // Function to handle console.logs in the aceConsole
-
-
     let newLog = function(...theArgs){
       let results = "";
       let args = [].slice.call(arguments);
