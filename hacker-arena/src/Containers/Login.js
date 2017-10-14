@@ -1,5 +1,7 @@
 import React from 'react';
 import firebase from '../Firebase/firebase';
+import provider from '../Firebase/oauth/oauth.js'
+
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -14,37 +16,45 @@ class SignUp extends React.Component {
         }
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange =this.onChange.bind(this);
+        this.signInWithGoogle =this.signInWithGoogle.bind(this);
    
     }
-        onChange(e) {
-            this.setState({[e.target.name]: e.target.value});
-            
-        }
-        onSubmit(e) {
-            e.preventDefault();
-            let {navigate} = this.props;
-            console.log('adfaf',this.state.email)
-            console.log('adfaf',this.state.password)
-            var email = this.state.email;
-            var password = this.state.password
-            firebase.auth().signInWithEmailAndPassword(email, password).then((val)=> {
-                navigate('/');
-            
-            })
-                .catch(function(error) {
-                console.log(error)
+    
+    onChange(e) {
+        this.setState({[e.target.name]: e.target.value});
         
-              });
-            
-       
+    }
+        
+    onSubmit(e) {
+        e.preventDefault();
+        let {navigate} = this.props;
+        console.log('adfaf',this.state.email)
+        console.log('adfaf',this.state.password)
+        var email = this.state.email;
+        var password = this.state.password
+        firebase.auth().signInWithEmailAndPassword(email, password).then((val)=> {
+            navigate('/');
+        
+        })
+        .catch(function(error) {
+        console.log(error)
+        });
+    }
 
-        }
+    signInWithGoogle(e) {
+        console.log('this')
+        let {navigate} = this.props;
+        firebase.auth().signInWithPopup(provider)
+        .then(() => navigate('/'));
+    }
+
     render() {
         let { navigate } = this.props;
         return (
             <div>
                 <h1>{this.state.errmsg}</h1>
                 <button onClick={() => navigate('/SignUp') }> SignUp </button>
+                <button onClick={this.signInWithGoogle}>Log in with google</button>
             <form onSubmit= {this.onSubmit}>
                 <h1>Wanna Have Some Fun Today?</h1>
                 <div>
