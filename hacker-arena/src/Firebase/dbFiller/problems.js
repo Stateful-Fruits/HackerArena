@@ -1,6 +1,24 @@
 let problems = [];
 
 problems.push({
+  title:'Add two numbers',
+  description: `Two monkeys have two more monkeys, one male, one female, and each female will have 
+  two more monkeys every day, whereas each male will have no monkeys.
+  
+  Write a function to add two numbers a, b.
+  
+  e.g. add(5, 6) should return 11`,
+  userFn: 'add',
+  difficulty: '1',
+  tests: [`Test.assertEquals(add(2012, 2016), 4028)`,
+  `Test.assertEquals(add(5, 6), 11)`,
+  `Test.assertEquals(add(0, 5), 5)`,
+  `Test.assertEquals(add(null, 6), 6)`,
+  `Test.assertEquals(add(-6, -11),-17)`,
+ ]
+});
+
+problems.push({
   title:'Age in 2099',
   description: `Philip's just turned four and he wants to know how old he will be in various years in the future such as 2090 or 3044. His parents can't keep up calculating this so they've begged you to help them out by writing a programme that can answer Philip's endless questions.
   
