@@ -39,8 +39,19 @@ class SignUp extends React.Component {
                     id : res.uid,
                     email: res.email
                 }
+<<<<<<< HEAD
                 )
+<<<<<<< HEAD
                 navigate('/');
+=======
+                this.props.navigate('/');
+=======
+                ).then(()=>{
+                    navigate('/')
+                })
+                
+>>>>>>> fix some route
+>>>>>>> fix some route
                   console.log(res.uid,res.email);
               }).catch((err)=> {
                   this.setState({errmsg: err.message})})
