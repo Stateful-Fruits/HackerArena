@@ -27,7 +27,6 @@ class CodeEditor extends React.Component {
   }
 
   componentDidMount(){
-
     console.log(" THE CURRENT CREATOR", this.props.currentRoom.creatorName)
     console.log(" THE CURRENT USER", fire.auth().currentUser)
     // const editor = this.ace.editor;
@@ -35,6 +34,42 @@ class CodeEditor extends React.Component {
     // editor.getSession().setMode("ace/mode/javascript");
   }
 
+  componentWillUpdate(){
+    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+      console.log(fire.auth().currentUser.email.split('@')[0])
+      if(this.props.currentRoom.creatorDisruptions){
+        this.props.currentRoom.creatorDisruptions.forEach(disruption => {
+          if(disruption !== ""){
+            console.log(disruption)
+            this.receiveDisruptions(disruption);
+          }
+        })
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorDisruptions').set([""])
+      }
+
+      // if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.challengerName) {
+      //   if(this.props.currentRoom.challengerDisruptions){
+      //     this.props.currentRoom.challengerDisruptions.forEach(disruption => {
+      //       if(disruption !== ""){
+      //         console.log(disruption)
+      //         this.receiveDisruptions(disruption);
+      //       }
+      //     })
+      //     fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set([""])
+      //   }
+      // }
+    } else {
+      if(this.props.currentRoom.challengerDisruptions){
+        this.props.currentRoom.challengerDisruptions.forEach(disruption => {
+          if(disruption !== ""){
+            console.log("2",disruption)
+            this.receiveDisruptions(disruption);
+          }
+        })
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set([""])
+      }
+    }
+  }
   // NEEDS TO TAKE INPUT CODE OF EDITOR,
   // UTILIZE ROOM.PROBLEM.TESTCASES TO GRAB TEST RESULTS
   // SET TEST RESULTS IN ROOM DATABASE 
@@ -50,8 +85,12 @@ class CodeEditor extends React.Component {
 
   sendDisruptions(){
     let func = prompt("What do you want to send?")
-    let challengerDisruptions = this.props.currentRoom.challengerDisruptions.push(func);
-    let creatorDisruptions = this.props.currentRoom.creatorDisruptions.push(func);
+    console.log("disruptions", this.props.currentRoom.challengerDisruptions, this.props.currentRoom.creatorDisruptions);
+    let challengerDisruptions = this.props.currentRoom.challengerDisruptions
+    let creatorDisruptions = this.props.currentRoom.creatorDisruptions
+    challengerDisruptions = challengerDisruptions.concat(func);
+    creatorDisruptions = creatorDisruptions.concat(func);
+    console.log(challengerDisruptions, creatorDisruptions, func);
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set(challengerDisruptions)
     } else {
