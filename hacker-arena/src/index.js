@@ -17,7 +17,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import createHistory from 'history/createBrowserHistory';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, Redirect } from 'react-router';
 
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 
@@ -51,11 +51,41 @@ ReactDOM.render(
         {
           (
             <Switch>
-              <Route exact path="/" component={ Home }/>
-              <Route exact path="/About" component={About}/>
-              <Route exact path="/User" component={User}/>
-              <Route exact path="/GameRoom/:roomId" component={GameRoom}/>
-              <Route exact path="/Spectate/:roomId" component={SpectatorRoom}/>
+              <Route exact path="/" render={() => (
+                fire.auth().currentUser ? (
+                  <Home />
+                ) : (
+                  <Redirect to="/Login" />
+                )
+              )}/>
+              <Route exact path="/About" render={() => (
+                fire.auth().currentUser ? (
+                  <About />
+                ) : (
+                  <Redirect to="/Login" />      
+                )
+              )}/>
+              <Route exact path="/User" render={() => (
+                fire.auth().currentUser ? (
+                  <User />
+                ) : (
+                  <Redirect to="/Login" />      
+                )
+              )}/>
+              <Route exact path="/GameRoom/:roomId" render={() => (
+                fire.auth().currentUser ? (
+                  <GameRoom />
+                ) : (
+                  <Redirect to="/Login" />      
+                )
+              )}/>
+              <Route exact path="/Spectate/:roomId" render={() => (
+                fire.auth().currentUser ? (
+                  <SpectatorRoom />
+                ) : ( 
+                  <Redirect to="/Login" />      
+                )
+              )}/>
               <Route exact path="/SignUp" component={SignUp}/>
               <Route exact path="/Login" component={Login}/>
             </Switch>
