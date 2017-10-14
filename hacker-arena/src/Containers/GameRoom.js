@@ -44,11 +44,20 @@ class GameRoom extends React.Component {
     var gameRoom = Object.assign({}, this.props.room);
     let username = this.props.username;
     if (gameRoom.players === 2) {
-      console.log('loserrrrrrrr')
+      if (gameRoom.challengerName === username) {
+        console.log('challenger left');
+        gameRoom.challengerName = '';
+        gameRoom.players--;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      } else if (gameRoom.creatorName === username) {
+        console.log('creator left');
+        gameRoom.creatorName = '';
+        gameRoom.players--;
+        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+      }
     } else if (gameRoom.players === 1) {
       fire.database().ref('rooms/' + gameRoom.key).remove();
     }
-
   }
 
   render () {
