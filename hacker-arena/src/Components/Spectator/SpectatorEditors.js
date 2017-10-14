@@ -9,7 +9,7 @@ class SpectatorEditors extends Component {
               { [gameRoom.creatorName, gameRoom.challengerName].map((player, i) => (
                 <SpectatorEditor 
                   playerName={player}
-                  key={player+i}
+                  key={String(player)+i}
                 />
               )) }
             </div>
