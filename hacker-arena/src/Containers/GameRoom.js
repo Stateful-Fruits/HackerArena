@@ -30,7 +30,11 @@ class GameRoom extends React.Component {
   }
 
   componentWillUnmount () {
+<<<<<<< HEAD
     if (this.props.room) this.handleLeave();
+=======
+    this.handleLeave();
+>>>>>>> changes
   }
 
   handleLeave () {
@@ -38,14 +42,14 @@ class GameRoom extends React.Component {
     let username = this.props.username;
     if (gameRoom.players === 2) {
       if (gameRoom.challengerName === username) {
-        console.log('challenger left');
         gameRoom.challengerName = '';
         gameRoom.players--;
+        console.log('challenger left', gameRoom.players);
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       } else if (gameRoom.creatorName === username) {
-        console.log('creator left');
         gameRoom.creatorName = '';
         gameRoom.players--;
+        console.log('creator left', gameRoom.players);
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       }
     } else if (gameRoom.players === 1) {
