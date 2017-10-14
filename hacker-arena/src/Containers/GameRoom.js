@@ -51,8 +51,8 @@ class GameRoom extends React.Component {
       testSuite = <TestSuite currentRoom={props.room}/>; //creatorTestStatus challengerTestStatus problem
       testpassed = (
         <div>
-          <div>Challenger {props.challengerName} Passed {props.challengerTestPassed}</div>
-          <div>Creator {props.creatorName} Passed {props.creatorTestPassed}</div>
+          <div>Challenger: {props.room.challengerName} | Passed: {props.challengerTestPassed}</div>
+          <div>Creator: {props.room.creatorName} | Passed: {props.creatorTestPassed}</div>
         </div>
       )
     } else {
