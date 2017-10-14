@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import swal from 'sweetalert2';
+
+import fire from '../Firebase/firebase';
+import updateSpecificRoom from '../Actions/updateSpecificRoom';
+
 import CodeEditor from './CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
-//import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
-import updateSpecificRoom from '../Actions/updateSpecificRoom';
-import fire from '../Firebase/firebase';
-import swal from 'sweetalert2';
-import '../Styles/GameRoom.css';
+import ProgressBar from '../Components/GameRoom/ProgressBar';
+import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 
 import '../Styles/GameRoom.css';
 
@@ -16,29 +18,16 @@ class GameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
   }
 
+  componentWillMount() {
+    this.handleEnter();
+  }
+
   componentDidMount () {
     window.addEventListener('beforeunload', this.handleLeave);
   }
 
   componentWillUnmount () {
-    var gameRoom = Object.assign({}, this.props.room);
-    let username = this.props.username;
-    if (gameRoom.players === 2) {
-      if (gameRoom.challengerName === username) {
-        console.log('challenger left');
-        gameRoom.challengerName = '';
-        gameRoom.players--;
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      } else if (gameRoom.creatorName === username) {
-        console.log('creator left');
-        gameRoom.creatorName = '';
-        gameRoom.players--;
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      }
-    } else if (gameRoom.players === 1) {
-      console.log(`room ${gameRoom.key} about to be destroyed`);
-      fire.database().ref('rooms/' + gameRoom.key).remove();
-    }
+    this.handleLeave();
   }
 
   handleLeave () {
@@ -62,7 +51,7 @@ class GameRoom extends React.Component {
     }
   }
 
-  componentWillMount () {
+  handleEnter() {
     // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
     //   let gameRoom = snapshot.val();
     //   gameRoom.key = this.props.Key;
@@ -90,51 +79,20 @@ class GameRoom extends React.Component {
   } 
   
   render () {
-    let props = this.props;
-    console.log(this.props);
-    let message, editor, testSuite, testpassed;
-    let players = this.props.room.players || 1;
-    let progress = props.room.creatorTestPassed;
-    let total = props.room.problem.tests.length;
-    let percent = (progress/total) * 100;
-    let challengerPercent = (props.room.challengerTestPassed/total) * 100;
-    if (players === 2) {
-      message = 'COMPETE';
-      editor = <CodeEditor currentRoom={props.room}/>;
-      testSuite = <TestSuite currentRoom={props.room}/>; //creatorTestStatus challengerTestStatus problem
-      testpassed = (
-        <div>
-          <div>Challenger: {props.room.challengerName} | Passed: {props.challengerTestPassed}</div>
-          <div className="progress">
-            <div className="progress-bar" role="progressbar" aria-valuenow="70"
-              aria-valuemin="0" aria-valuemax="100" style={{width: `${percent}%`}}>
-              <span className="sr-only">bobo Complete</span>
-            </div>
-          </div>
-          <div>Creator: {props.room.creatorName} | Passed: {props.creatorTestPassed}</div>
-          <div className="progress">
-            <div className="progress-bar" role="progressbar" aria-valuenow="70"
-              aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
-              <span className="sr-only">bobo Complete</span>
-            </div>
-          </div>
+    let { room } = this.props;
+    if (!room) return (<GameRoomLoading />);
+    let players = room.players || 1;
+    let isRoomFull = players === 2;
+    return (
+      <div>
+        <div>{isRoomFull ? 'COMPLETE' : 'Waiting for one more player'}</div>
+        {isRoomFull ? <ProgressBar room={ room }/> : null}
+        <div id="editorAndTestSuite">
+        {isRoomFull ? <CodeEditor currentRoom={room}/> : null}
+        {isRoomFull ? <TestSuite currentRoom={room}/> : null}
         </div>
-      )
-    } else {
-      message = 'Waiting for one more player';
-      editor = null;
-      testSuite = null;
-      testpassed = null;
-    }
-
-    return <div>
-      <div>{message}</div>
-      {testpassed}
-      <div id="editorAndTestSuite">
-      {editor}
-      {testSuite}
       </div>
-    </div>
+    )
   }
 }
 const mapStateToProps = (state) => {
