@@ -49,7 +49,7 @@ const Disruptions = {
     
     // Duration ends 
     setTimeout(() => {
-      $("#ace-editor").css({"transform": "scaleX(-1)"});
+      $("#ace-editor").css({"transform": "scaleX(1)"});
       $("#ace-editor").css({"filter": "none"});
     },5000)
 	},
@@ -63,18 +63,23 @@ const Disruptions = {
     }, 1500 )
 
     // Duration ends
-    $("#ace-editor").stop();
+    setTimeout(() => {
+      $("#ace-editor").animate({
+        "width" : "100%",
+        "marginLeft": "-0.6in",
+        "fontSize": "10px",
+        "borderWidth": "0px"
+        }, 1500 )
+    },5000)
 	},
 	Sublime: function(){
-    // Sublime popups for the next 5 times the user types
-    let counter = 5;
-    while (counter > 0){
-      $( "#ace-editor" ).keydown(function() {
+    // Sublime popups for the next 5 seconds
+      $("#ace-editor").keydown(function() {
         alert( "Hello! Thanks for trying out Sublime Text.\n\nThis is an unregistered evaluation version, and although the trial is untimed, a license must be purchased for continued use.\n\nWould you like to purchase a license now?" );
       })
-      counter--;
-    }
-    $("#ace-editor").unbind('keydown');
+      setTimeout(() => {
+        $("#ace-editor").unbind('keydown');
+      },5000)
 	},
   Move: function(){
   // Randomly move the console around
@@ -111,17 +116,17 @@ ActualTimeTravel: function(editor){
     editor.undo();
   }
 },
-Kennify: function(){
+Kennify: function(editor){
   // Change background to Kenny
   $("#ace-editor").css({
-    "background":" url(./kenny.jpg) center",
+    "background":" url('/assets/kenny.jpg') center",
     "backgroundSize":" cover "  
   })
 
   setTimeout(() => {
-    $("#ace-editor").css({
-      "background": "none" 
-    })
+    // editor.getSession().setMode("ace/mode/javascript");
+    $("#ace-editor").css({"background": "#272822", "color": "white"});
+    // editor.setTheme("ace/theme/monokai");
   }, 5000);
 }
 
