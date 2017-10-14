@@ -49,7 +49,7 @@ ReactDOM.render(
     <ConnectedRouter history={history}>
       <App>
         {
-          fire.auth().currentUser ? (
+          (
             <Switch>
               <Route exact path="/" component={ Home }/>
               <Route exact path="/About" component={About}/>
@@ -58,11 +58,6 @@ ReactDOM.render(
               <Route exact path="/Spectate/:roomId" component={SpectatorRoom}/>
               <Route exact path="/SignUp" component={SignUp}/>
               <Route exact path="/Login" component={Login}/>
-            </Switch>
-          ) : (
-            <Switch>
-              <Route exact path="/SignUp" component={SignUp}/>
-              <Route exact path="/*" component={Login}/>
             </Switch>
           )
         }
