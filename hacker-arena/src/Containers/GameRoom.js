@@ -56,6 +56,7 @@ class GameRoom extends React.Component {
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       }
     } else if (gameRoom.players === 1) {
+      console.log(`room ${gameRoom.key} about to be destroyed`);
       fire.database().ref('rooms/' + gameRoom.key).remove();
     }
   }
