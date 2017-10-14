@@ -8,7 +8,7 @@ const TestSuite = props => {
       <div id="testSuite">
         <div> PROBLEM TITLE{props.currentRoom.problem.title} </div>
         <div id="description"> PROBLEM DESCRIPTION {props.currentRoom.problem.description}</div>
-        {props.currentRoom.creatorTestStatus ? 
+        {(props.currentRoom.creatorTestStatus && props.currentRoom.challengerTestStatus) ? 
           ((fire.auth().currentUser.email.split('@')[0] === props.currentRoom.creatorName) ? 
           (<div> TESTS + TESTS PASSED {props.currentRoom.creatorTestStatus.map(tests => {
             return <div>
