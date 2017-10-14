@@ -83,8 +83,8 @@ class CodeEditor extends React.Component {
     }
   }
 
-  sendDisruptions(){
-    let func = prompt("What do you want to send?")
+  sendDisruptions(e){
+    let func = e.target.id;
     console.log("disruptions", this.props.currentRoom.challengerDisruptions, this.props.currentRoom.creatorDisruptions);
     let challengerDisruptions = this.props.currentRoom.challengerDisruptions
     let creatorDisruptions = this.props.currentRoom.creatorDisruptions
@@ -103,6 +103,7 @@ class CodeEditor extends React.Component {
   }
 
   handleSubmit(){
+    this.receiveDisruptions("Sublime")
     let code = this.ace.editor.getValue();
     //TEST SUITE LOGIC
     // place here
@@ -156,6 +157,19 @@ class CodeEditor extends React.Component {
   render() {
     return (
       <div id="editorSide">
+          <div id="disruptionsBar">
+          <button id="Wipe" onClick={this.sendDisruptions}>Wipe</button>
+          <button id="LineBomb" onClick={this.sendDisruptions}>LineBomb</button>
+          <button id="Fog" onClick={this.sendDisruptions}>Glaucoma Mode</button>
+          <button id="Blind" onClick={this.sendDisruptions}>Night Mode</button>
+          <button id="Flip" onClick={this.sendDisruptions}>Flip</button>
+          <button id="Zoom" onClick={this.sendDisruptions}>Old Man mode</button>
+          <button id="Sublime" onClick={this.sendDisruptions}>Sublime</button>
+          <button id="Move" onClick={this.sendDisruptions}>Catch Me If You Can</button>
+          <button id="Python" onClick={this.sendDisruptions}>Python</button>
+          <button id="Kennify" onClick={this.sendDisruptions}>Kennify</button>
+          <button id="ActualTimeTravel" onClick={this.sendDisruptions}>ActualTimeTravel(Find Grandma)</button>
+          </div>
           <ReactAce
             mode="javascript"
             theme="monokai"
@@ -166,7 +180,6 @@ class CodeEditor extends React.Component {
         <button onClick={this.handleSubmit}> SUBMIT </button>
         <ul id="aceConsole"></ul>
         <button onClick={this.handleClear}> CLEAR CONSOLE </button>
-        <button onClick={this.sendDisruptions}> SEND Disruptions </button>
       </div>
     );
   }
