@@ -1,5 +1,7 @@
 import React from 'react';
 import firebase from '../Firebase/firebase';
+import provider from '../Firebase/oauth/oauth.js'
+
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -15,6 +17,7 @@ class SignUp extends React.Component {
         }
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange =this.onChange.bind(this);
+        this.signInWithGoogle =this.signInWithGoogle.bind(this);
    
     }
         onChange(e) {
@@ -34,11 +37,19 @@ class SignUp extends React.Component {
                 .catch(function(error) {
                 console.log(error)
         
-              });
-            
-       
+        })
+        .catch(function(error) {
+        console.log(error)
+        });
+    }
 
-        }
+    signInWithGoogle(e) {
+        console.log('this')
+        let {navigate} = this.props;
+        firebase.auth().signInWithPopup(provider)
+        .then(() => navigate('/'));
+    }
+
     render() {
         let { navigate } = this.props;
         return (
@@ -46,6 +57,8 @@ class SignUp extends React.Component {
                 <h1>{this.state.errmsg}</h1>
                 <div className="container">
                     <img src='../profile.jpg' alt='Waiting' />
+                <button onClick={() => navigate('/SignUp') }> SignUp </button>
+                <button onClick={this.signInWithGoogle}>Log in with google</button>
             <form onSubmit= {this.onSubmit}>
            
                 <h1 className='header'>Wanna Have Some Fun Today?</h1>

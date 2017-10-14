@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import provider from './oauth/oauth.js'
 
 const config = {
     apiKey: "AIzaSyBh-fU3BoBvdgOvCjzDb8Gql86RlWwsfxU",
