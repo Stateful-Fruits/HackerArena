@@ -35,7 +35,7 @@ class CodeEditor extends React.Component {
   }
 
   componentWillUpdate(){
-    if(this.props.currentRoom.winner !== "" && this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0]){
+    if(this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])){
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
       window.swal({
         title: `The Winner is ${this.props.currentRoom.winner}!`,
@@ -43,6 +43,13 @@ class CodeEditor extends React.Component {
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'
       })
+    } else if (this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner === fire.auth().currentUser.email.split('@')[0])){
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
+      window.swal(
+        'Good job!',
+        'You passed all the tests!',
+        'success'
+      )
     }
 
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
@@ -122,11 +129,6 @@ class CodeEditor extends React.Component {
     if(testStatus.every(item => {
       return item.passed === true;
     })) {
-      window.swal(
-        'Good job!',
-        'You passed all the tests!',
-        'success'
-      )
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(fire.auth().currentUser.email.split('@')[0])
     } else {
       window.swal(
