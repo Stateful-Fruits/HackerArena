@@ -57,7 +57,7 @@ class CreateGameRoom extends React.Component {
     };
     db.Rooms.push(room).then(added => {
       room.key = added.key;
-      this.props.updateCurrentGameRoom(room);
+      // this.props.updateCurrentGameRoom(room);
       this.props.navigateToGameRoom(added.key);
     })
   
