@@ -61,7 +61,7 @@ class SignUp extends React.Component {
                     <input
                     value = {this.state.email}
                     onChange= {this.onChange}
-                    type= 'text'
+                    type= 'email'
                     name= 'email'
                     className = 'form-control'
                     />
