@@ -36,6 +36,7 @@ class CodeEditor extends React.Component {
 
   componentWillUpdate(){
     if(this.props.currentRoom.winner !== "" && this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0]){
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
       window.swal({
         title: `The Winner is ${this.props.currentRoom.winner}!`,
         width: 600,
