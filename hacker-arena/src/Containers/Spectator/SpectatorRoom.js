@@ -16,8 +16,8 @@ class SpectatorRoom extends Component {
     return gameRoom ? (
       <div>
         {/* 
-          - need to get the game room information from mapStateToProps
-          - create a view for the problem prompt
+          - include the list of disruptions and progress bar in 
+            the problem description
           - create a view for each player's editor and allow the 
           spectator to run that players code in the editor's console
           - have a chat for the spectators
