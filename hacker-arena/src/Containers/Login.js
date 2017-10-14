@@ -28,7 +28,11 @@ class SignUp extends React.Component {
             var email = this.state.email;
             var password = this.state.password
             firebase.auth().signInWithEmailAndPassword(email, password).then((val)=> {
+<<<<<<< HEAD
                 navigate('/');
+=======
+                navigate('/Home')
+>>>>>>> changes
             
             })
                 .catch(function(error) {
@@ -50,11 +54,19 @@ class SignUp extends React.Component {
                 <div>
                     <label>email</label>
                     <input
+<<<<<<< HEAD
                         value = {this.state.email}
                         onChange= {this.onChange}
                         type= 'text'
                         name= 'email'
                         className = 'form-control'
+=======
+                    value = {this.state.email}
+                    onChange= {this.onChange}
+                    type= 'email'
+                    name= 'email'
+                    className = 'form-control'
+>>>>>>> changes
                     />
                     <label>Password</label>
                     <input
