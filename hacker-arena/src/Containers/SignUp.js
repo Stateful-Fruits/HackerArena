@@ -25,6 +25,7 @@ class SignUp extends React.Component {
         onSubmit(e) {
             
             e.preventDefault();
+            let {navigate} = this.props;
             // db.Users.once('users').then((val)=> {
             //     console.log(val);
             // }) 
@@ -32,6 +33,7 @@ class SignUp extends React.Component {
             var password = this.state.password
             var db = firebase.database();
             firebase.auth().createUserWithEmailAndPassword(email, password).then((res,b)=> {
+                
                 const username = beforeAt(res.email); 
                 db.ref('users/'+username).set({
                     id : res.uid,
