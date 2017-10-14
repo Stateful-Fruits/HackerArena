@@ -6,6 +6,7 @@ import './Styles/App.css';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import CodeEditor from './Containers/CodeEditor.js';
+import UserButton from  './Components/User/UserButton.js';
 
 import fire from './Firebase/firebase';
 import db from './Firebase/db';
@@ -28,7 +29,11 @@ class App extends Component {
     });
 
   }
-
+  // firebase.auth().signOut().then(function() {
+  //   // Sign-out successful.
+  // }, function(error) {
+  //   // An error happened.
+  // });
   render() {
     let { navigate } = this.props;
     return (
@@ -53,6 +58,9 @@ class App extends Component {
           </button>
           )
         }
+        <button onClick={()=>fire.auth().signOut().then(()=>{
+navigate('/Login');
+        })}> Logout</button>
         <div>
           { this.props.children }
         </div>

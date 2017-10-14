@@ -3,6 +3,7 @@ import firebase from '../Firebase/firebase';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import '../Styles/Log.css';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -28,8 +29,7 @@ class SignUp extends React.Component {
             var email = this.state.email;
             var password = this.state.password
             firebase.auth().signInWithEmailAndPassword(email, password).then((val)=> {
-                navigate('/');
-            
+                navigate('/') 
             })
                 .catch(function(error) {
                 console.log(error)
@@ -44,32 +44,43 @@ class SignUp extends React.Component {
         return (
             <div>
                 <h1>{this.state.errmsg}</h1>
-                <button onClick={() => navigate('/SignUp') }> SignUp </button>
+                <div className="container">
+                    <img src='../profile.jpg' alt='Waiting' />
             <form onSubmit= {this.onSubmit}>
-                <h1>Wanna Have Some Fun Today?</h1>
-                <div>
-                    <label>email</label>
+           
+                <h1 className='header'>Wanna Have Some Fun Today?</h1>
+                
+                    
+                    <div className= "form-input">
+                        <label className='header'>email</label> 
                     <input
-                        value = {this.state.email}
-                        onChange= {this.onChange}
-                        type= 'text'
-                        name= 'email'
-                        className = 'form-control'
+                    value = {this.state.email}
+                    onChange= {this.onChange}
+                    placeholder= 'Enter your email'
+                    type= 'text'
+                    name= 'email'
+                    className = 'form-control'
                     />
-                    <label>Password</label>
+                    <label className='header'>Password</label>
+                    </div>
+                    <div>
                     <input
                     value = {this.state.password}
                     onChange= {this.onChange}
                     type= 'password'
                     name= 'password'
                     className = 'form-control'
+                    placeholder="Enter Password"
                     />
                     </div>
+                <a onClick={() => navigate('/SignUp') }> SignUp </a>
+                  
                     <div>
-                        <button type = 'submit' value= 'submit'>
+                        <button type = 'submit' value= 'submit' className="btn-login">
                             Start Now</button>
                             </div>
-                            </form>
+                            </form> 
+                             </div>
                             </div>
         )
     }
