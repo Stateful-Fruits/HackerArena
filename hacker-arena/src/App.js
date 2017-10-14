@@ -29,7 +29,11 @@ class App extends Component {
     });
 
   }
-
+  // firebase.auth().signOut().then(function() {
+  //   // Sign-out successful.
+  // }, function(error) {
+  //   // An error happened.
+  // });
   render() {
     let { navigate } = this.props;
     return (
@@ -54,6 +58,9 @@ class App extends Component {
           </button>
           )
         }
+        <button onClick={()=>fire.auth().signOut().then(()=>{
+navigate('/Login');
+        })}> Logout</button>
         <div>
           { this.props.children }
         </div>
