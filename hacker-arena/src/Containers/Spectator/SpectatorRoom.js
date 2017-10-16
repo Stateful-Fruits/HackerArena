@@ -34,6 +34,7 @@ class SpectatorRoom extends Component {
   }
 
   componentDidMount() {
+    window.addEventListener('beforeunload', this.leaveGameRoom);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     this.enterGameRoom(gameRoom);
   }
