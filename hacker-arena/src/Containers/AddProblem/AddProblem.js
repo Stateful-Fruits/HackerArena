@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import updateAddProblem from '../../Actions/addProblem';
-
+import updateAddProblem from '../../Actions/addProblem/updateAddProblem';
+import fire from '../../Firebase/firebase';
 
 class AddProblem extends React.Component {
   constructor (props) {
@@ -16,18 +16,27 @@ class AddProblem extends React.Component {
     let property = e.target.dataset.property;
     let problem = Object.assign({}, this.props.problem);
     problem[property] = value;
-    this.props.submit(problem);
+    this.props.update(problem);
   }
 
   handleSubmit (e) {
     e.preventDefault();
-
-  }
-  componentWillReceiveProps () {
-    
+    let problem = this.props.problem;
+    let truth = true;
+    for (var key in problem) {
+      if (problem[key].length === 0) {
+        truth = false;
+      }
+    }
+    if (truth) {
+      let added = fire.database().ref('problems').push(problem).key;
+      console.log('id of problem that was added ',added);
+    } else {
+      console.log('has empty fields', problem);
+    }
   }
   componentDidMount () {
-    console.log ('props is ',this.props);
+    //console.log ('props is ',this.props);
   }
 
   render () {
@@ -41,12 +50,13 @@ class AddProblem extends React.Component {
           onChange={this.handleChange}
           data-property='title'/><br/>
 
-          Problem description: <textarea 
+          Problem description: <br/>
+          <textarea 
           value={problem.problemDescription} 
           onChange={this.handleChange}
           rows="10" 
           cols="70"
-          data-property='problemDescription'/><br/>
+          data-property='description'/><br/>
 
           Difficulty: <input value={problem.difficulty} 
           onChange={this.handleChange}
@@ -54,14 +64,16 @@ class AddProblem extends React.Component {
 
           Function Name: <input value={problem.fxnName} 
           onChange={this.handleChange}
-          data-property='fxnName'/><br/>
-
-          Tests: <input value={problem.oneTest} 
+          data-property='userFn'/><br/>
+          Format: Test.assertEquals(userFn(2012, 2016), 4028)<br/>
+          <button type='button' value={problem.addingTest}>Add To Tests:</button> <input value={problem.addingTest} 
           onChange={this.handleChange}
-          data-property='oneTest'/><br/>
+          data-property='addingTest'/><br/>
+
+          <div>Tests so far: {JSON.stringify(problem.tests)}</div>
 
           {/* {JSON.stringify(props.allTests)} */}
-          <button type='submit'></button>
+          <button type='submit'> Add This Problem </button>
         </form>
       </div>
     )
@@ -77,7 +89,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    submit: (problem) => {
+    update: (problem) => {
       dispatch(updateAddProblem(problem));
     }
   }

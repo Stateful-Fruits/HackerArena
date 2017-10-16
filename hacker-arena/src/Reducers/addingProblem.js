@@ -1,11 +1,20 @@
 let start = {
-  title: '',
-  problemDescription: '',
+  description: '',
   difficulty: '',
-  fxnName: '',
-  allTests: [],
-  oneTest: ''
-};
+  tests: [],
+  title: '',
+  userFn: '',
+  addingTest: ''
+}
+
+// {
+//   title: '',
+//   problemDescription: '',
+//   difficulty: '',
+//   fxnName: '',
+//   allTests: [],
+//   oneTest: ''
+// };
 
 const addingProblem = (state=start, action) => {
   switch (action.type) {
