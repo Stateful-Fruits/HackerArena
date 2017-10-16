@@ -24,6 +24,7 @@ class SpectatorChat extends Component {
     let room = this.props.gameRoom;
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
     this.props.sendSpectatorMessage(room, username, msg);
+    this.setState({ msg: '' });
   }
 
   render() {
@@ -35,18 +36,18 @@ class SpectatorChat extends Component {
         <form onSubmit={this.handleMsgSend}>
           <h2>Chat: </h2>
             <p>{(spectators ? spectators.join(', ') : '')}</p>
-          <input type="text" onChange={this.handleMsgInput} />
+          <input type="text" onChange={this.handleMsgInput} value={ this.state.msg }/>
           <button>
             <h3>Send</h3>
           </button>
         </form>
-        <div>
+        <div style={{ padding: '5%' }}>
           { spectatorChat.map((chatMessage, i) => (
             <SpectatorChatMessage 
               key={chatMessage.msg+i}
               chatMessage={chatMessage}
             /> 
-          ))}
+          )).reverse()}
         </div>
       </div>
     );
