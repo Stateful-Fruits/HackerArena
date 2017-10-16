@@ -35,6 +35,8 @@
   height: auto;
   display: inline-block;
   align: right;
+}
+
 .navbar {
   border-radius: 0px !important;
 }
