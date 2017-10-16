@@ -7,6 +7,8 @@ import SpectatorChat from '../../Components/Spectator/SpectatorChat';
 import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDescription';
 import SpectatorError from '../../Components/Spectator/SpectatorError';
 
+import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
+
 class SpectatorRoom extends Component {
   sendSpectatorMessage(room, username, msg) {
     let gameRoom = Object.assign({}, room);
@@ -67,6 +69,7 @@ class SpectatorRoom extends Component {
         />
       </div>
     ) : (
+      Object.keys(this.props.gameRooms).length === 0 ? <WaitingForPlayer /> :
       <SpectatorError 
         errorMessage='You Need To Enter A Game Room First'
       />
