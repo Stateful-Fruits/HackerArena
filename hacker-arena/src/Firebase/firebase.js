@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import provider from './oauth/oauth.js'
 
 const config = {
     apiKey: "AIzaSyBh-fU3BoBvdgOvCjzDb8Gql86RlWwsfxU",
@@ -8,6 +9,7 @@ const config = {
     storageBucket: "",
     messagingSenderId: "194372044318"
 };
+
 const fire = firebase.initializeApp(config);
 
 export default fire;

@@ -1,32 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
+import GameRoom from './GameRoom';
 import GameRoomList from '../Components/GameRooms/GameRoomList';
+import CreateGameRoom from './CreateGameRoom';
 
-const sampleGameRooms = [
-  {roomName: 'Paul\'s Game'},
-  {roomName: 'Kai\'s Game'},
-  {roomName: 'Simon\'s Game'},
-  {roomName: 'David\'s Game'},
-];
+class Home extends Component {
 
-const Home = ({ gameRooms, dispatch }) => (
-  <div>
-    <button onClick={ () => dispatch(push('/About')) }><h1>About</h1></button>
-    <h2>Welcome to Hacker Arena</h2>
-    <GameRoomList 
-      gameRooms={gameRooms}
-    />
-  </div>
-);
+  render() {
+    let { gameRooms, navigate } = this.props;
+    return (
+       <div>    
+         <h2>Welcome to Hacker Arena</h2>
+         <CreateGameRoom />
+         {gameRooms ? <GameRoomList 
+           gameRooms={gameRooms}
+           navigate={navigate}
+         /> : null}
+       </div>
+      );
+  }
+}
 
 const mapStateToProps = (state) => ({
-  gameRooms: sampleGameRooms
+  gameRooms: state.gameRooms
 });
 
-// const mapDispatchToProps = () => {
-// };
+const mapDispatchToProps = (dispatch) => ({
+  navigate: (route) => dispatch(push(route)),
+});
 
-
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
