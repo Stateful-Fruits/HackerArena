@@ -43,6 +43,7 @@ class App extends Component {
           {
           fire.auth().currentUser ? (
             <span className="profile-image">
+              <span className="profile-greeting"> Hi { fire.auth().currentUser.email.split('@')[0] }!</span>
               <img className="profile-photo"
               src={fire.auth().currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}>
               </img>
@@ -78,17 +79,20 @@ navigate('/Login');
             <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/') }>Home</li>
             <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/About') }>About</li>
             <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/AddProblem') }>Add Problem</li>
-            
-          {
-            fire.auth().currentUser ? (
-              <li className="nav-item rightNav navbar-brand"> Hi { fire.auth().currentUser.email.split('@')[0] }</li>
-            ) : (
-              <li className="nav-item rightNav navbar-brand" onClick={ () => navigate('/SignUp') }>Sign Up / Log In</li>
-            )
-          }
-          <li className="nav-item rightNav navbar-brand" onClick={()=>fire.auth().signOut().then(()=>{
-  navigate('/Login');
-          })}> Logout</li>
+            {
+              fire.auth().currentUser ? (
+                <li
+                  className="nav-item rightNav navbar-brand"
+                  onClick={
+                    ()=>fire.auth().signOut().then(()=>{
+                      navigate('/Login');
+                      })
+                  }
+                >
+                  Logout
+                </li>
+              ) : null
+            }
           </ul>
         </nav>
         <div>
