@@ -39,8 +39,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-<<<<<<< HEAD
-          <h1 className="App-title">Welcome to Hacker Arena</h1>
+          <h1 className="App-title">HACKER ARENA</h1>
           {
           fire.auth().currentUser ? (
             <span className="profile-image">
@@ -49,9 +48,6 @@ class App extends Component {
               </img>
             </span>
           ) : null}
-=======
-          <h1 className="App-title">HACKER ARENA</h1>
->>>>>>> dev
         </header>
         {/* <button onClick={ () => navigate('/') }>
           <h3>Home</h3>
