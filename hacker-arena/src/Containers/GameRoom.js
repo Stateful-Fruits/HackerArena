@@ -24,7 +24,7 @@ class GameRoom extends React.Component {
   // componentWillReceiveProps() {
   //   if (this.props.room) this.handleEnter();
   // }
-
+  
   componentDidMount () {
     if (this.props.room) window.addEventListener('beforeunload', this.handleLeave);
   }
