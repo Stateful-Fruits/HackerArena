@@ -75,7 +75,7 @@ class CreateGameRoom extends React.Component {
   render () {
     return (
       <div>
-        <button onClick={this.createRoom}>Create Game Room</button>
+        <button onClick={this.createRoom}><h3>Create Game Room</h3></button>
       </div>
     )
   }
