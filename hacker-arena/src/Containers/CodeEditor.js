@@ -7,7 +7,6 @@ import fire from '../Firebase/firebase';
 import db from '../Firebase/db';
 import Disruptions from './Disruptions/disruptions';
 import updateTestSuite from '../Actions/updateTestSuite';
-// import swal from 'sweetalert2';
 
 import '../Styles/CodeEditor.css';
  
@@ -32,25 +31,37 @@ class CodeEditor extends React.Component {
     // const editor = this.ace.editor;
     // editor.setTheme("ace/theme/monokai");
     // editor.getSession().setMode("ace/mode/javascript");
+    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
+    setInterval(()=> {
+      if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName){
+        let newCreatorCredits = this.props.currentRoom.creatorCredits + 5;
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
+        let newChallengerCredits = this.props.currentRoom.challengerCredits + 5;
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+      }
+    }, 30000)
   }
 
   componentWillUpdate(){
-    if(this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])){
-      fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
+    //  && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])
+    if(this.props.currentRoom.winner !== "" 
+     && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])){
       window.swal({
         title: `The Winner is ${this.props.currentRoom.winner}!`,
         width: 600,
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'
       })
-    } else if (this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner === fire.auth().currentUser.email.split('@')[0])){
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
-      window.swal(
-        'Good job!',
-        'You passed all the tests!',
-        'success'
-      )
-    }
+    } 
+    // else if (this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner === fire.auth().currentUser.email.split('@')[0])){
+    //   window.swal(
+    //     'Good job!',
+    //     'You passed all the tests!',
+    //     'success'
+    //   )
+    //   fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
+    // }
 
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
       console.log(fire.auth().currentUser.email.split('@')[0])
@@ -101,18 +112,32 @@ class CodeEditor extends React.Component {
   }
 
   sendDisruptions(e){
-    let func = e.target.id;
+    let func = e.target.id.split(" ")[0];
+    let cost = e.target.id.split(" ")[1];
     console.log("disruptions", this.props.currentRoom.challengerDisruptions, this.props.currentRoom.creatorDisruptions);
     let challengerDisruptions = this.props.currentRoom.challengerDisruptions
     let creatorDisruptions = this.props.currentRoom.creatorDisruptions
     challengerDisruptions = challengerDisruptions.concat(func);
     creatorDisruptions = creatorDisruptions.concat(func);
     console.log(challengerDisruptions, creatorDisruptions, func);
-    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+    
+    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName 
+    && this.props.currentRoom.creatorCredits >= cost){
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set(challengerDisruptions)
-    } else {
+      let newCreatorCredits = this.props.currentRoom.creatorCredits - cost;
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
+      
+    } else if (fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.challengerName
+    && this.props.currentRoom.challengerCredits >= cost){
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorDisruptions').set(creatorDisruptions)
+      let newChallengerCredits = this.props.currentRoom.challengerCredits - cost;
+      fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
     }
+      // if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+      //   fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set(challengerDisruptions)
+      // } else {
+      //   fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorDisruptions').set(creatorDisruptions)
+      // }
   }
 
   receiveDisruptions(func){
@@ -122,27 +147,40 @@ class CodeEditor extends React.Component {
   handleSubmit(){
     let code = this.ace.editor.getValue();
     //TEST SUITE LOGIC
-    // place here
-    // testStatus object// actual,expected,passed,inputs
-    // this.setState({testStatus: runTestsOnUserAnswer(code,this.props.testCases)});
     let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn);
-    if(testStatus.every(item => {
-      return item.passed === true;
-    })) {
-      fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(fire.auth().currentUser.email.split('@')[0])
+    if(Array.isArray(testStatus)){
+      console.log(testStatus);
+      if(testStatus.every(item => {
+        return item.passed === true;
+      })) {
+        window.swal(
+          'Good job!',
+          'You passed all the tests!',
+          'success'
+        )
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(fire.auth().currentUser.email.split('@')[0])
+      } else {
+        window.swal(
+          'Oops...',
+          'Something went wrong!',
+          'error'
+        )
+      }
+    }
+    console.log("the props in CodeEditor", this.props)
+    console.log("the TEST STATUS", testStatus);
+    if(testStatus[0] && testStatus[0].actual){
+      if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorTestStatus').set(testStatus)
+      } else {
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerTestStatus').set(testStatus)
+      }
     } else {
       window.swal(
         'Oops...',
         'Something went wrong!',
         'error'
       )
-    }
-    console.log("the props in CodeEditor", this.props)
-    console.log("the TEST STATUS", testStatus);
-    if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
-      fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorTestStatus').set(testStatus)
-    } else {
-      fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerTestStatus').set(testStatus)
     }
   
     // ACE CONSOLE
@@ -162,7 +200,8 @@ class CodeEditor extends React.Component {
 
       // eslint-disable-next-line
     try {
-      console.log(eval(code));
+      // console.log("CODE", eval(code));
+      console.log("NEWCODE", eval(newCode));
       if(eval(code)){
           $('#aceConsole').append(`<li>${eval(newCode)}</li>`);
       } else {
@@ -175,24 +214,32 @@ class CodeEditor extends React.Component {
   
   handleClear(){
     $('#aceConsole').empty();
+    // $('#aceConsole').append(`<li>Console</li>`);
   }
-
+  
+  // {/* <button className="btn clearConsole" onClick={this.handleClear}> CLEAR CONSOLE </button> */}
   render() {
     return (
       <div id="editorSide">
           <div id="disruptionsBar">
-          <button id="Wipe" onClick={this.sendDisruptions}>Wipe</button>
-          <button id="LineBomb" onClick={this.sendDisruptions}>LineBomb</button>
-          <button id="Fog" onClick={this.sendDisruptions}>Glaucoma Mode</button>
-          <button id="Blind" onClick={this.sendDisruptions}>Night Mode</button>
-          <button id="Flip" onClick={this.sendDisruptions}>Flip</button>
-          <button id="Zoom" onClick={this.sendDisruptions}>Old Man mode</button>
-          <button id="Sublime" onClick={this.sendDisruptions}>Sublime</button>
-          <button id="Move" onClick={this.sendDisruptions}>Catch Me If You Can</button>
-          <button id="Python" onClick={this.sendDisruptions}>Python</button>
-          <button id="Kennify" onClick={this.sendDisruptions}>Kennify</button>
-          <button id="ActualTimeTravel" onClick={this.sendDisruptions}>ActualTimeTravel(Find Grandma)</button>
+            {fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName ?
+          <button className=" btn disruptionsHeader"><span className="dc badge">{this.props.currentRoom.creatorCredits}</span> Disruptions</button>
+          :
+          <button className=" btn disruptionsHeader"><span className="dc badge">{this.props.currentRoom.challengerCredits}</span> Disruptions</button>
+            }
+          <button className="btn" id="Blind 1" onClick={this.sendDisruptions}><span className="d1 badge">1</span> Blind</button>
+          <button className="btn" id="Python 1" onClick={this.sendDisruptions}><span className="d1 badge">1</span> Python</button>
+          <button className="btn" id="Kennify 1" onClick={this.sendDisruptions}><span className="d1 badge">1</span> Kennify</button>
+          <button className="btn" id="LineBomb 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> LineBomb</button>
+          <button className="btn" id="Fog 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> Fog</button>
+          <button className="btn" id="Flip 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> Flip</button>
+          <button className="btn" id="Zoom 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> Old Man</button>
+          <button className="btn" id="Sublime 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> Sublime</button>
+          <button className="btn" id="Move 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> Move</button>
+          <button className="btn" id="ActualTimeTravel 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> Undo</button>
+          <button className="btn" id="Wipe 10" onClick={this.sendDisruptions}><span className="d10 badge">10</span> Wipe</button>
           </div>
+          <button className="btn editorHeader" color="secondary" size="lg" >Editor</button>
           <ReactAce
             mode="javascript"
             theme="monokai"
@@ -200,25 +247,17 @@ class CodeEditor extends React.Component {
             style={{ height: '400px', width: '50vw' }}
             ref={instance => { this.ace = instance; }} // Let's put things into scope
           />
-        <button onClick={this.handleSubmit}> SUBMIT </button>
-        <ul id="aceConsole"></ul>
-        <button onClick={this.handleClear}> CLEAR CONSOLE </button>
+        <button className="btn submitButton" onClick={this.handleSubmit}> SUBMIT </button>
+        
+        <button className="btn consoleHeader" color="secondary" size="lg" >
+          <span>Console</span>
+          <span className="clearConsole" onClick={this.handleClear}>X</span>
+        </button>
+        <ul id="aceConsole">
+        </ul>
       </div>
     );
   }
 }
-
-// const mapStateToProps = (state) => {
-//   console.log('mapped state to props', state);
-//   return ({
-//     // ROOM DATA? 
-//     // room.testData
-//     // tests: state.gameRooms.testCases
-//   })
-// }
-
-// const mapDispatchToProps = (dispatch) => ({
-//   updateTestSuite: () => dispatch(updateTestSuite(this.state.testStatus))
-// })
 
 export default CodeEditor;

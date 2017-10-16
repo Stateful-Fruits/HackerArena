@@ -1,10 +1,11 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css';
 .App {
   text-align: center;
 }
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 100px;
   padding: 20px;
   color: white;
 }
@@ -15,4 +16,29 @@
 
 .App-intro {
   font-size: large;
+}
+
+.navbar {
+  border-radius: 0px !important;
+}
+
+.navbar-brand {
+  transition: border-bottom 1s ease,
+              border-top 1s ease;
+  border-top: 3px transparent solid;
+  border-bottom: 3px transparent solid;
+}
+
+.navbar-brand:hover {
+  border-top: 3px solid white;
+  border-bottom: 3px solid white;
+}
+
+.nav-item {
+  margin-left: 10px; 
+  margin-right: 10px;
+}
+
+.nav-item:hover {
+  cursor: pointer;
 }

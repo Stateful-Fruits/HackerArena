@@ -6,33 +6,43 @@ import '../Styles/TestSuite.css';
 const TestSuite = props => {
     return(
       <div id="testSuite">
-        <div> PROBLEM TITLE{props.currentRoom.problem.title} </div>
-        <div id="description"> PROBLEM DESCRIPTION {props.currentRoom.problem.description}</div>
-        {(props.currentRoom.creatorTestStatus && props.currentRoom.challengerTestStatus) ? 
+        <h3 className="problemTitle"> {props.currentRoom.problem.title} </h3>
+        <h4> PROBLEM DESCRIPTION  </h4>
+        <p id="description">{props.currentRoom.problem.description}</p>
+        <h4 className="testTitle"> TESTS </h4>
+        {(props.currentRoom.creatorTestStatus.length > 1 || props.currentRoom.challengerTestStatus.length > 1 ) ? 
           ((fire.auth().currentUser.email.split('@')[0] === props.currentRoom.creatorName) ? 
-          (<div> TESTS + TESTS PASSED {props.currentRoom.creatorTestStatus.map((tests, i) => {
+          (<div>{props.currentRoom.creatorTestStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"
             }
             return <div key={tests.inputs + i}>
-              <p>{`${passing} Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</p>
+              {passing === "FAILED!" ? 
+              <span className="failure">{passing}</span>
+              : <span className="success">{passing}</span>
+              }
+              <span>{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
             </div>
           })}</div>)
           :
-          (<div> TESTS + TESTS PASSED {props.currentRoom.challengerTestStatus.map((tests, i) => {
+          (<div>{props.currentRoom.challengerTestStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"
             }
             return <div key={tests.inputs + i}>
-              <p>{`${passing} Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</p>
+              {passing === "FAILED!" ? 
+              <span className="failure">{passing}</span>
+              : <span className="success">{passing}</span>
+              }
+              <span>{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
             </div>
           })}</div>)
           )
           : 
           null
-        }
+          }
       </div>
     )
 }

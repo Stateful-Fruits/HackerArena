@@ -97,7 +97,7 @@ const Disruptions = {
   setTimeout(() => {
     clearInterval(movement);
     $("#ace-editor").css({
-      "left":"0px",
+      "left":"5px",
       "top":"0px"
     })
   }, 5000);  
