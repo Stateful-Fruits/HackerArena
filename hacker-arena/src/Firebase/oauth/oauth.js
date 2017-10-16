@@ -3,6 +3,7 @@ import firebase from 'firebase'
 const provider = new firebase.auth.GoogleAuthProvider();
 
 const scopes = [
+  'openiD',
   'https://www.googleapis.com/auth/plus.login',
   'https://www.googleapis.com/auth/plus.me',
   'https://www.googleapis.com/auth/userinfo.email',
