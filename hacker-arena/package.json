@@ -99,5 +99,8 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "video.js": "^6.2.8"
   }
 }

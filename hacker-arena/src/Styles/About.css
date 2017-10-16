@@ -1,0 +1,7 @@
+video {
+    position: absolute; right: 0; bottom: 0; top: 150px;
+    min-width: 50%; min-height: 50%;
+     z-index: -50;
+    background:  no-repeat; 
+    background-size: cover;
+}
