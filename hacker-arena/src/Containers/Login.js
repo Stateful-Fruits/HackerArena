@@ -24,6 +24,8 @@ constructor(props) {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange =this.onChange.bind(this);
     this.signInWithGoogle =this.signInWithGoogle.bind(this);
+    this.signInWithFacebook =this.signInWithFacebook.bind(this);
+    
   }
 
   onChange(e) {
@@ -43,6 +45,11 @@ constructor(props) {
     auth.googleAuth(navigate);
   }
 
+  signInWithFacebook(e) {
+    let {navigate} = this.props;
+    auth.fbookAuth(navigate);
+  }
+
   render() {
     let { navigate } = this.props;
     return (
@@ -52,6 +59,7 @@ constructor(props) {
           <img src='../profile.jpg' alt='Waiting' />
           <button onClick={() => navigate('/SignUp') }> SignUp </button>
           <button onClick={this.signInWithGoogle}>Log in with google</button>
+          <button onClick={this.signInWithFacebook}>Log in with facebook</button>
           <form onSubmit= {this.onSubmit}>
 
           <h1 className='header'>Wanna Have Some Fun Today?</h1>

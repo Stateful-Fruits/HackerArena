@@ -39,6 +39,11 @@ class SignUp extends React.Component {
     auth.googleAuth(navigate);
   }
 
+  signInWithFacebook(e) {
+    let {navigate} = this.props;
+    auth.fbookAuth(navigate);
+  }
+
   render() {
     let { navigate } = this.props;
     return (
@@ -47,6 +52,7 @@ class SignUp extends React.Component {
         <div className="container">
           <button onClick={() => navigate('/Login') }> Login </button>
           <button onClick={this.signInWithGoogle}>Log in with google</button>
+          <button onClick={this.signInWithFacebook}>Log in with facebook</button>
 
           <form onSubmit= {this.onSubmit}>
             <div className='header'>

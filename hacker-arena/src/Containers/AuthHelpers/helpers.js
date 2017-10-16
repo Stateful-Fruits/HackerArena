@@ -1,5 +1,7 @@
 import firebase from '../../Firebase/firebase';
 import provider from '../../Firebase/oauth/oauth';
+import facebookProvider from '../../Firebase/oauth/facebook';
+
 import getUsernameFromEmail from '../../Util';
 
 const auth = {};
@@ -33,6 +35,15 @@ auth.normalSignUp = function(email, password, navigate) {
 auth.googleAuth = function(navigate) {
   firebase.auth().signInWithPopup(provider)
   .then((data) => {
+    navigate('/');
+  });
+};
+
+auth.fbookAuth = function(navigate) {
+  firebase.auth().signInWithPopup(facebookProvider)
+  .then((data) => {
+    console.log('data', data)
+    console.log('current user', firebase.auth().currentUser);
     navigate('/');
   });
 };
