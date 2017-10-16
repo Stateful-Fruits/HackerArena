@@ -24,7 +24,7 @@ class App extends Component {
       updateGameRooms(data.val());
     });
 
-    db.Problems.once('value', data => {
+    db.Problems.on('value', data => {
       updateProblems(data.val());  
     });
 
@@ -39,6 +39,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+<<<<<<< HEAD
           <h1 className="App-title">Welcome to Hacker Arena</h1>
           {
           fire.auth().currentUser ? (
@@ -48,12 +49,18 @@ class App extends Component {
               </img>
             </span>
           ) : null}
+=======
+          <h1 className="App-title">HACKER ARENA</h1>
+>>>>>>> dev
         </header>
-        <button onClick={ () => navigate('/') }>
+        {/* <button onClick={ () => navigate('/') }>
           <h3>Home</h3>
         </button>
         <button onClick={ () => navigate('/About') }>
           <h3>About</h3>
+        </button>
+        <button onClick={ () => navigate('/AddProblem') }>
+          <h3>Add Problem</h3>
         </button>
         {
           fire.auth().currentUser ? (
@@ -68,7 +75,26 @@ class App extends Component {
         }
         <button onClick={()=>fire.auth().signOut().then(()=>{
 navigate('/Login');
-        })}> Logout</button>
+        })}> Logout</button> */}
+
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <ul className="navbar-nav ml-auto mr-auto">
+            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/') }>Home</li>
+            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/About') }>About</li>
+            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/AddProblem') }>Add Problem</li>
+            
+          {
+            fire.auth().currentUser ? (
+              <li className="nav-item rightNav navbar-brand"> Hi { fire.auth().currentUser.email.split('@')[0] }</li>
+            ) : (
+              <li className="nav-item rightNav navbar-brand" onClick={ () => navigate('/SignUp') }>Sign Up / Log In</li>
+            )
+          }
+          <li className="nav-item rightNav navbar-brand" onClick={()=>fire.auth().signOut().then(()=>{
+  navigate('/Login');
+          })}> Logout</li>
+          </ul>
+        </nav>
         <div>
           { this.props.children }
         </div>

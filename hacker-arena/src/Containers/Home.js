@@ -14,10 +14,10 @@ class Home extends Component {
        <div>    
          <h2>Welcome to Hacker Arena</h2>
          <CreateGameRoom />
-         {gameRooms ? <GameRoomList 
-           gameRooms={gameRooms}
+         <GameRoomList 
+           gameRooms={gameRooms || {}}
            navigate={navigate}
-         /> : null}
+          />
        </div>
       );
   }
