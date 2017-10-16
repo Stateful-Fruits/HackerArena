@@ -13,7 +13,7 @@ const GameRoomPreview = ({
       <div>
         Spectators: {(spectators ? spectators.join(', ') : '')}
       </div>
-      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) }>
+      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={challengerName && creatorName}>
         <h3>Join Game</h3> 
       </button>
       <button onClick={ () => navigate(`/Spectate/${gameRoom.key}`) }>
