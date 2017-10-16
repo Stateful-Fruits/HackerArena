@@ -42,9 +42,9 @@ const store = createStore(
 
 fire.auth().onAuthStateChanged(function(user) {
   if (user) {
-    console.log('user is already logged in!');
+    console.log('user is already logged in!', arguments);
     user.updateProfile(user);
-    console.log('value of currentUser is now', fire.auth().currentUser);
+    console.log('value of currentUser is now', fire.auth());
   }
 
   ReactDOM.render(
