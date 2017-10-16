@@ -39,7 +39,15 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Welcome to Team Stateful Fruits</h1>
+          <h1 className="App-title">Welcome to Hacker Arena</h1>
+          {
+          fire.auth().currentUser ? (
+            <span className="profile-image">
+              <img className="profile-photo"
+              src={fire.auth().currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}>
+              </img>
+            </span>
+          ) : null}
         </header>
         <button onClick={ () => navigate('/') }>
           <h3>Home</h3>

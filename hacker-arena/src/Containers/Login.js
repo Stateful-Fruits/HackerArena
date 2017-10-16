@@ -44,10 +44,13 @@ class SignUp extends React.Component {
     }
 
     signInWithGoogle(e) {
-        console.log('this')
         let {navigate} = this.props;
         firebase.auth().signInWithPopup(provider)
-        .then(() => navigate('/'));
+        .then((data) => {
+            console.log('this is running!!!!!')
+            console.log('data', data);
+            navigate('/');
+        });
     }
 
     render() {
