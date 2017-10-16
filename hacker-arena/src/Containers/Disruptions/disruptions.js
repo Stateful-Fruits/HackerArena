@@ -56,21 +56,15 @@ const Disruptions = {
   Zoom: function(){
     // Zooms into console
 		$("#ace-editor").animate({
-    "width" : "70%",
-    "marginLeft": "0.6in",
-    "fontSize": "3em",
-    "borderWidth": "10px"
+      "fontSize": "3em"
     }, 1500 )
 
     // Duration ends
     setTimeout(() => {
       $("#ace-editor").animate({
-        "width" : "100%",
-        "marginLeft": "-0.6in",
-        "fontSize": "10px",
-        "borderWidth": "0px"
+        "fontSize": "12px"
         }, 1500 )
-    },5000)
+    },6000)
 	},
 	Sublime: function(){
     // Sublime popups for the next 5 seconds
@@ -97,10 +91,10 @@ const Disruptions = {
   setTimeout(() => {
     clearInterval(movement);
     $("#ace-editor").css({
-      "left":"5px",
+      "left":"0px",
       "top":"0px"
     })
-  }, 5000);  
+  }, 6000);  
 },
 Python: function(editor){
   // Change from javascript mode to python mode

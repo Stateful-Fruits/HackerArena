@@ -78,7 +78,7 @@ ul#aceConsole > li {
 
 .clearConsole {
   float:right;
-  color: black;
+  color: white;
 }
 
 .consoleHeader:hover {
