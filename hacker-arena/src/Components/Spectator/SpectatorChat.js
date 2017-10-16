@@ -29,10 +29,12 @@ class SpectatorChat extends Component {
   render() {
     let { gameRoom } = this.props;
     let spectatorChat = gameRoom.spectatorChat || [];
+    let { spectators } = gameRoom;
     return (
       <div style={{ margin: "5%" }}>
         <form onSubmit={this.handleMsgSend}>
-          <h2>Chat Here!</h2>
+          <h2>Chat: </h2>
+            <p>{(spectators ? spectators.join(', ') : '')}</p>
           <input type="text" onChange={this.handleMsgInput} />
           <button>
             <h3>Send</h3>
