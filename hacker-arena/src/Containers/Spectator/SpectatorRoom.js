@@ -41,6 +41,18 @@ class SpectatorRoom extends Component {
     this.enterGameRoom(gameRoom);
   }
 
+  componentWillUpdate() {
+    let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    if(gameRoom && gameRoom.winner !== "") {
+      window.swal({
+        title: `The Winner is ${gameRoom.winner}!`,
+        width: 600,
+        padding: 100,
+        background: '#fff url(//bit.ly/1Nqn9HU)'
+      });
+     }
+  }
+
   componentWillUnmount() {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     this.leaveGameRoom(gameRoom);
