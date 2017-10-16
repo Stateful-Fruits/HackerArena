@@ -43,6 +43,7 @@ class CodeEditor extends React.Component {
   }
 
   componentWillUpdate(){
+    let username = fire.auth().currentUser.email.split('@')[0];    
     //  && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])
     if(this.props.currentRoom.winner !== "" 
      && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])){
@@ -53,6 +54,11 @@ class CodeEditor extends React.Component {
         background: '#fff url(//bit.ly/1Nqn9HU)'
       })
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
+      fire.database().ref('users/' + username).once('value').then(snapshot => {
+        let losses = snapshot.val().losses + 1;
+        console.log('losses are now', losses);
+        fire.database().ref('users/' + username + '/losses').set(losses);
+      })
     } 
     // else if (this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner === fire.auth().currentUser.email.split('@')[0])){
     //   window.swal(
@@ -146,6 +152,7 @@ class CodeEditor extends React.Component {
 
   handleSubmit(){
     let code = this.ace.editor.getValue();
+    let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
     let testStatus =  runTestsOnUserAnswer((code),this.props.currentRoom.problem.tests, this.props.currentRoom.problem.userFn);
     if(Array.isArray(testStatus)){
@@ -158,7 +165,12 @@ class CodeEditor extends React.Component {
           'You passed all the tests!',
           'success'
         )
-        fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(fire.auth().currentUser.email.split('@')[0])
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(username);
+        fire.database().ref('users/' + username).once('value').then(snapshot => {
+          let wins = snapshot.val().wins + 1;
+          console.log('wins are now', wins);
+          fire.database().ref('users/' + username + '/wins').set(wins);
+        })
       } else {
         window.swal(
           'Oops...',

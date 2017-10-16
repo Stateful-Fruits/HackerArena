@@ -1,7 +1,7 @@
 const updateUserProfile = (state = {}, action) => {
   switch(action.type) {
-    case 'SHOW_PASS':
-      return Object.assign(state,{showPass: !state.showPass});
+    case 'UPDATE_PROFILE':
+      return action.payload;
     default:
       return state;
   }
