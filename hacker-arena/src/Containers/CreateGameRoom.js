@@ -45,11 +45,13 @@ class CreateGameRoom extends React.Component {
     const room = {
       challengerName: '',
       challengerTestsPassed: 0,
+      challengerCredits: 5,
       challengerTestStatus: [""],
       challengerDisruptions: [""],
       challengerLiveInput: "",
       creatorName: '', //'ron' || this.props.user,
       creatorTestsPassed: 0,
+      creatorCredits: 5,
       creatorTestStatus: [""],
       creatorDisruptions: [""],
       creatorLiveInput: "",

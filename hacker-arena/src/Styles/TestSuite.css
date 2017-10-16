@@ -1,6 +1,39 @@
 #testSuite {
+  padding: 20px;
   margin: 5px;
   float: right;
-  width: 50vw;
+  width: 49vw;
+  height: 100%;
   background: beige;
+  position: absolute;
+  left: 50vw;
 }
+
+.problemTitle {
+  padding-top: 0px;
+  padding-bottom: 5px;
+  margin: 0px;
+  border-bottom:1px solid black;
+}
+
+#description {
+  padding: 5px 5px;
+  line-height: 150%;
+}
+
+.testTitle {
+  border-top: 1px solid black;
+  padding-top: 5px;
+}
+
+.failure {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+/* span {
+  padding: 5px;
+} */

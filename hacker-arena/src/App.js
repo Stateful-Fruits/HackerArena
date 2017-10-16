@@ -41,26 +41,22 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Welcome to Team Stateful Fruits</h1>
         </header>
-        <button onClick={ () => navigate('/') }>
-          <h3>Home</h3>
-        </button>
-        <button onClick={ () => navigate('/About') }>
-          <h3>About</h3>
-        </button>
-        {
-          fire.auth().currentUser ? (
-          <button>
-            <h3>Hi { fire.auth().currentUser.email.split('@')[0] }</h3>
-          </button>
-          ) : (
-          <button onClick={ () => navigate('/SignUp') }>
-            <h3>SignUp/Login</h3>
-          </button>
-          )
-        }
-        <button onClick={()=>fire.auth().signOut().then(()=>{
-navigate('/Login');
-        })}> Logout</button>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <ul className="navbar-nav ml-auto mr-auto">
+            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/') }>Home</li>
+            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/About') }>About</li>
+          {
+            fire.auth().currentUser ? (
+              <li className="nav-item rightNav navbar-brand"> Hi { fire.auth().currentUser.email.split('@')[0] }</li>
+            ) : (
+              <li className="nav-item rightNav navbar-brand" onClick={ () => navigate('/SignUp') }>Sign Up / Log In</li>
+            )
+          }
+          <li className="nav-item rightNav navbar-brand" onClick={()=>fire.auth().signOut().then(()=>{
+  navigate('/Login');
+          })}> Logout</li>
+          </ul>
+        </nav>
         <div>
           { this.props.children }
         </div>

@@ -9,7 +9,6 @@ import User from './Containers/User'
 import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
-
 // To check Log in info
 import fire from './Firebase/firebase';
 
