@@ -12,29 +12,29 @@ const TestSuite = props => {
         <h4 className="testTitle"> TESTS </h4>
         {(props.currentRoom.creatorTestStatus.length > 1 || props.currentRoom.challengerTestStatus.length > 1 ) ? 
           ((fire.auth().currentUser.email.split('@')[0] === props.currentRoom.creatorName) ? 
-          (<div>{props.currentRoom.creatorTestStatus.map((tests, i) => {
+          (<div className="testHolder">{props.currentRoom.creatorTestStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"
             }
             return <div key={tests.inputs + i}>
               {passing === "FAILED!" ? 
-              <span className="failure">{passing}</span>
-              : <span className="success">{passing}</span>
+              <span className="failure">{passing} </span>
+              : <span className="success">{passing} </span>
               }
               <span>{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
             </div>
           })}</div>)
           :
-          (<div>{props.currentRoom.challengerTestStatus.map((tests, i) => {
+          (<div className="testHolder">{props.currentRoom.challengerTestStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"
             }
             return <div key={tests.inputs + i}>
               {passing === "FAILED!" ? 
-              <span className="failure">{passing}</span>
-              : <span className="success">{passing}</span>
+              <span className="failure">{passing} </span>
+              : <span className="success">{passing} </span>
               }
               <span>{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
             </div>

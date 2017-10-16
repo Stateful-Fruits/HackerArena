@@ -9,8 +9,6 @@ import Disruptions from './Disruptions/disruptions';
 import updateTestSuite from '../Actions/updateTestSuite';
 
 import '../Styles/CodeEditor.css';
- 
-
 
 class CodeEditor extends React.Component {
   constructor(props) {
@@ -28,10 +26,9 @@ class CodeEditor extends React.Component {
   componentDidMount(){
     console.log(" THE CURRENT CREATOR", this.props.currentRoom.creatorName)
     console.log(" THE CURRENT USER", fire.auth().currentUser)
-    // const editor = this.ace.editor;
-    // editor.setTheme("ace/theme/monokai");
-    // editor.getSession().setMode("ace/mode/javascript");
+    // Creates template for current problem using userFn
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
+    // Increments user credits by 5 every 30 seconds
     setInterval(()=> {
       if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName){
         let newCreatorCredits = this.props.currentRoom.creatorCredits + 5;
@@ -43,7 +40,7 @@ class CodeEditor extends React.Component {
   }
 
   componentWillUpdate(){
-    //  && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])
+    // Alert users if someone has won the game
     if(this.props.currentRoom.winner !== "" 
      && (this.props.currentRoom.winner !== fire.auth().currentUser.email.split('@')[0])){
       window.swal({
@@ -54,15 +51,7 @@ class CodeEditor extends React.Component {
       })
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
     } 
-    // else if (this.props.currentRoom.winner !== "" && (this.props.currentRoom.winner === fire.auth().currentUser.email.split('@')[0])){
-    //   window.swal(
-    //     'Good job!',
-    //     'You passed all the tests!',
-    //     'success'
-    //   )
-    //   fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
-    // }
-
+    // Check for disruptions sent if user is CREATOR
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
       console.log(fire.auth().currentUser.email.split('@')[0])
       if(this.props.currentRoom.creatorDisruptions){
@@ -74,18 +63,7 @@ class CodeEditor extends React.Component {
         })
         fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorDisruptions').set([""])
       }
-
-      // if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.challengerName) {
-      //   if(this.props.currentRoom.challengerDisruptions){
-      //     this.props.currentRoom.challengerDisruptions.forEach(disruption => {
-      //       if(disruption !== ""){
-      //         console.log(disruption)
-      //         this.receiveDisruptions(disruption);
-      //       }
-      //     })
-      //     fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set([""])
-      //   }
-      // }
+    // Check for disruptions sent if user is CHALLENGER 
     } else {
       if(this.props.currentRoom.challengerDisruptions){
         this.props.currentRoom.challengerDisruptions.forEach(disruption => {
@@ -98,11 +76,9 @@ class CodeEditor extends React.Component {
       }
     }
   }
-  // NEEDS TO TAKE INPUT CODE OF EDITOR,
-  // UTILIZE ROOM.PROBLEM.TESTCASES TO GRAB TEST RESULTS
-  // SET TEST RESULTS IN ROOM DATABASE 
-  
+
   liveInputs(){
+    // Sends live inputs of user to database
     let liveInput = this.ace.editor.getValue();
     if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorLiveInput').set(liveInput)
@@ -112,6 +88,7 @@ class CodeEditor extends React.Component {
   }
 
   sendDisruptions(e){
+    // Sends disruptions to oppposite player
     let func = e.target.id.split(" ")[0];
     let cost = e.target.id.split(" ")[1];
     console.log("disruptions", this.props.currentRoom.challengerDisruptions, this.props.currentRoom.creatorDisruptions);
@@ -133,14 +110,10 @@ class CodeEditor extends React.Component {
       let newChallengerCredits = this.props.currentRoom.challengerCredits - cost;
       fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
     }
-      // if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
-      //   fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerDisruptions').set(challengerDisruptions)
-      // } else {
-      //   fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorDisruptions').set(creatorDisruptions)
-      // }
   }
 
   receiveDisruptions(func){
+    // Runs disruptions for user, if called
     Disruptions[func](this.ace.editor);
   }
 
@@ -167,9 +140,13 @@ class CodeEditor extends React.Component {
         )
       }
     }
-    console.log("the props in CodeEditor", this.props)
     console.log("the TEST STATUS", testStatus);
-    if(testStatus[0] && testStatus[0].actual){
+    if((testStatus.length === this.props.currentRoom.problem.tests.length) && testStatus){
+      testStatus.forEach(items => {
+        if(items.actual === undefined){
+          items.actual = null;
+        }
+      })
       if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName) {
         fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorTestStatus').set(testStatus)
       } else {
@@ -194,11 +171,10 @@ class CodeEditor extends React.Component {
       })
       $('#aceConsole').append(`<li id="log">${results}</li>`);
     }
-
     let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
     let newCode = consoleLogChange + code;
-
-      // eslint-disable-next-line
+    
+    // eslint-disable-next-line
     try {
       // console.log("CODE", eval(code));
       console.log("NEWCODE", eval(newCode));
@@ -213,8 +189,8 @@ class CodeEditor extends React.Component {
   }
   
   handleClear(){
+    // Clears the console
     $('#aceConsole').empty();
-    // $('#aceConsole').append(`<li>Console</li>`);
   }
   
   // {/* <button className="btn clearConsole" onClick={this.handleClear}> CLEAR CONSOLE </button> */}
