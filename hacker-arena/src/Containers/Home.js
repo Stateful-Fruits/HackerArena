@@ -12,7 +12,6 @@ class Home extends Component {
     let { gameRooms, navigate } = this.props;
     return (
        <div>    
-         <h2>Welcome to Hacker Arena</h2>
          <CreateGameRoom />
          <GameRoomList 
            gameRooms={gameRooms || {}}
