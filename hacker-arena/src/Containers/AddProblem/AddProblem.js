@@ -4,6 +4,12 @@ import { connect } from 'react-redux';
 import updateAddProblem from '../../Actions/addProblem/updateAddProblem';
 import updateAddProblemTests from '../../Actions/addProblem/updateAddProblemTests';
 import fire from '../../Firebase/firebase';
+import AllTests from './AllTests';
+import Title from './Title';
+import ProblemDescription from './ProblemDescription';
+import FunctionName from './FunctionName';
+import Difficulty from './Difficulty';
+import AddingTest from './AddingTest';
 
 class AddProblem extends React.Component {
   constructor (props) {
@@ -53,39 +59,22 @@ class AddProblem extends React.Component {
       <div>
         <div>Adding Toy Problem</div>
         <form onSubmit={this.handleSubmit}>
-          Title: <input value={problem.title}
-          className='title' 
-          onChange={this.handleChange}
-          data-property='title'/><br/>
+          Title: <Title problem={problem} handleChange={this.handleChange}/> 
 
-          Problem description: <br/>
-          <textarea 
-          value={problem.problemDescription} 
-          onChange={this.handleChange}
-          rows="10"
-          data-property='description'/><br/>
+          Problem description: <ProblemDescription problem={problem} handleChange={this.handleChange}/>
 
-          Difficulty: <input value={problem.difficulty}
-          className='difficulty' 
-          onChange={this.handleChange}
-          data-property='difficulty'/><br/>
+          Difficulty: <Difficulty problem={problem} handleChange={this.handleChange}/>
 
-          Function Name: <input value={problem.fxnName} 
-          onChange={this.handleChange}
-          className='fxn'
-          data-property='userFn'/><br/>
-          Format: Test.assertEquals(userFn(2012, 2016), 4028)<br/>
- 
+          Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
+          
+          Format: Test.assertEquals(userFn(2012, 2016), 4028)
           <button onClick={this.addInTest}
-          type='button' 
-          value={problem.addingTest}>Add To Tests:</button>
-          <input value={problem.addingTest}
-          className='addingTest' 
-          onChange={this.handleChange}
-          data-property='addingTest'/>
+            type='button' 
+            value={problem.addingTest}>Add To Tests:</button>
+          <AddingTest problem={problem} handleChange={this.handleChange}/>
           <br/>
 
-          <div>Tests so far: {JSON.stringify(problem.tests)}</div>
+          <AllTests/>
           <button type='submit'> Add This Problem </button>
         </form>
       </div>
