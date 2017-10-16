@@ -53,7 +53,7 @@ class SpectatorChat extends Component {
             <h3>Send</h3>
           </button>
         </form>
-       
+        
         <div>
           <div className='stream'> <video id ="localVideo"></video>
           </div>
