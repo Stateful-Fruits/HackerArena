@@ -34,8 +34,8 @@ class GameRoomList extends Component {
     return (
       <div>
         <h3> Sort By: </h3>
-        <select className='form-control' style={{ width: '80%', marginLeft: '10%' }} onChange={this.handleSortChange} value={this.state.filters[this.state.filterInx]}>
-          { this.state.filters.map((filter) => <option key={filter}>{filter}</option>) }
+        <select className='form-control' style={{ width: '20%', marginLeft: '40%', fontSize: '1.5em', height: '40px' }} onChange={this.handleSortChange} value={this.state.filters[this.state.filterInx]}>
+          { this.state.filters.map((filter) => <option key={filter} style={{ fontSize: '1.5em' }}>{filter}</option>) }
         </select>
         <ul className='list-group'>
           { rooms.sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]]).reverse().map((room, inx) => (
