@@ -28,12 +28,19 @@
 
 .failure {
   color: red;
+  padding-right: 10px;
 }
 
 .success {
   color: green;
+  padding-right: 10px;
 }
 
 /* span {
   padding: 5px;
 } */
+.testHolder > div {
+  display: flex;
+  margin-bottom: 7px;
+  margin-top: 7px;
+}

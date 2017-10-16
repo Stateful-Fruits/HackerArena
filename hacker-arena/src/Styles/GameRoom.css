@@ -1,3 +1,40 @@
 #editorAndTestSuite {
   display:flex;
 }
+.progress {
+  width: 90%;
+  height: 25px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.usernames {
+  font-size: 16px;
+  color: rgb(64, 91, 198);
+}
+
+.usernameLabels {
+  font-size: 16px;
+}
+.opponent {
+  font-size: 16px;
+  color: rgb(205, 79, 79); 
+}
+
+.opponentLabels {
+  font-size: 16px;
+}
+
+
+
+.progress-bar {
+  transition: width 2s;
+}
+
+.progress-bar-success {
+  background-color: rgb(64, 91, 198);
+}
+
+.progress-bar-warning {
+  background-color:  rgb(205, 79, 79); 
+}
