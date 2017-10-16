@@ -50,7 +50,8 @@ class AddProblem extends React.Component {
           onChange={this.handleChange}
           data-property='title'/><br/>
 
-          Problem description: <textarea 
+          Problem description: <br/>
+          <textarea 
           value={problem.problemDescription} 
           onChange={this.handleChange}
           rows="10" 
@@ -65,7 +66,7 @@ class AddProblem extends React.Component {
           onChange={this.handleChange}
           data-property='userFn'/><br/>
           Format: Test.assertEquals(userFn(2012, 2016), 4028)<br/>
-          Add Test: <input value={problem.oneTest} 
+          <button type='button' value={problem.addingTest}>Add To Tests:</button> <input value={problem.addingTest} 
           onChange={this.handleChange}
           data-property='addingTest'/><br/>
 
