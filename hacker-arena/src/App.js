@@ -24,7 +24,7 @@ class App extends Component {
       updateGameRooms(data.val());
     });
 
-    db.Problems.once('value', data => {
+    db.Problems.on('value', data => {
       updateProblems(data.val());  
     });
 
@@ -46,6 +46,9 @@ class App extends Component {
         </button>
         <button onClick={ () => navigate('/About') }>
           <h3>About</h3>
+        </button>
+        <button onClick={ () => navigate('/AddProblem') }>
+          <h3>Add Problem</h3>
         </button>
         {
           fire.auth().currentUser ? (

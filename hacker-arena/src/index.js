@@ -9,7 +9,7 @@ import User from './Containers/User'
 import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
-
+import AddProblem from './Containers/AddProblem/AddProblem';
 // To check Log in info
 import fire from './Firebase/firebase';
 
@@ -58,6 +58,13 @@ fire.auth().onAuthStateChanged(function(user) {
                 <Route exact path="/" render={() => (
                   fire.auth().currentUser ? (
                     <Home />
+                  ) : (
+                    <Redirect to="/Login" />
+                  )
+                )}/>
+                <Route exact path="/AddProblem" render={() => (
+                  fire.auth().currentUser ? (
+                    <AddProblem />
                   ) : (
                     <Redirect to="/Login" />
                   )
