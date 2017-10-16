@@ -8,7 +8,7 @@ const GameRoomPreview = ({
   let { spectators, creatorName, challengerName } = gameRoom;
   return (
     <div className='list-group-item' style={{ color: 'black' }}>
-      <h4>Host: { creatorName }</h4>
+      <h4>Host: { creatorName || (<span style={{color: 'darkgreen'}}>OPEN</span>) }</h4>
       <h4>Opponent: { challengerName || (<span style={{color: 'darkgreen'}}>OPEN</span>) }</h4>
       <div>
         Spectators: {(spectators ? spectators.join(', ') : '')}
