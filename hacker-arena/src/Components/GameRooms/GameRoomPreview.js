@@ -7,11 +7,10 @@ const GameRoomPreview = ({
 }) => {
   let { spectators } = gameRoom;
   return (
-    <div>
+    <div className='list-group-item' style={{ color: 'black' }}>
       <h4>Host: { gameRoom.creatorName }</h4>
       <div>
-        Spectators: { (spectators ? (spectators.length === 1 ? spectators :
-                      spectators.join(', ').slice(0, -1)) : '')}
+        Spectators: {(spectators ? spectators.join(', ') : '')}
       </div>
       <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) }>
         <h3>Join Game</h3> 
