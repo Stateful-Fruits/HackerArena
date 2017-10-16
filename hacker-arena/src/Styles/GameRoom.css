@@ -38,3 +38,7 @@
 .progress-bar-warning {
   background-color:  rgb(205, 79, 79); 
 }
+
+.completeWaiting {
+  font-size: 16px;
+}

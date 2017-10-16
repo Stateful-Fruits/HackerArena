@@ -6,7 +6,7 @@ import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import SpectatorChat from '../../Components/Spectator/SpectatorChat';
 import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDescription';
 import SpectatorError from '../../Components/Spectator/SpectatorError';
-
+import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 
 class SpectatorRoom extends Component {
@@ -60,6 +60,7 @@ class SpectatorRoom extends Component {
         <SpectatorGameDescription
           gameRoom={gameRoom} 
         />
+        <ProgressBar room = {gameRoom}/>
         <SpectatorEditors 
           gameRoom={gameRoom}
         />
