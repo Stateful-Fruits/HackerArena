@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import fire from '../../Firebase/firebase';
 
 import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import SpectatorChat from '../../Components/Spectator/SpectatorChat';
@@ -7,8 +8,39 @@ import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDe
 import SpectatorError from '../../Components/Spectator/SpectatorError';
 
 class SpectatorRoom extends Component {
-  componentWillMount() {
-    // connect to the gameroom in the database here
+  sendSpectatorMessage(room, username, msg) {
+    let gameRoom = Object.assign({}, room);
+    gameRoom.spectatorChat = [...(gameRoom.spectatorChat || []), {username, msg}];
+    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+  }
+
+  enterGameRoom(room) {
+    let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
+    let gameRoom = Object.assign({}, room);
+    gameRoom.spectators = [...(gameRoom.spectators || []), username];
+    console.log('Entered Game Room: ', gameRoom);
+    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+  }
+
+  leaveGameRoom(room) {
+    let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
+    let gameRoom = Object.assign({}, room);
+    if (gameRoom.spectators) {
+      gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => (
+        !(spectator === username)
+      ));
+    }
+    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+  }
+
+  componentDidMount() {
+    let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    this.enterGameRoom(gameRoom);
+  }
+
+  componentWillUnmount() {
+    let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    this.leaveGameRoom(gameRoom);
   }
 
   render() {
@@ -28,7 +60,10 @@ class SpectatorRoom extends Component {
         <SpectatorEditors 
           gameRoom={gameRoom}
         />
-        <SpectatorChat />
+        <SpectatorChat
+          gameRoom={gameRoom}
+          sendSpectatorMessage={this.sendSpectatorMessage}
+        />
       </div>
     ) : (
       <SpectatorError 
@@ -40,7 +75,7 @@ class SpectatorRoom extends Component {
 
 const mapStateToProps = (state) => ({
   gameRooms: state.gameRooms,
-  gameRoomId: state.router.location.pathname.split('/')[2]
+  gameRoomId: state.router.location.pathname.split('/')[2],
 });
 
 export default connect(mapStateToProps, null)(SpectatorRoom);
