@@ -61,7 +61,7 @@ class GameRoom extends React.Component {
   }
 
   handleEnter() {
-    if (this.props.room && this.props.gameRooms[this.props.room.id]) {
+    if (this.props.room && this.props.gameRooms[this.props.id]) {
       var gameRoom = Object.assign({}, this.props.room);
       if (gameRoom.players === 2 
         && gameRoom.creatorName !== this.props.username 
