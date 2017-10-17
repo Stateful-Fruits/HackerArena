@@ -5,7 +5,7 @@ import App from './App';
 import About from './Components/About';
 import Home from './Containers/Home';
 import GameRoom from './Containers/GameRoom';
-import User from './Containers/User'
+import UserProfile from './Containers/UserProfile'
 import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
@@ -76,9 +76,9 @@ fire.auth().onAuthStateChanged(function(user) {
                     <Redirect to="/Login" />      
                   )
                 )}/>
-                <Route exact path="/User" render={() => (
+                <Route exact path="/User/:username" render={() => (
                   fire.auth().currentUser ? (
-                    <User />
+                    <UserProfile />
                   ) : (
                     <Redirect to="/Login" />      
                   )
