@@ -81,6 +81,8 @@ class GameRoom extends React.Component {
           && challengerName.length === 0) {
           gameRoom.challengerName = username;
           gameRoom.players++;
+          gameRoom.timerStarted = true;
+          gameRoom.timeStart = performance.now();
           fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
         }
       }
