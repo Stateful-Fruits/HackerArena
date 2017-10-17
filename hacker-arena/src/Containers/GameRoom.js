@@ -91,6 +91,7 @@ class GameRoom extends React.Component {
   
   render () {
     let { room, gameRooms } = this.props;
+    gameRooms = gameRooms || {};
     if (Object.keys(gameRooms).length === 0 && !room) return (<GameRoomLoading />);
     if (!room) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     this.handleEnter();
@@ -111,7 +112,7 @@ class GameRoom extends React.Component {
 }
 const mapStateToProps = (state) => ({
   id: state.router.location.pathname.split('/')[2],
-  room: state.gameRooms[state.router.location.pathname.split('/')[2]],
+  room: state.gameRooms ? state.gameRooms[state.router.location.pathname.split('/')[2]] : null,
   username: fire.auth().currentUser.email.split('@')[0],
   gameRooms: state.gameRooms
 });
