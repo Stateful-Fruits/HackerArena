@@ -5,12 +5,10 @@ import './Styles/App.css';
 
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
-import CodeEditor from './Containers/CodeEditor.js';
-import UserButton from  './Components/User/UserButton.js';
+import NavBar from './Components/NavBar/NavBar';
 
 import fire from './Firebase/firebase';
 import db from './Firebase/db';
-import populateDb from './Firebase/dbFiller/populateDb';
 
 import { push } from 'react-router-redux';
 
@@ -29,11 +27,7 @@ class App extends Component {
     });
 
   }
-  // firebase.auth().signOut().then(function() {
-  //   // Sign-out successful.
-  // }, function(error) {
-  //   // An error happened.
-  // });
+
   render() {
     let { navigate } = this.props;
     let currentUser = fire.auth().currentUser;
@@ -46,57 +40,17 @@ class App extends Component {
               <span className="profile-image" onClick={() => navigate('/User/' + currentUser.email.split('@')[0])}>
                 <span className="profile-greeting"> Hi { currentUser.email.split('@')[0] }!</span>
                 <img className="profile-photo"
-                src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}>
+                  src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
+                  alt='profile'
+                >
                 </img>
               </span>
             ) : null
           }
         </header>
-        {/* <button onClick={ () => navigate('/') }>
-          <h3>Home</h3>
-        </button>
-        <button onClick={ () => navigate('/About') }>
-          <h3>About</h3>
-        </button>
-        <button onClick={ () => navigate('/AddProblem') }>
-          <h3>Add Problem</h3>
-        </button>
-        {
-          fire.auth().currentUser ? (
-          <button>
-            <h3>Hi { fire.auth().currentUser.email.split('@')[0] }</h3>
-          </button>
-          ) : (
-          <button onClick={ () => navigate('/SignUp') }>
-            <h3>SignUp/Login</h3>
-          </button>
-          )
-        }
-        <button onClick={()=>fire.auth().signOut().then(()=>{
-navigate('/Login');
-        })}> Logout</button> */}
- 
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <ul className="navbar-nav ml-auto mr-auto">
-            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/') }>Home</li>
-            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/About') }>About</li>
-            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/AddProblem') }>Add Problems</li>
-            {
-              fire.auth().currentUser ? (
-                <li
-                  className="nav-item rightNav navbar-brand"
-                  onClick={
-                    ()=>fire.auth().signOut().then(()=>{
-                      navigate('/Login');
-                      })
-                  }
-                >
-                  Log out
-                </li>
-              ) : null
-            }
-          </ul>
-        </nav>
+        <NavBar 
+          navigate={navigate}
+        />
         <div>
           { this.props.children }
         </div>

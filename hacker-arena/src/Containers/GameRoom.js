@@ -11,6 +11,7 @@ import TestSuite from '../Components/TestSuite.js'; //From Simon
 import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
+import GameRoomError from '../Components/GameRoom/GameRoomError';
 
 import '../Styles/GameRoom.css';
 
@@ -18,16 +19,17 @@ class GameRoom extends React.Component {
   constructor (props) {
     super (props);
     this.handleLeave = this.handleLeave.bind(this);
-    // this.handleEnter = this.handleEnter.bind(this);
+    this.handleEnter = this.handleEnter.bind(this);
   }
-
-  // componentWillReceiveProps() {
-  //   if (this.props.room) this.handleEnter();
-  // }
   
   componentDidMount () {
     if (this.props.room) window.addEventListener('beforeunload', this.handleLeave);
+    this.handleEnter();
   }
+
+  // componentWillUpdate() {
+  //   this.handleEnter();
+  // }
 
   componentWillUnmount () {
     if (this.props.room) this.handleLeave();
@@ -48,74 +50,68 @@ class GameRoom extends React.Component {
         console.log('creator left', gameRoom.players);
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       }
-    } else if (gameRoom.players === 1) {
+    } else if (gameRoom.players === 1 || username === gameRoom.creatorName) {
       console.log(`room ${gameRoom.key} about to be destroyed`);
       fire.database().ref('rooms/' + gameRoom.key).remove();
     }
   }
 
-  componentWillMount () {
-    // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
-    //   let gameRoom = snapshot.val();
-    //   gameRoom.key = this.props.Key;
-    //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
-    // });
-    var gameRoom = Object.assign({}, this.props.room);
-    if (gameRoom.players === 2 && gameRoom.creatorName !== this.props.username && gameRoom.creatorName !== this.props.challengerName) this.props.navigate(`/Spectate/${this.props.id}`);
-    else {
-      let creatorName = gameRoom.creatorName;
-      let challengerName = gameRoom.challengerName;
-      let username = this.props.username;
-      if (gameRoom.creatorName === '') {
-        gameRoom.creatorName = username;
-        gameRoom.players++;
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-        //this.props.updateSpecificRoom(gameRoom);
-      } else if (creatorName.length > 0 
-        && creatorName !==  username
-        && challengerName.length === 0) {
-        gameRoom.challengerName = username;
-        gameRoom.players++;
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-        //this.props.updateSpecificRoom(gameRoom);
-      } else {
-        //this.props.updateSpecificRoom(gameRoom);
-      } 
+  handleEnter() {
+    if (this.props.room) {
+      var gameRoom = Object.assign({}, this.props.room);
+      if (gameRoom.players === 2 
+        && gameRoom.creatorName !== this.props.username 
+        && gameRoom.creatorName !== this.props.challengerName 
+        && gameRoom.challengerName !== this.props.username) this.props.navigate(`/Spectate/${this.props.id}`);
+      else if (!(gameRoom.players === 2)) {
+        let creatorName = gameRoom.creatorName;
+        let challengerName = gameRoom.challengerName;
+        let username = this.props.username;
+        if (gameRoom.creatorName === '') {
+          gameRoom.creatorName = username;
+          gameRoom.players++;
+          fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+        } else if (creatorName.length > 0 
+          && creatorName !==  username
+          && challengerName.length === 0) {
+          gameRoom.challengerName = username;
+          gameRoom.players++;
+          fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+        }
+      }
     }
   } 
   
   render () {
-    let { room } = this.props;
-    if (!room) return (<GameRoomLoading />);
+    let { room, gameRooms } = this.props;
+    if (Object.keys(gameRooms).length === 0 && !room) return (<GameRoomLoading />);
+    if (!room) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
+    this.handleEnter();
     let players = room.players || 1;
     let isRoomFull = players === 2;
+    console.log('current gameroom: ', room);
     return (
       <div>
         <div className="completeWaiting" >{isRoomFull ? 'COMPLETE' : <WaitingForPlayer />}</div>
-        {isRoomFull ? <ProgressBar room={ room }/> : null}
+          {isRoomFull ? <ProgressBar room={ room }/> : null}
         <div id="editorAndTestSuite">
-        {isRoomFull ? <CodeEditor currentRoom={room}/> : null}
-        {isRoomFull ? <TestSuite currentRoom={room}/> : null}
+          {isRoomFull ? <CodeEditor currentRoom={room}/> : null}
+          {isRoomFull ? <TestSuite currentRoom={room}/> : null}
         </div>
       </div>
     )
   }
 }
-const mapStateToProps = (state) => {
-  console.log(`state passed to GameRoom: `, state, fire.auth().currentUser);
-  let id = state.router.location.pathname.split('/')[2];
-  let room = state.gameRooms[id];
-  let username = fire.auth().currentUser.email.split('@')[0];
-  console.log('state is',state);
-  console.log('Room ', room);
-  return {room, username, id};
-};
+const mapStateToProps = (state) => ({
+  id: state.router.location.pathname.split('/')[2],
+  room: state.gameRooms[state.router.location.pathname.split('/')[2]],
+  username: fire.auth().currentUser.email.split('@')[0],
+  gameRooms: state.gameRooms
+});
 
-const mapDispatcherToProps = (dispatch) => {
-  return {
-    updateSpecificRoom: (room) => dispatch(updateSpecificRoom(room)),
-    navigate: (route) => dispatch(push(route))
-  }
-}
+const mapDispatcherToProps = (dispatch) => ({
+  updateSpecificRoom: (room) => dispatch(updateSpecificRoom(room)),
+  navigate: (route) => dispatch(push(route))
+});
 
 export default connect(mapStateToProps, mapDispatcherToProps)(GameRoom);
