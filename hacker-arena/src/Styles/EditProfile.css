@@ -3,3 +3,11 @@
   margin-top: 10px;
   width: 75%
 }
+
+.upload-photo {
+  margin-top: 50px;  
+}
+
+.edit-profile .choose-file {
+  display: inline-block;
+}
