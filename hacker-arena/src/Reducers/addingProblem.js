@@ -28,6 +28,8 @@ const addingProblem = (state=start, action) => {
     case 'REMOVE_TEST_FROM_ADDING_PROBLEM':
       problem.tests = problem.tests.filter(test => test !== action.payload);
       return problem;
+    case 'RESET_ADD_PROBLEM':
+      return start;
     default:
       return state;
   }

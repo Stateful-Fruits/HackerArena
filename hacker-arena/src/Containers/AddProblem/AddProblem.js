@@ -10,6 +10,7 @@ import ProblemDescription from './ProblemDescription';
 import FunctionName from './FunctionName';
 import Difficulty from './Difficulty';
 import AddingTest from './AddingTest';
+import resetAddProblem from '../../Actions/addProblem/resetAddProblem';
 
 class AddProblem extends React.Component {
   constructor (props) {
@@ -39,6 +40,7 @@ class AddProblem extends React.Component {
     }
     if (truth) {
       let added = fire.database().ref('problems').push(problem).key;
+      this.props.resetAddProblem();
       console.log('id of problem that was added ',added);
     } else {
       console.log('has empty fields', problem);
@@ -67,11 +69,11 @@ class AddProblem extends React.Component {
 
           Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
           
-          NOTE: use userFN instead of {JSON.stringify(problem.userFN)} when writing test
+          <div>NOTE: Replace actual function name with userFn when writing test</div>
+          <AddingTest problem={problem} handleChange={this.handleChange}/>
           <button onClick={this.addInTest}
             type='button' 
             value={problem.addingTest}>Add To Tests:</button>
-          <AddingTest problem={problem} handleChange={this.handleChange}/>
 
           <AllTests/>
           <button className='addProblem' type='submit'> Add This Problem </button>
@@ -95,6 +97,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     addTest: (test) => {
       dispatch(updateAddProblemTests(test));
+    },
+    resetAddProblem: () => {
+      dispatch(resetAddProblem());
     }
   }
 }
