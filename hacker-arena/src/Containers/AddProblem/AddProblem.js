@@ -72,10 +72,9 @@ class AddProblem extends React.Component {
             type='button' 
             value={problem.addingTest}>Add To Tests:</button>
           <AddingTest problem={problem} handleChange={this.handleChange}/>
-          <br/>
 
           <AllTests/>
-          <button type='submit'> Add This Problem </button>
+          <button className='addProblem' type='submit'> Add This Problem </button>
         </form>
       </div>
     )
