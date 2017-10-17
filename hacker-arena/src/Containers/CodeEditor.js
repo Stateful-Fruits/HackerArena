@@ -149,9 +149,9 @@ class CodeEditor extends React.Component {
       })) {
         let room = this.props.currentRoom;
         room.timeEnd = performance.now();
-        let timeTaken = room.timeEnd - room.timeStart;
+        let timeTaken = (room.timeEnd - room.timeStart)/1000;
         window.swal(
-          `Good job! Finished in ${timeTaken}`,
+          `Good job! Finished in ${timeTaken} seconds`,
           'You passed all the tests!',
           'success'
         )
