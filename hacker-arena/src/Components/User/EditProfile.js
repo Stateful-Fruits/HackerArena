@@ -47,7 +47,13 @@ class EditProfile extends React.Component {
     console.log('typeof file', typeof file);
     console.log('file', file)
     let storageRef = fire.storage().ref('user-photos/' + file.name);
-    storageRef.put(file);
+    storageRef.put(file)
+    .then(ss => {
+      console.log('ss.downloadURL', ss.downloadURL)
+      fire.auth().currentUser.updateProfile({
+        photoURL: ss.downloadURL
+      });
+    });
   }
 
   render() {
@@ -64,10 +70,11 @@ class EditProfile extends React.Component {
           <button onClick={this.onSubmit}>Submit</button>
         </div>
         <div className="upload-photo">
-          <input type="file" id="input" name="photoFiles" files={this.state.photoFiles} onChange={this.onFileChange}/>
-          file:{JSON.stringify(this.state.photoFiles)}
+          OR - upload you own photo!
+          <br/>
+          <input className="choose-file" type="file" id="input" name="photoFiles" files={this.state.photoFiles} onChange={this.onFileChange}/>
+          <button className="submit-file" onClick={this.onFileSubmit}>Upload</button>
         </div>
-        <button onClick={this.onFileSubmit}>Upload</button>
       </div>
     )
   }
