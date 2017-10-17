@@ -8,6 +8,16 @@
     object-fit: cover;
     border :coral;
 }
+#remoteVideo {
+    position: relative;
+    height: 120px;
+    width: 120px;
+    top:6px;
+    bottom: 9px;
+    border-radius: 50%;
+    object-fit: cover;
+    border :coral;
+}
 .stream{
     border-radius: 50%;
 	width: 200px;
