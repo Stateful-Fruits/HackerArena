@@ -147,11 +147,15 @@ class CodeEditor extends React.Component {
       if(testStatus.every(item => {
         return item.passed === true;
       })) {
+        let room = this.props.currentRoom;
+        room.timeEnd = performance.now();
+        let timeTaken = room.timeEnd - room.timeStart;
         window.swal(
-          'Good job!',
+          `Good job! Finished in ${timeTaken}`,
           'You passed all the tests!',
           'success'
         )
+        fire.database().ref('rooms/' + this.props.currentRoom.key).set(room);
         fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(username);
         fire.database().ref('users/' + username).once('value').then(snapshot => {
           let wins = snapshot.val().wins + 1;

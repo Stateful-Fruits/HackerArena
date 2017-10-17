@@ -61,7 +61,11 @@ class GameRoom extends React.Component {
   }
 
   handleEnter() {
+<<<<<<< HEAD
     if (this.props.room && this.props.gameRooms[this.props.id]) {
+=======
+    if (this.props.room && this.props.gameRooms[this.props.room.id]) {
+>>>>>>> timetaken
       var gameRoom = Object.assign({}, this.props.room);
       if (gameRoom.players === 2 
         && gameRoom.creatorName !== this.props.username 
@@ -81,6 +85,8 @@ class GameRoom extends React.Component {
           && challengerName.length === 0) {
           gameRoom.challengerName = username;
           gameRoom.players++;
+          gameRoom.timerStarted = true;
+          gameRoom.timeStart = performance.now();
           fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
         }
       }
