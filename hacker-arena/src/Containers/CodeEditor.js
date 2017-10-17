@@ -38,14 +38,16 @@ class CodeEditor extends React.Component {
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
     // Increments user credits by 5 every 30 seconds
     setInterval(()=> {
-      if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName){
-        let newCreatorCredits = this.props.currentRoom.creatorCredits + 5;
-        if(this.props.currentRoom.creatorCredits <= 50){
-          fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
-        }
-        let newChallengerCredits = this.props.currentRoom.challengerCredits + 5;
-        if(this.props.currentRoom.challengerCredits <= 50){
-          fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+      if (this.props.currentRoom) {
+        if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName){
+          let newCreatorCredits = this.props.currentRoom.creatorCredits + 5;
+          if(this.props.currentRoom.creatorCredits <= 50){
+            fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
+          }
+          let newChallengerCredits = this.props.currentRoom.challengerCredits + 5;
+          if(this.props.currentRoom.challengerCredits <= 50){
+            fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+          }
         }
       }
     }, 30000)
