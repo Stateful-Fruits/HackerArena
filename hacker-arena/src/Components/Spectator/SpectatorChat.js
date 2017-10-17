@@ -36,8 +36,10 @@ class SpectatorChat extends Component {
       // immediately ask for camera access 
       autoRequestMedia: true
   });
-  webrtc.on('readyToCall', function () {
+  webrtc.on('readyToCall', function (id) {
     // you can name it anything 
+    console.log(id);
+    webrtc.getPeers(id);
     webrtc.joinRoom('your awesome room name');
 });
   }
@@ -59,6 +61,7 @@ class SpectatorChat extends Component {
         
         <div>
           <div className='stream'> <video id ="localVideo"></video>
+          <video id ="remoteVideo"></video>
           </div>
           { spectatorChat.map((chatMessage, i) => (
             <SpectatorChatMessage 
