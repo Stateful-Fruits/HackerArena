@@ -75,12 +75,12 @@ class App extends Component {
         <button onClick={()=>fire.auth().signOut().then(()=>{
 navigate('/Login');
         })}> Logout</button> */}
-
+ 
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <ul className="navbar-nav ml-auto mr-auto">
             <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/') }>Home</li>
             <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/About') }>About</li>
-            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/AddProblem') }>Add Problem</li>
+            <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/AddProblem') }>Add Problems</li>
             {
               fire.auth().currentUser ? (
                 <li
@@ -91,7 +91,7 @@ navigate('/Login');
                       })
                   }
                 >
-                  Logout
+                  Log out
                 </li>
               ) : null
             }
