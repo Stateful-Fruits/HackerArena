@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import updateUserProfile from '../Actions/updateUserProfile';
 import fire from '../Firebase/firebase';
 import getUsernameFromEmail from '../Util';
+import EditProfile from '../Components/User/EditProfile.js';
 
 class UserProfile extends React.Component {
   componentWillMount () {
@@ -26,13 +27,22 @@ class UserProfile extends React.Component {
 
   render () {
     let profile = this.props.profile;
+    let profileUsername = this.props.profileUsername;
+    let clientUsername = fire.auth().currentUser.email.split('@')[0];
     console.log('this.props', this.props);
 
     return (
       <div>
-        <div>Username: {profile.username}</div><br/>
-        <div>Wins: {profile.wins}</div><br/>
-        <div>Losses: {profile.losses}</div>
+        <div>
+          <div>Username: {profile.username}</div><br/>
+          <div>Wins: {profile.wins}</div><br/>
+          <div>Losses: {profile.losses}</div>
+        </div>
+        
+        {(profileUsername === clientUsername) ?
+          <EditProfile /> :
+          null
+        }
       </div>
     )
   }

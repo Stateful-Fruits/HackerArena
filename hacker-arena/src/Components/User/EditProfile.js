@@ -1,9 +1,6 @@
 import React from 'react';
 
-import fire from '../Firebase/firebase';
-import db from '../Firebase/db';
-
-import { connect } from 'react-redux';
+import fire from '../../Firebase/firebase';
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -23,16 +20,18 @@ class EditProfile extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    let photoURL = this.state.email;
+    let photoURL = this.state.photoURL;
+    console.log('photoURL', photoURL);
     fire.auth().currentUser.updateProfile({
       photoURL: photoURL
     });
+
   }
 
   render() {
     return (
       <div>
-        <input
+        <input onChange={this.onChange}
           value = {this.state.photoURL}
           type= 'text'
           name= 'photoURL'
