@@ -32,7 +32,7 @@ class GameRoom extends React.Component {
   // }
 
   componentWillUnmount () {
-    if (this.props.room) this.handleLeave();
+    this.handleLeave();
   }
 
   handleLeave () {
