@@ -38,6 +38,10 @@ class GameRoom extends React.Component {
   handleLeave () {
     var gameRoom = Object.assign({}, this.props.room);
     let username = this.props.username;
+    if (gameRoom.creatorName === this.props.username) {
+      console.log(`room ${gameRoom.key} about to be destroyed`);
+      fire.database().ref('rooms/' + gameRoom.key).remove();
+    }
     if (gameRoom.players === 2) {
       if (gameRoom.challengerName === username) {
         gameRoom.challengerName = '';
@@ -50,19 +54,20 @@ class GameRoom extends React.Component {
         console.log('creator left', gameRoom.players);
         fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
       }
-    } else if (gameRoom.players === 1 || username === gameRoom.creatorName) {
+    } else if (gameRoom.players === 1) {
       console.log(`room ${gameRoom.key} about to be destroyed`);
       fire.database().ref('rooms/' + gameRoom.key).remove();
     }
   }
 
   handleEnter() {
-    if (this.props.room) {
+    if (this.props.room && this.props.gameRooms[this.props.room.id]) {
       var gameRoom = Object.assign({}, this.props.room);
       if (gameRoom.players === 2 
         && gameRoom.creatorName !== this.props.username 
         && gameRoom.creatorName !== this.props.challengerName 
         && gameRoom.challengerName !== this.props.username) this.props.navigate(`/Spectate/${this.props.id}`);
+      if (gameRoom.challengerName === this.props.username || gameRoom.creatorName === this.props.username) return;
       else if (!(gameRoom.players === 2)) {
         let creatorName = gameRoom.creatorName;
         let challengerName = gameRoom.challengerName;
