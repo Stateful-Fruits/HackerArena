@@ -67,7 +67,7 @@ class AddProblem extends React.Component {
 
           Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
           
-          Format: Test.assertEquals(userFn(2012, 2016), 4028)
+          NOTE: use userFN instead of {JSON.stringify(problem.userFN)} when writing test
           <button onClick={this.addInTest}
             type='button' 
             value={problem.addingTest}>Add To Tests:</button>
