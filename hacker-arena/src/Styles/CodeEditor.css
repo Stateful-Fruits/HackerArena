@@ -116,7 +116,7 @@ ul#aceConsole > li {
   margin-bottom: 10px;
 }
 #log {
-  color: white;
+  color: white !important;
 }
 
 #disruptionsBar {
