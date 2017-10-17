@@ -19,7 +19,8 @@ const Disruptions = {
 		editor.gotoLine(6);
 		editor.insert("\nfspofjdsofijsfsoifjsdofijasfodijfsoafijjroijweraoeijraworiejr");
 		editor.gotoLine(8);
-		editor.insert("\nfspofjdsofijsfsoifjsdofijasfodijfsoafijjroijweraoeijraworiejr");
+    editor.insert("\nfspofjdsofijsfsoifjsdofijasfodijfsoafijjroijweraoeijraworiejr");
+    
   },
   Blind: function(editor){
     // Turn console black
@@ -122,6 +123,13 @@ Kennify: function(editor){
     $("#ace-editor").css({"background": "#272822", "color": "white"});
     // editor.setTheme("ace/theme/monokai");
   }, 5000);
+},
+Charmin: function(editor){
+  $('.completeWaiting').append('<iframe width="560" height="315" src="https://www.youtube.com/embed/JAzqGuZfo00?autoplay=1&rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>');
+  
+  setTimeout(() => {
+    $('iframe').remove();
+  }, 28000);
 }
 
 }

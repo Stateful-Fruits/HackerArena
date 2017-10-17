@@ -27,14 +27,26 @@ class CodeEditor extends React.Component {
     console.log(" THE CURRENT CREATOR", this.props.currentRoom.creatorName)
     console.log(" THE CURRENT USER", fire.auth().currentUser)
     // Creates template for current problem using userFn
+    this.ace.editor.on("paste", () => {
+      this.ace.editor.undo();
+      window.swal(
+        'You little cheater',
+        '',
+        'warning'
+      )
+    })
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
     // Increments user credits by 5 every 30 seconds
     setInterval(()=> {
       if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName){
         let newCreatorCredits = this.props.currentRoom.creatorCredits + 5;
-        fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
+        if(this.props.currentRoom.creatorCredits <= 50){
+          fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
+        }
         let newChallengerCredits = this.props.currentRoom.challengerCredits + 5;
-        fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+        if(this.props.currentRoom.challengerCredits <= 50){
+          fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+        }
       }
     }, 30000)
   }
@@ -120,7 +132,9 @@ class CodeEditor extends React.Component {
 
   receiveDisruptions(func){
     // Runs disruptions for user, if called
+    let oldHistory = this.ace.editor.getSession().getUndoManager();
     Disruptions[func](this.ace.editor);
+    this.ace.editor.getSession().setUndoManager(oldHistory);
   }
 
   handleSubmit(){
@@ -215,17 +229,19 @@ class CodeEditor extends React.Component {
           :
           <button className=" btn disruptionsHeader"><span className="dc badge">{this.props.currentRoom.challengerCredits}</span> Disruptions</button>
             }
+
           <button className="btn" id="Blind 1" onClick={this.sendDisruptions}><span className="d1 badge">1</span> Blind</button>
           <button className="btn" id="Python 1" onClick={this.sendDisruptions}><span className="d1 badge">1</span> Python</button>
           <button className="btn" id="Kennify 1" onClick={this.sendDisruptions}><span className="d1 badge">1</span> Kennify</button>
-          <button className="btn" id="LineBomb 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> LineBomb</button>
           <button className="btn" id="Fog 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> Fog</button>
           <button className="btn" id="Flip 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> Flip</button>
           <button className="btn" id="Zoom 3" onClick={this.sendDisruptions}><span className="d3 badge">3</span> Old Man</button>
+          <button className="btn" id="LineBomb 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> LineBomb</button>
           <button className="btn" id="Sublime 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> Sublime</button>
           <button className="btn" id="Move 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> Move</button>
           <button className="btn" id="ActualTimeTravel 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span> Undo</button>
-          <button className="btn" id="Wipe 10" onClick={this.sendDisruptions}><span className="d10 badge">10</span> Wipe</button>
+          <button className="btn" id="Charmin 5" onClick={this.sendDisruptions}><span className="d5 badge">5</span>Charmin</button>
+          <button className="btn" id="Wipe 20" onClick={this.sendDisruptions}><span className="d10 badge">20</span> Wipe</button>
           </div>
           <button className="btn editorHeader" color="secondary" size="lg" >Editor</button>
           <ReactAce
