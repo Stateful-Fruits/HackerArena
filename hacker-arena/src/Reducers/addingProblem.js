@@ -23,7 +23,7 @@ const addingProblem = (state=start, action) => {
       return action.payload;
     case 'UPDATE_ADD_PROBLEM_TESTS':
       problem.tests.push(action.payload);
-      console.log('updated tests ', problem);
+      console.log('updated tests ', problem, action.payload);
       return problem;
     case 'REMOVE_TEST_FROM_ADDING_PROBLEM':
       problem.tests = problem.tests.filter(test => test !== action.payload);
