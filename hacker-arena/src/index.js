@@ -107,8 +107,6 @@ fire.auth().onAuthStateChanged(function(user) {
     </Provider>,
     document.getElementById('root')
   );
-  
-
 })
 
     
