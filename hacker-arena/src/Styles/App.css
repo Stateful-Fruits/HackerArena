@@ -29,6 +29,7 @@
   right: 50px;
   position: absolute;
   top: 15px;
+  cursor: pointer;
 }
 
 .profile-photo {

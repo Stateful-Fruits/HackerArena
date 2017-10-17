@@ -2,6 +2,8 @@ import React from 'react';
 
 import fire from '../../Firebase/firebase';
 
+import '../../Styles/EditProfile.css'
+
 class EditProfile extends React.Component {
   constructor(props) {
     super(props);
@@ -30,8 +32,9 @@ class EditProfile extends React.Component {
 
   render() {
     return (
-      <div>
-        <input onChange={this.onChange}
+      <div className="edit-profile">
+        Enter custom url to profile photo here:
+        <input className="photo-url-input" onChange={this.onChange}
           value = {this.state.photoURL}
           type= 'text'
           name= 'photoURL'

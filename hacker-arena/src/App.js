@@ -36,19 +36,21 @@ class App extends Component {
   // });
   render() {
     let { navigate } = this.props;
+    let currentUser = fire.auth().currentUser;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">HACKER ARENA</h1>
           {
-          fire.auth().currentUser ? (
-            <span className="profile-image">
-              <span className="profile-greeting"> Hi { fire.auth().currentUser.email.split('@')[0] }!</span>
-              <img className="profile-photo"
-              src={fire.auth().currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}>
-              </img>
-            </span>
-          ) : null}
+            currentUser ? (
+              <span className="profile-image" onClick={() => navigate('/User/' + currentUser.email.split('@')[0])}>
+                <span className="profile-greeting"> Hi { currentUser.email.split('@')[0] }!</span>
+                <img className="profile-photo"
+                src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}>
+                </img>
+              </span>
+            ) : null
+          }
         </header>
         {/* <button onClick={ () => navigate('/') }>
           <h3>Home</h3>
