@@ -8,9 +8,10 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-          <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/') }>Home</li>
-          <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/About') }>About</li>
-          <li className="leftNav nav-item navbar-brand" onClick={ () => navigate('/AddProblem') }>Add Problems</li>
+          <a href='/' className='leftNav nav-item navbar-brand'>Home</a>
+          <a href='/About' className='leftNav nav-item navbar-brand'>About</a>
+          <a href='/AddProblem' className='leftNav nav-item navbar-brand'>Add Problem</a>
+          <a href='/CodeRunLobby' className='leftNav nav-item navbar-brand'>Code Run</a>
           {
             fire.auth().currentUser ? (
               <li
