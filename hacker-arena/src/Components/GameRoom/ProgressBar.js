@@ -18,50 +18,58 @@ const ProgressBar = ({ room }) => {
 
   return (
     <div> 
-      {fire.auth().currentUser.email.split('@')[0] === room.creatorName ?
-       (<div>
-       <div>
-         <span className="usernameLabels">Creator: </span>
-         <span className="usernames">{room.creatorName}</span> | Passed: {room.creatorTestPassed}
-       </div>
-        <div className="progress">
-          <div className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuenow="70"
-            aria-valuemin="0" aria-valuemax="100" style={{width: `${percent}%`}}>
-            <span className="sr-only">bobo Complete</span>
-          </div>
-        </div>
-        <div>
-         <span className="opponentLabels">Challenger: </span>
-         <span className="opponent">{room.challengerName}</span> | Passed: {room.challengerTestPassed}
-       </div>
-        <div className="progress">
-          <div className="progress-bar progress-bar-striped progress-bar-danger progress-bar-animated" role="progressbar" aria-valuenow="70"
-            aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
-            <span className="sr-only">bobo Complete</span>
-          </div>
-        </div>
-        </div>)
-      :
+      {fire.auth().currentUser.email.split('@')[0] === room.challengerName ?
       (<div>
-        <div>
+        <div style={{float:"left", margin: "10px"}}>
          <span className="usernameLabels">Challenger: </span>
-         <span className="usernames">{room.challengerName}</span> | Passed: {room.challengerTestPassed}
+         <span className="usernames">{room.challengerName}</span>
        </div>
-        <div className="progress">
-          <div className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuenow="70"
-            aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
-            <span className="sr-only">bobo Complete</span>
-          </div>
-        </div>
+
+       <div style={{float:"right", margin: "10px"}}>
         <div>
          <span className="opponentLabels">Creator: </span>
-         <span className="opponent">{room.creatorName}</span> | Passed: {room.creatorTestPassed}
+         <span className="opponent">{room.creatorName}</span>
        </div>
+        </div>
+
+        <div className="thebars">
+        <div className="progress">
+          <div className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
+            <span className="sr-only">bobo Complete</span>
+          </div>
+        </div>
         <div className="progress">
           <div className="progress-bar progress-bar-striped progress-bar-danger progress-bar-animated" role="progressbar" aria-valuenow="70"
             aria-valuemin="0" aria-valuemax="100" style={{width: `${percent}%`}}>
             <span className="sr-only">bobo Complete</span>
           </div>
+        </div>
+        </div>
+        </div>)
+        :
+       (<div>
+       <div style={{float:"left", margin: "10px"}}>
+         <span className="usernameLabels">Creator: </span>
+         <span className="usernames">{room.creatorName}</span>
+       </div>
+        <div style={{float: "right", margin: "10px"}}>
+         <span className="opponentLabels">Challenger: </span>
+         <span className="opponent">{room.challengerName}</span>
+       </div>
+       <div className="thebars">
+        <div className="progress">
+          <div className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style={{width: `${percent}%`}}>
+            <span className="sr-only">bobo Complete</span>
+          </div>
+        </div>
+        <div className="progress">
+          <div className="progress-bar progress-bar-striped progress-bar-danger progress-bar-animated" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style={{width: `${challengerPercent}%`}}>
+            <span className="sr-only">bobo Complete</span>
+          </div>
+        </div>
         </div>
         </div>)
       }
