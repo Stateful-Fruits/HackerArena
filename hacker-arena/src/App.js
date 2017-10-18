@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import './Styles/App.css';
-
+import updateBoardRooms from './Actions/updateBoardRooms';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
@@ -15,7 +15,7 @@ import { push } from 'react-router-redux';
 class App extends Component {
 
   componentWillMount() {
-    let { updateGameRooms, updateProblems } = this.props;
+    let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
     // grab and listen for game rooms from firebase db
     db.Rooms.on('value', data => {
       // dispatch action to change game rooms array in store
@@ -25,6 +25,10 @@ class App extends Component {
     db.Problems.on('value', data => {
       updateProblems(data.val());  
     });
+
+    db.BoardRooms.on('value', data => {
+      updateBoardRooms(data.val());
+    })
 
   }
 
@@ -62,6 +66,7 @@ class App extends Component {
 const mapDispatchToProps = (dispatch) => ({
   updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms)),
   updateProblems: (problems) => dispatch(updateProblems(problems)),
+  updateBoardRooms: (rooms) => dispatch(updateBoardRooms(rooms)),
   navigate: (route) => dispatch(push(route))
 });
 
