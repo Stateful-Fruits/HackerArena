@@ -30,7 +30,8 @@ class EditProfile extends React.Component {
     console.log('photoURL', photoURL);
     fire.auth().currentUser.updateProfile({
       photoURL: photoURL
-    });
+    })
+    .then(() => this.props.navigate(this.props.pathname))
   }
 
   onFileChange(e) {
@@ -52,7 +53,8 @@ class EditProfile extends React.Component {
       console.log('ss.downloadURL', ss.downloadURL)
       fire.auth().currentUser.updateProfile({
         photoURL: ss.downloadURL
-      });
+      })
+      .then(() => this.props.navigate(this.props.pathname))
     });
   }
 
