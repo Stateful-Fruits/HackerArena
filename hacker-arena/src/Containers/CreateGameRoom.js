@@ -28,9 +28,8 @@ class CreateGameRoom extends React.Component {
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
-      gameStarted: false,
-      winner: "",
-      closed: false,
+      roomStatus: 'standby',
+      winner: '',
       startingCredits: startingCredits,
       isPrivate: isPrivate,
       problemID: problemID,

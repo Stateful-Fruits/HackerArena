@@ -60,14 +60,15 @@ class GameRoom extends React.Component {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
-      // if the players array is undefined (you're creating the room) set it to an empty array
-      let players = room.players || {};
+      // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
+      let players = room.players;      
+
       let playerNames = Object.keys(players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
-      } else if (playerNames.length === room.playerCapacity) {
+      } else if (room.roomStatus !== 'standby') {
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
@@ -77,14 +78,15 @@ class GameRoom extends React.Component {
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
           gameRoom.timeStart = performance.now();
-        } 
+        } else if (playerNames.length === gameRoom.playerCapacity) {
+          gameRoom.roomStatus === 'playing';
+        }
         // add you username to the gameroom
         gameRoom.players[username] = {
-          distruptions: [''],
+          disruptions: [''],
           testStatus: {},
           credits: 0,
-          liveInput: '',
-          players: room.players
+          liveInput: ''
         };
         // and update the database
         fire.database().ref('rooms/' + roomId).set(gameRoom);
@@ -106,13 +108,10 @@ class GameRoom extends React.Component {
     // We have retrieved gameRooms from firebase and our room exists
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
-    let { players, playerCapacity } = room;
-    // find number of players currently in the room
-    let numPlayers = Object.keys(players).length;
-    // check that against the capacity established when the room was created
-    let roomIsFull = numPlayers === playerCapacity;
-    if (roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
-    return (
+    let { roomStatus, winner } = room;
+    if (roomStatus === 'standby' || roomStatus === 'intermission') return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
+    else if (roomStatus === 'playing') {
+      return (
       <div>
           {/* <ProgressBar room={ room }/> */}
         <div id="editorAndTestSuite">
@@ -121,6 +120,12 @@ class GameRoom extends React.Component {
         </div>
       </div>
     );
+  } else if (roomStatus === 'completed') {
+    return (
+      <div>
+        The winner is {winner}!
+      </div>
+    )
   }
 }
 const mapStateToProps = (state) => ({
