@@ -36,7 +36,8 @@ class CreateGameRoom extends React.Component {
       problemID: problemID,
       problem: problem,
       spectators: 0,
-      rounds: 0
+      rounds: 0,
+      playerCapacity
     };
 
     db.Rooms.push(room).then(added => {

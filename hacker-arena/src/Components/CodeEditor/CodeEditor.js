@@ -43,6 +43,7 @@ class CodeEditor extends React.Component {
   }
 
   componentWillUpdate(){
+    console.log('Code editor updating with props: \n', this.props);
     // Alert users if someone has won the game
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];    
@@ -60,8 +61,8 @@ class CodeEditor extends React.Component {
       });
     } 
     // Check for disruptions sent to the user
-    if(currentRoom[username].disruptions.length){
-      currentRoom[username].disruptions.forEach(disruption => {
+    if(currentRoom.players[username].disruptions.length){
+      currentRoom.players[username].disruptions.forEach(disruption => {
         if(disruption !== "") this.receiveDisruptions(disruption);
       });
       fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])

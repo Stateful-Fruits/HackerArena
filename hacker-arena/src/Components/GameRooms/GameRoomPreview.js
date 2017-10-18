@@ -10,7 +10,7 @@ const GameRoomPreview = ({
   let playerNames = Object.keys(players);
   let playerSpans = [];
   for (let i = 0; i < playerCapacity; i++) {
-    playerSpans.push(<li><h4>Player {i} -> { playerNames[i] ? playerNames[i] : <span style={{color: 'darkgreen'}}>OPEN</span> }</h4></li>);
+    playerSpans.push(<li key={(playerNames[i] || "OPEN") + i}><h4>Player {i} -> { playerNames[i] ? playerNames[i] : <span style={{color: 'darkgreen'}}>OPEN</span> }</h4></li>);
   }
   return (
     <div className='list-group-item' style={{ color: 'black' }}>
@@ -20,7 +20,7 @@ const GameRoomPreview = ({
       <div>
         Spectators: {(spectators ? spectators.join(', ') : '')}
       </div>
-      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={playerCapacity >= playerNames.length}>
+      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={playerCapacity === playerNames.length}>
         <h3>Join Game</h3> 
       </button>
       <button onClick={ () => navigate(`/Spectate/${gameRoom.key}`) }>

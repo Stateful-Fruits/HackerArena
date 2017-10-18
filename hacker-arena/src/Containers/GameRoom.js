@@ -36,7 +36,7 @@ class GameRoom extends React.Component {
   handleLeave () {
     // handles leaving the gameroom should only be called when gameRooms 
     // has been retrieved from Firebase, the room exists, and you are a member
-    if (this.props.gameRooms 
+    if (this.props && this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && Object.keys(this.props.gameRooms[this.props.roomId].players).includes(this.props.username)) {
       let { gameRooms, roomId, username } = this.props;
@@ -83,7 +83,8 @@ class GameRoom extends React.Component {
           distruptions: [''],
           testStatus: {},
           credits: 0,
-          liveInput: ''
+          liveInput: '',
+          players: room.players
         };
         // and update the database
         fire.database().ref('rooms/' + roomId).set(gameRoom);
@@ -93,13 +94,17 @@ class GameRoom extends React.Component {
   } 
   
   render () {
-    let { gameRooms, roomId } = this.props.gameRooms;
+    console.log('props: \n', this.props);
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
-    if (!gameRooms || !Object.keys(gameRooms).length) return (<GameRoomLoading />);
+    if (!this.props.gameRooms 
+        || !Object.keys(this.props.gameRooms).length 
+        || !this.props.gameRooms[this.props.roomId].players
+        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
-    if (!gameRooms[roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
+    if (!this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     // We have retrieved gameRooms from firebase and our room exists
+    let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
     let { players, playerCapacity } = room;
     // find number of players currently in the room
@@ -109,10 +114,10 @@ class GameRoom extends React.Component {
     if (roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
     return (
       <div>
-          <ProgressBar room={ room }/>
+          {/* <ProgressBar room={ room }/> */}
         <div id="editorAndTestSuite">
           <CodeEditor currentRoom={room}/>
-          <TestSuite currentRoom={room}/>
+          {/* <TestSuite currentRoom={ room }/> */}
         </div>
       </div>
     );
