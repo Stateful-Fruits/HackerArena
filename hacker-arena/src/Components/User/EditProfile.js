@@ -10,7 +10,8 @@ class EditProfile extends React.Component {
 
     this.state = {
       photoURL: fire.auth().currentUser.photoURL,
-      photoFiles: []
+      photoFiles: [],
+      uploadProgress: 0
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -30,7 +31,8 @@ class EditProfile extends React.Component {
     console.log('photoURL', photoURL);
     fire.auth().currentUser.updateProfile({
       photoURL: photoURL
-    });
+    })
+    .then(() => this.props.navigate(this.props.pathname))
   }
 
   onFileChange(e) {
@@ -47,18 +49,47 @@ class EditProfile extends React.Component {
     console.log('typeof file', typeof file);
     console.log('file', file)
     let storageRef = fire.storage().ref('user-photos/' + file.name);
-    storageRef.put(file)
-    .then(ss => {
+    const task = storageRef.put(file)
+    // .then(ss => {
+    //   console.log('ss.downloadURL', ss.downloadURL)
+    //   fire.auth().currentUser.updateProfile({
+    //     photoURL: ss.downloadURL
+    //   })
+    //   .then(() => this.props.navigate(this.props.pathname))
+    // });
+
+    console.log('task', task)
+    task.on('state_changed', (snapshot) => {
+      let percentage = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      console.log('percentage', percentage);
+      this.setState({
+        uploadProgress: percentage
+      })
+    })
+
+    task.then(ss => {
       console.log('ss.downloadURL', ss.downloadURL)
       fire.auth().currentUser.updateProfile({
         photoURL: ss.downloadURL
-      });
+      })
+      .then(() => {
+        this.props.navigate(this.props.pathname)        
+        this.setState({
+          uploadProgress: 0
+        })
+      })
     });
   }
 
   render() {
+    let currentUser = fire.auth().currentUser;
     return (
       <div className="edit-profile">
+        <img className="profile-photo"
+          src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
+          alt='profile'
+        >
+        </img>
         <div className="photo-url-edit">
           Enter custom url to profile photo here:
           <input className="photo-url-input" onChange={this.onChange}
@@ -73,7 +104,11 @@ class EditProfile extends React.Component {
           OR - upload you own photo!
           <br/>
           <input className="choose-file" type="file" id="input" name="photoFiles" files={this.state.photoFiles} onChange={this.onFileChange}/>
-          <button className="submit-file" onClick={this.onFileSubmit}>Upload</button>
+          <button className="submit-file" onClick={this.onFileSubmit}>Upload</button><br/>
+          <div className="progress">
+            <span className="progress-display">{this.state.uploadProgress}</span>
+            <div className="upload-bar progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="uploader" style={{width: `${this.state.uploadProgress}%`}}></div>
+          </div>
         </div>
       </div>
     )
