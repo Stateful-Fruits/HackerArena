@@ -15,7 +15,7 @@ import { push } from 'react-router-redux';
 class App extends Component {
 
   componentWillMount() {
-    let { updateGameRooms, updateProblems } = this.props;
+    let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
     // grab and listen for game rooms from firebase db
     db.Rooms.on('value', data => {
       // dispatch action to change game rooms array in store
@@ -66,6 +66,7 @@ class App extends Component {
 const mapDispatchToProps = (dispatch) => ({
   updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms)),
   updateProblems: (problems) => dispatch(updateProblems(problems)),
+  updateBoardRooms: (rooms) => dispatch(updateBoardRooms(rooms)),
   navigate: (route) => dispatch(push(route))
 });
 
