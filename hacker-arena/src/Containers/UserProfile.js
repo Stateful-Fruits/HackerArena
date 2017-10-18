@@ -4,6 +4,7 @@ import updateUserProfile from '../Actions/updateUserProfile';
 import fire from '../Firebase/firebase';
 import getUsernameFromEmail from '../Util';
 import EditProfile from '../Components/User/EditProfile.js';
+import { push } from 'react-router-redux';
 
 class UserProfile extends React.Component {
   componentWillMount () {
@@ -39,8 +40,9 @@ class UserProfile extends React.Component {
           <div>Losses: {profile.losses}</div>
         </div>
         
-        {(profileUsername === clientUsername) ?
-          <EditProfile /> :
+        {
+          (profileUsername === clientUsername) ?
+          <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
           null
         }
       </div>
@@ -51,14 +53,18 @@ class UserProfile extends React.Component {
 const mapStateToProps = (state) => {
   let profile = state.profile;
   let profileUsername = state.router.location.pathname.split('/')[2];
-  return { profile, profileUsername };
+  let pathname = state.router.location.pathname;
+  
+  
+  return { profile, profileUsername, pathname};
 };
 
 const mapDispatcherToProps = (dispatch) => {
   return {
     update: (profile) => {
       dispatch(updateUserProfile(profile));
-    }
+    },
+    navigate : (route) => dispatch(push(route)),    
   }
 }
 
