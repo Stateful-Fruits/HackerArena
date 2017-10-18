@@ -1,88 +1,105 @@
 import React from 'react';
 import { connect } from 'react-redux';
-//import fire from '../firebase';
+import { push } from 'react-router-redux';
+
 import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
 import db from '../Firebase/db';
-import { push } from 'react-router-redux';
 
 class CreateGameRoom extends React.Component {
   constructor (props) {
     super (props);
+
+    this.state = {
+      problemID: '',
+      isPrivate: false,
+      startingCredits: 5,
+      playerCapacity: 2
+    }
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onCheck = this.onCheck.bind(this);
+
     this.createRoom = this.createRoom.bind(this);
   }
-  createRoom () {
-    // db.Problems.once('value').then(snapshot => {
-    //   const allProblems = snapshot.val();
-    //   const problems = []; 
-    //   for (var key in allProblems) {
-    //     let problem = allProblems[key]
-    //     problem.key = key;
-    //     problems.push(problem);
-    //   }
-    //   const random = Math.floor(Math.random() * problems.length);
-    //   const selectedProblem = problems[random];
-    //   const room = {
-    //     challengerName: '',
-    //     challengerTestsPassed: 0,
-    //     creatorName: '', //'ron' || this.props.user,
-    //     creatorTestsPassed: 0,
-    //     gameStarted: false,
-    //     players: 0,
-    //     problemID: selectedProblem.key,
-    //     spectators: 0
-    //   };
-      
-    //   db.Rooms.push(room).then(added => {
-    //     room.key = added.key;
-    //     this.props.updateCurrentGameRoom(room);
-    //     this.props.navigateToGameRoom(added.key);
-    //   })
-    // })
+
+  createRoom (e, problemID, isPrivate, startingCredits, playerCapacity) {
     let allProblems = this.props.problems;
-    let keys = Object.keys(allProblems);
-    let random = Math.floor(Math.random() * keys.length);
-    let problem = allProblems[keys[random]];
+    let problem = allProblems[problemID];
     const room = {
-      challengerName: '',
-      challengerTestsPassed: 0,
-      challengerCredits: 5,
-      challengerTestStatus: [""],
-      challengerDisruptions: [""],
-      challengerLiveInput: "",
-      creatorName: '', //'ron' || this.props.user,
-      creatorTestsPassed: 0,
-      creatorCredits: 5,
-      creatorTestStatus: [""],
-      creatorDisruptions: [""],
-      creatorLiveInput: "",
       gameStarted: false,
-      players: 0,
       winner: "",
-      // creatorTestStatus: 
-      // challengerTestStatus: 
-      problemID: keys[random],
+      closed: false,
+      startingCredits: startingCredits,
+      isPrivate: isPrivate,
+      problemID: problemID,
       problem: problem,
       spectators: 0
     };
-    db.Rooms.push(room).then(added => {
-      room.key = added.key;
-      // this.props.updateCurrentGameRoom(room);
-      this.props.navigateToGameRoom(added.key);
-    })
-  
 
+    db.Rooms.push(room).then(added => {
+      this.props.navigateToGameRoom(added.key);
+    });
   }
+
+  onSubmit(e) {
+    e.preventDefault();
+    problemID = this.state.problemID || 
+  }
+
+  onChange(e) {
+    e.preventDefault();
+    console.log('change running', e.target.value);
+
+    this.setState({[e.target.name] : e.target.value || e.target.checked})
+  }
+
+  onCheck(e) {
+    e.stopPropagation();
+    let name = e.target.name;
+
+    this.setState(({ isPrivate }) => {
+      return {[name] : !isPrivate}})
+  }
+
   render () {
     return (
       <div>
+        <form>
+          Max Players
+          <input
+            type="number" 
+            value={this.state.playerCapacity} 
+            min="1" 
+            max="4" 
+            name="playerCapacity"
+            onChange={this.onChange}
+          />
+          Make room private
+          <input
+            type="checkbox"
+            label="Make room private"
+            checked={this.state.isPrivate} 
+            name="isPrivate"
+            onChange={this.onCheck}
+          />
+          Starting Attack credits<input
+            type="number" 
+            value={this.state.startingCredits} 
+            min="1" 
+            max="50" 
+            name="startingCredits"
+            onChange={this.onChange}
+          />
+        </form>
         <button onClick={this.createRoom}><h3>Create Game Room</h3></button>
       </div>
     )
   }
 }
+
 const mapStateToProps = (state) => {
   return {
-    user: state.user,
     problems: state.problems
   }
 }
@@ -94,12 +111,3 @@ const mapDispatcherToProps = (dispatch) => {
   }
 }
 export default connect(mapStateToProps, mapDispatcherToProps)(CreateGameRoom);
-
-
-// function writeUserData(userId, name, email, imageUrl) {
-//   firebase.database().ref('users/' + userId).set({
-//     username: name,
-//     email: email,
-//     profile_picture : imageUrl
-//   });
-// }
