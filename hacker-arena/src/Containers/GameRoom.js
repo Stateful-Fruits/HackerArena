@@ -60,12 +60,14 @@ class GameRoom extends React.Component {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
-      let { players, playerCapacity } = room;
+      // if the players array is undefined (you're creating the room) set it to an empty array
+      let players = room.players || {};
+      if (!room.players) room.players = {};
       let playerNames = Object.keys(players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
-      } else if (playerNames.length === playerCapacity) {
+      } else if (playerNames.length === room.playerCapacity) {
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
@@ -113,7 +115,7 @@ class GameRoom extends React.Component {
           <TestSuite currentRoom={room}/>
         </div>
       </div>
-    )
+    );
   }
 }
 const mapStateToProps = (state) => ({

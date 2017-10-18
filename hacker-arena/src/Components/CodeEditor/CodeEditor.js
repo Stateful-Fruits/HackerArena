@@ -3,10 +3,10 @@ import React from 'react';
 import $ from 'jquery';
 import runTestsOnUserAnswer from '../../ToyProblemTesting/testUserAnswer';
 import fire from '../../Firebase/firebase';
-import Disruptions from './Disruptions/disruptions';
+import Disruptions from './disruptions';
 import DisruptionsBar from './DisruptionsBar';
 
-import '../Styles/CodeEditor.css';
+import '../../Styles/CodeEditor.css';
 
 class CodeEditor extends React.Component {
   constructor(props) {

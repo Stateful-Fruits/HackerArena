@@ -5,15 +5,22 @@ const GameRoomPreview = ({
   gameRoom, 
   navigate
 }) => {
-  let { spectators, creatorName, challengerName } = gameRoom;
+  let { spectators, playerCapacity } = gameRoom;
+  let players = gameRoom.players || {};
+  let playerNames = Object.keys(players);
+  let playerSpans = [];
+  for (let i = 0; i < playerCapacity; i++) {
+    playerSpans.push(<li><h4>Player {i} -> { playerNames[i] ? playerNames[i] : <span style={{color: 'darkgreen'}}>OPEN</span> }</h4></li>);
+  }
   return (
     <div className='list-group-item' style={{ color: 'black' }}>
-      <h4>Host: { creatorName || (<span style={{color: 'darkgreen'}}>OPEN</span>) }</h4>
-      <h4>Opponent: { challengerName || (<span style={{color: 'darkgreen'}}>OPEN</span>) }</h4>
+      <ul>
+        { playerSpans }
+      </ul>
       <div>
         Spectators: {(spectators ? spectators.join(', ') : '')}
       </div>
-      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={challengerName && creatorName}>
+      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={playerCapacity >= playerNames.length}>
         <h3>Join Game</h3> 
       </button>
       <button onClick={ () => navigate(`/Spectate/${gameRoom.key}`) }>
