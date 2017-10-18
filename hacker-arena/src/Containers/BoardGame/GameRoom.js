@@ -23,16 +23,14 @@ class GameRoom extends React.Component {
   }
 
   handleLeave () {
-    console.log('byebye');
-    if (this.props.room) {
+    if (this.props.room !== undefined) {
       let user = this.props.user;
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
-      console.log('players after leaving ', room.players, room.key);
       if (room.players > 0) {
-        fire.database().ref('BoardRooms' + this.props.room.key).set(room);
+        fire.database().ref('BoardRooms/' + this.props.room.key).set(room);
       } else {
-        fire.database().ref('BoardRooms' + this.props.room.key).remove();
+        fire.database().ref('BoardRooms/' + this.props.room.key).remove();
       }
     }
   }
@@ -56,7 +54,7 @@ class GameRoom extends React.Component {
 const mapStoP = (state) => {
   return {
     user: fire.auth().currentUser.email.split('@')[0],
-    room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : {},
+    room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined,
   }
 }
 
