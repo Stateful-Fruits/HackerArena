@@ -10,6 +10,7 @@ import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
 import AddProblem from './Containers/AddProblem/AddProblem';
+import CodeRunLobby from './Containers/BoardGame/Lobby';
 // To check Log in info
 import fire from './Firebase/firebase';
 
@@ -94,6 +95,13 @@ fire.auth().onAuthStateChanged(function(user) {
                   fire.auth().currentUser ? (
                     <SpectatorRoom />
                   ) : ( 
+                    <Redirect to="/Login" />      
+                  )
+                )}/>
+                <Route exact path="/CodeRunLobby" render={() => (
+                  fire.auth().currentUser ? (
+                    <CodeRunLobby />
+                  ) : (
                     <Redirect to="/Login" />      
                   )
                 )}/>
