@@ -25,6 +25,7 @@ class CreateRoom extends React.Component {
     };
     db.BoardRooms.push(room).then(added => {
       room.key = added.key;
+      fire.database().ref('BoardRooms/' + added.key).set(room);
       this.props.navigateToBoardRoom(added.key);
     })
   
