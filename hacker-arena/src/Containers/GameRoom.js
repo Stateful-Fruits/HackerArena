@@ -36,19 +36,21 @@ class GameRoom extends React.Component {
   handleLeave () {
     // handles leaving the gameroom should only be called when gameRooms 
     // has been retrieved from Firebase, the room exists, and you are a member
+    console.log('props before leave:\n\n', this.props);
     if (this.props && this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
+        && this.props.gameRooms[this.props.roomId].players
         && Object.keys(this.props.gameRooms[this.props.roomId].players).includes(this.props.username)) {
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       // when you're the last player inside, leaving deletes the gameroom
       if (room.players.length <= 1) {
-        fire.database().ref('rooms/' + roomId).remove();
+        fire.database().ref('/rooms/' + roomId).remove();
       } else {
         let gameRoom = Object.assign({}, room);
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
-        fire.database().ref('rooms/' + roomId).set(gameRoom);
+        fire.database().ref('/rooms/' + roomId).set(gameRoom);
       }
     } 
   }
@@ -80,14 +82,13 @@ class GameRoom extends React.Component {
         } 
         // add you username to the gameroom
         gameRoom.players[username] = {
-          distruptions: [''],
+          disruptions: [''],
           testStatus: {},
           credits: 0,
-          liveInput: '',
-          players: room.players
+          liveInput: ''
         };
         // and update the database
-        fire.database().ref('rooms/' + roomId).set(gameRoom);
+        fire.database().ref('/rooms/' + roomId).set(gameRoom);
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
@@ -111,7 +112,7 @@ class GameRoom extends React.Component {
     let numPlayers = Object.keys(players).length;
     // check that against the capacity established when the room was created
     let roomIsFull = numPlayers === playerCapacity;
-    if (roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
+    if (!roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
     return (
       <div>
           {/* <ProgressBar room={ room }/> */}
