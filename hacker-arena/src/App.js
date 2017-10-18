@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import './Styles/App.css';
-
+import updateBoardRooms from './Actions/updateBoardRooms';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
@@ -25,6 +25,10 @@ class App extends Component {
     db.Problems.on('value', data => {
       updateProblems(data.val());  
     });
+
+    db.BoardRooms.on('value', data => {
+      updateBoardRooms(data.val());
+    })
 
   }
 

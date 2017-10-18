@@ -6,14 +6,15 @@ import profile from './updateUserProfile';
 import problems from './updateProblems';
 import addingProblem from './addingProblem';
 //state.gameRooms , state.addingProblem etc...
-
+import boardRooms from './updateBoardRooms';
 
 const appReducers = ({
   gameRooms,
   testStatus,
   problems,
   addingProblem,
-  profile
+  profile,
+  boardRooms
 });
 
 export default appReducers;
