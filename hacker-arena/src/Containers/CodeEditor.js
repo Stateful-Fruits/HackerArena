@@ -24,6 +24,7 @@ class CodeEditor extends React.Component {
   }
 
   componentDidMount(){
+    console.log("CREATOR FROM STATE", this.state.creator)
     console.log(" THE CURRENT CREATOR", this.props.currentRoom.creatorName)
     console.log(" THE CURRENT USER", fire.auth().currentUser)
     // Creates template for current problem using userFn
@@ -36,20 +37,24 @@ class CodeEditor extends React.Component {
       )
     })
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
+    
     // Increments user credits by 5 every 30 seconds
     setInterval(()=> {
-      if (this.props.currentRoom) {
-        if(fire.auth().currentUser.email.split('@')[0] === this.props.currentRoom.creatorName){
-          let newCreatorCredits = this.props.currentRoom.creatorCredits + 5;
-          if(this.props.currentRoom.creatorCredits <= 50){
-            fire.database().ref('rooms/' + this.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
-          }
-          let newChallengerCredits = this.props.currentRoom.challengerCredits + 5;
-          if(this.props.currentRoom.challengerCredits <= 50){
-            fire.database().ref('rooms/' + this.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+      let that = this;
+      fire.database().ref('rooms/' + that.props.currentRoom.key + '/challengerName').once('value').then((function(snapshot){
+        if (that.props.currentRoom) {
+          if(fire.auth().currentUser.email.split('@')[0] === snapshot.val()){
+            let newCreatorCredits = that.props.currentRoom.creatorCredits + 5;
+            if(that.props.currentRoom.creatorCredits <= 50){
+              fire.database().ref('rooms/' + that.props.currentRoom.key + '/creatorCredits').set(newCreatorCredits);
+            }
+            let newChallengerCredits = that.props.currentRoom.challengerCredits + 5;
+            if(that.props.currentRoom.challengerCredits <= 50){
+              fire.database().ref('rooms/' + that.props.currentRoom.key + '/challengerCredits').set(newChallengerCredits);
+            }
           }
         }
-      }
+      }));
     }, 30000)
   }
 
@@ -135,7 +140,7 @@ class CodeEditor extends React.Component {
   receiveDisruptions(func){
     // Runs disruptions for user, if called
     let oldHistory = this.ace.editor.getSession().getUndoManager();
-    Disruptions[func](this.ace.editor);
+    Disruptions[func]("ace-editor", this.ace.editor);
     this.ace.editor.getSession().setUndoManager(oldHistory);
   }
 

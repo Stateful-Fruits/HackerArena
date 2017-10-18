@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import fire from '../../Firebase/firebase';
-
+import $ from 'jquery';
+import Disruptions from './../Disruptions/disruptions';
 import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import SpectatorChat from '../../Components/Spectator/SpectatorChat';
 import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDescription';
@@ -10,6 +11,7 @@ import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 
 class SpectatorRoom extends Component {
+
   sendSpectatorMessage(room, username, msg) {
     let gameRoom = Object.assign({}, room);
     gameRoom.spectatorChat = [...(gameRoom.spectatorChat || []), {username, msg}];
@@ -34,11 +36,12 @@ class SpectatorRoom extends Component {
     }
     fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
   }
-
+  
   componentDidMount() {
     window.addEventListener('beforeunload', this.leaveGameRoom);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     if(this.gameRoom) this.enterGameRoom(gameRoom);
+
   }
 
   componentWillUpdate() {
@@ -51,11 +54,48 @@ class SpectatorRoom extends Component {
         background: '#fff url(//bit.ly/1Nqn9HU)'
       });
      }
+
+
+    console.log("heres the game room yall", gameRoom , "GASDFSDFDF", this.props.gameRooms);
+    if(gameRoom){
+      //Check for disruptions sent if user is CREATOR
+     if(gameRoom.creatorDisruptions){
+       gameRoom.creatorDisruptions.forEach(disruption => {
+         if(disruption !== ""){
+           console.log(disruption)
+           this.receiveDisruptions(disruption, gameRoom.creatorName);
+         }
+       })
+     }
+    // Check for disruptions sent if user is CHALLENGER 
+     if(gameRoom.challengerDisruptions){
+       gameRoom.challengerDisruptions.forEach(disruption => {
+         if(disruption !== ""){
+           console.log("2",disruption)
+           this.receiveDisruptions(disruption, gameRoom.challengerName);
+         }
+       })
+     }
+
+    }
   }
 
   componentWillUnmount() {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     this.leaveGameRoom(gameRoom);
+  }
+
+
+  receiveDisruptions(func, user){
+    // Runs disruptions for user, if called
+    Disruptions[func](user);
+  }
+
+  test(){
+    console.log(this.ace.edit("abc"))
+    $('.ace_editor').css({"background": "black"});
+    $(".ace_editor").css({"transform": "scaleX(-1)"});
+    $(".ace_editor").css({"filter": "FlipH"});
   }
 
   render() {
@@ -80,6 +120,7 @@ class SpectatorRoom extends Component {
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}
         />
+        <button className="btn" onClick={this.test.bind(this)}>TESTTTTTING</button>
       </div>
     ) : (
       Object.keys(this.props.gameRooms).length === 0 ? <WaitingForPlayer /> :
