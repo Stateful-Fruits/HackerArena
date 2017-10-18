@@ -15,12 +15,7 @@ import { push } from 'react-router-redux';
 class App extends Component {
 
   componentWillMount() {
-<<<<<<< HEAD
-    // db.populateDB();
-    let { updateGameRooms, updateProblems } = this.props;
-=======
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
->>>>>>> board
     // grab and listen for game rooms from firebase db
     db.Rooms.on('value', data => {
       // dispatch action to change game rooms array in store
