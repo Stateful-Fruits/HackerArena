@@ -3,7 +3,38 @@ import {connect} from 'react-redux';
 import fire from '../../Firebase/firebase';
 
 class GameRoom extends React.Component {
-  componentWillMount() { 
+  constructor (props) {
+    super (props);
+    this.handleLeave = this.handleLeave.bind(this);
+  }
+  componentDidMount() { 
+    if (this.props.room) {
+      window.addEventListener('beforeunload', this.handleLeave);
+    }
+    this.handleEnter();
+  }
+  
+  componentWillUnmount () {
+    this.handleLeave();
+  }
+  
+  handleEnter () {
+
+  }
+
+  handleLeave () {
+    console.log('byebye');
+    if (this.props.room) {
+      let user = this.props.user;
+      let room = this.props.room;
+      room.players = room.players.filter(player => player !== user);
+      console.log('players after leaving ', room.players, room.key);
+      if (room.players > 0) {
+        fire.database().ref('BoardRooms' + this.props.room.key).set(room);
+      } else {
+        fire.database().ref('BoardRooms' + this.props.room.key).remove();
+      }
+    }
   }
 
   render () {
@@ -24,6 +55,7 @@ class GameRoom extends React.Component {
 
 const mapStoP = (state) => {
   return {
+    user: fire.auth().currentUser.email.split('@')[0],
     room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : {},
   }
 }
