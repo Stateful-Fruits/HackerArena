@@ -19,8 +19,8 @@ class CodeEditor extends React.Component {
     this.liveInputs = this.liveInputs.bind(this);
     this.sendDisruptions = this.sendDisruptions.bind(this);
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
+    this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
 
-    this.handleConfirmAlert = this.handleConfirmAlert.bind(this);
   }
   
   componentDidMount() {
@@ -113,9 +113,10 @@ class CodeEditor extends React.Component {
       timeTaken: room.timeTaken,
     }
 
-    room.results = [];
+    room.results = room.results || [];
 
     room.results.push(resultForThisRound);
+    console.log('room results after push', room.results);
     
     let winEvent = {
       eventName: 'winner',

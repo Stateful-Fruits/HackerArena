@@ -11,7 +11,7 @@ import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
 
-import eventHandler from './EventHandlers.eventHandler'
+import eventHandler from './EventHandler/eventHandler'
 
 import '../Styles/GameRoom.css';
 
@@ -20,6 +20,7 @@ class GameRoom extends React.Component {
     super (props);
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
+    this.handleIncomingEvents = this.handleIncomingEvents.bind(this);
   }
   
   componentDidMount () {
@@ -114,16 +115,16 @@ class GameRoom extends React.Component {
     let username = fire.auth().currentUser.email.split('@')[0];
     let player = room.players[username];
     let events = player.events;
+    player.events = '';
+    fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
 
     // NOTE THAT IF THERE ARE MULTIPLE EVENTS
     // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
     if (events) {
       events.forEach(event => {
-        eventHandler[event.eventName](room, username, event.value)
-        .then(room => fire.database().ref(`rooms/${roomId}`).set(room);)
+        eventHandler[event.eventName](room, roomId, username, event.value)
       })
 
-      player.events = [];
     }
   }
 

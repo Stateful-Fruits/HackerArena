@@ -91,7 +91,7 @@ class CreateGameRoom extends React.Component {
     return (
       <div>
         <form>
-        Rounds
+        Wins needed to be the champion
           <select
             type="number" 
             value={this.state.rounds} 
@@ -99,8 +99,8 @@ class CreateGameRoom extends React.Component {
             onChange={this.onChange}
           >
             <option value="1">1</option>
+            <option value="2">2</option>
             <option value="3">3</option>
-            <option value="5">5</option>
           </select>
           <br/>
           Max Players

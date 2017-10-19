@@ -1,4 +1,4 @@
-import fire from '../Firebase/firebase';
+import fire from '../../Firebase/firebase';
 
 let eventHandler = {};
 
@@ -20,11 +20,12 @@ eventHandler.helpers.incrementLosses = function(username) {
 }
 
 eventHandler.helpers.calculateResultsByPlayer = function(results) {
+  console.log('results before calc', results);
   return results.reduce((resultsObj, result) => {
     let winner = result.winner
     resultsObj[winner] = resultsObj[winner] || 0;
     resultsObj[winner]++;
-    return resultsObj[winner]
+    return resultsObj
   }, {})
 }
 
@@ -39,19 +40,19 @@ eventHandler.helpers.calculateMostTotalWins = function(winsObj) {
   return biggest
 }
 
-eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, username) {
+eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username) {
   console.log('handleConfirmAlert running. room is:', room)
   let resultsSoFar = room.results;
-  let resultsByPlayer = this.helpers.calculateResultsByPlayer(results);
-  let mostTotalWins = this.helpers.calculateMostTotalWins(resultsByPlayer);
+  console.log('this', this);
+  let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
+  console.log('resultsByPlayer', resultsByPlayer);
+  let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
 
-  let isLastRound = mostTotalWins === room.rounds;
-  console.log('room.currentRound, room.rounds, isLastRound', room.currentRound, room.rounds, isLastRound)  
+  let isLastRound = parseInt(mostTotalWins, 10) === parseInt(room.rounds, 10);
+  console.log('room.currentRound, mostTotalWins, room.rounds, isLastRound', room.currentRound, mostTotalWins, room.rounds, isLastRound)  
 
   let numPlayers = Object.keys(room.players).length;
-  
-  let playerObj = room.players;
-  
+    
   room.playersReady = room.playersReady + 1 || 1;
   console.log('room.players after add', room.playersReady)
     
@@ -68,12 +69,12 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, usernam
     room.roomStatus = 'completed';
   }
   
-  return room;
+  return fire.database().ref(`rooms/${roomId}`).set(room);
 }
 
 // ---------------- Events ----------------
 
-eventHandler.winner = function(room, username, eventValue) {
+eventHandler.winner = function(room, roomId, username, eventValue) {
   let winner = eventValue.winner;
   let isClientWinner = winner === username
 
@@ -91,14 +92,14 @@ eventHandler.winner = function(room, username, eventValue) {
       this.helpers.incrementLosses(username)
 
       return window.swal({
-        title: `The Winner is ${this.props.currentRoom.winner}!`,
+        title: `The Winner is ${winner}!`,
         width: 600,
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'
       })
     }
   })()
-  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, username))
+  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username))
   
 }   
 
