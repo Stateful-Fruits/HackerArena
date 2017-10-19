@@ -115,7 +115,7 @@ class GameRoom extends React.Component {
     if (!roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
     return (
       <div>
-          {/* <ProgressBar room={ room }/> */}
+          <ProgressBar room={ room }/>
         <div id="editorAndTestSuite">
           <CodeEditor currentRoom={room}/>
           {/* <TestSuite currentRoom={ room }/> */}
