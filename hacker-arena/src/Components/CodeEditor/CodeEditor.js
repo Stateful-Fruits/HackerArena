@@ -87,7 +87,11 @@ class CodeEditor extends React.Component {
   receiveDisruptions(func) {
     // Runs disruptions for user, if called
     let oldHistory = this.ace.editor.getSession().getUndoManager();
+<<<<<<< HEAD
     Disruptions[func]('ace-editor', this.ace.editor);
+=======
+    Disruptions[func]("ace-editor", this.ace.editor);
+>>>>>>> Heatmap + Stats Mockup
     this.ace.editor.getSession().setUndoManager(oldHistory);
   }
 
