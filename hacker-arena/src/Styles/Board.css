@@ -1,0 +1,38 @@
+.board {
+  text-align: center;
+  width: 100%;
+}
+
+.bdrow {
+  width: 100%;
+}
+
+.bdblock {
+  display: inline-block;
+  border-style: solid;
+  border-width: 1.5px 0px 0px 1.5px;  /*TOP RIGHT BOTTOM LEFT*/
+  width: 8%;
+  padding-top: 2%;
+  height: 75px;
+}
+
+.lastblock {
+  border-width: 1.5px 1.5px 0px 1.5px;
+}
+
+.lastrow {
+  border-width: 1.5px 0px 1.5px 1.5px;
+}
+
+.lastrowblock {
+  border-width: 1.5px 1.5px 1.5px 1.5px;
+}
+
+.bottomend {
+  margin-bottom: 200px;
+}
+
+.dice {
+  margin: 20px 5px 10px 5px;
+  display: inline-block;
+}
