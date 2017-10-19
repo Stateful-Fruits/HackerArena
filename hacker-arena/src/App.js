@@ -6,6 +6,7 @@ import updateBoardRooms from './Actions/updateBoardRooms';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
+import GameRoomLoading from './Components/GameRoom/GameRoomLoading';
 
 import fire from './Firebase/firebase';
 import db from './Firebase/db';
@@ -60,12 +61,16 @@ class App extends Component {
           navigate={navigate}
         />
         <div>
-          { this.props.children }
+          { Object.keys(this.props.gameRooms) ? this.props.children : <GameRoomLoading />}
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  gameRooms: state.gameRooms
+});
 
 const mapDispatchToProps = (dispatch) => ({
   updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms)),
@@ -74,4 +79,4 @@ const mapDispatchToProps = (dispatch) => ({
   navigate: (route) => dispatch(push(route))
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
