@@ -16,6 +16,10 @@ class App extends Component {
 
   componentWillMount() {
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
+    db.Rooms.once('value', data => {
+      // dispatch action to change game rooms array in store
+      updateGameRooms(data.val());
+    });
     // grab and listen for game rooms from firebase db
     db.Rooms.on('value', data => {
       // dispatch action to change game rooms array in store

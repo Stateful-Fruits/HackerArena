@@ -16,6 +16,9 @@ import '../Styles/GameRoom.css';
 class GameRoom extends React.Component {
   constructor (props) {
     super (props);
+    this.state = {
+      allowEnter: true
+    }
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
   }
@@ -31,13 +34,13 @@ class GameRoom extends React.Component {
 
   componentWillUnmount () {
     this.handleLeave();
+    // window.removeEventListener('beforeunload', this.handleLeave);
   }
 
   handleLeave () {
     // handles leaving the gameroom should only be called when gameRooms 
     // has been retrieved from Firebase, the room exists, and you are a member
-    console.log('props before leave:\n\n', this.props);
-    if (this.props && this.props.gameRooms 
+    if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
         && Object.keys(this.props.gameRooms[this.props.roomId].players).includes(this.props.username)) {
@@ -45,12 +48,14 @@ class GameRoom extends React.Component {
       let room = gameRooms[roomId];
       // when you're the last player inside, leaving deletes the gameroom
       if (room.players.length <= 1) {
-        fire.database().ref('/rooms/' + roomId).remove();
+        fire.database().ref(`/rooms/${roomId}`).remove();
       } else {
         let gameRoom = Object.assign({}, room);
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
-        fire.database().ref('/rooms/' + roomId).set(gameRoom);
+        // don't allow handle enter to run again 
+        this.setState({ allowEnter: false });
+        fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
     } 
   }
@@ -59,7 +64,7 @@ class GameRoom extends React.Component {
     // handles entering the gameroom: should only be called when gameRooms
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
-    if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
+    if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
       // if the players array is undefined (you're creating the room) set it to an empty array
@@ -88,14 +93,13 @@ class GameRoom extends React.Component {
           liveInput: ''
         };
         // and update the database
-        fire.database().ref('/rooms/' + roomId).set(gameRoom);
+        fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
   } 
   
   render () {
-    console.log('props: \n', this.props);
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
     if (!this.props.gameRooms 
@@ -111,7 +115,7 @@ class GameRoom extends React.Component {
     // find number of players currently in the room
     let numPlayers = Object.keys(players).length;
     // check that against the capacity established when the room was created
-    let roomIsFull = numPlayers === playerCapacity;
+    let roomIsFull = numPlayers === Number(playerCapacity);
     if (!roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
     return (
       <div>
