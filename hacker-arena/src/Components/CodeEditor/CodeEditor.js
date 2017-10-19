@@ -19,9 +19,11 @@ class CodeEditor extends React.Component {
     this.liveInputs = this.liveInputs.bind(this);
     this.sendDisruptions = this.sendDisruptions.bind(this);
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
-  }
+    this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
 
-  componentDidMount(){
+  }
+  
+  componentDidMount() {
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     // Creates template for current problem using userFn
@@ -32,8 +34,8 @@ class CodeEditor extends React.Component {
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
     // Increments user credits by 5 every 30 seconds
     let intervalId = setInterval(()=> {
-        let newCreditTotal = currentRoom.players[username].credits + 5;
-        if(currentRoom.players[username].credits <= 50) fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(newCreditTotal);
+      let newCreditTotal = currentRoom.players[username].credits + 5;
+      if(currentRoom.players[username].credits <= 50) fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(newCreditTotal);
     }, 30000);
     this.setState({ intervalId });
   }
@@ -47,19 +49,7 @@ class CodeEditor extends React.Component {
     // Alert users if someone has won the game
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];    
-    if(currentRoom.winner !== "" && (currentRoom.winner !== username)){
-      window.swal({
-        title: `The Winner is ${this.props.currentRoom.winner}!`,
-        width: 600,
-        padding: 100,
-        background: '#fff url(//bit.ly/1Nqn9HU)'
-      });
-      fire.database().ref(`rooms/${this.props.currentRoom.key}/winner`).set("")
-      fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-        let losses = snapshot.val().losses + 1;
-        fire.database().ref(`users/${username}/losses`).set(losses);
-      });
-    } 
+
     // Check for disruptions sent to the user
     if(currentRoom.players[username].disruptions.length){
       currentRoom.players[username].disruptions.forEach(disruption => {
@@ -94,11 +84,57 @@ class CodeEditor extends React.Component {
     }
   }
 
-  receiveDisruptions(func){
+  receiveDisruptions(func) {
     // Runs disruptions for user, if called
     let oldHistory = this.ace.editor.getSession().getUndoManager();
     Disruptions[func]('ace-editor', this.ace.editor);
     this.ace.editor.getSession().setUndoManager(oldHistory);
+  }
+
+  endRoundWithClientAsVictor() {
+    // send win event (in room.players),
+    // update results object (in room),
+    // and increment user's wins (in database)
+    let room = this.props.currentRoom;
+    let username = fire.auth().currentUser.email.split('@')[0];
+
+    room.timeEnd = performance.now();
+    room.timeTaken = (room.timeEnd - room.timeStart)/1000;
+
+    let players = room.players;
+    let playersArr = Object.keys(room.players);
+
+    let currentRound = room.currentRound;
+    
+    let resultForThisRound = {
+      players: playersArr,
+      winner: username,
+      problemID: room.problemID,
+      timeTaken: room.timeTaken,
+    }
+
+    room.results = room.results || [];
+
+    room.results.push(resultForThisRound);
+    console.log('room results after push', room.results);
+    
+    let winEvent = {
+      eventName: 'winner',
+      value: resultForThisRound
+    }
+
+    for (let playerID in players) {
+      let player = players[playerID];
+      player.events = player.events || [];
+      player.events.push(winEvent);
+    }
+
+    fire.database().ref(`rooms/${room.key}`).set(room)
+    
+    fire.database().ref(`users/${username}`).once('value').then(snapshot => {
+      let wins = snapshot.val().wins + 1;
+      fire.database().ref(`users/${username}/wins`).set(wins);
+    });
   }
 
   handleSubmit(){
@@ -108,19 +144,13 @@ class CodeEditor extends React.Component {
     //TEST SUITE LOGIC
     let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
     if(Array.isArray(testStatus)){
-      if(testStatus.every(item => {
+      if(testStatus.every(
+        item => {
         return item.passed === true;
-      })) {
-        let room = currentRoom;
-        room.timeEnd = performance.now();
-        let timeTaken = (room.timeEnd - room.timeStart)/1000;
-        window.swal(`Good job! Finished in ${timeTaken} seconds`, 'You passed all the tests!', 'success');
-        fire.database().ref(`rooms/${currentRoom.key}`).set(room);
-        fire.database().ref(`rooms/${currentRoom.key}/winner`).set(username);
-        fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-          let wins = snapshot.val().wins + 1;
-          fire.database().ref(`users/${username}/wins`).set(wins);
-        });
+        }
+      )) {
+        // if every test is passed
+        this.endRoundWithClientAsVictor();
       } else {
         window.swal('Oops...', 'Something went wrong!', 'error');
       }
