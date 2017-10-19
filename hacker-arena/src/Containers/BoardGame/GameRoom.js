@@ -33,6 +33,7 @@ class GameRoom extends React.Component {
       let notAlreadyIn = room.players.indexOf(user) === -1;
       if (notFull && notAlreadyIn) {
         room.players.push(user);
+        room.board[0][0].push(user);
         if (!room.playerInfo[user]) {
           room.playerInfo[user] = {
             position: [0,0]
