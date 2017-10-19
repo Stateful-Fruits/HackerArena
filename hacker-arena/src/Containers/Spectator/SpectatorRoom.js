@@ -22,7 +22,6 @@ class SpectatorRoom extends Component {
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
     let gameRoom = Object.assign({}, room);
     gameRoom.spectators = [...(gameRoom.spectators || []), username];
-    console.log('Entered Game Room: ', gameRoom);
     fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
   }
 
@@ -55,28 +54,15 @@ class SpectatorRoom extends Component {
       });
      }
 
-
-    console.log("heres the game room yall", gameRoom , "GASDFSDFDF", this.props.gameRooms);
     if(gameRoom){
-      //Check for disruptions sent if user is CREATOR
-     if(gameRoom.creatorDisruptions){
-       gameRoom.creatorDisruptions.forEach(disruption => {
-         if(disruption !== ""){
-           console.log(disruption)
-           this.receiveDisruptions(disruption, gameRoom.creatorName);
-         }
-       })
+      //Check for disruptions sent to each user
+     if(gameRoom.players){
+       Object.keys(gameRoom.players).forEach(playerName => {
+        gameRoom.players[playerName].disruptions.forEach(disruption => {
+          if(disruption !== "") this.receiveDisruptions(disruption, playerName);
+        });
+      })
      }
-    // Check for disruptions sent if user is CHALLENGER 
-     if(gameRoom.challengerDisruptions){
-       gameRoom.challengerDisruptions.forEach(disruption => {
-         if(disruption !== ""){
-           console.log("2",disruption)
-           this.receiveDisruptions(disruption, gameRoom.challengerName);
-         }
-       })
-     }
-
     }
   }
 
@@ -102,20 +88,9 @@ class SpectatorRoom extends Component {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     return gameRoom ? (
       <div>
-        {/* 
-          - include the list of disruptions and progress bar in 
-            the problem description (progress bar of tests passed)
-          - create a view for each player's editor and allow the 
-          spectator to run that players code in the editor's console
-          - have a chat for the spectators
-        */}
-        <SpectatorGameDescription
-          gameRoom={gameRoom} 
-        />
-        <ProgressBar room = {gameRoom}/>
-        <SpectatorEditors 
-          gameRoom={gameRoom}
-        />
+        <SpectatorGameDescription gameRoom={gameRoom} />
+        <ProgressBar room={gameRoom}/>
+        <SpectatorEditors gameRoom={gameRoom} />
         <SpectatorChat
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}
