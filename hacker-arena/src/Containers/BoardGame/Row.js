@@ -6,21 +6,21 @@ const Row = (props) => {
       props.row.map((block, i) => {
         if (!props.lastrow) {
           if (i === props.row.length-1) {
-            return <div className={'bdblock lastblock'} key={i}>
+            return <div id={props.i + ' ' + i} className={'bdblock lastblock'} key={i}>
               {block}
             </div>
           } else {
-            return <div className={'bdblock'} key={i}>
+            return <div id={props.i + ' ' + i} className={'bdblock'} key={i}>
               {block}
             </div>
           }
         } else {
           if (i === props.row.length-1) {
-            return <div className={'bdblock lastrowblock'} key={i}>
+            return <div id={props.i + ' ' + i} className={'bdblock lastrowblock'} key={i}>
               {block}
             </div>
           } else {
-            return <div className={'bdblock lastrow'} key={i}>
+            return <div id={props.i + ' ' + i} className={'bdblock lastrow'} key={i}>
               {block}
             </div>
           }
