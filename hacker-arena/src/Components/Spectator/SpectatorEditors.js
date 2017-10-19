@@ -6,12 +6,11 @@ class SpectatorEditors extends Component {
     let { gameRoom } = this.props;
     return (
             <div>
-              { [{name: gameRoom.creatorName, input: gameRoom.creatorLiveInput},
-                 {name: gameRoom.challengerName, input: gameRoom.challengerLiveInput}].map((player, i) => (
+              { Object.keys(gameRoom.players).map((playerName, i) => (
                 <SpectatorEditor 
-                  playerName={player.name}
-                  playerInput={player.input}
-                  key={String(player.name)+i}
+                  playerName={playerName}
+                  playerInput={gameRoom.players[playerName].liveInput}
+                  key={String(playerName)+i}
                 />
               )) }
             </div>

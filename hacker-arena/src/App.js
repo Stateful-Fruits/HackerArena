@@ -46,7 +46,7 @@ class App extends Component {
           {
             currentUser ? (
               <span className="profile-image" onClick={() => navigate('/User/' + currentUser.email.split('@')[0])}>
-                <span className="profile-greeting"> Hi { currentUser.email.split('@')[0] }!</span>
+                <span className="profile-greeting"> Hi { currentUser.email.split('@')[0] }! {' '} </span>
                 <img className="profile-photo"
                   src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
                   alt='profile'

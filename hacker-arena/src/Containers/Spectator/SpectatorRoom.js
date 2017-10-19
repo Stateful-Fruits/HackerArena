@@ -15,33 +15,40 @@ class SpectatorRoom extends Component {
   sendSpectatorMessage(room, username, msg) {
     let gameRoom = Object.assign({}, room);
     gameRoom.spectatorChat = [...(gameRoom.spectatorChat || []), {username, msg}];
-    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+    fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
   }
 
   enterGameRoom(room) {
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
     let gameRoom = Object.assign({}, room);
     gameRoom.spectators = [...(gameRoom.spectators || []), username];
-    console.log('Entered Game Room: ', gameRoom);
-    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+    fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
   }
 
   leaveGameRoom(room) {
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
     let gameRoom = Object.assign({}, room);
     if (gameRoom.spectators) {
-      gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => (
-        !(spectator === username)
-      ));
+      // each tab a user opens when logged in will add their name to the list of spectators, 
+      // only remove one per exit on each tab
+      let removedOne = false;
+      gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => {
+        if (removedOne || !(spectator === username)) return true;
+        else {
+          removedOne = true;
+          return false;
+        }
+      });
     }
     fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
   }
   
   componentDidMount() {
-    window.addEventListener('beforeunload', this.leaveGameRoom);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
-    if(this.gameRoom) this.enterGameRoom(gameRoom);
-
+    if(gameRoom) {
+      window.addEventListener('beforeunload', this.leaveGameRoom);
+      this.enterGameRoom(gameRoom);
+    }
   }
 
   componentWillUpdate() {
@@ -55,33 +62,21 @@ class SpectatorRoom extends Component {
       });
      }
 
-
-    console.log("heres the game room yall", gameRoom , "GASDFSDFDF", this.props.gameRooms);
     if(gameRoom){
-      //Check for disruptions sent if user is CREATOR
-     if(gameRoom.creatorDisruptions){
-       gameRoom.creatorDisruptions.forEach(disruption => {
-         if(disruption !== ""){
-           console.log(disruption)
-           this.receiveDisruptions(disruption, gameRoom.creatorName);
-         }
-       })
+      //Check for disruptions sent to each user
+     if(gameRoom.players){
+       Object.keys(gameRoom.players).forEach(playerName => {
+        gameRoom.players[playerName].disruptions.forEach(disruption => {
+          if(disruption !== "") this.receiveDisruptions(disruption, playerName);
+        });
+      })
      }
-    // Check for disruptions sent if user is CHALLENGER 
-     if(gameRoom.challengerDisruptions){
-       gameRoom.challengerDisruptions.forEach(disruption => {
-         if(disruption !== ""){
-           console.log("2",disruption)
-           this.receiveDisruptions(disruption, gameRoom.challengerName);
-         }
-       })
-     }
-
     }
   }
 
   componentWillUnmount() {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    window.removeEventListener('beforeunload', this.leaveGameRoom);
     this.leaveGameRoom(gameRoom);
   }
 
@@ -102,20 +97,9 @@ class SpectatorRoom extends Component {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     return gameRoom ? (
       <div>
-        {/* 
-          - include the list of disruptions and progress bar in 
-            the problem description (progress bar of tests passed)
-          - create a view for each player's editor and allow the 
-          spectator to run that players code in the editor's console
-          - have a chat for the spectators
-        */}
-        <SpectatorGameDescription
-          gameRoom={gameRoom} 
-        />
-        <ProgressBar room = {gameRoom}/>
-        <SpectatorEditors 
-          gameRoom={gameRoom}
-        />
+        <SpectatorGameDescription gameRoom={gameRoom} />
+        <ProgressBar room={gameRoom}/>
+        <SpectatorEditors gameRoom={gameRoom} />
         <SpectatorChat
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}
