@@ -113,7 +113,9 @@ class CodeEditor extends React.Component {
       timeTaken: room.timeTaken,
     }
 
-    room.results[currentRound] = resultForThisRound
+    room.results = [];
+
+    room.results.push(resultForThisRound);
     
     let winEvent = {
       eventName: 'winner',
