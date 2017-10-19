@@ -76,23 +76,23 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
 
 eventHandler.winner = function(room, roomId, username, eventValue) {
   let winner = eventValue.winner;
+  let timeTaken = eventValue.timeTaken
   let isClientWinner = winner === username
+  let currentRound = room.currentRound
 
   return (() => {
     if (isClientWinner) {
       this.helpers.incrementWins(username)
 
-      return window.swal({
-        title: `You Win!`,
-        width: 600,
-        padding: 100,
-        background: '#fff url(//bit.ly/1Nqn9HU)'
-      })
+      return window.swal(
+        `Good job! Finished in ${timeTaken} seconds!`,
+        `You are the winner of round ${currentRound}`,
+        'success')
     } else {
       this.helpers.incrementLosses(username)
 
       return window.swal({
-        title: `The Winner is ${winner}!`,
+        title: `The Winner of round ${currentRound} is ${winner}!`,
         width: 600,
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'

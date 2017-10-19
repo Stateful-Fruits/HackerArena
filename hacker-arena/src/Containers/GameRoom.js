@@ -159,7 +159,7 @@ class GameRoom extends React.Component {
         <div>
             {/* <ProgressBar room={ room }/> */}
           <div id="editorAndTestSuite">
-            <CodeEditor currentRoom={room}/>
+            <CodeEditor currentRoom={ room }/>
             {/* <TestSuite currentRoom={ room }/> */}
           </div>
         </div>
