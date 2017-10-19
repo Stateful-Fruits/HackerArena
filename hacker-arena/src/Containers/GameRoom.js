@@ -102,12 +102,13 @@ class GameRoom extends React.Component {
   render () {
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
+    // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
+    if (this.props.gameRooms && Object.keys(this.props.gameRooms).length && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     if (!this.props.gameRooms 
         || !Object.keys(this.props.gameRooms).length 
+        || !this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
-    if (!this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     // We have retrieved gameRooms from firebase and our room exists
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
