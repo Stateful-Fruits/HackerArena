@@ -74,9 +74,9 @@ class GameRoom extends React.Component {
       
 
       return <div>
-      <div></div>
+      <div>{message}</div>
       <div>{this.props.room.players.join(' ')}</div>
-      {start}
+      {startButton}
       <Board board={room.board}/>
     </div>
     }
