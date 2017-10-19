@@ -9,3 +9,10 @@ props were not updating when redux store had already been updated
 
 problem with handling leave. Seems to be not invoking handleLeave() when it's a refresh.
   -a tag vs li tag --> a tags refresh while li tag doesn't, when App refreshes it takes a while to retrieve state from firebase and so we have null?
+
+firebase error;
+  fire.database().ref('BoardRooms' + id).remove()
+     problem was that because I had no slash after BoardGames, it was not going into the 
+     BoardRooms collection but instead going into 'BoardRoomsKwd0932' and making it in the database
+     then removing that, which to firebase is a valid process, so it thinks nothing went wrong.
+     Which is why it was throwing on errors either.
