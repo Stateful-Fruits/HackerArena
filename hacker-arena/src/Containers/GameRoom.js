@@ -11,6 +11,8 @@ import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
 
+import eventHandler from './EventHandlers.eventHandler'
+
 import '../Styles/GameRoom.css';
 
 class GameRoom extends React.Component {
@@ -26,7 +28,11 @@ class GameRoom extends React.Component {
   }
 
   componentWillUpdate() {
+    // see if user is entering the room and if room needs to be updated as a result
     this.handleEnter();
+
+    // processing incoming events from db
+    this.handleIncomingEvents()
   }
 
   componentWillUnmount () {
@@ -100,7 +106,73 @@ class GameRoom extends React.Component {
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
-  } 
+  }
+
+  handleIncomingEvents() {
+    let roomId = this.props.roomId
+    let room = this.props.gameRooms[roomId]
+    let username = fire.auth().currentUser.email.split('@')[0];
+    let player = room.players[username];
+    let events = player.events;
+
+    // NOTE THAT IF THERE ARE MULTIPLE EVENTS
+    // THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
+    if (events) {
+      events.forEach(event => {
+        eventHandler[event.eventName](room, username, event.value)
+      })
+
+      player.events = [];
+    }
+
+    fire.database().ref(`rooms/${roomId}`).set(room);
+  }
+
+  handleConfirmAlert (isWinner) {
+    let room = this.props.currentRoom;
+    console.log('handleConfirmAlert running. room is:', room)    
+    let numPlayers = Object.keys(room.players).length;
+    let isLastRound = parseInt(room.currentRound) === parseInt(room.rounds);
+    console.log('room.currentRound, room.rounds, isLastRound', room.currentRound, room.rounds, isLastRound)
+    let username = fire.auth().currentUser.email.split('@')[0];
+    let playerObj = room.players;
+    let player = playerObj[username];
+    
+    room.playersReady = room.playersReady + 1 || 1;
+    console.log('room.players after add', room.playersReady)
+    
+    room.winner = ''; 
+    
+    if (room.playersReady === numPlayers && !isLastRound) {
+      console.log('everyone is ready for next round! status to playing')
+      room.currentRound = room.currentRound + 1;
+      room.roomStatus = 'playing';
+      for (let playerID in playerObj) {
+        let player = playerObj[playerID]
+        player.status = 'playing'
+      }
+      room.playersReady = 0;
+    } else if (room.playersReady < numPlayers) {
+      console.log('everyone is NOT ready yet. status to intermission')
+      player.status = 'waiting';
+      room.roomStatus = 'intermission';
+    } else if (isLastRound) {
+      console.log('everyone is ready and it is the last round, set to completed')
+      for (let playerID in playerObj) {
+        let player = playerObj[playerID]
+        player.status = 'completed'
+      }
+      room.roomStatus = 'completed';
+    }
+
+    if (isWinner) {
+      room.timeEnd = performance.now();
+    }
+    
+    
+    return fire.database().ref('rooms/' + room.key).set(room);
+  }
+
   
   render () {
     console.log('props: \n', this.props);
