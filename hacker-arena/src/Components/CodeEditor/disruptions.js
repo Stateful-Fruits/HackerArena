@@ -126,6 +126,7 @@ ActualTimeTravel: function(affected, editor){
 },
 Kennify: function(affected, editor){
   // Change background to Kenny
+  console.log('affected: ', affected);
   $("#".concat(affected)).css({
     "background":" url('/assets/kenny.jpg') center",
     "backgroundSize":" cover "  
