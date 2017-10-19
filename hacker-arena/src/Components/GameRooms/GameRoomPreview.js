@@ -10,11 +10,16 @@ const GameRoomPreview = ({
   let playerNames = Object.keys(players);
   let playerSpans = [];
   for (let i = 0; i < playerCapacity; i++) {
-    playerSpans.push(<li key={(playerNames[i] || "OPEN") + i}><h4>Player {i} -> { playerNames[i] ? playerNames[i] : <span style={{color: 'darkgreen'}}>OPEN</span> }</h4></li>);
+    playerSpans.push(
+      <li className='list-group-item' key={(playerNames[i] || "OPEN") + i}>
+        <h4>
+          Player {i} -> { playerNames[i] ? playerNames[i] : <span style={{color: 'darkgreen'}}>OPEN</span> }
+        </h4>
+      </li>);
   }
   return (
-    <div className='list-group-item' style={{ color: 'black' }}>
-      <ul>
+    <div className='list-group-item' style={{ color: 'black', border: '3px solid #222', margin: '1%', marginLeft: '20%', marginRight: '20%'}}>
+      <ul className='list-group'>
         { playerSpans }
       </ul>
       <div>
