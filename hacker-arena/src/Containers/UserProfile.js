@@ -4,6 +4,8 @@ import updateUserProfile from '../Actions/updateUserProfile';
 import fire from '../Firebase/firebase';
 import getUsernameFromEmail from '../Util';
 import EditProfile from '../Components/User/EditProfile.js';
+import ActivityHeatMap from '../Components/ActivityHeatMap';
+import Stats from '../Components/Stats'
 import { push } from 'react-router-redux';
 
 class UserProfile extends React.Component {
@@ -45,6 +47,8 @@ class UserProfile extends React.Component {
           <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
           null
         }
+        <Stats />
+        <ActivityHeatMap profile={profile}/>
       </div>
     )
   }
