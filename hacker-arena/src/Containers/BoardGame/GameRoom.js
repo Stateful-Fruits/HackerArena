@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import fire from '../../Firebase/firebase';
 import { push } from 'react-router-redux';
 import Board from './Board';
+import Dice from './Dice';
 
 class GameRoom extends React.Component {
   constructor (props) {
@@ -11,7 +12,12 @@ class GameRoom extends React.Component {
     this.handleEnter = this.handleEnter.bind(this);
     this.startGame = this.startGame.bind(this);
   }
-  componentDidMount() {
+  componentDidMount () {
+    console.log('mounting that shit boy')
+    this.handleEnter();
+  }
+
+  componentWillUpdate () {
     this.handleEnter();
   }
   
@@ -25,8 +31,15 @@ class GameRoom extends React.Component {
       window.addEventListener('beforeunload', this.handleLeave);
       let notFull = room.players.length < 4 && !room.gameStarted;
       let notAlreadyIn = room.players.indexOf(user) === -1;
+      console.log('handling that enter boy')
       if (notFull && notAlreadyIn) {
         room.players.push(user);
+        console.log('got wiped yo bobo')
+        if (!room.playerInfo[user]) {
+          room.playerInfo[user] = {
+            position: [0,0]
+          }
+        }
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && notAlreadyIn) {
         navigate('/CodeRunLobby');
@@ -63,22 +76,33 @@ class GameRoom extends React.Component {
         <div> Please wait as we prepare your board </div>
       </div>
     } else {
-      let message, startButton;
+      let message, startButton, board, dice, diceResult;
       if (room.gameStarted) {
         startButton = null;
-        message = 'Run run run your code hastily down the board'
+        message = 'Run run run your code hastily down the board';
+        board = <Board board={room.board}/>;
+        dice = <Dice room={room}/>;
+        diceResult = <div className='dice'>{'Rolled: ' + room.diceResult}</div>;
       } else {
         startButton = <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
         message = `Waiting for victims`;
+        board = null;
+        dice = null;
+        diceResult = null;
       }
       
 
       return <div>
-      <div>{message}</div>
-      <div>{this.props.room.players.join(' ')}</div>
-      {startButton}
-      <Board board={room.board}/>
-    </div>
+        <div>{message}</div>
+        <div>{this.props.room.players.join(' ')}</div>
+        {startButton}
+        {board}
+        <div className='diceContainer'>
+          {diceResult}
+          {dice}
+        </div>
+        <div className='bottomend'></div>
+      </div>
     }
   }
 }
@@ -86,7 +110,7 @@ class GameRoom extends React.Component {
 const mapStoP = (state) => {
   return {
     user: fire.auth().currentUser.email.split('@')[0],
-    room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined,
+    room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined
   }
 }
 
