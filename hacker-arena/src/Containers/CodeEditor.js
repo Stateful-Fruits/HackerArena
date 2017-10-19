@@ -23,6 +23,27 @@ class CodeEditor extends React.Component {
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
   }
 
+  handleConfirmAlert (isWinner) {
+    let room = this.props.currentRoom
+    let numPlayers = Object.keys(room.players).length
+
+    fire.database().ref('rooms/' + room.key).once('value')
+    .then(snapshot => {
+      let playersReady = snapshot.val().playersReady + 1;
+      return fire.database().ref('rooms/' + room.key + '/playersReady').set(playersReady)
+    })
+    .then(snapshot => {
+      let playersReady = snapshot.val()
+      console.log('playersReady', playersReady);
+      if (playersReady === Object.keys(room.players).length) {
+        fire.database().ref('rooms/' + room.key + '/roomStatus').set('playing')
+        fire.database().ref('rooms/' + room.key + '/playersReady').set(0)
+      }
+    })
+
+    fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set('');
+  }
+
   componentDidMount(){
     console.log("CREATOR FROM STATE", this.state.creator)
     console.log(" THE CURRENT CREATOR", this.props.currentRoom.creatorName)
@@ -69,7 +90,15 @@ class CodeEditor extends React.Component {
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'
       })
-      fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set("")
+      .then(() => {
+        fire.database().ref('rooms/' + this.props.currentRoom.key).once('value').then(snapshot => {
+          let playersReady = snapshot.val().playersReady + 1;
+          fire.database().ref('rooms/' + this.props.currentRoom.key + '/playersReady').set(playersReady);
+        })
+
+        fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set('');        
+      })
+
       fire.database().ref('users/' + username).once('value').then(snapshot => {
         let losses = snapshot.val().losses + 1;
         console.log('losses are now', losses);
@@ -155,19 +184,34 @@ class CodeEditor extends React.Component {
         return item.passed === true;
       })) {
         let room = this.props.currentRoom;
+        room.winner = username;
         room.timeEnd = performance.now();
-        let timeTaken = (room.timeEnd - room.timeStart)/1000;
-        window.swal(
+        let timeTaken = (room.timeEnd - room.timeStart)/1000;        
+        
+        if (room.currentRound === room.Rounds) {
+          room.roomStatus = 'completed';
+        } else {
+          room.roomStatus = 'intermission';
+          room.playersReady = 0;
+          room.currentRound = room.currentRound + 1;
+        }
+
+        fire.database().ref('users/' + username).once('value').then(snapshot => {
+          let wins = snapshot.val().wins + 1;
+          fire.database().ref('users/' + username + '/wins').set(wins);
+        })
+
+        fire.database().ref('rooms/' + this.props.currentRoom.key).set(room)
+        .then(() => window.swal(
           `Good job! Finished in ${timeTaken} seconds`,
           'You passed all the tests!',
           'success'
-        )
-        fire.database().ref('rooms/' + this.props.currentRoom.key).set(room);
-        fire.database().ref('rooms/' + this.props.currentRoom.key + '/winner').set(username);
-        fire.database().ref('users/' + username).once('value').then(snapshot => {
-          let wins = snapshot.val().wins + 1;
-          console.log('wins are now', wins);
-          fire.database().ref('users/' + username + '/wins').set(wins);
+        ))
+        .then(() => {
+          fire.database().ref('rooms/' + this.props.currentRoom.key).once('value').then(snapshot => {
+            let playersReady = snapshot.val().playersReady + 1;
+            fire.database().ref('rooms/' + this.props.currentRoom.key + '/playersReady').set(playersReady);
+          })
         })
       } else {
         window.swal(

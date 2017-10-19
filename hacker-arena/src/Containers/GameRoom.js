@@ -36,19 +36,21 @@ class GameRoom extends React.Component {
   handleLeave () {
     // handles leaving the gameroom should only be called when gameRooms 
     // has been retrieved from Firebase, the room exists, and you are a member
+    console.log('props before leave:\n\n', this.props);
     if (this.props && this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
+        && this.props.gameRooms[this.props.roomId].players
         && Object.keys(this.props.gameRooms[this.props.roomId].players).includes(this.props.username)) {
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       // when you're the last player inside, leaving deletes the gameroom
       if (room.players.length <= 1) {
-        fire.database().ref('rooms/' + roomId).remove();
+        fire.database().ref('/rooms/' + roomId).remove();
       } else {
         let gameRoom = Object.assign({}, room);
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
-        fire.database().ref('rooms/' + roomId).set(gameRoom);
+        fire.database().ref('/rooms/' + roomId).set(gameRoom);
       }
     } 
   }
@@ -78,8 +80,9 @@ class GameRoom extends React.Component {
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
           gameRoom.timeStart = performance.now();
-        } else if (playerNames.length === gameRoom.playerCapacity) {
-          gameRoom.roomStatus === 'playing';
+        } else if (playerNames.length + 1 === gameRoom.playerCapacity) {
+          console.log('about to update roomStatus!!')
+          gameRoom.roomStatus = 'playing';
         }
         // add you username to the gameroom
         gameRoom.players[username] = {
@@ -89,7 +92,8 @@ class GameRoom extends React.Component {
           liveInput: ''
         };
         // and update the database
-        fire.database().ref('rooms/' + roomId).set(gameRoom);
+        console.log('gameroom before database', gameRoom);
+        fire.database().ref('/rooms/' + roomId).set(gameRoom);
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
@@ -112,22 +116,24 @@ class GameRoom extends React.Component {
     if (roomStatus === 'standby' || roomStatus === 'intermission') return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
     else if (roomStatus === 'playing') {
       return (
-      <div>
-          {/* <ProgressBar room={ room }/> */}
-        <div id="editorAndTestSuite">
-          <CodeEditor currentRoom={room}/>
-          {/* <TestSuite currentRoom={ room }/> */}
+        <div>
+            {/* <ProgressBar room={ room }/> */}
+          <div id="editorAndTestSuite">
+            <CodeEditor currentRoom={room}/>
+            {/* <TestSuite currentRoom={ room }/> */}
+          </div>
         </div>
-      </div>
-    );
-  } else if (roomStatus === 'completed') {
-    return (
-      <div>
-        The winner is {winner}!
-      </div>
-    )
+      );
+    } else if (roomStatus === 'completed') {
+      return (
+        <div>
+          The winner is {winner}!
+        </div>
+      )
+    }
   }
 }
+
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
   username: fire.auth().currentUser.email.split('@')[0],

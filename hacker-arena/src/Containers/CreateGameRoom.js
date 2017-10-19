@@ -36,6 +36,7 @@ class CreateGameRoom extends React.Component {
       problem: problem,
       spectators: 0,
       rounds: 0,
+      currentRound: 1,
       playerCapacity
     };
 

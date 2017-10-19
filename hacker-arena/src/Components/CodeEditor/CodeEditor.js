@@ -20,6 +20,27 @@ class CodeEditor extends React.Component {
     this.sendDisruptions = this.sendDisruptions.bind(this);
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
   }
+  
+  handleConfirmAlert (isWinner) {
+    let room = this.props.currentRoom;
+    let numPlayers = Object.keys(room.players).length;
+    let isLastRound = room.currentRound === room.rounds;
+
+    room.playersReady = room.playersReady + 1;
+    
+    if (room.playersReady === numPlayers && !isLastRound) {
+      room.roomStatus = 'playing';
+      room.playersReady = 0;
+    }
+
+    if (isWinner) {
+      room.timeEnd = performance.now();
+    }
+    
+    room.winner = '';
+    
+    return fire.database().ref('rooms/' + room.key).set(room);
+  }
 
   componentDidMount(){
     let { currentRoom } = this.props;
@@ -53,8 +74,9 @@ class CodeEditor extends React.Component {
         width: 600,
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'
-      });
-      fire.database().ref(`rooms/${this.props.currentRoom.key}/winner`).set("")
+      })
+      .then(this.handleConfirmAlert)
+      
       fire.database().ref(`users/${username}`).once('value').then(snapshot => {
         let losses = snapshot.val().losses + 1;
         fire.database().ref(`users/${username}/losses`).set(losses);
@@ -114,13 +136,19 @@ class CodeEditor extends React.Component {
         let room = currentRoom;
         room.timeEnd = performance.now();
         let timeTaken = (room.timeEnd - room.timeStart)/1000;
-        window.swal(`Good job! Finished in ${timeTaken} seconds`, 'You passed all the tests!', 'success');
-        fire.database().ref(`rooms/${currentRoom.key}`).set(room);
-        fire.database().ref(`rooms/${currentRoom.key}/winner`).set(username);
+        fire.database().ref(`rooms/${currentRoom.key}/winner`).set(username)        
+        .then(() => {
+          return window.swal(`Good job! Finished in ${timeTaken} seconds`, 'You passed all the tests!', 'success')
+        })
+        .then(() => {
+          this.handleConfirmWinner(true);
+        })
+        
         fire.database().ref(`users/${username}`).once('value').then(snapshot => {
           let wins = snapshot.val().wins + 1;
           fire.database().ref(`users/${username}/wins`).set(wins);
         });
+        
       } else {
         window.swal('Oops...', 'Something went wrong!', 'error');
       }
