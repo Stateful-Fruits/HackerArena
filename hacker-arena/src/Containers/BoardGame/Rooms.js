@@ -5,8 +5,15 @@ const Rooms = (props) => {
     {
       props.rooms.map((room,i)=> {
         return <div key={i}>
-          <div>Room Name: </div>
-          {JSON.stringify(room.players)}
+          <div>Players: {room.players.join(' ')}</div>
+          <button value={room.key} onClick={(e) => {
+            e.preventDefault();
+            props.navigate('CodeRun/' + e.target.value);
+          }}>JOIN</button>
+          <button value={room.key} onClick={(e) => {
+            e.preventDefault();
+            props.deleteRoom(e.target.value);
+          }}> Delete </button>
         </div>
       })
     }

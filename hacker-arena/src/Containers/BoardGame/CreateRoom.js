@@ -21,8 +21,17 @@ class CreateRoom extends React.Component {
       playerCount: 1,
       winner: "",
       problems: problems,
-      spectators: 0
-    };
+      spectators: 0,
+      board: [
+        ['End',0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,'Start']
+      ]
+    }
     db.BoardRooms.push(room).then(added => {
       room.key = added.key;
       fire.database().ref('BoardRooms/' + added.key).set(room);
