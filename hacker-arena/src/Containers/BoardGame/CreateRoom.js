@@ -11,26 +11,25 @@ class CreateRoom extends React.Component {
   }
   createRoom () {
     let problems = this.props.problems;
-    // let keys = Object.keys(allProblems);
-    // let random = Math.floor(Math.random() * keys.length);
-    // let problem = allProblems[keys[random]];
     let user = fire.auth().currentUser.email.split('@')[0];
     const room = {
       players: [user],
+      playerInfo: {[user]: {position: [0,0]}},
       gameStarted: false,
       playerCount: 1,
       winner: "",
       problems: problems,
       spectators: 0,
       board: [
-        ['End',0,0,0,0,0,0],
+        ['Start',0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,'Start']
-      ]
+        [0,0,0,0,0,0,'End']
+      ],
+      diceResult: 'None'
     }
     db.BoardRooms.push(room).then(added => {
       room.key = added.key;
