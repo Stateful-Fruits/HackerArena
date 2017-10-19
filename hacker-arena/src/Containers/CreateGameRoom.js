@@ -29,13 +29,12 @@ class CreateGameRoom extends React.Component {
     let problem = allProblems[problemID];
     const room = {
       roomStatus: 'standby',
-      winner: '',
       startingCredits: startingCredits,
       isPrivate: isPrivate,
       problemID: problemID,
       problem: problem,
       spectators: 0,
-      rounds: 1,
+      rounds: rounds,
       currentRound: 1,
       playerCapacity
     };
@@ -60,8 +59,9 @@ class CreateGameRoom extends React.Component {
     let isPrivate = this.state.isPrivate
     let startingCredits = this.state.startingCredits;
     let playerCapacity = this.state.playerCapacity;
+    let rounds = this.state.rounds;
 
-    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity);
+    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds);
   }
 
   onChange(e) {

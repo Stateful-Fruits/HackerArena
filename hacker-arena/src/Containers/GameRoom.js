@@ -70,7 +70,7 @@ class GameRoom extends React.Component {
       let playerNames = Object.keys(players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
-        console.log('player found in room, this is over')
+        console.log('player already found in room, no update to room needed')
         return;
       } else if (room.roomStatus !== 'standby') {
         console.log('room is already full, navigating to spectate')
@@ -116,8 +116,16 @@ class GameRoom extends React.Component {
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
     let { roomStatus, winner } = room;
-    if (roomStatus === 'standby' || roomStatus === 'intermission') return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
-    else if (roomStatus === 'playing') {
+    let player = room.players[this.props.username];
+    if (roomStatus === 'standby' || player.status === 'waiting') {
+      return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
+    } else if (roomStatus === 'completed' || player.status === 'completed') {
+      return (
+        <div>
+          The winner is {winner}!
+        </div>
+      )
+    } else if (roomStatus === 'playing' || roomStatus === 'intermission') {
       return (
         <div>
             {/* <ProgressBar room={ room }/> */}
@@ -127,13 +135,7 @@ class GameRoom extends React.Component {
           </div>
         </div>
       );
-    } else if (roomStatus === 'completed') {
-      return (
-        <div>
-          The winner is {winner}!
-        </div>
-      )
-    }
+    } 
   }
 }
 

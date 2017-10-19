@@ -24,33 +24,40 @@ class CodeEditor extends React.Component {
   }
   
   handleConfirmAlert (isWinner) {
-    console.log('handleConfirmAlert still running')
     let room = this.props.currentRoom;
+    console.log('handleConfirmAlert running. room is:', room)    
     let numPlayers = Object.keys(room.players).length;
-    let isLastRound = room.currentRound === room.rounds;
-    console.log('whole room in confirmAlert', JSON.stringify(room));
-    console.log('room.rounds', room.rounds);
-    console.log('room.currentRound', room.currentRound);
-    console.log('isLastRound', isLastRound);
-
+    let isLastRound = parseInt(room.currentRound) === parseInt(room.rounds);
+    console.log('room.currentRound, room.rounds, isLastRound', room.currentRound, room.rounds, isLastRound)
+    let username = fire.auth().currentUser.email.split('@')[0];
+    let playerObj = room.players;
+    let player = playerObj[username];
     
-    console.log('room.players before add', room.playersReady)    
     room.playersReady = room.playersReady + 1 || 1;
     console.log('room.players after add', room.playersReady)
-    let saveWinner = room.winner;
+    
     room.winner = ''; 
     
     if (room.playersReady === numPlayers && !isLastRound) {
       console.log('everyone is ready for next round! status to playing')
+      room.currentRound = room.currentRound + 1;
       room.roomStatus = 'playing';
+      for (let playerID in playerObj) {
+        let player = playerObj[playerID]
+        player.status = 'playing'
+      }
       room.playersReady = 0;
     } else if (room.playersReady < numPlayers) {
       console.log('everyone is NOT ready yet. status to intermission')
+      player.status = 'waiting';
       room.roomStatus = 'intermission';
     } else if (isLastRound) {
       console.log('everyone is ready and it is the last round, set to completed')
+      for (let playerID in playerObj) {
+        let player = playerObj[playerID]
+        player.status = 'completed'
+      }
       room.roomStatus = 'completed';
-      room.winner = saveWinner;
     }
 
     if (isWinner) {
@@ -87,7 +94,7 @@ class CodeEditor extends React.Component {
     // Alert users if someone has won the game
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];    
-    if(currentRoom.winner !== "" && (currentRoom.winner !== username)){
+    if(currentRoom.players[username] !== "" && (currentRoom.winner !== username)){
       window.swal({
         title: `The Winner is ${this.props.currentRoom.winner}!`,
         width: 600,
@@ -155,7 +162,22 @@ class CodeEditor extends React.Component {
         let room = currentRoom;
         room.timeEnd = performance.now();
         let timeTaken = (room.timeEnd - room.timeStart)/1000;
-        fire.database().ref(`rooms/${currentRoom.key}/winner`).set(username)        
+        let players = room.players;
+        let winEvent = {
+          eventName: 'winner',
+          value: {
+            name: username,
+            round: room.currentRound
+          }
+        }
+
+        for (let playerID in players) {
+          let player = players[playerID];
+          player.events = player.events || [];
+          player.events.push(winEvent);
+        }
+
+        fire.database().ref(`rooms/${currentRoom.key}`).set(room)        
         .then(() => {
           return window.swal(`Good job! Finished in ${timeTaken} seconds`, 'You passed all the tests!', 'success')
         })
