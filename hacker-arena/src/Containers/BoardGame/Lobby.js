@@ -11,7 +11,7 @@ class Lobby extends React.Component {
     this.deleteRoom = this.deleteRoom.bind(this);
   }
   deleteRoom (id) {
-    fire.database().ref('BoardRooms/' +id).remove();
+    fire.database().ref('BoardRooms/' + id).remove();
   }
   render () {
     let rooms = this.props.rooms;
