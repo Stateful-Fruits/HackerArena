@@ -6,7 +6,7 @@ import fire from '../Firebase/firebase';
 
 import CodeEditor from '../Components/CodeEditor/CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
-import ProgressBar from '../Components/GameRoom/ProgressBar';
+//import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
@@ -40,7 +40,7 @@ class GameRoom extends React.Component {
     if (this.props && this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && Object.keys(this.props.gameRooms[this.props.roomId].players).includes(this.props.username)) {
+        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       // when you're the last player inside, leaving deletes the gameroom
@@ -60,6 +60,7 @@ class GameRoom extends React.Component {
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
+      console.log('handleEnter running')
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
       // if the players object is undefined (you're creating the room) set it to an empty object
@@ -69,12 +70,14 @@ class GameRoom extends React.Component {
       let playerNames = Object.keys(players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
+        console.log('player found in room, this is over')
         return;
       } else if (room.roomStatus !== 'standby') {
+        console.log('room is already full, navigating to spectate')
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
-        // the game room is open and user want to join, add user to room in db
+        console.log('the game room is open and user want to join, add user to room in db')
         let gameRoom = Object.assign({}, room);
         // if you're the first one in, start the game timer
         if (playerNames.length === 0) {
