@@ -10,7 +10,7 @@ class CreateGameRoom extends React.Component {
     super (props);
 
     this.state = {
-      problemID: '',
+      problemID: Object.keys(props.problems)[0],
       isPrivate: false,
       startingCredits: 5,
       playerCapacity: 2,
@@ -28,15 +28,14 @@ class CreateGameRoom extends React.Component {
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
-      gameStarted: false,
-      winner: "",
-      closed: false,
+      roomStatus: 'standby',
       startingCredits: startingCredits,
       isPrivate: isPrivate,
       problemID: problemID,
       problem: problem,
       spectators: 0,
-      rounds: 0,
+      rounds: rounds,
+      currentRound: 1,
       playerCapacity
     };
 
@@ -48,8 +47,9 @@ class CreateGameRoom extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     let problemID = this.state.problemID;
+    console.log('problemID', problemID)
 
-    if (!problemID || problemID.length === 0) {
+    if (!problemID || problemID.length === 0 || problemID === 'random') {
       let allProblems = this.props.problems;
       let keys = Object.keys(allProblems);
       let random = Math.floor(Math.random() * keys.length);
@@ -59,13 +59,15 @@ class CreateGameRoom extends React.Component {
     let isPrivate = this.state.isPrivate
     let startingCredits = this.state.startingCredits;
     let playerCapacity = this.state.playerCapacity;
+    let rounds = this.state.rounds;
 
-    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity);
+    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds);
   }
 
   onChange(e) {
     e.preventDefault();
-    console.log('e.target.value', e.target.value);
+
+    console.log('about to set state', JSON.stringify({[e.target.name] : e.target.value}))
 
     this.setState({[e.target.name] : e.target.value})
   }
@@ -79,10 +81,17 @@ class CreateGameRoom extends React.Component {
   }
 
   render () {
+    let allProblems = this.props.problems;
+    let problemsArr = [];
+    for (let problemKey in allProblems) {
+      let problem = allProblems[problemKey]
+      problemsArr.push(<option value={problemKey} key={problemKey}>{problem.title} </option>)
+    }
+
     return (
       <div>
         <form>
-        Rounds
+        Wins needed to be the champion
           <select
             type="number" 
             value={this.state.rounds} 
@@ -90,8 +99,8 @@ class CreateGameRoom extends React.Component {
             onChange={this.onChange}
           >
             <option value="1">1</option>
+            <option value="2">2</option>
             <option value="3">3</option>
-            <option value="5">5</option>
           </select>
           <br/>
           Max Players
@@ -102,7 +111,8 @@ class CreateGameRoom extends React.Component {
             max="4" 
             name="playerCapacity"
             onChange={this.onChange}
-          /><br/>
+          />
+          <br/>
           Make room private
           <input
             type="checkbox"
@@ -110,7 +120,8 @@ class CreateGameRoom extends React.Component {
             checked={this.state.isPrivate} 
             name="isPrivate"
             onChange={this.onCheck}
-          /><br/>
+          />
+          <br/>
           Starting Attack credits<input
             type="number" 
             value={this.state.startingCredits} 
@@ -118,7 +129,14 @@ class CreateGameRoom extends React.Component {
             max="50" 
             name="startingCredits"
             onChange={this.onChange}
-          /><br/>
+          />
+          <br/>
+          Choose a problem
+          <select name="problemID" value={this.state.problemID} onChange={this.onChange}>
+            {problemsArr}
+            <option value="random">random!</option>
+          </select>
+          <br/>
           <input type="submit" value="CREATE GAME ROOM" onClick={this.onSubmit}></input>
         </form>
       </div>
