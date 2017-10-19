@@ -19,25 +19,44 @@ class CodeEditor extends React.Component {
     this.liveInputs = this.liveInputs.bind(this);
     this.sendDisruptions = this.sendDisruptions.bind(this);
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
+
+    this.handleConfirmAlert = this.handleConfirmAlert.bind(this);
   }
   
   handleConfirmAlert (isWinner) {
+    console.log('handleConfirmAlert still running')
     let room = this.props.currentRoom;
     let numPlayers = Object.keys(room.players).length;
     let isLastRound = room.currentRound === room.rounds;
+    console.log('whole room in confirmAlert', JSON.stringify(room));
+    console.log('room.rounds', room.rounds);
+    console.log('room.currentRound', room.currentRound);
+    console.log('isLastRound', isLastRound);
 
-    room.playersReady = room.playersReady + 1;
+    
+    console.log('room.players before add', room.playersReady)    
+    room.playersReady = room.playersReady + 1 || 1;
+    console.log('room.players after add', room.playersReady)
+    let saveWinner = room.winner;
+    room.winner = ''; 
     
     if (room.playersReady === numPlayers && !isLastRound) {
+      console.log('everyone is ready for next round! status to playing')
       room.roomStatus = 'playing';
       room.playersReady = 0;
+    } else if (room.playersReady < numPlayers) {
+      console.log('everyone is NOT ready yet. status to intermission')
+      room.roomStatus = 'intermission';
+    } else if (isLastRound) {
+      console.log('everyone is ready and it is the last round, set to completed')
+      room.roomStatus = 'completed';
+      room.winner = saveWinner;
     }
 
     if (isWinner) {
       room.timeEnd = performance.now();
     }
     
-    room.winner = '';
     
     return fire.database().ref('rooms/' + room.key).set(room);
   }
@@ -141,7 +160,7 @@ class CodeEditor extends React.Component {
           return window.swal(`Good job! Finished in ${timeTaken} seconds`, 'You passed all the tests!', 'success')
         })
         .then(() => {
-          this.handleConfirmWinner(true);
+          this.handleConfirmAlert(true);
         })
         
         fire.database().ref(`users/${username}`).once('value').then(snapshot => {
