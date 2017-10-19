@@ -63,11 +63,18 @@ class GameRoom extends React.Component {
         <div> Please wait as we prepare your board </div>
       </div>
     } else {
-      let start = room.gameStarted ? null : 
-      <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
+      let message, startButton;
+      if (room.gameStarted) {
+        startButton = null;
+        message = 'Run run run your code hastily down the board'
+      } else {
+        startButton = <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
+        message = `Waiting for victims`;
+      }
+      
 
       return <div>
-      <div>Run run run your code hastily down the board</div>
+      <div></div>
       <div>{this.props.room.players.join(' ')}</div>
       {start}
       <Board board={room.board}/>
