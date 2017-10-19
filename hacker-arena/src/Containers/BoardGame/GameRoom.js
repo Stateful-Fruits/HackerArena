@@ -4,6 +4,7 @@ import fire from '../../Firebase/firebase';
 import { push } from 'react-router-redux';
 import Board from './Board';
 import Dice from './Dice';
+import MovePlayer from './MovePlayer';
 
 class GameRoom extends React.Component {
   constructor (props) {
@@ -73,14 +74,15 @@ class GameRoom extends React.Component {
         <div> Please wait as we prepare your board </div>
       </div>
     } else {
-      let message, startButton, board, dice, diceResult, playerTurn;
+      let message, startButton, board, dice, diceResult, playerTurn, move;
       if (room.gameStarted) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
         board = <Board board={room.board}/>;
         dice = <Dice room={room}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.diceResult}</div>;
-        playerTurn = <div className='playerTurn'>{'It is ' + room.playerTurn + `'s turn`}</div>
+        playerTurn = <div className='playerTurn'>{'It is ' + room.playerTurn + `'s turn`}</div>;
+        move = <MovePlayer room={room}/>;
       } else {
         startButton = <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
         message = `Waiting for victims`;
@@ -88,6 +90,7 @@ class GameRoom extends React.Component {
         dice = null;
         diceResult = null;
         playerTurn = null;
+        move = null;
       }
       
 
@@ -101,6 +104,7 @@ class GameRoom extends React.Component {
           {diceResult}
           {dice}
         </div>
+        {move}
         <div className='bottomend'></div>
       </div>
     }
