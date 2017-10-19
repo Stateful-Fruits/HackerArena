@@ -52,7 +52,7 @@ class SpectatorChat extends Component {
       <button onClick= {(e)=>this.chat()}>vChat</button>
         <form onSubmit={this.handleMsgSend}>
           <h2>Chat: </h2>
-            <p>{(spectators ? spectators.join(', ') : '')}</p>
+            <p>{(spectators ? spectators.filter((spectatorName, i) => spectators.indexOf(spectatorName) === i).join(', ') : '')}</p>
           <input type="text" onChange={this.handleMsgInput} value={ this.state.msg }/>
           <button>
             <h3>Send</h3>

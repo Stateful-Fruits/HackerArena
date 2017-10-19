@@ -10,7 +10,10 @@ class GameRoomList extends Component {
       filterInx: 0,
       filterFunctions: {
         None: (gameRoom1, gameRoom2) => 0,
-        'Open Rooms': (gameRoom1, gameRoom2) => Object.keys(gameRoom1.players || {}) - Object.keys(gameRoom2.players || {}),
+        'Open Rooms': (gameRoom1, gameRoom2) => (
+          (gameRoom1.playerCapacity - Object.keys(gameRoom1.players || {})) - 
+          (gameRoom2.playerCapacity - Object.keys(gameRoom2.players || {}))
+        ),
         Spectators: (gameRoom1, gameRoom2) => (gameRoom1.spectators ? gameRoom1.spectators.length : 0) - (gameRoom2.spectators ? gameRoom2.spectators.length : 0)
       }
     }

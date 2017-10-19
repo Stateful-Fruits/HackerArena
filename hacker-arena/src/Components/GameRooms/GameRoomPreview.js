@@ -18,7 +18,7 @@ const GameRoomPreview = ({
         { playerSpans }
       </ul>
       <div>
-        Spectators: {(spectators ? spectators.join(', ') : '')}
+        Spectators: {(spectators ? spectators.filter((spectatorName, i) => spectators.indexOf(spectatorName) === i).join(', ') : '')}
       </div>
       <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={playerCapacity === playerNames.length}>
         <h3>Join Game</h3> 

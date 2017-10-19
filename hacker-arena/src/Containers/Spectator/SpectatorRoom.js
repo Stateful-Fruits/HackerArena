@@ -15,32 +15,40 @@ class SpectatorRoom extends Component {
   sendSpectatorMessage(room, username, msg) {
     let gameRoom = Object.assign({}, room);
     gameRoom.spectatorChat = [...(gameRoom.spectatorChat || []), {username, msg}];
-    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+    fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
   }
 
   enterGameRoom(room) {
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
     let gameRoom = Object.assign({}, room);
     gameRoom.spectators = [...(gameRoom.spectators || []), username];
-    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+    fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
   }
 
   leaveGameRoom(room) {
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
     let gameRoom = Object.assign({}, room);
     if (gameRoom.spectators) {
-      gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => (
-        !(spectator === username)
-      ));
+      // each tab a user opens when logged in will add their name to the list of spectators, 
+      // only remove one per exit on each tab
+      let removedOne = false;
+      gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => {
+        if (removedOne || !(spectator === username)) return true;
+        else {
+          removedOne = true;
+          return false;
+        }
+      });
     }
     fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
   }
   
   componentDidMount() {
-    window.addEventListener('beforeunload', this.leaveGameRoom);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
-    if(this.gameRoom) this.enterGameRoom(gameRoom);
-
+    if(gameRoom) {
+      window.addEventListener('beforeunload', this.leaveGameRoom);
+      this.enterGameRoom(gameRoom);
+    }
   }
 
   componentWillUpdate() {
@@ -68,6 +76,7 @@ class SpectatorRoom extends Component {
 
   componentWillUnmount() {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    window.removeEventListener('beforeunload', this.leaveGameRoom);
     this.leaveGameRoom(gameRoom);
   }
 

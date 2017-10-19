@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import GameRoomList from '../Components/GameRooms/GameRoomList';
-import CreateGameRoom from './CreateGameRoom';
 
 class Home extends Component {
 
