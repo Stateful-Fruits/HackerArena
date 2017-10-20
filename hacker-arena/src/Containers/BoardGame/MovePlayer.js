@@ -22,13 +22,7 @@ class MovePlayer extends React.Component {
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
-        let total = room.players.length;
-        if (room.playerTurnIndex === total-1) {
-          room.playerTurnIndex = 0;
-        } else {
-          room.playerTurnIndex++;
-        }
-        room.playerTurn = room.players[room.playerTurnIndex];
+        userInfo.canMove = !userInfo.canMove;
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Down' && room.board[row+1]) {
@@ -38,13 +32,7 @@ class MovePlayer extends React.Component {
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
-        let total = room.players.length;
-        if (room.playerTurnIndex === total-1) {
-          room.playerTurnIndex = 0;
-        } else {
-          room.playerTurnIndex++;
-        }
-        room.playerTurn = room.players[room.playerTurnIndex];
+        userInfo.canMove = !userInfo.canMove;
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Left' && room.board[row][col-1]) {
@@ -54,13 +42,7 @@ class MovePlayer extends React.Component {
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
-        let total = room.players.length;
-        if (room.playerTurnIndex === total-1) {
-          room.playerTurnIndex = 0;
-        } else {
-          room.playerTurnIndex++;
-        }
-        room.playerTurn = room.players[room.playerTurnIndex];
+        userInfo.canMove = !userInfo.canMove;
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Right' && room.board[row][col+1]) {
@@ -70,7 +52,7 @@ class MovePlayer extends React.Component {
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
-        room.canMove = !room.canMove;
+        userInfo.canMove = !userInfo.canMove;
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     }

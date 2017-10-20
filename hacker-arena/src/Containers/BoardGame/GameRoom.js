@@ -5,6 +5,8 @@ import { push } from 'react-router-redux';
 import Board from './Board';
 import Dice from './Dice';
 import MovePlayer from './MovePlayer';
+import CodeEditor from '../../Components/CodeEditor/CodeEditor';
+import TestSuite from '../../Components/TestSuite';
 
 class GameRoom extends React.Component {
   constructor (props) {
@@ -79,18 +81,20 @@ class GameRoom extends React.Component {
       </div>
     } else {
       let userInfo = room.playerInfo[user];
-      let message, startButton, board, dice, diceResult, canMove, move;
+      let message, startButton, board, dice, diceResult, canMove, move, codePage;
       if (room.gameStarted) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
         board = <Board board={room.board}/>;
-        if (userInfo.canMove) {
-          dice = <Dice room={room} user={user}/>;
-        }
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
+          dice = <Dice room={room} user={user}/>;
         } else {
+          codePage = <div id="editorAndTestSuite">
+            <CodeEditor currentRoom={room}/>
+            <TestSuite currentRoom={room}/>
+          </div>;
           canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
         }
         if (userInfo.diceResult > 0) {
@@ -118,6 +122,7 @@ class GameRoom extends React.Component {
           {dice}
         </div>
         {move}
+        {codePage}
         <div className='bottomend'></div>
       </div>
     }
