@@ -1,44 +1,17 @@
 import fire from '../../Firebase/firebase';
+import helpers from '../../Helpers/helpers'
 
 let eventHandler = {};
 
-// ---------------- Helpers ----------------
 eventHandler.helpers = {};
 
-eventHandler.helpers.calculateResultsByPlayer = function(results) {
-  console.log('results before calc', results);
-  return results.reduce((resultsObj, result) => {
-    let winner = result.winner
-    resultsObj[winner] = resultsObj[winner] || 0;
-    resultsObj[winner]++;
-    return resultsObj
-  }, {})
-}
+// ---------------- Helpers ----------------
 
-eventHandler.helpers.calculateMostTotalWins = function(winsObj) {
-  let biggest = {
-    winner: '',
-    wins: 0
-  };
-
-  for (let username in winsObj) {
-    if (winsObj[username] > biggest.wins) {
-      biggest.winner = username
-      biggest.wins = winsObj[username];
-    }
-  }
-
-  return biggest
-}
-
-eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username) {
+eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username, problems) {
   console.log('handleConfirmAlert running. room is:', room)
   let resultsSoFar = room.results;
-  console.log('this', this);
-  let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
-  console.log('resultsByPlayer', resultsByPlayer);
-  let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
-  console.log('mostTotalWins', mostTotalWins);
+  let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
+  let mostTotalWins = helpers.calculateMostTotalWins(resultsByPlayer);
 
   let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
   console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
@@ -46,18 +19,32 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
   let numPlayers = Object.keys(room.players).length;
     
   room.playersReady = room.playersReady + 1 || 1;
-  console.log('room.players after add', room.playersReady)
     
   if (room.playersReady === numPlayers && !isLastRound) {
-    console.log('everyone is ready for next round! status to playing')
+    console.log('everyone is ready for next round!')
     room.currentRound = room.currentRound + 1;
     room.roomStatus = 'playing';
     room.playersReady = 0;
+
+    // new problem
+    let filteredProblems = helpers.filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
+    console.log('filteredProblems in eventhandler', filteredProblems)
+    room.problemID = helpers.chooseRandomProblem(filteredProblems);
+    room.problem = problems[room.problemID]
+
+    // reset each player
+    for (let username in room.players) {
+      let player = room.players[username];
+      player.disruptions = [''];
+      player.testStatus = ['']
+      player.credits = room.startingCredits;
+    }
+
   } else if (room.playersReady < numPlayers) {
-    console.log('everyone is NOT ready yet. status to intermission')
+    console.log('everyone is NOT ready yet.')
     room.roomStatus = 'intermission';
   } else if (isLastRound) {
-    console.log('everyone is ready and it is the last round, set to completed')
+    console.log('everyone is ready and the last round just completed')
     room.roomStatus = 'completed';
   }
   
@@ -66,9 +53,9 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
 
 // ---------------- Events ----------------
 
-eventHandler.winner = function(room, roomId, username, eventValue) {
+eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let resultsSoFar = room.results.slice();
-  let resultsByPlayer = this.helpers.calculateResultsByPlayer(resultsSoFar);
+  let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
 
   let winner = eventValue.winner;
   let timeTaken = eventValue.timeTaken.toFixed(2);
@@ -105,7 +92,7 @@ eventHandler.winner = function(room, roomId, username, eventValue) {
       })
     }
   })()
-  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username))
+  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems))
   
 }   
 

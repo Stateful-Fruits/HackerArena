@@ -10,8 +10,9 @@ import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
+import eventHandler from './EventHandler/eventHandler';
 
-import eventHandler from './EventHandler/eventHandler'
+import helpers from './../Helpers/helpers'
 
 import '../Styles/GameRoom.css';
 
@@ -119,6 +120,9 @@ class GameRoom extends React.Component {
       let username = fire.auth().currentUser.email.split('@')[0];
       let player = room.players[username];
       let events = player.events;
+      let problems = this.props.problems
+      console.log('problems in gameroom', problems)
+
       player.events = '';
       fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
       .then(() => {
@@ -126,7 +130,7 @@ class GameRoom extends React.Component {
         // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
         if (events) {
           events.forEach(event => {
-            eventHandler[event.eventName](room, roomId, username, event.value)
+            eventHandler[event.eventName](room, roomId, username, event.value, problems)
           })
         }
       })
@@ -152,8 +156,8 @@ class GameRoom extends React.Component {
     let roomStatus = room.roomStatus;
     let results = room.results;
 
-    let resultsByPlayer = results ? eventHandler.helpers.calculateResultsByPlayer(results) : null;
-    let mostTotalWins = results ? eventHandler.helpers.calculateMostTotalWins(resultsByPlayer) : null;
+    let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
+    let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
     let champion = mostTotalWins ? mostTotalWins.winner : null
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
@@ -189,7 +193,8 @@ class GameRoom extends React.Component {
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
   username: fire.auth().currentUser.email.split('@')[0],
-  gameRooms: state.gameRooms
+  gameRooms: state.gameRooms,
+  problems: state.problems
 });
 
 const mapDispatcherToProps = (dispatch) => ({

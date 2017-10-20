@@ -2,7 +2,7 @@ import firebase from '../../Firebase/firebase';
 import provider from '../../Firebase/oauth/oauth';
 import facebookProvider from '../../Firebase/oauth/facebook';
 
-import getUsernameFromEmail from '../../Util';
+import helpers from '../../Helpers/helpers';
 
 const auth = {};
 
@@ -18,7 +18,7 @@ auth.normalLogin = function(email, password, navigate) {
 auth.normalSignUp = function(email, password, navigate) {
   const db = firebase.database();
   firebase.auth().createUserWithEmailAndPassword(email, password).then((res,b)=> {
-    const username = getUsernameFromEmail(res.email); 
+    const username = helpers.getUsernameFromEmail(res.email); 
     db.ref('users/'+username).set({
       id : res.uid,
       email: res.email,

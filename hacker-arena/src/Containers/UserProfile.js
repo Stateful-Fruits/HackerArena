@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import updateUserProfile from '../Actions/updateUserProfile';
 import fire from '../Firebase/firebase';
-import getUsernameFromEmail from '../Util';
 import EditProfile from '../Components/User/EditProfile.js';
 import ActivityHeatMap from '../Components/ActivityHeatMap';
 import Stats from '../Components/Stats'
@@ -16,7 +15,6 @@ class UserProfile extends React.Component {
     if (!this.props.profile.username) {
       const db = fire.database();
       let profileUsername = this.props.profileUsername;
-      let clientUsername = fire.auth().currentUser.email.split('@')[0];
 
       console.log('profileusername', profileUsername)
 
