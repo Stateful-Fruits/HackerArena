@@ -53,12 +53,18 @@ class SpectatorRoom extends Component {
 
   componentWillUpdate() {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
-    if(gameRoom && gameRoom.winner !== "") {
-      window.swal({
-        title: `The Winner is ${gameRoom.winner}!`,
-        width: 600,
-        padding: 100,
-        background: '#fff url(//bit.ly/1Nqn9HU)'
+    // gameroom.players.playerName.events <- Array
+    // inside {eventName: 'winner', value: {'winner': "playername"}}
+    let playerNames = gameRoom && gameRoom.players ? Object.keys(gameRoom.players) : null;
+    if(gameRoom && playerNames) {
+      let events = gameRoom.players[playerNames[0]].events || [];
+      events.forEach((event) => {
+        window.swal({
+          title: `The Winner is ${event.value.winner}!`,
+          width: 600,
+          padding: 100,
+          background: '#fff url(//bit.ly/1Nqn9HU)'
+        });
       });
      }
 
