@@ -68,16 +68,13 @@ class SpectatorRoom extends Component {
         });
       });
      }
-
-    if(gameRoom){
+    if(gameRoom && gameRoom.players){
       //Check for disruptions sent to each user
-     if(gameRoom.players){
-       Object.keys(gameRoom.players).forEach(playerName => {
+      Object.keys(gameRoom.players).forEach(playerName => {
         gameRoom.players[playerName].disruptions.forEach(disruption => {
           if(disruption !== "") this.receiveDisruptions(disruption, playerName);
         });
       })
-     }
     }
   }
 
