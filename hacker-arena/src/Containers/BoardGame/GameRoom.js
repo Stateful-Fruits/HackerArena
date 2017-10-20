@@ -91,10 +91,10 @@ class GameRoom extends React.Component {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
           dice = <Dice room={room} user={user}/>;
         } else {
-          codePage = <div id="editorAndTestSuite">
-            <CodeEditor currentRoom={room}/>
-            <TestSuite currentRoom={room}/>
-          </div>;
+          // codePage = <div id="editorAndTestSuite">
+          //   <CodeEditor currentRoom={room}/>
+          //   <TestSuite currentRoom={room}/>
+          // </div>;
           canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
         }
         if (userInfo.diceResult > 0) {
