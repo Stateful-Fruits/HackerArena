@@ -8,6 +8,7 @@ import DisruptionsBar from '../../../Components/CodeEditor/DisruptionsBar';
 
 import '../../../Styles/CodeEditor.css';
 
+<<<<<<< HEAD
 import ReactAce from 'react-ace-editor';
 import React from 'react';
 import $ from 'jquery';
@@ -204,3 +205,5 @@ class CodeEditor extends React.Component {
 }
 
 export default CodeEditor;
+=======
+>>>>>>> d9e16aca1fb22c29178e0d48691dd8dacde1c937
