@@ -41,7 +41,10 @@ class GameRoomList extends Component {
           { this.state.filters.map((filter) => <option key={filter} style={{ fontSize: '1.5em' }}>{filter}</option>) }
         </select>
         <ul className='list-group'>
-          { rooms.sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]]).reverse().map((room, inx) => (
+          { rooms.sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
+                 .filter((eachRoom) => !Object.keys(eachRoom).includes('isTrusted') && !Object.keys(eachRoom).includes('challengerName'))
+                 .reverse()
+                 .map((room, inx) => (
             <GameRoomPreview 
               gameRoom={room}
               key={room.key + inx}

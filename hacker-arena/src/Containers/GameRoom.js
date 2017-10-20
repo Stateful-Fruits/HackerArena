@@ -11,6 +11,8 @@ import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
 
+import eventHandler from './EventHandler/eventHandler'
+
 import '../Styles/GameRoom.css';
 
 class GameRoom extends React.Component {
@@ -21,6 +23,7 @@ class GameRoom extends React.Component {
     }
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
+    this.handleIncomingEvents = this.handleIncomingEvents.bind(this);
   }
   
   componentDidMount () {
@@ -29,7 +32,11 @@ class GameRoom extends React.Component {
   }
 
   componentWillUpdate() {
+    // see if user is entering the room and if room needs to be updated as a result
     this.handleEnter();
+
+    // processing incoming events from db
+    this.handleIncomingEvents()
   }
 
   componentWillUnmount () {
@@ -43,11 +50,11 @@ class GameRoom extends React.Component {
     if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && Object.keys(this.props.gameRooms[this.props.roomId].players).includes(this.props.username)) {
+        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       // when you're the last player inside, leaving deletes the gameroom
-      if (room.players.length <= 1) {
+      if (Object.keys(room.players).length <= 1) {
         fire.database().ref(`/rooms/${roomId}`).remove();
       } else {
         let gameRoom = Object.assign({}, room);
@@ -67,29 +74,35 @@ class GameRoom extends React.Component {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
-      // if the players array is undefined (you're creating the room) set it to an empty array
-      let players = room.players || {};
+      // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
+      let players = room.players;      
+
       let playerNames = Object.keys(players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
+        console.log('player already found in room, no update to room needed')
         return;
-      } else if (playerNames.length === room.playerCapacity) {
+      } else if (room.roomStatus !== 'standby') {
+        console.log('room is already full, navigating to spectate')
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
-        // the game room is open and user want to join, add user to room in db
+        console.log('the game room is open and user want to join, add user to room in db')
         let gameRoom = Object.assign({}, room);
         // if you're the first one in, start the game timer
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
           gameRoom.timeStart = performance.now();
-        } 
+        } else if (playerNames.length + 1 === gameRoom.playerCapacity) {
+          console.log('about to update roomStatus!!')
+          gameRoom.roomStatus = 'playing';
+        }
         // add you username to the gameroom
         gameRoom.players[username] = {
           disruptions: [''],
           testStatus: {},
-          credits: 0,
+          credits: room.startingCredits || 0,
           liveInput: ''
         };
         // and update the database
@@ -97,38 +110,82 @@ class GameRoom extends React.Component {
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
-  } 
+  }
+
+  handleIncomingEvents() {
+    if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
+      let roomId = this.props.roomId
+      let room = this.props.gameRooms[roomId]
+      let username = fire.auth().currentUser.email.split('@')[0];
+      let player = room.players[username];
+      let events = player.events;
+      player.events = '';
+      fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
+      .then(() => {
+        // NOTE THAT IF THERE ARE MULTIPLE EVENTS
+        // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
+        if (events) {
+          events.forEach(event => {
+            eventHandler[event.eventName](room, roomId, username, event.value)
+          })
+        }
+      })
+    }
+  }
+
   
   render () {
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
-    if (this.props.gameRooms && Object.keys(this.props.gameRooms).length && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
+    if (this.props.gameRooms 
+        && Object.keys(this.props.gameRooms).length 
+        && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
+    // If we have retrieved gameRooms from firebase and our room exists
     if (!this.props.gameRooms 
         || !Object.keys(this.props.gameRooms).length 
         || !this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    // We have retrieved gameRooms from firebase and our room exists
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
-    let { players, playerCapacity } = room;
-    // find number of players currently in the room
-    let numPlayers = Object.keys(players).length;
-    // check that against the capacity established when the room was created
-    let roomIsFull = numPlayers === Number(playerCapacity);
-    if (!roomIsFull) return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
-    return (
-      <div>
-          <ProgressBar room={ room }/>
-        <div id="editorAndTestSuite">
-          <CodeEditor currentRoom={room}/>
-          <TestSuite currentRoom={ room }/>
+    let roomStatus = room.roomStatus;
+    let results = room.results;
+
+    let resultsByPlayer = results ? eventHandler.helpers.calculateResultsByPlayer(results) : null;
+    let mostTotalWins = results ? eventHandler.helpers.calculateMostTotalWins(resultsByPlayer) : null;
+    let champion = mostTotalWins ? mostTotalWins.winner : null
+
+    if (roomStatus === 'standby' || roomStatus === 'intermission') {
+      return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
+    } else if (roomStatus === 'completed') {
+      return (
+        <div>
+          The grand champion is {champion}!
+          {
+            (() => {
+              for (let player in resultsByPlayer) {
+                let result = resultsByPlayer[player];
+                return <div>{player}: {result} wins </div>
+              }
+            })()
+          }
         </div>
-      </div>
-    );
+      )
+    } else if (roomStatus === 'playing') {
+      return (
+        <div>
+            <ProgressBar room={ room }/>
+          <div id="editorAndTestSuite">
+            <CodeEditor currentRoom={room}/>
+            <TestSuite currentRoom={ room }/>
+          </div>
+        </div>
+      );
+    } 
   }
 }
+
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
   username: fire.auth().currentUser.email.split('@')[0],
