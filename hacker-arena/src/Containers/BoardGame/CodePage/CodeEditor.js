@@ -8,17 +8,6 @@ import DisruptionsBar from '../../../Components/CodeEditor/DisruptionsBar';
 
 import '../../../Styles/CodeEditor.css';
 
-<<<<<<< HEAD
-import ReactAce from 'react-ace-editor';
-import React from 'react';
-import $ from 'jquery';
-import runTestsOnUserAnswer from '../../ToyProblemTesting/testUserAnswer';
-import fire from '../../Firebase/firebase';
-import Disruptions from './disruptions';
-import DisruptionsBar from './DisruptionsBar';
-
-import '../../Styles/CodeEditor.css';
-
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -205,5 +194,3 @@ class CodeEditor extends React.Component {
 }
 
 export default CodeEditor;
-=======
->>>>>>> d9e16aca1fb22c29178e0d48691dd8dacde1c937
