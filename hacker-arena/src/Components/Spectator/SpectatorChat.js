@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../../Styles/SpectatorChat.css'
 import fire from '../../Firebase/firebase';
 import Webrtc from '../../Containers/PeerVideos/Webrtc.js';
 import SpectatorChatMessage from './SpectatorChatMessage.js';
