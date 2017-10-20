@@ -6,7 +6,7 @@ import fire from '../Firebase/firebase';
 
 import CodeEditor from '../Components/CodeEditor/CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
-//import ProgressBar from '../Components/GameRoom/ProgressBar';
+import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
@@ -54,7 +54,7 @@ class GameRoom extends React.Component {
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       // when you're the last player inside, leaving deletes the gameroom
-      if (room.players.length <= 1) {
+      if (Object.keys(room.players).length <= 1) {
         fire.database().ref(`/rooms/${roomId}`).remove();
       } else {
         let gameRoom = Object.assign({}, room);
@@ -113,21 +113,22 @@ class GameRoom extends React.Component {
   }
 
   handleIncomingEvents() {
-    let roomId = this.props.roomId
-    let room = this.props.gameRooms[roomId]
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let player = room.players[username];
-    let events = player.events;
-    player.events = '';
-    fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
+    if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
+      let roomId = this.props.roomId
+      let room = this.props.gameRooms[roomId]
+      let username = fire.auth().currentUser.email.split('@')[0];
+      let player = room.players[username];
+      let events = player.events;
+      player.events = '';
+      fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
 
-    // NOTE THAT IF THERE ARE MULTIPLE EVENTS
-    // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
-    if (events) {
-      events.forEach(event => {
-        eventHandler[event.eventName](room, roomId, username, event.value)
-      })
-
+      // NOTE THAT IF THERE ARE MULTIPLE EVENTS
+      // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
+      if (events) {
+        events.forEach(event => {
+          eventHandler[event.eventName](room, roomId, username, event.value)
+        })
+      }
     }
   }
 
@@ -159,10 +160,10 @@ class GameRoom extends React.Component {
     } else if (roomStatus === 'playing') {
       return (
         <div>
-            {/* <ProgressBar room={ room }/> */}
+            <ProgressBar room={ room }/>
           <div id="editorAndTestSuite">
             <CodeEditor currentRoom={room}/>
-            {/* <TestSuite currentRoom={ room }/> */}
+            <TestSuite currentRoom={ room }/>
           </div>
         </div>
       );

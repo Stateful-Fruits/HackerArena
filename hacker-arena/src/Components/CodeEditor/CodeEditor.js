@@ -159,7 +159,7 @@ class CodeEditor extends React.Component {
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
       });
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus)
+      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus);
     } else {
       window.swal('Oops...', 'Something went wrong!', 'error');
     }
