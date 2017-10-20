@@ -28,8 +28,10 @@ class CodeEditor extends React.Component {
     let username = fire.auth().currentUser.email.split('@')[0];
     // Creates template for current problem using userFn
     this.ace.editor.on("paste", () => {
-      this.ace.editor.undo();
       window.swal('You little cheater', '', 'warning');
+      setTimeout( () => {
+        this.ace.editor.setValue("")
+      }, 500);
     });
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
     // Increments user credits by 5 every 30 seconds
