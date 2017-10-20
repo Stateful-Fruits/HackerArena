@@ -9,6 +9,7 @@ import SpectatorGameDescription from '../../Components/Spectator/SpectatorGameDe
 import SpectatorError from '../../Components/Spectator/SpectatorError';
 import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
+import GameRoomError from '../../Components/GameRoom/GameRoomError';
 
 class SpectatorRoom extends Component {
 
@@ -100,6 +101,9 @@ class SpectatorRoom extends Component {
   }
 
   render() {
+    if (this.props.gameRooms 
+      && Object.keys(this.props.gameRooms).length 
+      && !this.props.gameRooms[this.props.gameRoomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     return gameRoom ? (
       <div>

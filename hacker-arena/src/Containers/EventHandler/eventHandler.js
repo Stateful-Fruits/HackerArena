@@ -32,36 +32,39 @@ eventHandler.helpers.calculateMostTotalWins = function(winsObj) {
 }
 
 eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username) {
-  console.log('handleConfirmAlert running. room is:', room)
-  let resultsSoFar = room.results;
-  console.log('this', this);
-  let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
-  console.log('resultsByPlayer', resultsByPlayer);
-  let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
-  console.log('mostTotalWins', mostTotalWins);
-
-  let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
-  console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
-
-  let numPlayers = Object.keys(room.players).length;
-    
-  room.playersReady = room.playersReady + 1 || 1;
-  console.log('room.players after add', room.playersReady)
-    
-  if (room.playersReady === numPlayers && !isLastRound) {
-    console.log('everyone is ready for next round! status to playing')
-    room.currentRound = room.currentRound + 1;
-    room.roomStatus = 'playing';
-    room.playersReady = 0;
-  } else if (room.playersReady < numPlayers) {
-    console.log('everyone is NOT ready yet. status to intermission')
-    room.roomStatus = 'intermission';
-  } else if (isLastRound) {
-    console.log('everyone is ready and it is the last round, set to completed')
-    room.roomStatus = 'completed';
-  }
+  fire.database().ref(`rooms/${roomId}`).once('value', snapshot => {
+    let room = snapshot.val();
+    console.log('handleConfirmAlert running. room is:', room)
+    let resultsSoFar = room.results;
+    console.log('this', this);
+    let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
+    console.log('resultsByPlayer', resultsByPlayer);
+    let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
+    console.log('mostTotalWins', mostTotalWins);
   
-  return fire.database().ref(`rooms/${roomId}`).set(room);
+    let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
+    console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
+  
+    let numPlayers = Object.keys(room.players).length;
+      
+    room.playersReady = room.playersReady + 1 || 1;
+    console.log('room.players after add', room.playersReady)
+      
+    if (room.playersReady === numPlayers && !isLastRound) {
+      console.log('everyone is ready for next round! status to playing')
+      room.currentRound = room.currentRound + 1;
+      room.roomStatus = 'playing';
+      room.playersReady = 0;
+    } else if (room.playersReady < numPlayers) {
+      console.log('everyone is NOT ready yet. status to intermission')
+      room.roomStatus = 'intermission';
+    } else if (isLastRound) {
+      console.log('everyone is ready and it is the last round, set to completed')
+      room.roomStatus = 'completed';
+    }
+    
+    return fire.database().ref(`rooms/${roomId}`).set(room);
+  })
 }
 
 // ---------------- Events ----------------

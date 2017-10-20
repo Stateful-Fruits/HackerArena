@@ -53,13 +53,17 @@ class GameRoom extends React.Component {
         && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
+      let playerNames = Object.keys(room.players);
       // when you're the last player inside, leaving deletes the gameroom
-      if (Object.keys(room.players).length <= 1) {
+      if (playerNames.length <= 1) {
         fire.database().ref(`/rooms/${roomId}`).remove();
       } else {
         let gameRoom = Object.assign({}, room);
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
+        // see if the game needs to switch to standby
+        if (playerNames.length - 1 < gameRoom.playerCapacity 
+            && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
         // don't allow handle enter to run again 
         this.setState({ allowEnter: false });
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
@@ -83,7 +87,7 @@ class GameRoom extends React.Component {
       if (playerNames.includes(username)) {
         console.log('player already found in room, no update to room needed')
         return;
-      } else if (room.roomStatus !== 'standby') {
+      } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
         console.log('room is already full, navigating to spectate')
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
@@ -94,9 +98,10 @@ class GameRoom extends React.Component {
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
           gameRoom.timeStart = performance.now();
-        } else if (playerNames.length + 1 === gameRoom.playerCapacity) {
-          console.log('about to update roomStatus!!')
-          gameRoom.roomStatus = 'playing';
+        } else if (playerNames.length + 1 === gameRoom.playerCapacity 
+                   && gameRoom.gameStatus !== 'completed') {
+            console.log('about to update roomStatus!!')
+            gameRoom.roomStatus = 'playing';
         }
         // add you username to the gameroom
         gameRoom.players[username] = {
@@ -114,22 +119,23 @@ class GameRoom extends React.Component {
 
   handleIncomingEvents() {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
-      let roomId = this.props.roomId
-      let room = this.props.gameRooms[roomId]
+      let roomId = this.props.roomId;
+      let room = this.props.gameRooms[roomId];
       let username = fire.auth().currentUser.email.split('@')[0];
       let player = room.players[username];
       let events = player.events;
-      player.events = '';
-      fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
-      .then(() => {
-        // NOTE THAT IF THERE ARE MULTIPLE EVENTS
-        // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
-        if (events) {
-          events.forEach(event => {
-            eventHandler[event.eventName](room, roomId, username, event.value)
-          })
-        }
-      })
+      if (events !== '' && room.roomStatus === 'playing') {
+        fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
+        .then(() => {
+          // NOTE THAT IF THERE ARE MULTIPLE EVENTS
+          // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
+          if (events) {
+            events.forEach(event => {
+              eventHandler[event.eventName](room, roomId, username, event.value)
+            })
+          }
+        })
+      }
     }
   }
 
@@ -157,7 +163,11 @@ class GameRoom extends React.Component {
     let champion = mostTotalWins ? mostTotalWins.winner : null
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
-      return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
+      return (
+        <div className="completeWaiting">
+          <WaitingForPlayer room={room}/>
+        </div>
+      );
     } else if (roomStatus === 'completed') {
       return (
         <div>
@@ -182,6 +192,13 @@ class GameRoom extends React.Component {
           </div>
         </div>
       );
+    } else {
+      console.log('Room: ', room);
+      return (
+        <div>
+          THIS ROOM HAS NO STATUS?
+        </div>
+      )
     } 
   }
 }
