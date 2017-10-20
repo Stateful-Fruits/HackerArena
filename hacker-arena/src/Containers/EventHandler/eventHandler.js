@@ -1,58 +1,17 @@
 import fire from '../../Firebase/firebase';
+import helpers from '../../Helpers/helpers'
 
 let eventHandler = {};
 
-// ---------------- Helpers ----------------
 eventHandler.helpers = {};
 
-eventHandler.helpers.calculateResultsByPlayer = function(results) {
-  console.log('results before calc', results);
-  return results.reduce((resultsObj, result) => {
-    let winner = result.winner
-    resultsObj[winner] = resultsObj[winner] || 0;
-    resultsObj[winner]++;
-    return resultsObj
-  }, {})
-}
-
-eventHandler.helpers.calculateMostTotalWins = function(winsObj) {
-  let biggest = {
-    winner: '',
-    wins: 0
-  };
-
-  for (let username in winsObj) {
-    if (winsObj[username] > biggest.wins) {
-      biggest.winner = username
-      biggest.wins = winsObj[username];
-    }
-  }
-
-  return biggest
-}
-
-eventHandler.helpers.chooseRandomProblem = function(problems) {
-  let keys = Object.keys(problems);
-  let random = Math.floor(Math.random() * keys.length);
-  return keys[random];
-}
-
-eventHandler.helpers.filterProblemsByDifficulty = function(minDifficulty = 0, maxDifficulty = 8, problems) {
-  let keys = Object.keys(problems);
-
-  return keys
-  .filter(key => {
-    let problem = problems[key];
-    return (problem.difficulty >= minDifficulty && problem.difficulty >= maxDifficulty)
-  })
-  .map(key => problems[key])
-}
+// ---------------- Helpers ----------------
 
 eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username, problems) {
   console.log('handleConfirmAlert running. room is:', room)
   let resultsSoFar = room.results;
-  let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
-  let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
+  let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
+  let mostTotalWins = helpers.calculateMostTotalWins(resultsByPlayer);
 
   let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
   console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
@@ -68,8 +27,9 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
     room.playersReady = 0;
 
     // new problem
-    problems = this.filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
-    room.problemID = this.chooseRandomProblem(problems);
+    let filteredProblems = helpers.filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
+    console.log('filteredProblems in eventhandler', filteredProblems)
+    room.problemID = helpers.chooseRandomProblem(filteredProblems);
     room.problem = problems[room.problemID]
 
     // reset each player
@@ -95,7 +55,7 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
 
 eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let resultsSoFar = room.results.slice();
-  let resultsByPlayer = this.helpers.calculateResultsByPlayer(resultsSoFar);
+  let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
 
   let winner = eventValue.winner;
   let timeTaken = eventValue.timeTaken.toFixed(2);

@@ -10,8 +10,9 @@ import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
+import eventHandler from './EventHandler/eventHandler';
 
-import eventHandler from './EventHandler/eventHandler'
+import helpers from './../Helpers/helpers'
 
 import '../Styles/GameRoom.css';
 
@@ -155,8 +156,8 @@ class GameRoom extends React.Component {
     let roomStatus = room.roomStatus;
     let results = room.results;
 
-    let resultsByPlayer = results ? eventHandler.helpers.calculateResultsByPlayer(results) : null;
-    let mostTotalWins = results ? eventHandler.helpers.calculateMostTotalWins(resultsByPlayer) : null;
+    let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
+    let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
     let champion = mostTotalWins ? mostTotalWins.winner : null
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
