@@ -11,32 +11,67 @@ class MovePlayer extends React.Component {
     let direction = e.target.value;
     let room = this.props.room;
     let user = this.props.user;
-    let position = room.playerInfo[user].position;
+    let userInfo = room.playerInfo[user];
+    let position = userInfo.position;
     let row = position[0];
     let col = position[1];
     if (direction === 'Up' && room.board[row - 1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       row -= 1;
       room.board[row][col].push(user);
-      room.playerInfo[user].position = [row,col];
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        let total = room.players.length;
+        if (room.playerTurnIndex === total-1) {
+          room.playerTurnIndex = 0;
+        } else {
+          room.playerTurnIndex++;
+        }
+        room.playerTurn = room.players[room.playerTurnIndex];
+      }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Down' && room.board[row+1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       row += 1;
       room.board[row][col].push(user);
-      room.playerInfo[user].position = [row,col];
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        let total = room.players.length;
+        if (room.playerTurnIndex === total-1) {
+          room.playerTurnIndex = 0;
+        } else {
+          room.playerTurnIndex++;
+        }
+        room.playerTurn = room.players[room.playerTurnIndex];
+      }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Left' && room.board[row][col-1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       col -= 1;
       room.board[row][col].push(user);
-      room.playerInfo[user].position = [row,col];
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        let total = room.players.length;
+        if (room.playerTurnIndex === total-1) {
+          room.playerTurnIndex = 0;
+        } else {
+          room.playerTurnIndex++;
+        }
+        room.playerTurn = room.players[room.playerTurnIndex];
+      }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Right' && room.board[row][col+1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       col += 1;
       room.board[row][col].push(user);
-      room.playerInfo[user].position = [row,col];
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        room.canMove = !room.canMove;
+      }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     }
   }
