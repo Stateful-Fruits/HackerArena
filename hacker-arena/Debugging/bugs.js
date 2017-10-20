@@ -27,3 +27,8 @@ Refreshing the page will lose state and user will be removed from state info by 
   doesn't behave that way. 
   -- use componentWillUpdate
 
+One page will get the Dice component while the other one doesn't. 
+  normal components like <div> seem to work but not jsx components;
+  moving it down an if statement seems to work;
+  -close incognito tab and reopen hit;
+

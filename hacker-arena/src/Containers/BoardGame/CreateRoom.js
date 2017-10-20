@@ -14,7 +14,13 @@ class CreateRoom extends React.Component {
     let user = fire.auth().currentUser.email.split('@')[0];
     const room = {
       players: [user],
-      playerInfo: {[user]: {position: [0,0]}},
+      playerInfo: {
+        [user]: {
+          position: [0,0],
+          diceResult: 0,
+          canMove: true,
+        }
+      },
       gameStarted: false,
       playerCount: 1,
       winner: "",
@@ -29,8 +35,7 @@ class CreateRoom extends React.Component {
         [[0],[0],[0],[0],[0],[0],[0]],
         [[0],[0],[0],[0],[0],[0],[0]],
         [[0],[0],[0],[0],[0],[0],['End']],
-      ],
-      diceResult: 'None'
+      ]
     }
     db.BoardRooms.push(room).then(added => {
       room.key = added.key;
