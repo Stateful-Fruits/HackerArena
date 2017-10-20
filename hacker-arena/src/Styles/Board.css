@@ -36,3 +36,27 @@
   margin: 20px 5px 10px 5px;
   display: inline-block;
 }
+
+.inline {
+  display: inline-block;
+  margin: 0px 22px 0px 22px;
+}
+
+.but {
+  width: 100px;
+}
+
+.up {
+  margin-bottom: 5px;
+}
+
+.down {
+  margin-top: 5px;
+}
+
+/* .analog {
+  border-radius: 10px;
+	width: 20px;
+  height: 20px; 
+  color: red;
+} */

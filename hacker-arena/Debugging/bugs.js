@@ -16,3 +16,14 @@ firebase error;
      BoardRooms collection but instead going into 'BoardRoomsKwd0932' and making it in the database
      then removing that, which to firebase is a valid process, so it thinks nothing went wrong.
      Which is why it was throwing on errors either.
+
+BoardRoom error-
+  randomly crashes when rolling dice;
+  randomly splits into two rooms;
+
+Refreshing the page will lose state and user will be removed from state info by handleLeave;
+  componentDidMount only runs once when the App hasn't finished pulling data from firebase. 
+  When the store is updated by App's listeners it doesn't rerender because componentDidMount 
+  doesn't behave that way. 
+  -- use componentWillUpdate
+
