@@ -8,8 +8,9 @@ class Dice extends React.Component {
   }
   roll (e) {
     let room = this.props.room;
+    let user = this.props.user;
     e.preventDefault();
-    room.diceResult = Math.floor(Math.random() * 6) + 1;
+    room.playerInfo[user].diceResult = Math.floor(Math.random() * 4) + 1;
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
   render () {
@@ -19,4 +20,4 @@ class Dice extends React.Component {
   }
 }
 
-export default (Dice);
+export default Dice;
