@@ -102,7 +102,7 @@ class GameRoom extends React.Component {
         } else if (playerNames.length + 1 === gameRoom.playerCapacity 
                    && gameRoom.gameStatus !== 'completed') {
             console.log('about to update roomStatus!!')
-            gameRoom.roomStatus = 'playing';
+            gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
         // add you username to the gameroom
         gameRoom.players[username] = {
@@ -158,10 +158,9 @@ class GameRoom extends React.Component {
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
     let results = room.results;
-
     let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
     let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
-    let champion = mostTotalWins ? mostTotalWins.winner : null
+    let champion = mostTotalWins ? mostTotalWins.winner : null;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (
