@@ -148,7 +148,7 @@ class CodeEditor extends React.Component {
         }
       )) {
         // if every test is passed
-        this.endRoundWithClientAsVictor();
+        if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
       } else {
         window.swal('Oops...', 'Something went wrong!', 'error');
       }
