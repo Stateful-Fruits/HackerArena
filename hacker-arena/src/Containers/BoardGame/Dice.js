@@ -20,4 +20,4 @@ class Dice extends React.Component {
   }
 }
 
-export default (Dice);
+export default Dice;
