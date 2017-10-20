@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
-import PropTypes from'prop-types';
-import { List } from 'immutable';
+// import PropTypes from'prop-types';
+// import { List } from 'immutable';
 // import mapDispatchToProps from './actions';
 import SimpleWebRTC from 'simplewebrtc';
 import{ connect} from 'react-redux';
-import VideoChat from '../../Components/Spectator/VideoChat.js';
 import '../../Styles/Webrtc.css';
+// import fire from '../../Firebase/firebase';
+
 // import shouldPureComponentUpdate from 'react-pure-render/function';
 
 class Webrtc extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       muted: false,
       paused: false
@@ -18,27 +19,28 @@ class Webrtc extends Component {
   }
    componentDidMount() {
     //    const{onReady} =this.props
-       const webrtc = new SimpleWebRTC({
+    const {room } = this.props;
+        const webrtc = new SimpleWebRTC({
         localVideoEl: this.refs.local,
         remoteVideosEl: "",
         // remoteVideosEl: '',
         
-        autoRequestMedia: true,
+        autoRequestMedia: false,
         detectSpeakingEvents: true,
       });
-      console.log('this is from another place', webrtc.remoteVideosEl)
-      webrtc.on('videoAdded', function (video, peer) {
-        console.log('video added', peer);
-        var remotes = document.getElementById('remoteVideo');
+
+    webrtc.on('videoAdded', function (video, peer) {
+      console.log('video added', peer);
+      var remotes = document.getElementById('remoteVideo');
         if (remotes) {
-            var container = document.createElement('div');
+          var container = document.createElement('div');
             container.className = 'videoContainer';
             container.id = 'container_' + webrtc.getDomId(peer);
             container.appendChild(video);
-    
+
             // suppress contextmenu
             video.oncontextmenu = function () { return false; };
-    
+
             remotes.appendChild(container);
         }
     });
@@ -54,8 +56,7 @@ class Webrtc extends Component {
     //   this.webrtc = webrtc;
       webrtc.on('readyToCall', function () {
         // you can name it anything
-      webrtc.joinRoom('abc');
-        console.log('chatroom ', webrtc);
+      webrtc.joinRoom(`spectator/${room.key}`);
     });
     this.webrtc = webrtc;
     console.log('video object', this.refs.remote);
@@ -63,12 +64,6 @@ class Webrtc extends Component {
 
 componentWillReceiveProps(nextProps) {
 console.log('video object', this.refs.remote);
-//    console.log('hello', this.webrtc);
-        // this.webrtc.joinRoom('abc');
-    
-        // webrtc.on('videoAdded', (video, peer) =>
-        //   addPeer({ video, peer })
-        // );
 }
 // shouldComponentUpdate = shouldPureComponentUpdate;
 mute(){
@@ -83,12 +78,18 @@ mute(){
 pause(){
   if(this.state.paused){
     this.webrtc.resumeVideo();
+    document.getElementById('localVideo').style.display = "flex";    
     this.setState({paused:false});
   } else {
-    this.webrtc.pauseVideo();
+    this.webrtc.pause();
+    document.getElementById("localVideo").style.display = "none";
+      
     this.setState({paused:true});
   }
   console.log(this.webrtc);
+}
+startVideo () {
+this.webrtc.startLocalVideo();
 }
 render() {
 
@@ -105,20 +106,16 @@ return (
       </div>
     </div>
       <button onClick={this.mute.bind(this)}>Mute Audio</button>
-      <button onClick={this.pause.bind(this)}>Turn Camera Off</button>
+      <button onClick={this.pause.bind(this)}>Toggle Camera</button>
+      <button onClick = {this.startVideo.bind(this)}>startVideo</button>
 
     </div>
 )
 
 }
 }
-// const mapStateToProps =(state)=> ({
-//     webrtc : state.webrtc,
-//     room : state.gameRooms ? state.gameRooms[state.router.location.pathname.split('/')[2]] : null,   
-// })
-Webrtc.PropTypes= {
-//     webrtc: PropTypes.object,
-    peerVideos: PropTypes.instanceOf(List).isRequired,
-    
-}
-export default connect()(Webrtc);
+
+const mapStateToProps =(state)=> ({
+    room : state.gameRooms ? state.gameRooms[state.router.location.pathname.split('/')[2]] : null,   
+})
+export default connect(mapStateToProps)(Webrtc);
