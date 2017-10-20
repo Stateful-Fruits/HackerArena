@@ -4,64 +4,35 @@ import fire from '../../Firebase/firebase';
 class MovePlayer extends React.Component {
   constructor (props) {
     super (props);
-    this.handleUp = this.handleUp.bind(this);
-    this.handleDown = this.handleDown.bind(this);
-    this.handleLeft = this.handleLeft.bind(this);
-    this.handleRight = this.handleRight.bind(this);
+    this.handleMove = this.handleMove.bind(this);
   }
-  handleUp (e) {
+  handleMove (e) {
     e.preventDefault();
+    let direction = e.target.value;
     let room = this.props.room;
     let user = this.props.user;
     let position = room.playerInfo[user].position;
     let row = position[0];
     let col = position[1];
-    if (room.board[row - 1] && room.board[row - 1][col]) {
+    if (direction === 'Up' && room.board[row - 1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       row -= 1;
       room.board[row][col].push(user);
       room.playerInfo[user].position = [row,col];
       fire.database().ref('BoardRooms/' + room.key).set(room);
-    }
-  }
-  handleDown (e) {
-    e.preventDefault();
-    let room = this.props.room;
-    let user = this.props.user;
-    let position = room.playerInfo[user].position;
-    let row = position[0];
-    let col = position[1];
-    if (room.board[row+1] && room.board[row+1][col]) {
+    } else if (direction === 'Down' && room.board[row+1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       row += 1;
       room.board[row][col].push(user);
       room.playerInfo[user].position = [row,col];
       fire.database().ref('BoardRooms/' + room.key).set(room);
-    }
-  }
-  handleLeft (e) {
-    e.preventDefault();
-    let room = this.props.room;
-    let user = this.props.user;
-    let position = room.playerInfo[user].position;
-    let row = position[0];
-    let col = position[1];
-    if (room.board[row][col-1]) {
+    } else if (direction === 'Left' && room.board[row][col-1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       col -= 1;
       room.board[row][col].push(user);
       room.playerInfo[user].position = [row,col];
       fire.database().ref('BoardRooms/' + room.key).set(room);
-    }
-  }
-  handleRight (e) {
-    e.preventDefault();
-    let room = this.props.room;
-    let user = this.props.user;
-    let position = room.playerInfo[user].position;
-    let row = position[0];
-    let col = position[1];
-    if (room.board[row][col+1]) {
+    } else if (direction === 'Right' && room.board[row][col+1]) {
       room.board[row][col] = room.board[row][col].filter(player => player !== user);
       col += 1;
       room.board[row][col].push(user);
@@ -71,12 +42,12 @@ class MovePlayer extends React.Component {
   }
   render () {
     return <div>
-      <button className='up but' onClick={this.handleUp}>Up</button>
+      <button className='up but' value='Up' onClick={this.handleMove}>Up</button>
       <div>
-        <button className='inline but' onClick={this.handleLeft}>Left</button>
-        <button className='inline but' onClick={this.handleRight}>Right</button>
+        <button className='inline but' value='Left' onClick={this.handleMove}>Left</button>
+        <button className='inline but' value='Right' onClick={this.handleMove}>Right</button>
       </div>
-      <button className='down but' onClick={this.handleDown}>Down</button>
+      <button className='down but' value='Down' onClick={this.handleMove}>Down</button>
     </div>
   }
 }
