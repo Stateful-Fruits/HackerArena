@@ -31,17 +31,24 @@ class GameRoom extends React.Component {
     let {room, user, navigate} = this.props;
     if (room) {
       window.addEventListener('beforeunload', this.handleLeave);
-      let notFull = room.players.length < 4 && !room.gameStarted;
+      let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
-      if (notFull && notAlreadyIn) {
+      let firstTile = room.board[0][0];
+      if (notFull && notAlreadyIn) {//not full nor started and not in;
         room.players.push(user);
-        room.board[0][0].push(user);
+        firstTile.push(user);
         if (!room.playerInfo[user]) {
           room.playerInfo[user] = {
             position: [0,0],
             diceResult: 0,
             canMove: true
           }
+        }
+        fire.database().ref('BoardRooms/' + room.key).set(room);
+      } else if (!notFull && Object.keys(room.playerInfo).indexOf(user) !== -1 && notAlreadyIn) { //refresh coming back
+        room.players.push(user);
+        if (firstTile.indexOf(user) === -1) {
+          firstTile.push(user);
         }
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && notAlreadyIn) {
@@ -82,7 +89,7 @@ class GameRoom extends React.Component {
     } else {
       let userInfo = room.playerInfo[user];
       let message, startButton, board, dice, diceResult, canMove, move, codePage;
-      if (room.gameStarted) {
+      if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
         board = <Board board={room.board}/>;
