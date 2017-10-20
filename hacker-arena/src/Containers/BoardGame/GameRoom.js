@@ -89,7 +89,7 @@ class GameRoom extends React.Component {
     } else {
       let userInfo = room.playerInfo[user];
       let message, startButton, board, dice, diceResult, canMove, move, codePage;
-      if (room.gameStarted) {
+      if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
         board = <Board board={room.board}/>;
