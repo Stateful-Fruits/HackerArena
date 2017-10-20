@@ -4,6 +4,7 @@ import fire from '../../Firebase/firebase';
 import { push } from 'react-router-redux';
 import Board from './Board';
 import Dice from './Dice';
+import MovePlayer from './MovePlayer';
 
 class GameRoom extends React.Component {
   constructor (props) {
@@ -13,7 +14,6 @@ class GameRoom extends React.Component {
     this.startGame = this.startGame.bind(this);
   }
   componentDidMount () {
-    console.log('mounting that shit boy')
     this.handleEnter();
   }
 
@@ -31,10 +31,9 @@ class GameRoom extends React.Component {
       window.addEventListener('beforeunload', this.handleLeave);
       let notFull = room.players.length < 4 && !room.gameStarted;
       let notAlreadyIn = room.players.indexOf(user) === -1;
-      console.log('handling that enter boy')
       if (notFull && notAlreadyIn) {
         room.players.push(user);
-        console.log('got wiped yo bobo')
+        room.board[0][0].push(user);
         if (!room.playerInfo[user]) {
           room.playerInfo[user] = {
             position: [0,0]
@@ -70,25 +69,30 @@ class GameRoom extends React.Component {
   }
 
   render () {
+    let user = this.props.user;
     let room = this.props.room;
     if (room === undefined) {
       return <div>
         <div> Please wait as we prepare your board </div>
       </div>
     } else {
-      let message, startButton, board, dice, diceResult;
+      let message, startButton, board, dice, diceResult, playerTurn, move;
       if (room.gameStarted) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
         board = <Board board={room.board}/>;
         dice = <Dice room={room}/>;
-        diceResult = <div className='dice'>{'Rolled: ' + room.diceResult}</div>;
+        diceResult = <div className='dice'>{'Moves Left: ' + room.diceResult}</div>;
+        playerTurn = <div className='playerTurn'>{'It is ' + room.playerTurn + `'s turn`}</div>;
+        move = <MovePlayer room={room} user={user}/>;
       } else {
         startButton = <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
         message = `Waiting for victims`;
         board = null;
         dice = null;
         diceResult = null;
+        playerTurn = null;
+        move = null;
       }
       
 
@@ -97,10 +101,12 @@ class GameRoom extends React.Component {
         <div>{this.props.room.players.join(' ')}</div>
         {startButton}
         {board}
+        {playerTurn}
         <div className='diceContainer'>
           {diceResult}
           {dice}
         </div>
+        {move}
         <div className='bottomend'></div>
       </div>
     }
