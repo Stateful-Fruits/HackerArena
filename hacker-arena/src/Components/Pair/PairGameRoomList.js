@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import GameRoomPreview from './GameRoomPreview';
+import PairGameRoomPreview from './PairGameRoomPreview';
 
 class GameRoomList extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class GameRoomList extends Component {
 
   render() {
     let { gameRooms, navigate} = this.props;
-    const roomKeys = Object.keys(gameRooms).filter(key => !gameRooms[key].isPairRoom);
+    const roomKeys = Object.keys(gameRooms).filter(key => gameRooms[key].isPairRoom);
     const rooms = roomKeys.map((roomKey) => {
       const roomData = gameRooms[roomKey];
       roomData.key = roomKey;
@@ -45,7 +45,7 @@ class GameRoomList extends Component {
                  .filter((eachRoom) => !Object.keys(eachRoom).includes('isTrusted') && !Object.keys(eachRoom).includes('challengerName'))
                  .reverse()
                  .map((room, inx) => (
-            <GameRoomPreview 
+            <PairGameRoomPreview 
               gameRoom={room}
               key={room.key + inx}
               navigate={navigate}
