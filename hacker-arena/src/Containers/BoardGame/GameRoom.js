@@ -69,6 +69,7 @@ class GameRoom extends React.Component {
   }
 
   render () {
+    let user = this.props.user;
     let room = this.props.room;
     if (room === undefined) {
       return <div>
@@ -83,7 +84,7 @@ class GameRoom extends React.Component {
         dice = <Dice room={room}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.diceResult}</div>;
         playerTurn = <div className='playerTurn'>{'It is ' + room.playerTurn + `'s turn`}</div>;
-        move = <MovePlayer room={room}/>;
+        move = <MovePlayer room={room} user={user}/>;
       } else {
         startButton = <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
         message = `Waiting for victims`;
