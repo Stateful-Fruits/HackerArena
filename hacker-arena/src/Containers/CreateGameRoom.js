@@ -1,9 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import noUiSlider from 'nouislider'
 
 import updateCurrentGameRoom from '../Actions/updateCurrentGameRoom';
 import db from '../Firebase/db';
+
+import helpers from './../Helpers/helpers';
+import './../Styles/CreateGameRoom.css';
+import './../Styles/nouislider.css';
+
 
 class CreateGameRoom extends React.Component {
   constructor (props) {
@@ -14,7 +20,7 @@ class CreateGameRoom extends React.Component {
       isPrivate: false,
       startingCredits: 5,
       playerCapacity: 2,
-      rounds: 1
+      rounds: 1,
     }
 
     this.onChange = this.onChange.bind(this);
@@ -24,7 +30,27 @@ class CreateGameRoom extends React.Component {
     this.createRoom = this.createRoom.bind(this);
   }
 
-  createRoom (problemID, isPrivate, startingCredits, playerCapacity, rounds) {
+  componentDidMount() {
+    const slider = document.getElementById('slider');
+    noUiSlider.create(slider, {
+      start: [1, 5],
+      step: 1,
+      tooltips: true,
+      connect: [false, true, false],
+      range: {
+        'min': [ 1 ],
+        'max': [ 8 ]
+      }
+    });
+
+    console.dir('slider', slider);
+
+    slider.noUiSlider.on('update', () => this.setState({
+      problemID: 'random'
+    }))
+  }
+
+  createRoom (problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty = 0, maxDifficulty = 8) {
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
@@ -36,6 +62,8 @@ class CreateGameRoom extends React.Component {
       spectators: 0,
       rounds: rounds,
       currentRound: 1,
+      minDifficulty: minDifficulty,
+      maxDifficulty: maxDifficulty,
       playerCapacity
     };
 
@@ -46,14 +74,20 @@ class CreateGameRoom extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
+    
+    const slider = document.getElementById('slider'); 
+    console.log('slider', slider)
+    let sliderValues = slider.noUiSlider.get();  
+    console.log('sliderValues', sliderValues)  
+    
     let problemID = this.state.problemID;
-    console.log('problemID', problemID)
+    let minDifficulty = parseInt(sliderValues[0], 10);
+    let maxDifficulty = parseInt(sliderValues[1], 10);
 
     if (!problemID || problemID.length === 0 || problemID === 'random') {
       let allProblems = this.props.problems;
-      let keys = Object.keys(allProblems);
-      let random = Math.floor(Math.random() * keys.length);
-      problemID = keys[random];
+      let filteredProblems = helpers.filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems)
+      problemID = helpers.chooseRandomProblem(filteredProblems);
     }
 
     let isPrivate = this.state.isPrivate
@@ -61,7 +95,8 @@ class CreateGameRoom extends React.Component {
     let playerCapacity = this.state.playerCapacity;
     let rounds = this.state.rounds;
 
-    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds);
+
+    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty, maxDifficulty);
   }
 
   onChange(e) {
@@ -137,6 +172,10 @@ class CreateGameRoom extends React.Component {
             <option value="random">random!</option>
           </select>
           <br/>
+          Select a difficulty level for this and subsequent problems
+          <div className="slider-container">
+            <div id="slider"></div>
+          </div>
           <input type="submit" value="CREATE GAME ROOM" onClick={this.onSubmit}></input>
         </form>
       </div>
