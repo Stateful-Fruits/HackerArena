@@ -31,14 +31,28 @@ eventHandler.helpers.calculateMostTotalWins = function(winsObj) {
   return biggest
 }
 
-eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username) {
+eventHandler.helpers.chooseRandomProblem = function(problems) {
+  let keys = Object.keys(problems);
+  let random = Math.floor(Math.random() * keys.length);
+  return keys[random];
+}
+
+eventHandler.helpers.filterProblemsByDifficulty = function(minDifficulty = 0, maxDifficulty = 8, problems) {
+  let keys = Object.keys(problems);
+
+  return keys
+  .filter(key => {
+    let problem = problems[key];
+    return (problem.difficulty >= minDifficulty && problem.difficulty >= maxDifficulty)
+  })
+  .map(key => problems[key])
+}
+
+eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId, username, problems) {
   console.log('handleConfirmAlert running. room is:', room)
   let resultsSoFar = room.results;
-  console.log('this', this);
   let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
-  console.log('resultsByPlayer', resultsByPlayer);
   let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
-  console.log('mostTotalWins', mostTotalWins);
 
   let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
   console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
@@ -46,18 +60,31 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
   let numPlayers = Object.keys(room.players).length;
     
   room.playersReady = room.playersReady + 1 || 1;
-  console.log('room.players after add', room.playersReady)
     
   if (room.playersReady === numPlayers && !isLastRound) {
-    console.log('everyone is ready for next round! status to playing')
+    console.log('everyone is ready for next round!')
     room.currentRound = room.currentRound + 1;
     room.roomStatus = 'playing';
     room.playersReady = 0;
+
+    // new problem
+    problems = this.filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
+    room.problemID = this.chooseRandomProblem(problems);
+    room.problem = problems[room.problemID]
+
+    // reset each player
+    for (let username in room.players) {
+      let player = room.players[username];
+      player.disruptions = [''];
+      player.testStatus = ['']
+      player.credits = room.startingCredits;
+    }
+
   } else if (room.playersReady < numPlayers) {
-    console.log('everyone is NOT ready yet. status to intermission')
+    console.log('everyone is NOT ready yet.')
     room.roomStatus = 'intermission';
   } else if (isLastRound) {
-    console.log('everyone is ready and it is the last round, set to completed')
+    console.log('everyone is ready and the last round just completed')
     room.roomStatus = 'completed';
   }
   
@@ -66,7 +93,7 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
 
 // ---------------- Events ----------------
 
-eventHandler.winner = function(room, roomId, username, eventValue) {
+eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let resultsSoFar = room.results.slice();
   let resultsByPlayer = this.helpers.calculateResultsByPlayer(resultsSoFar);
 
@@ -105,7 +132,7 @@ eventHandler.winner = function(room, roomId, username, eventValue) {
       })
     }
   })()
-  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username))
+  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems))
   
 }   
 
