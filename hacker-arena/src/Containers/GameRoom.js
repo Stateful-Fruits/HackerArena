@@ -121,14 +121,15 @@ class GameRoom extends React.Component {
       let events = player.events;
       player.events = '';
       fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
-
-      // NOTE THAT IF THERE ARE MULTIPLE EVENTS
-      // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
-      if (events) {
-        events.forEach(event => {
-          eventHandler[event.eventName](room, roomId, username, event.value)
-        })
-      }
+      .then(() => {
+        // NOTE THAT IF THERE ARE MULTIPLE EVENTS
+        // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
+        if (events) {
+          events.forEach(event => {
+            eventHandler[event.eventName](room, roomId, username, event.value)
+          })
+        }
+      })
     }
   }
 
@@ -148,13 +149,27 @@ class GameRoom extends React.Component {
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
-    let { roomStatus, winner } = room;
+    let roomStatus = room.roomStatus;
+    let results = room.results;
+
+    let resultsByPlayer = results ? eventHandler.helpers.calculateResultsByPlayer(results) : null;
+    let mostTotalWins = results ? eventHandler.helpers.calculateMostTotalWins(resultsByPlayer) : null;
+    let champion = mostTotalWins ? mostTotalWins.winner : null
+
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (<div className="completeWaiting" ><WaitingForPlayer /></div>);
     } else if (roomStatus === 'completed') {
       return (
         <div>
-          The winner is {winner}!
+          The grand champion is {champion}!
+          {
+            (() => {
+              for (let player in resultsByPlayer) {
+                let result = resultsByPlayer[player];
+                return <div>{player}: {result} wins </div>
+              }
+            })()
+          }
         </div>
       )
     } else if (roomStatus === 'playing') {

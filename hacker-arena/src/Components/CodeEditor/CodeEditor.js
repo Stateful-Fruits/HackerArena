@@ -103,8 +103,6 @@ class CodeEditor extends React.Component {
 
     let players = room.players;
     let playersArr = Object.keys(room.players);
-
-    let currentRound = room.currentRound;
     
     let resultForThisRound = {
       players: playersArr,

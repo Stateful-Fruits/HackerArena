@@ -5,20 +5,6 @@ let eventHandler = {};
 // ---------------- Helpers ----------------
 eventHandler.helpers = {};
 
-eventHandler.helpers.incrementWins = function(username) {
-  return fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-    let wins = snapshot.val().wins + 1;
-    fire.database().ref(`users/${username}/wins`).set(wins);
-  });
-}
-
-eventHandler.helpers.incrementLosses = function(username) {
-  return fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-    let losses = snapshot.val().losses + 1;
-    fire.database().ref(`users/${username}/losses`).set(losses);
-  });
-}
-
 eventHandler.helpers.calculateResultsByPlayer = function(results) {
   console.log('results before calc', results);
   return results.reduce((resultsObj, result) => {
@@ -30,10 +16,15 @@ eventHandler.helpers.calculateResultsByPlayer = function(results) {
 }
 
 eventHandler.helpers.calculateMostTotalWins = function(winsObj) {
-  let biggest = 0;
+  let biggest = {
+    winner: '',
+    wins: 0
+  };
+
   for (let username in winsObj) {
-    if (winsObj[username] > biggest) {
-      biggest = winsObj[username];
+    if (winsObj[username] > biggest.wins) {
+      biggest.winner = username
+      biggest.wins = winsObj[username];
     }
   }
 
@@ -47,9 +38,10 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
   let resultsByPlayer = this.calculateResultsByPlayer(resultsSoFar);
   console.log('resultsByPlayer', resultsByPlayer);
   let mostTotalWins = this.calculateMostTotalWins(resultsByPlayer);
+  console.log('mostTotalWins', mostTotalWins);
 
-  let isLastRound = parseInt(mostTotalWins, 10) === parseInt(room.rounds, 10);
-  console.log('room.currentRound, mostTotalWins, room.rounds, isLastRound', room.currentRound, mostTotalWins, room.rounds, isLastRound)  
+  let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
+  console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
 
   let numPlayers = Object.keys(room.players).length;
     
@@ -75,24 +67,38 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, room, roomId,
 // ---------------- Events ----------------
 
 eventHandler.winner = function(room, roomId, username, eventValue) {
+  let resultsSoFar = room.results.slice();
+  let resultsByPlayer = this.helpers.calculateResultsByPlayer(resultsSoFar);
+
   let winner = eventValue.winner;
+  let timeTaken = eventValue.timeTaken.toFixed(2);
   let isClientWinner = winner === username
+  let currentRound = room.currentRound
+
+  let scoreMessage = ``;
+
+  for (let player in resultsByPlayer) {
+    let result = resultsByPlayer[player];
+    scoreMessage = scoreMessage + `<div>${player}: ${result} wins \n</div>`
+  }
 
   return (() => {
     if (isClientWinner) {
-      this.helpers.incrementWins(username)
-
-      return window.swal({
-        title: `You Win!`,
-        width: 600,
-        padding: 100,
-        background: '#fff url(//bit.ly/1Nqn9HU)'
-      })
+      return window.swal(
+        `<div>Good job! Finished in ${timeTaken} seconds!</div>`,
+        `<div>You are the winner of round ${currentRound} </div>
+        <div>Best out of ${room.rounds} wins! </div>
+        <div>Current score is:</div>
+        ${scoreMessage}`,
+        'success')
     } else {
-      this.helpers.incrementLosses(username)
-
       return window.swal({
-        title: `The Winner is ${winner}!`,
+        title: `The Winner of round ${currentRound} is ${winner}!`,
+        html: `
+          <div>Best out of ${room.rounds} wins!</div>
+          <div>Current score is:</div>
+          ${scoreMessage}
+          `,
         width: 600,
         padding: 100,
         background: '#fff url(//bit.ly/1Nqn9HU)'
