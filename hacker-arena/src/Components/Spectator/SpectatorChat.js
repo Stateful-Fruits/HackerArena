@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../Styles/SpectatorChat.css'
 import fire from '../../Firebase/firebase';
-import SimpleWebRTC from "simplewebrtc"
+import Webrtc from '../../Containers/PeerVideos/Webrtc.js';
 import SpectatorChatMessage from './SpectatorChatMessage.js';
 
 class SpectatorChat extends Component {
@@ -12,7 +12,7 @@ class SpectatorChat extends Component {
     }
     this.handleMsgInput = this.handleMsgInput.bind(this);
     this.handleMsgSend = this.handleMsgSend.bind(this);
-    this.chat = this.chat.bind(this);
+    
   }
 
   handleMsgInput(e) {
@@ -27,29 +27,14 @@ class SpectatorChat extends Component {
     this.props.sendSpectatorMessage(room, username, msg);
     this.setState({ msg: '' });
   }
-  chat(e) {
-    var webrtc = new SimpleWebRTC({
-      // the id/element dom element that will hold "our" video 
-      localVideoEl: 'localVideo',
-      // the id/element dom element that will hold remote videos 
-      remoteVideosEl: 'remoteVideos',
-      // immediately ask for camera access 
-      autoRequestMedia: true
-  });
-  webrtc.on('readyToCall', function (id) {
-    // you can name it anything 
-    console.log(id);
-    webrtc.getPeers(id);
-    webrtc.joinRoom('your awesome room name');
-});
-  }
+
   render() {
     let { gameRoom } = this.props;
     let spectatorChat = gameRoom.spectatorChat || [];
     let { spectators } = gameRoom;
     return (
       <div style={{ margin: "5%" }}>
-      <button onClick= {(e)=>this.chat()}>vChat</button>
+       <Webrtc/>
         <form onSubmit={this.handleMsgSend}>
           <h2>Chat: </h2>
             <p>{(spectators ? spectators.join(', ') : '')}</p>
@@ -60,9 +45,7 @@ class SpectatorChat extends Component {
         </form>
         
         <div>
-          <div className='stream'> <video id ="localVideo"></video>
-          <video id ="remoteVideo"></video>
-          </div>
+        
           { spectatorChat.map((chatMessage, i) => (
             <SpectatorChatMessage 
               key={chatMessage.msg+i}
