@@ -9,18 +9,48 @@ import '../../Styles/Webrtc.css';
 // import shouldPureComponentUpdate from 'react-pure-render/function';
 
 class Webrtc extends Component {
+  constructor(){
+    super();
+    this.state = {
+      muted: false,
+      paused: false
+    }
+  }
    componentDidMount() {
     //    const{onReady} =this.props
        const webrtc = new SimpleWebRTC({
         localVideoEl: this.refs.local,
-        remoteVideosEl: this.refs.remote,
+        remoteVideosEl: "",
         // remoteVideosEl: '',
         
         autoRequestMedia: true,
         detectSpeakingEvents: true,
       });
       console.log('this is from another place', webrtc.remoteVideosEl)
+      webrtc.on('videoAdded', function (video, peer) {
+        console.log('video added', peer);
+        var remotes = document.getElementById('remoteVideo');
+        if (remotes) {
+            var container = document.createElement('div');
+            container.className = 'videoContainer';
+            container.id = 'container_' + webrtc.getDomId(peer);
+            container.appendChild(video);
+    
+            // suppress contextmenu
+            video.oncontextmenu = function () { return false; };
+    
+            remotes.appendChild(container);
+        }
+    });
 
+    webrtc.on('videoRemoved', function(video,peer) {
+      console.log('video removed', peer);
+      // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
+      Element.prototype.getElementById = function(id) {
+        return document.getElementById(id);
+    }
+      document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer)).remove();
+    })
     //   this.webrtc = webrtc;
       webrtc.on('readyToCall', function () {
         // you can name it anything
@@ -41,18 +71,41 @@ console.log('video object', this.refs.remote);
         // );
 }
 // shouldComponentUpdate = shouldPureComponentUpdate;
+mute(){
+  if(this.state.muted){
+    this.webrtc.unmute();
+    this.setState({muted: false});
+  } else {
+    this.webrtc.mute();
+    this.setState({muted: true});
+  }
+}
+pause(){
+  if(this.state.paused){
+    this.webrtc.resumeVideo();
+    this.setState({paused:false});
+  } else {
+    this.webrtc.pauseVideo();
+    this.setState({paused:true});
+  }
+  console.log(this.webrtc);
+}
 render() {
 
 return (
     <div className ='stream'>
-      {/* <video ref='local' id = 'localVideo'/> */}
       {/* {setTimeout( ()=> {
-       return <VideoChat
-       data ={this.webrtc}/>
-       },1000)}  */}
+        return <VideoChat
+        data ={this.webrtc}/>
+      },1000)}  */}
     
-    <div ref='remote' id ='remoteVideo'/>
-
+    <div ref='remotes' id ='remoteVideo'>
+      <div className="videoContainer">
+        <video  ref='local' id = 'localVideo'/>
+      </div>
+    </div>
+      <button onClick={this.mute.bind(this)}>Mute Audio</button>
+      <button onClick={this.pause.bind(this)}>Turn Camera Off</button>
 
     </div>
 )
