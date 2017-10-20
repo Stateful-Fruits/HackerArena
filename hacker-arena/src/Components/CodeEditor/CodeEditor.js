@@ -12,7 +12,7 @@ class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      testStatus: "",
+      testStatus: ""
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
@@ -20,7 +20,6 @@ class CodeEditor extends React.Component {
     this.sendDisruptions = this.sendDisruptions.bind(this);
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
     this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
-
   }
   
   componentDidMount() {
@@ -30,7 +29,7 @@ class CodeEditor extends React.Component {
     this.ace.editor.on("paste", () => {
       window.swal('You little cheater', '', 'warning');
       setTimeout( () => {
-        this.ace.editor.setValue("")
+        this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`)
       }, 500);
     });
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
@@ -47,11 +46,9 @@ class CodeEditor extends React.Component {
   }
 
   componentWillUpdate(){
-    console.log('Code editor updating with props: \n', this.props);
     // Alert users if someone has won the game
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];    
-
     // Check for disruptions sent to the user
     if(currentRoom.players[username].disruptions.length){
       currentRoom.players[username].disruptions.forEach(disruption => {
@@ -94,9 +91,7 @@ class CodeEditor extends React.Component {
   }
 
   endRoundWithClientAsVictor() {
-    // send win event (in room.players),
-    // update results object (in room),
-    // and increment user's wins (in database)
+    // send win event (in room.players), update results object (in room), and increment user's wins (in database)
     let room = this.props.currentRoom;
     let username = fire.auth().currentUser.email.split('@')[0];
 
@@ -104,33 +99,25 @@ class CodeEditor extends React.Component {
     room.timeTaken = (room.timeEnd - room.timeStart)/1000;
 
     let players = room.players;
-    let playersArr = Object.keys(room.players);
+    let playerNames = Object.keys(room.players);
     
     let resultForThisRound = {
-      players: playersArr,
+      players: playerNames,
       winner: username,
       problemID: room.problemID,
       timeTaken: room.timeTaken,
     }
-
     room.results = room.results || [];
-
     room.results.push(resultForThisRound);
-    console.log('room results after push', room.results);
     
     let winEvent = {
       eventName: 'winner',
       value: resultForThisRound
     }
 
-    for (let playerID in players) {
-      let player = players[playerID];
-      player.events = player.events || [];
-      player.events.push(winEvent);
-    }
+    playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
 
     fire.database().ref(`rooms/${room.key}`).set(room)
-    
     fire.database().ref(`users/${username}`).once('value').then(snapshot => {
       let wins = snapshot.val().wins + 1;
       fire.database().ref(`users/${username}/wins`).set(wins);
@@ -143,18 +130,11 @@ class CodeEditor extends React.Component {
     let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
     let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
-    if(Array.isArray(testStatus)){
-      if(testStatus.every(
-        item => {
-        return item.passed === true;
-        }
-      )) {
-        // if every test is passed
-        if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
-      } else {
-        window.swal('Oops...', 'Something went wrong!', 'error');
-      }
-    }
+    if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
+      // if every test is passed
+      if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
+    } else window.swal('Oops...', 'Something went wrong!', 'error');
+
     if((testStatus.length === currentRoom.problem.tests.length) && testStatus){
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
@@ -167,31 +147,21 @@ class CodeEditor extends React.Component {
     // ACE CONSOLE
     // Function to handle console.logs in the aceConsole
     let newLog = function(...theArgs){
-      let results = "";
-      let args = [].slice.call(arguments);
-      args.forEach( argument => {
-      // eslint-disable-next-line  
-        results += eval("'" + argument + "'");
-      });
+      let results = ""; // eslint-disable-next-line  
+      theArgs.forEach(argument => results += eval("'" + argument + "'"));
       $('#aceConsole').append(`<li id="log">${results}</li>`);
     }
     let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
     let newCode = consoleLogChange + code;
-    try {
-      // eslint-disable-next-line
-      if(eval(code)){
-          $('#aceConsole').append(`<li>${eval(newCode)}</li>`);
-      } else {
-        $('#aceConsole').append(`<li>undefined</li>`);
-      }
+    try { // eslint-disable-next-line
+      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
     }  catch(e) {
       $('#aceConsole').append(`<li>undefined</li>`);
     }
   }
   
   handleClear(){
-    // Clears the console
-    $('#aceConsole').empty();
+    $('#aceConsole').empty(); // Clears the console
   }
   
   render() {
