@@ -20,7 +20,7 @@ class NavigatorRoom extends React.Component {
       <div>
         <ProgressBar room={ room }/>
         <div id="editorAndTestSuite">
-          <CodeEditor currentRoom={ room }/>
+          <SpectatorEditor currentRoom={ room }/>
           <TestSuite currentRoom={ room }/>
         </div>
       </div>
