@@ -15,13 +15,14 @@ class NavigatorRoom extends React.Component {
 
         }
     render() {
-        let {roomId} = this.props
+        let {roomId, username} = this.props
         return (
           <div>
             <ProgressBar room={roomId}/>
             <div id="editorAndTestSuite">
               <SpectatorEditor currentRoom={roomId}/>
-              <TestSuite currentRoom={roomId}/>
+              <TestSuite currentRoom={roomId}
+                         groupName = {username}/>
             </div>
           </div>
         )
