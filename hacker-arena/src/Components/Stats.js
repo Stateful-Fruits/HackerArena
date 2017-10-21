@@ -1,43 +1,75 @@
 import React from 'react';
 import '../Styles/Stats.css';
+import fire from '../Firebase/firebase';
 import * as d3 from 'd3';
 import Sunburst from 'react-sunburst-d3-v4';
 
 class Stats extends React.Component { 
-  
-  componentDidMount(){
-    let data = {
-      "name": "Wins/Losses",
-      "children": [
-        {
-          "name": "losses",
-          "children":[
-            {"name": "data structures", "size": 90},
-            {"name": "something",
-              "children": [
-                {"name": "fsdaaaa", "size": 33},
-                {"name": "yello", "size":15}
-              ]
-            }
-          ]
-        },
-        {
-          "name": "wins",
-          "children": [
-            {"name": "data structures", "size": 100},
-            {"name": "algorithms", "size": 80},
-            {"name": "strings",
-              "children": [
-                {"name": "asdfdfsdf", "size": 25},
-                {"name": "dsfsdfzzzz", "size": 25}
-              ]},
-            {"name": "graphs", "size": 29},
-            {"name": "hahh", "size": 33},
+  constructor(props){
+    super(props);
+    this.state = {
 
-          ]
-        }
-      ]
     }
+  }
+  componentDidMount(){
+    //AN ARRAY OF TAGS FOR EACH PROBLEM
+    if(this.props.profile){
+      let problemTags = Object.values(this.props.profile.history).map(item => {
+        return [item[0].problem.tags];
+      })
+      console.log(problemTags)
+    }
+
+    let data =[]
+    if(this.props.profile){
+
+      console.log('STATS PROPS', this.props)
+      data = {
+        "name": "Wins/Losses",
+        "children": [
+          {
+            "name": "losses",
+            "size": (this.props.profile.losses)
+          },
+          {
+            "name": "wins",
+            "size": (this.props.profile.wins)
+          }
+        ]
+      }
+    }
+    // let data = {
+    //   "name": "Wins/Losses",
+    //   "children": [
+    //     {
+    //       "name": "losses",
+    //       "children":[
+    //         {"name": "data structures", "size": 90},
+    //         {"name": "something",
+    //           "children": [
+    //             {"name": "fsdaaaa", "size": 33},
+    //             {"name": "yello", "size":15}
+    //           ]
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       "name": "wins",
+    //       "children": [
+    //         {"name": "data structures", "size": 100},
+    //         {"name": "algorithms", "size": 80},
+    //         {"name": "strings",
+    //           "children": [
+    //             {"name": "asdfdfsdf", "size": 25},
+    //             {"name": "dsfsdfzzzz", "size": 25}
+    //           ]},
+    //         {"name": "graphs", "size": 29},
+    //         {"name": "hahh", "size": 33},
+
+    //       ]
+    //     }
+    //   ]
+    // }
     function computeTextRotation(d) {
         var angle = (d.x0 + d.x1) / Math.PI * 90;
 
