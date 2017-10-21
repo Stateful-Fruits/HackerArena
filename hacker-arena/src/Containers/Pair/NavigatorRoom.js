@@ -4,6 +4,8 @@ import fire from './../../Firebase/firebase';
 import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
 import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import TestSuite from '../../Components/TestSuite.js'; //From Simon
+import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
+
 
 //this should better be a view instead of room;
 class NavigatorRoom extends React.Component {
@@ -15,13 +17,26 @@ class NavigatorRoom extends React.Component {
   }
 
   render() {
-    let { room } = this.props
+    let { roomId, room, username, partnerName, partnerRole } = this.props
     return (
       <div>
+        YOU ARE A NAVIGATOR - TALK!!
         <ProgressBar room={ room }/>
         <div id="editorAndTestSuite">
-          <CodeEditor currentRoom={ room }/>
-          <TestSuite currentRoom={ room }/>
+          <SpectatorEditors 
+            gameRoom={room}
+            roomId={roomId}
+            username={username} 
+            partnerName ={partnerName}
+            partnerRole={partnerRole} 
+          />
+          <TestSuite 
+            currentRoom={room}
+            roomId={roomId}
+            username={username} 
+            partnerName ={partnerName}
+            partnerRole={partnerRole}
+          />
         </div>
       </div>
     )
