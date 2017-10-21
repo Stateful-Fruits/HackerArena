@@ -22,16 +22,16 @@ const GameRoomPreview = ({
       <ul className='list-group'>
         { playerSpans }
       </ul>
-      <div>
+      {/* <div>
         Spectators: {(spectators ? spectators.filter((spectatorName, i) => spectators.indexOf(spectatorName) === i).join(', ') : '')}
-      </div>
-      <button onClick={ () => navigate(`/GameRoom/${gameRoom.key}`) } disabled={playerCapacity === playerNames.length}>
+      </div> */}
+      <button onClick={ () => navigate(`Pair/GameRoom/${gameRoom.key}`) } disabled={playerCapacity === playerNames.length}>
         <h3>Join Game</h3> 
       </button>
-      <button onClick={ () => navigate(`/Spectate/${gameRoom.key}`) }>
+      {/* <button onClick={ () => navigate(`Pair/Spectate/${gameRoom.key}`) }>
         <h3>Spectate Game  <span className="badge badge-default badge-pill">{spectators ? spectators.length : 0}</span>
         </h3>
-      </button>
+      </button> */}
     </div>
   );
 };
