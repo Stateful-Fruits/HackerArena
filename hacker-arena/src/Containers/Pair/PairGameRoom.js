@@ -10,6 +10,9 @@ import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../Components/GameRoom/GameRoomError';
+import NavigatorRoom from './NavigatorRoom';
+import DriverRoom from './DriverRoom';
+
 import eventHandler from './EventHandler/eventHandler';
 
 import helpers from './../Helpers/helpers'
@@ -145,6 +148,7 @@ class GameRoom extends React.Component {
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
+
     if (this.props.gameRooms 
         && Object.keys(this.props.gameRooms).length 
         && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
@@ -153,7 +157,8 @@ class GameRoom extends React.Component {
         || !Object.keys(this.props.gameRooms).length 
         || !this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
+        || !this.props.gameRooms[this.props.roomId].players[username]) return (<GameRoomLoading />);
+
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
@@ -161,6 +166,26 @@ class GameRoom extends React.Component {
     let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
     let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
     let champion = mostTotalWins ? mostTotalWins.winner : null;
+
+    let username = this.props.username;
+
+    let role = helpers.getRoleFromUsername(room, username);
+    let partnerName = helpers.getPartnerName(room, username);
+    let partnerRole = helpers.getPartnerRole(room, username);
+
+    let navigatorRoom = <NavigatorRoom
+      currentRoom={room}
+      username={username} 
+      partnerName ={partnerName}
+      partnerRole={partnerRole}
+    />
+
+    let driverRoom = <DriverRoom
+      currentRoom={room}
+      username={username} 
+      partnerName ={partnerName}
+      partnerRole={partnerRole}
+    />
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (
@@ -183,15 +208,13 @@ class GameRoom extends React.Component {
         </div>
       )
     } else if (roomStatus === 'playing') {
-      return (
-        <div>
-            <ProgressBar room={ room }/>
-          <div id="editorAndTestSuite">
-            <CodeEditor currentRoom={room}/>
-            <TestSuite currentRoom={ room }/>
-          </div>
-        </div>
-      );
+      if (role === 'navigator') {
+        return navigatorRoom;
+      } else if (role === 'driver') {
+        return driverRoom;
+      } else {
+        return <div>Error - role does not seem to be navigator or driver. Fatal error.</div>
+      }
     } else {
       console.log('Room: ', room);
       return (
