@@ -3,8 +3,8 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import '../Styles/ActivityHeatMap.css';
 const ActivityHeatMap = (props) => {  
   // create array with objects {date : date, count: count}
-  // let userStats = props.profile.user.gameStatus.map(items =>{
-  //   return 
+  // let userStats = props.profile.history.map(items =>{
+  //   return JSON.stringify(newDate(items[0].timestamp)).slice(1,11);
   // })
   return (
   <div>
