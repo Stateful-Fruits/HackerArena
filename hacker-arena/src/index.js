@@ -11,8 +11,13 @@ import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
 import AddProblem from './Containers/AddProblem/AddProblem';
 import CreateGameRoom from './Containers/CreateGameRoom'
+
 import CodeRunLobby from './Containers/BoardGame/Lobby';
 import CodeRunRoom from './Containers/BoardGame/GameRoom';
+
+import PairHome from './Containers/Pair/PairHome'
+import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
+
 // To check Log in info
 import fire from './Firebase/firebase';
 
@@ -121,6 +126,23 @@ fire.auth().onAuthStateChanged(function(user) {
                     <Redirect to="/Login" />      
                   )
                 )}/>
+
+                <Route exact path="/Pair" render={() => (
+                  fire.auth().currentUser ? (
+                    <PairHome />
+                  ) : (
+                    <Redirect to="/Login" />      
+                  )
+                )}/>
+
+                <Route exact path="/Pair/CreateGameRoom" render={() => (
+                  fire.auth().currentUser ? (
+                    <PairCreateGameRoom />
+                  ) : (
+                    <Redirect to="/Login" />      
+                  )
+                )}/>
+
                 <Route exact path="/SignUp" component={SignUp}/>
                 <Route exact path="/Login" component={Login}/>
               </Switch>
