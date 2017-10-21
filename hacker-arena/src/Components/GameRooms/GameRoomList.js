@@ -43,11 +43,10 @@ class GameRoomList extends Component {
       ))
       .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
       .map((room, inx) => (
-      <div>
+      <div key={room.key + room.problemID}>
         <h3 style={{ color: 'green' }}>Private Game</h3>
         <GameRoomPreview 
           gameRoom={room}
-          key={room.key + inx}
           navigate={navigate}
         />
       </div>
