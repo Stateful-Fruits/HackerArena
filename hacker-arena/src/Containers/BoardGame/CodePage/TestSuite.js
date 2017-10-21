@@ -5,14 +5,15 @@ import '../../../Styles/TestSuite.css';
 /* Check if user is challenger or creator*/
 const TestSuite = props => {
   let username = fire.auth().currentUser.email.split('@')[0];
+  if (props.room.playerInfo[username].problem) {
     return(
       <div id="testSuite">
-        <h3 className="problemTitle"> {props.currentRoom.problem.title} </h3>
+        <h3 className="problemTitle"> {props.room.problem.title} </h3>
         <h4> PROBLEM DESCRIPTION  </h4>
-        <p id="description">{props.currentRoom.problem.description}</p>
+        <p id="description">{props.room.problem.description}</p>
         <h4 className="testTitle"> TESTS </h4>
-        {(props.currentRoom.players[username].testStatus && props.currentRoom.players[username].testStatus.length > 1) ? 
-          (<div className="testHolder">{props.currentRoom.players[username].testStatus.map((tests, i) => {
+        {(props.room.players[username].testStatus && props.room.players[username].testStatus.length > 1) ? 
+          (<div className="testHolder">{props.room.players[username].testStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"
@@ -28,6 +29,34 @@ const TestSuite = props => {
           }
       </div>
     )
+  } else {
+    return (
+      <div id="testSuite">
+      <h3 className="problemTitle"> No Problem Yet </h3>
+      <h4> PROBLEM DESCRIPTION  </h4>
+      <p id="description"> No Problem Description Yet</p>
+      <h4 className="testTitle"> TESTS </h4>
+      {(props.room.playerInfo[username].testStatus && props.room.players[username].testStatus.length > 1) ? 
+        (<div className="testHolder">{props.room.players[username].testStatus.map((tests, i) => {
+          let passing = "PASSED!"
+          if(!tests.passed){
+            passing = "FAILED!"
+          }
+          return <div key={tests.inputs + i}>
+            {passing === "FAILED!" ? 
+            <span className="failure">{passing} </span>
+            : <span className="success">{passing} </span>
+            }
+            <span>{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
+          </div>
+        })}</div>) : null
+        }
+    </div>
+
+
+
+    )
+  }
 }
 
 
