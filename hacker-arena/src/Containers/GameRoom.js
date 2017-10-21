@@ -93,7 +93,7 @@ class GameRoom extends React.Component {
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
           gameRoom.timeStart = performance.now();
-        } else if (playerNames.length + 1 === gameRoom.playerCapacity && gameRoom.gameStatus !== 'completed') {
+        } else if (playerNames.length + 1 === Number(gameRoom.playerCapacity) && gameRoom.gameStatus !== 'completed') {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
         // add you username to the gameroom
