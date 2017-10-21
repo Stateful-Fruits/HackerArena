@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import SpectatorEditor from './SpectatorEditor';
+import helpers from '../../Helpers/helpers'
 
 class SpectatorEditors extends Component {
   render() {
-    let { gameRoom } = this.props;
+    let { gameRoom, roomId, username, partnerName, partnerRole } = this.props;
+    let players = Object.keys(gameRoom.players)
+    let partner = players.filter(playerName => playerName === partnerName) 
+    let playersToShow = partner.length ? partner : players;
+    
     return (
             <div>
-              { Object.keys(gameRoom.players).map((playerName, i) => (
+              { playersToShow.map((playerName, i) => (
                 <SpectatorEditor 
                   playerName={playerName}
                   playerInput={gameRoom.players[playerName].liveInput}
