@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import fire from './../../Firebase/firebase';
 import SpectatorEditor from './SpectatorEditor';
 import ProgressBar from '../../Components/GameRoom/ProgressBar';
-import TestSuite from '../Components/TestSuite.js'; //From Simon
+import TestSuite from '../../Components/TestSuite.js'; //From Simon
 
 //this should better be a view instead of room;
 class NavigatorRoom extends React.Component {
+<<<<<<< HEAD
     constructor (props) {
         super (props);
         this.state = {
@@ -27,10 +28,27 @@ class NavigatorRoom extends React.Component {
           </div>
         )
     }
+=======
+  constructor (props) {
+    super (props);
+    this.state = {
+      allowEnter: true
+>>>>>>> dev
     }
-const mapStateToProps = (state) => ({
-            roomId: state.router.location.pathname.split('/')[2],
-            username: fire.auth().currentUser.email.split('@')[0],     
-          });
-export default connect(mapStateToProps)(NavigatorRoom);
-          
+  }
+
+  render() {
+    let { room } = this.props
+    return (
+      <div>
+        <ProgressBar room={ room }/>
+        <div id="editorAndTestSuite">
+          <CodeEditor currentRoom={ room }/>
+          <TestSuite currentRoom={ room }/>
+        </div>
+      </div>
+    )
+  }
+  }
+
+export default NavigatorRoom

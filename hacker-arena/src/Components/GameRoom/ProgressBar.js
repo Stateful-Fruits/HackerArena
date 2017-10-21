@@ -25,8 +25,8 @@ const ProgressBar = ({ room }) => {
       }
 
       { 
-        otherUsers.map((otherUserName) => (
-          <div style={{float:"right", margin: "10px"}}>
+        otherUsers.map((otherUserName, i) => (
+          <div style={{float:"right", margin: "10px"}} key={otherUserName+i}>
             <div>
             <span className="opponentLabels">Player: </span>
             <span className="opponent">{otherUserName}</span>
@@ -45,8 +45,8 @@ const ProgressBar = ({ room }) => {
         </div> : null
       }
       {
-        otherUsers.map((otherUserName) => (
-          <div className="progress">
+        otherUsers.map((otherUserName, i) => (
+          <div className="progress" key={otherUserName+i}>
             <div className="progress-bar progress-bar-striped progress-bar-danger progress-bar-animated" role="progressbar" aria-valuenow="70"
               aria-valuemin="0" aria-valuemax="100" style={{width: `${eachPlayerTestProgress[otherUserName]}%`}}>
               <span className="sr-only">bobo Complete</span>
