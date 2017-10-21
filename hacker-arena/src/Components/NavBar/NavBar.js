@@ -18,6 +18,8 @@ class NavBar extends Component {
             Code Run </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
           Pair Match </li>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Random'); }}>
+          Random </li>
           {/* <a href='/' className='leftNav nav-item navbar-brand'>Home</a>
           <a href='/About' className='leftNav nav-item navbar-brand'>About</a>
           <a href='/AddProblem' className='leftNav nav-item navbar-brand'>Add Problem</a>
