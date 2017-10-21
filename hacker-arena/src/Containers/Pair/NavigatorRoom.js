@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import fire from './../../Firebase/firebase';
-import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
+import SpectatorEditor from './SpectatorEditor';
 import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import TestSuite from '../Components/TestSuite.js'; //From Simon
 
@@ -20,7 +20,7 @@ class NavigatorRoom extends React.Component {
           <div>
             <ProgressBar room={roomId}/>
             <div id="editorAndTestSuite">
-              <CodeEditor currentRoom={roomId}/>
+              <SpectatorEditor currentRoom={roomId}/>
               <TestSuite currentRoom={roomId}/>
             </div>
           </div>
