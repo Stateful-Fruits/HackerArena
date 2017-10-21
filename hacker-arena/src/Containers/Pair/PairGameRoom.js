@@ -2,24 +2,25 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import fire from '../Firebase/firebase';
+import fire from '../../Firebase/firebase';
 
-import CodeEditor from '../Components/CodeEditor/CodeEditor.js'; //From Simon
-import TestSuite from '../Components/TestSuite.js'; //From Simon
-import ProgressBar from '../Components/GameRoom/ProgressBar';
-import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
-import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
-import GameRoomError from '../Components/GameRoom/GameRoomError';
+import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
+import TestSuite from '../../Components/TestSuite.js'; //From Simon
+import ProgressBar from '../../Components/GameRoom/ProgressBar';
+import GameRoomLoading from '../../Components/GameRoom/GameRoomLoading';
+import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
+import GameRoomError from '../../Components/GameRoom/GameRoomError';
+
 import NavigatorRoom from './NavigatorRoom';
 import DriverRoom from './DriverRoom';
 
-import eventHandler from './EventHandler/eventHandler';
+import eventHandler from './../EventHandler/eventHandler';
 
-import helpers from './../Helpers/helpers'
+import helpers from './../../Helpers/helpers'
 
-import '../Styles/GameRoom.css';
+import '../../Styles/GameRoom.css';
 
-class GameRoom extends React.Component {
+class PairGameRoom extends React.Component {
   constructor (props) {
     super (props);
     this.state = {
@@ -31,6 +32,7 @@ class GameRoom extends React.Component {
   }
   
   componentDidMount () {
+    console.log('pairgameRoom mounted')
     window.addEventListener('beforeunload', this.handleLeave);
     this.handleEnter();
   }
@@ -145,6 +147,7 @@ class GameRoom extends React.Component {
 
   
   render () {
+    console.log('renderPairGameRoom is running');
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
@@ -237,4 +240,6 @@ const mapDispatcherToProps = (dispatch) => ({
   navigate: (route) => dispatch(push(route))
 });
 
-export default connect(mapStateToProps, mapDispatcherToProps)(GameRoom);
+console.log('pairGameRoom', PairGameRoom);
+
+export default connect(mapStateToProps, mapDispatcherToProps)(PairGameRoom);

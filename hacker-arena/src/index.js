@@ -17,6 +17,7 @@ import CodeRunRoom from './Containers/BoardGame/GameRoom';
 
 import PairHome from './Containers/Pair/PairHome'
 import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
+import PairGameRoom from './Containers/Pair/PairGameRoom';
 
 // To check Log in info
 import fire from './Firebase/firebase';
@@ -142,6 +143,14 @@ fire.auth().onAuthStateChanged(function(user) {
                     <Redirect to="/Login" />      
                   )
                 )}/>
+
+                <Route exact path="/Pair/GameRoom/:roomId" render={() => (
+                  fire.auth().currentUser ? (
+                    <PairGameRoom />
+                    ) : (
+                    <Redirect to="/Login" />      
+                    )
+                  )}/>
 
                 <Route exact path="/SignUp" component={SignUp}/>
                 <Route exact path="/Login" component={Login}/>

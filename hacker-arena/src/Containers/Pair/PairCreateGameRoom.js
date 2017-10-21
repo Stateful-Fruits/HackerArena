@@ -72,7 +72,7 @@ class PairCreateGameRoom extends React.Component {
     };
 
     db.Rooms.push(room).then(added => {
-      this.props.navigateToGameRoom(added.key);
+      this.props.navigateToPairGameRoom(added.key);
     });
   }
 
@@ -100,12 +100,12 @@ class PairCreateGameRoom extends React.Component {
     let rounds = this.state.rounds;
     let creatorRole = this.state.creatorRole;
 
-
     this.createRoom(problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty, maxDifficulty);
   }
 
   onChange(e) {
     e.preventDefault();
+    console.log('e.target.name', 'e.target.value', e.target.name, e.target.value);
 
     this.setState({[e.target.name] : e.target.value})
   }
@@ -170,7 +170,7 @@ class PairCreateGameRoom extends React.Component {
           />
           <br/>
           Your role
-          <select name="role" value={this.state.creatorRole} onChange={this.onChange}>
+          <select name="creatorRole" value={this.state.creatorRole} onChange={this.onChange}>
             <option value="driver">driver</option>
             <option value="navigator">navigator</option>
           </select>
@@ -201,7 +201,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatcherToProps = (dispatch) => {
   return {
-    navigateToGameRoom: (id) => {dispatch(push('/GameRoom/' + id))}
+    navigateToPairGameRoom: (id) => {dispatch(push('/Pair/GameRoom/' + id))}
   }
 }
 export default connect(mapStateToProps, mapDispatcherToProps)(PairCreateGameRoom);
