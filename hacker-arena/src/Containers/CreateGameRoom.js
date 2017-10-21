@@ -20,12 +20,12 @@ class CreateGameRoom extends React.Component {
       startingCredits: 5,
       playerCapacity: 2,
       rounds: 1,
+      invitedPlayers: []
     }
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCheck = this.onCheck.bind(this);
-
     this.createRoom = this.createRoom.bind(this);
   }
 
@@ -53,18 +53,18 @@ class CreateGameRoom extends React.Component {
     const room = {
       roomStatus: 'standby',
       isPairRoom: false,
-      startingCredits: startingCredits,
-      isPrivate: isPrivate,
-      problemID: problemID,
-      problem: problem,
+      startingCredits,
+      isPrivate,
+      problemID,
+      problem,
       spectators: 0,
-      rounds: rounds,
+      rounds,
       currentRound: 1,
-      minDifficulty: minDifficulty,
-      maxDifficulty: maxDifficulty,
+      minDifficulty,
+      maxDifficulty,
       playerCapacity
     };
-
+    if (room.isPrivate) room.invitedPlayers = this.state.invitedPlayers;
     db.Rooms.push(room).then(added => {
       this.props.navigateToGameRoom(added.key);
     });
@@ -74,9 +74,7 @@ class CreateGameRoom extends React.Component {
     e.preventDefault();
     
     const slider = document.getElementById('slider'); 
-    console.log('slider', slider)
     let sliderValues = slider.noUiSlider.get();  
-    console.log('sliderValues', sliderValues)  
     
     let problemID = this.state.problemID;
     let minDifficulty = parseInt(sliderValues[0], 10);
@@ -93,24 +91,40 @@ class CreateGameRoom extends React.Component {
     let playerCapacity = this.state.playerCapacity;
     let rounds = this.state.rounds;
 
-
     this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty, maxDifficulty);
   }
 
   onChange(e) {
     e.preventDefault();
-
-    console.log('about to set state', JSON.stringify({[e.target.name] : e.target.value}))
-
-    this.setState({[e.target.name] : e.target.value})
+    // if changing the number of players to invite, need up update number of inputs
+    // to show the user when enter their friend's names
+    if (e.target.name === 'playerCapacity' && this.state.isPrivate) {
+      let invitedPlayers = this.state.invitedPlayers;
+      let previousCapacity = this.state.playerCapacity;
+      if (previousCapacity > e.target.value) {
+        invitedPlayers = invitedPlayers.slice(0, e.target.value - 1);
+      } else {
+        for (let i = 0; i < (e.target.value - previousCapacity); i++) invitedPlayers.push('');
+      }
+      this.setState({
+        [e.target.name] : e.target.value,
+        invitedPlayers 
+      }); 
+    } else {
+      this.setState({[e.target.name] : e.target.value}); 
+    }
   }
 
   onCheck(e) {
     e.stopPropagation();
     let name = e.target.name;
-
+    let invitedPlayers = [];
+    for (let i = 0; i < this.state.playerCapacity - 1; i++) invitedPlayers.push('');
     this.setState(({ isPrivate }) => {
-      return {[name] : !isPrivate}})
+      return {
+        [name] : !isPrivate,
+        invitedPlayers
+      }})
   }
 
   render () {
@@ -145,6 +159,26 @@ class CreateGameRoom extends React.Component {
             name="playerCapacity"
             onChange={this.onChange}
           />
+          {
+            !this.state.isPrivate ? null : (
+              <div>
+                <h3>Invite Players:</h3>
+                <ul>
+                  {
+                    this.state.invitedPlayers.map((player, i) => (
+                      <li key={i}>
+                        <input type='text' value={this.state.invitedPlayers[i]} onChange={(e) => {
+                          let invitedPlayers = [...this.state.invitedPlayers];
+                          invitedPlayers[i] = e.target.value;
+                          this.setState({ invitedPlayers });
+                        }}/>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            )
+          }
           <br/>
           Make room private
           <input
