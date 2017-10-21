@@ -5,6 +5,8 @@ import noUiSlider from 'nouislider'
 
 import db from '../Firebase/db';
 
+import fire from '../Firebase/firebase';
+
 import helpers from './../Helpers/helpers';
 import './../Styles/CreateGameRoom.css';
 import './../Styles/nouislider.css';
@@ -102,7 +104,7 @@ class CreateGameRoom extends React.Component {
       let invitedPlayers = this.state.invitedPlayers;
       let previousCapacity = this.state.playerCapacity;
       if (previousCapacity > e.target.value) {
-        invitedPlayers = invitedPlayers.slice(0, e.target.value - 1);
+        invitedPlayers = invitedPlayers.slice(0, e.target.value);
       } else {
         for (let i = 0; i < (e.target.value - previousCapacity); i++) invitedPlayers.push('');
       }
@@ -117,9 +119,11 @@ class CreateGameRoom extends React.Component {
 
   onCheck(e) {
     e.stopPropagation();
+    let username = fire.auth().currentUser.email.split('@')[0];
     let name = e.target.name;
     let invitedPlayers = [];
-    for (let i = 0; i < this.state.playerCapacity - 1; i++) invitedPlayers.push('');
+    for (let i = 0; i < this.state.playerCapacity; i++) invitedPlayers.push('');
+    invitedPlayers[0] = username;
     this.setState(({ isPrivate }) => {
       return {
         [name] : !isPrivate,
@@ -173,7 +177,7 @@ class CreateGameRoom extends React.Component {
                           this.setState({ invitedPlayers });
                         }}/>
                       </li>
-                    ))
+                    )).slice(1)
                   }
                 </ul>
               </div>
