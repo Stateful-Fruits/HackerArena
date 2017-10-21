@@ -34,17 +34,42 @@ class GameRoomList extends Component {
       roomData.key = roomKey;
       return roomData;
     });
+    let privateGames = rooms.filter(eachRoom => (
+      (!Object.keys(eachRoom).includes('isPrivate') ? eachRoom.isPrivate : false) && 
+       !Object.keys(eachRoom).includes('isTrusted') &&
+       !Object.keys(eachRoom).includes('challengerName')
+      ))
+      .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
+      .map((room, inx) => (
+        <GameRoomPreview 
+          gameRoom={room}
+          key={room.key + inx}
+          navigate={navigate}
+        />
+    ));
     return (
       <div>
         <h3> Sort By: </h3>
         <select className='form-control' style={{ width: '20%', marginLeft: '40%', fontSize: '1.5em', height: '40px' }} onChange={this.handleSortChange} value={this.state.filters[this.state.filterInx]}>
           { this.state.filters.map((filter) => <option key={filter} style={{ fontSize: '1.5em' }}>{filter}</option>) }
         </select>
+        { privateGames.length ?
+          <div style={{ border: '5px solid green', margin: '25%' }}>
+            <h3>Private Games</h3>
+            <ul className='list-group'>
+              { privateGames }
+            </ul>
+          </div> : null
+        }
         <ul className='list-group'>
           { rooms.sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
-                 .filter((eachRoom) => !Object.keys(eachRoom).includes('isTrusted') && !Object.keys(eachRoom).includes('challengerName'))
-                 .reverse()
-                 .map((room, inx) => (
+              .filter(eachRoom => (
+                !Object.keys(eachRoom).includes('isTrusted') && 
+                !Object.keys(eachRoom).includes('challengerName') &&
+                (!Object.keys(eachRoom).includes('isPrivate') ? !eachRoom.isPrivate : true))
+              )
+              .reverse()
+              .map((room, inx) => (
             <GameRoomPreview 
               gameRoom={room}
               key={room.key + inx}

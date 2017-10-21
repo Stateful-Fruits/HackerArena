@@ -13,7 +13,7 @@ import GameRoomError from '../Components/GameRoom/GameRoomError';
 import eventHandler from './EventHandler/eventHandler';
 import WinnerDisplay from '../Components/GameRoom/WinnerDisplay';
 
-import helpers from './../Helpers/helpers'
+import helpers from './../Helpers/helpers';
 
 import '../Styles/GameRoom.css';
 
@@ -139,9 +139,7 @@ class GameRoom extends React.Component {
         && Object.keys(this.props.gameRooms).length 
         && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     // If we haven't retrieved gameRooms from firebase or our room doesn't exist
-    if (!this.props.gameRooms 
-        || !Object.keys(this.props.gameRooms).length 
-        || !this.props.gameRooms[this.props.roomId]
+    if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
     let { gameRooms, roomId } = this.props;
