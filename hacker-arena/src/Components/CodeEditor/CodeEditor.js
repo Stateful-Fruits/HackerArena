@@ -104,7 +104,7 @@ class CodeEditor extends React.Component {
     let resultForThisRound = {
       players: playerNames,
       winner: username,
-      problemID: room.problemID,
+      problem: room.problem,
       timeTaken: room.timeTaken,
       timeStamp: Date.now()
     }
