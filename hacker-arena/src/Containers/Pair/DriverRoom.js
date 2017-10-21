@@ -17,7 +17,7 @@ class DriverRoom extends React.Component {
     let { room } = this.props
     return (
       <div>
-        <ProgressBar room={room}/>
+        YOU ARE A DRIVER. CODE!
         <div id="editorAndTestSuite">
           <CodeEditor currentRoom={room}/>
         </div>
