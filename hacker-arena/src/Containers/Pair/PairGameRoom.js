@@ -4,9 +4,9 @@ import { push } from 'react-router-redux';
 
 import fire from '../../Firebase/firebase';
 
-import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
-import TestSuite from '../../Components/TestSuite.js'; //From Simon
-import ProgressBar from '../../Components/GameRoom/ProgressBar';
+//import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
+//import TestSuite from '../../Components/TestSuite.js'; //From Simon
+//import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
@@ -117,6 +117,7 @@ class PairGameRoom extends React.Component {
           liveInput: ''
         };
         // and update the database
+        console.log('gameRoom before database', gameRoom)
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
@@ -147,7 +148,10 @@ class PairGameRoom extends React.Component {
 
   
   render () {
-    console.log('renderPairGameRoom is running');
+    console.log('renderPairGameRoom is running', this.props.gameRooms);
+    console.log('this.props.roomId', this.props.roomId);
+    console.log('this.props.gameRooms[this.props.roomId]', this.props.gameRooms[this.props.roomId]);
+    console.log('this.props.gameRooms[this.props.roomId].players', this.props.gameRooms[this.props.roomId].players);
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
@@ -160,11 +164,12 @@ class PairGameRoom extends React.Component {
         || !Object.keys(this.props.gameRooms).length 
         || !this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[username]) return (<GameRoomLoading />);
+        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
 
     let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
+    console.log('roomStatus is currently', roomStatus);
     let results = room.results;
     let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
     let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
@@ -177,14 +182,16 @@ class PairGameRoom extends React.Component {
     let partnerRole = helpers.getPartnerRole(room, username);
 
     let navigatorRoom = <NavigatorRoom
-      currentRoom={room}
+      roomId={roomId}
+      room={room}
       username={username} 
       partnerName ={partnerName}
       partnerRole={partnerRole}
     />
 
     let driverRoom = <DriverRoom
-      currentRoom={room}
+      roomId={roomId}
+      room={room}
       username={username} 
       partnerName ={partnerName}
       partnerRole={partnerRole}
@@ -211,6 +218,7 @@ class PairGameRoom extends React.Component {
         </div>
       )
     } else if (roomStatus === 'playing') {
+      console.log('everyone recognizes we are playing');
       if (role === 'navigator') {
         return navigatorRoom;
       } else if (role === 'driver') {
@@ -230,7 +238,7 @@ class PairGameRoom extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  roomId: state.router.location.pathname.split('/')[2],
+  roomId: state.router.location.pathname.split('/')[3],
   username: fire.auth().currentUser.email.split('@')[0],
   gameRooms: state.gameRooms,
   problems: state.problems
