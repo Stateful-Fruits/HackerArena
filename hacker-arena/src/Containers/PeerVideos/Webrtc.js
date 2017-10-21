@@ -60,6 +60,8 @@ class Webrtc extends Component {
     });
     this.webrtc = webrtc;
     console.log('video object', this.refs.remote);
+    console.log('hello',room);    
+    console.log(this.webrtc)
     }
 
 componentWillReceiveProps(nextProps) {
@@ -88,9 +90,7 @@ pause(){
   }
   console.log(this.webrtc);
 }
-startVideo () {
-this.webrtc.startLocalVideo();
-}
+
 render() {
 
 return (

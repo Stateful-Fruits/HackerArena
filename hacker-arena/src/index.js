@@ -17,6 +17,7 @@ import CodeRunRoom from './Containers/BoardGame/GameRoom';
 
 import PairHome from './Containers/Pair/PairHome'
 import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
+import Random from './Components/Random.js'
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
 // To check Log in info
@@ -154,6 +155,7 @@ fire.auth().onAuthStateChanged(function(user) {
 
                 <Route exact path="/SignUp" component={SignUp}/>
                 <Route exact path="/Login" component={Login}/>
+                <Route exact path="/Random" component={Random}/>
               </Switch>
             )
           }
