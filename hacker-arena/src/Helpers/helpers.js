@@ -60,4 +60,26 @@ helpers.getUsernameFromEmail = (str) => {
   return str.slice(0,position)
 }
 
+helpers.getRole = (room, username) => {
+
+}
+
+helpers.getPartnerName = (room, username) => {
+  
+}
+
+helpers.getPartnerName = (room, username) => {
+  
+}
+
+helpers.getTeamIndex = (room, username) => {
+  let teams = room.teams;
+
+  if (teams) {
+    return teams.findIndex((team) => {
+      return team.driver === username || team.navigator === username
+    })
+  }
+}
+
 export default helpers;
