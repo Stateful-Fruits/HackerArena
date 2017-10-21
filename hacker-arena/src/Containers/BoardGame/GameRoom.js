@@ -5,8 +5,8 @@ import { push } from 'react-router-redux';
 import Board from './Board';
 import Dice from './Dice';
 import MovePlayer from './MovePlayer';
-import CodeEditor from '../../Components/CodeEditor/CodeEditor';
-import TestSuite from '../../Components/TestSuite';
+import CodeEditor from './CodePage/CodeEditor';
+import TestSuite from './CodePage/TestSuite';
 
 class GameRoom extends React.Component {
   constructor (props) {
@@ -34,7 +34,7 @@ class GameRoom extends React.Component {
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
-      let firstTile = room.board[0][0];
+      let firstTile = room.board[0][0][0];
       if (notFull && notAlreadyIn) {//not full nor started and not in;
         room.players.push(user);
         firstTile.push(user);
@@ -48,9 +48,6 @@ class GameRoom extends React.Component {
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && wasIn && notAlreadyIn) { //refresh coming back
         room.players.push(user);
-        if (firstTile.indexOf(user) === -1) {
-          firstTile.push(user);
-        }
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && notAlreadyIn) {
         navigate('/CodeRunLobby');
@@ -99,9 +96,9 @@ class GameRoom extends React.Component {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
           dice = <Dice room={room} user={user}/>;
         } else {
-          // codePage = <div id="editorAndTestSuite">
-          //   <CodeEditor currentRoom={room}/>
-          //   <TestSuite currentRoom={room}/>
+          // codePage = <div>
+          //   <CodeEditor room={room}/>
+          //   <TestSuite room={room}/>
           // </div>;
           canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
         }
@@ -130,7 +127,9 @@ class GameRoom extends React.Component {
           {dice}
         </div>
         {move}
-        {codePage}
+        <div id="editorAndTestSuite">
+          {codePage}
+        </div>
         <div className='bottomend'></div>
       </div>
     }

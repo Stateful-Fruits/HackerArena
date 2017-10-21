@@ -12,13 +12,18 @@ class CreateRoom extends React.Component {
   createRoom () {
     let problems = this.props.problems;
     let user = fire.auth().currentUser.email.split('@')[0];
-    const room = {
+    let room = {
       players: [user],
       playerInfo: {
         [user]: {
           position: [0,0],
           diceResult: 0,
           canMove: true,
+          disruptions: [''],
+          liveInput: '',
+          events: '',
+          credits: 5,
+          testStatus: []
         }
       },
       gameStarted: false,
@@ -28,15 +33,23 @@ class CreateRoom extends React.Component {
       spectators: 0,
       playerTurn: user,
       board: [
-        [[0,user],[0],[0],[0],[0],[0],[0]],
-        [[0],[0],[0],[0],[0],[0],[0]],
-        [[0],[0],[0],[0],[0],[0],[0]],
-        [[0],[0],[0],[0],[0],[0],[0]],
-        [[0],[0],[0],[0],[0],[0],[0]],
-        [[0],[0],[0],[0],[0],[0],[0]],
-        [[0],[0],[0],[0],[0],[0],['End']],
+        [[[0,user]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[['END']]]
       ]
     }
+    room.board = room.board.map((row, i) => {
+      return row.map((ele, j) => {
+        var keys = Object.keys(room.problems);
+        var random = Math.floor(Math.random() * keys.length);
+        console.log('keys', room.problems[keys[random]]);
+        return ele.concat(room.problems[keys[random]]);
+      })
+    })
     db.BoardRooms.push(room).then(added => {
       room.key = added.key;
       fire.database().ref('BoardRooms/' + added.key).set(room);
