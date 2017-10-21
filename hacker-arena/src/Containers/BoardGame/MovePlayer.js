@@ -16,9 +16,9 @@ class MovePlayer extends React.Component {
     let row = position[0];
     let col = position[1];
     if (direction === 'Up' && room.board[row - 1]) {
-      room.board[row][col] = room.board[row][col].filter(player => player !== user);
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       row -= 1;
-      room.board[row][col].push(user);
+      room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
@@ -26,9 +26,9 @@ class MovePlayer extends React.Component {
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Down' && room.board[row+1]) {
-      room.board[row][col] = room.board[row][col].filter(player => player !== user);
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       row += 1;
-      room.board[row][col].push(user);
+      room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
@@ -36,9 +36,9 @@ class MovePlayer extends React.Component {
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Left' && room.board[row][col-1]) {
-      room.board[row][col] = room.board[row][col].filter(player => player !== user);
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       col -= 1;
-      room.board[row][col].push(user);
+      room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
@@ -46,9 +46,9 @@ class MovePlayer extends React.Component {
       }
       fire.database().ref('BoardRooms/' + room.key).set(room);
     } else if (direction === 'Right' && room.board[row][col+1]) {
-      room.board[row][col] = room.board[row][col].filter(player => player !== user);
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       col += 1;
-      room.board[row][col].push(user);
+      room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
       if (userInfo.diceResult === 0) {
