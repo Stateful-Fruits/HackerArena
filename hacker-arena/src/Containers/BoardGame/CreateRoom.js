@@ -19,6 +19,9 @@ class CreateRoom extends React.Component {
           position: [0,0],
           diceResult: 0,
           canMove: true,
+          disruptions: [''],
+          liveInput: '',
+          credits: ''
         }
       },
       gameStarted: false,

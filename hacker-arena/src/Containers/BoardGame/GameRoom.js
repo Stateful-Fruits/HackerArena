@@ -48,9 +48,6 @@ class GameRoom extends React.Component {
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && wasIn && notAlreadyIn) { //refresh coming back
         room.players.push(user);
-        if (firstTile.indexOf(user) === -1) {
-          firstTile.push(user);
-        }
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && notAlreadyIn) {
         navigate('/CodeRunLobby');
