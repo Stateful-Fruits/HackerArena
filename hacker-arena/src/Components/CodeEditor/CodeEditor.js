@@ -106,6 +106,7 @@ class CodeEditor extends React.Component {
       winner: username,
       problemID: room.problemID,
       timeTaken: room.timeTaken,
+      timeStamp: Date.now()
     }
     room.results = room.results || [];
     room.results.push(resultForThisRound);

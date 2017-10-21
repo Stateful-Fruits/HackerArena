@@ -44,10 +44,18 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
       }
 
     } else if (room.playersReady < numPlayers) {
-      console.log('everyone is NOT ready yet.')
+      console.log('everyone is NOT ready yet.');
+
+      // still, put this user's history in the database
+      fire.database().ref(`users/${username}/history/${roomId}`).set(resultsSoFar);   
+
       room.roomStatus = 'intermission';
     } else if (isLastRound) {
       console.log('everyone is ready and the last round just completed')
+
+      // putting user history in firebase
+      fire.database().ref(`users/${username}/history/${roomId}`).set(resultsSoFar);        
+
       room.roomStatus = 'completed';
     }
     
@@ -59,6 +67,7 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
 // ---------------- Events ----------------
 
 eventHandler.winner = function(room, roomId, username, eventValue, problems) {
+  console.log('problems in eventHandler.winner', problems);
   let resultsSoFar = room.results.slice();
   let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
 
@@ -71,9 +80,9 @@ eventHandler.winner = function(room, roomId, username, eventValue, problems) {
 
   for (let player in resultsByPlayer) {
     let result = resultsByPlayer[player];
-    scoreMessage = scoreMessage + `<div>${player}: ${result} wins \n</div>`
+    scoreMessage = scoreMessage + `<div>${player}: ${result} wins \n</div>`;
   }
-
+  
   return (() => {
     if (isClientWinner) {
       return window.swal(

@@ -21,7 +21,13 @@ class CreateRoom extends React.Component {
           canMove: true,
           disruptions: [''],
           liveInput: '',
+<<<<<<< HEAD
           credits: ''
+=======
+          events: '',
+          credits: 5,
+          testStatus: []
+>>>>>>> dev
         }
       },
       gameStarted: false,
