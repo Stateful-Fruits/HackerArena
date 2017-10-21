@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import noUiSlider from 'nouislider'
 
-import db from '../Firebase/db';
+import fire from './../../Firebase/firebase';
+import db from './../../Firebase/db';
 
-import helpers from './../Helpers/helpers';
-import './../Styles/CreateGameRoom.css';
-import './../Styles/nouislider.css';
+import helpers from './../../Helpers/helpers';
+import './../../Styles/PairCreateGameRoom.css';
+import './../../Styles/nouislider.css';
 
-
-class CreateGameRoom extends React.Component {
+class PairCreateGameRoom extends React.Component {
   constructor (props) {
     super (props);
 
@@ -18,8 +18,9 @@ class CreateGameRoom extends React.Component {
       problemID: Object.keys(props.problems)[0],
       isPrivate: false,
       startingCredits: 5,
-      playerCapacity: 2,
+      maxPairs: 2,
       rounds: 1,
+      creatorRole: 'driver'
     }
 
     this.onChange = this.onChange.bind(this);
@@ -47,12 +48,13 @@ class CreateGameRoom extends React.Component {
     }))
   }
 
-  createRoom (problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty = 0, maxDifficulty = 8) {
+  createRoom (problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty = 0, maxDifficulty = 8) {
+    let username = fire.auth().currentUser.email.split('@')[0];
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
       roomStatus: 'standby',
-      isPairRoom: false,
+      isPairRoom: true,
       startingCredits: startingCredits,
       isPrivate: isPrivate,
       problemID: problemID,
@@ -62,7 +64,11 @@ class CreateGameRoom extends React.Component {
       currentRound: 1,
       minDifficulty: minDifficulty,
       maxDifficulty: maxDifficulty,
-      playerCapacity
+      maxPairs: maxPairs,
+      playerCapacity: maxPairs * 2,
+      teams: [
+        {[creatorRole]: username}
+      ]
     };
 
     db.Rooms.push(room).then(added => {
@@ -90,17 +96,16 @@ class CreateGameRoom extends React.Component {
 
     let isPrivate = this.state.isPrivate
     let startingCredits = this.state.startingCredits;
-    let playerCapacity = this.state.playerCapacity;
+    let maxPairs = this.state.maxPairs;
     let rounds = this.state.rounds;
+    let creatorRole = this.state.creatorRole;
 
 
-    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty, maxDifficulty);
+    this.createRoom(problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty, maxDifficulty);
   }
 
   onChange(e) {
     e.preventDefault();
-
-    console.log('about to set state', JSON.stringify({[e.target.name] : e.target.value}))
 
     this.setState({[e.target.name] : e.target.value})
   }
@@ -136,12 +141,12 @@ class CreateGameRoom extends React.Component {
             <option value="3">3</option>
           </select>
           <br/>
-          Max Players
+          Max Pairs
           <input
             type="number" 
-            value={this.state.playerCapacity} 
+            value={this.state.maxPairs} 
             min="1" 
-            max="4" 
+            max="2"
             name="playerCapacity"
             onChange={this.onChange}
           />
@@ -164,11 +169,18 @@ class CreateGameRoom extends React.Component {
             onChange={this.onChange}
           />
           <br/>
+          Your role
+          <select name="role" value={this.state.creatorRole} onChange={this.onChange}>
+            <option value="driver">driver</option>
+            <option value="navigator">navigator</option>
+          </select>
+          <br/>
           Choose a problem
           <select name="problemID" value={this.state.problemID} onChange={this.onChange}>
             {problemsArr}
             <option value="random">random!</option>
           </select>
+          <br/>
           <br/>
           Select a difficulty level for this and subsequent problems
           <div className="slider-container">
@@ -192,4 +204,4 @@ const mapDispatcherToProps = (dispatch) => {
     navigateToGameRoom: (id) => {dispatch(push('/GameRoom/' + id))}
   }
 }
-export default connect(mapStateToProps, mapDispatcherToProps)(CreateGameRoom);
+export default connect(mapStateToProps, mapDispatcherToProps)(PairCreateGameRoom);

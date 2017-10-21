@@ -16,6 +16,8 @@ class NavBar extends Component {
             Add Problem </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/CodeRunLobby'); }}>
             Code Run </li>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
+          Pair Match </li>
           {/* <a href='/' className='leftNav nav-item navbar-brand'>Home</a>
           <a href='/About' className='leftNav nav-item navbar-brand'>About</a>
           <a href='/AddProblem' className='leftNav nav-item navbar-brand'>Add Problem</a>
