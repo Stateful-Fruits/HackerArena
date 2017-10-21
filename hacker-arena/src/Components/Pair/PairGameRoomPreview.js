@@ -21,7 +21,6 @@ const GameRoomPreview = ({
   return (
     <div className='list-group-item' style={{ color: 'black', border: '3px solid #222', margin: '1%', marginLeft: '20%', marginRight: '20%'}}>
       <ul className='list-group'>
-        { playerSpans }
       </ul>
       <div>
         Spectators: {(spectators ? spectators.filter((spectatorName, i) => spectators.indexOf(spectatorName) === i).join(', ') : '')}
