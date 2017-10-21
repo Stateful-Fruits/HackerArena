@@ -7,33 +7,10 @@ import TestSuite from '../../Components/TestSuite.js'; //From Simon
 
 //this should better be a view instead of room;
 class NavigatorRoom extends React.Component {
-<<<<<<< HEAD
-    constructor (props) {
-        super (props);
-        this.state = {
-            allowEnter: true
-          }
-
-        }
-    render() {
-        let {roomId, username} = this.props
-        return (
-          <div>
-            <ProgressBar room={roomId}/>
-            <div id="editorAndTestSuite">
-              <SpectatorEditor currentRoom={roomId}/>
-              <TestSuite currentRoom={roomId}
-                         groupName = {username}/>
-            </div>
-          </div>
-        )
-    }
-=======
   constructor (props) {
     super (props);
     this.state = {
       allowEnter: true
->>>>>>> dev
     }
   }
 

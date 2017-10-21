@@ -17,12 +17,9 @@ import CodeRunRoom from './Containers/BoardGame/GameRoom';
 
 import PairHome from './Containers/Pair/PairHome'
 import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
-<<<<<<< HEAD
 import Random from './Components/Random.js'
-=======
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
->>>>>>> dev
 // To check Log in info
 import fire from './Firebase/firebase';
 
