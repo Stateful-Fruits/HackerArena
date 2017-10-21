@@ -25,7 +25,7 @@ class Webrtc extends Component {
         remoteVideosEl: "",
         // remoteVideosEl: '',
         
-        autoRequestMedia: false,
+        autoRequestMedia: true,
         detectSpeakingEvents: true,
       });
 

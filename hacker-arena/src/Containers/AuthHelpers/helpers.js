@@ -17,7 +17,7 @@ auth.normalLogin = function(email, password, navigate) {
 
 auth.normalSignUp = function(email, password, navigate) {
   const db = firebase.database();
-  firebase.auth().createUserWithEmailAndPassword(email, password).then((res,b)=> {
+  return firebase.auth().createUserWithEmailAndPassword(email, password).then((res,b)=> {
     const username = helpers.getUsernameFromEmail(res.email); 
     db.ref('users/'+username).set({
       id : res.uid,
@@ -26,9 +26,6 @@ auth.normalSignUp = function(email, password, navigate) {
       losses: 0
     });
     navigate('/');
-  })
-  .catch((err)=> {
-    this.setState({errmsg: err.message})
   })
 };
 

@@ -31,7 +31,10 @@ class SignUp extends React.Component {
     let email = this.state.email;
     let password = this.state.password;
 
-    auth.normalSignUp(email, password, navigate);
+    auth.normalSignUp(email, password, navigate)
+    .catch((err)=> {
+      this.setState({errmsg: err.message})
+    });
   }
 
   signInWithGoogle(e) {
