@@ -1,24 +1,66 @@
 const helpers = {};
 
+helpers.prepResultsObjectFromWinner = function(username, players, teams = [], problem, timeTaken, timeStamp) {
+  // send win event (in room.players), update results object (in room), and increment user's wins (in database)
+  let room = {}
+  room.teams = teams || {};
+
+  let playersByRole = Object.keys(players).reduce((playerObj, playerName) => {
+    playerObj[playerName] = helpers.getRoleFromUsername(room, playerName) || 'hacker';
+    return playerObj;
+  }, {});
+
+
+  let roleName = helpers.getRoleFromUsername(room, username) || 'hacker';
+  let partnerName = helpers.getPartnerName(room, username);
+  let partnerRole = helpers.getPartnerRole(room, username);
+  
+  let resultForThisRound = {
+    players: playersByRole,
+    winners: {
+      [roleName]: username,
+    },
+    problem: problem,
+    timeTaken: timeTaken,
+    timeStamp: timeStamp
+  }
+
+  if (partnerName) {
+    resultForThisRound.winners[partnerRole] = partnerName;
+  }
+
+  return resultForThisRound;
+}
+
 helpers.calculateResultsByPlayer = function(results) {
-  console.log('results before calc', results);
+  let baseObj = {}
+  let playersObj = results[0].players
+  console.log('playersObj', playersObj)
+  
+
+  for (let playerName in playersObj) {
+    baseObj[playerName] = {
+      role: playersObj[playerName],
+      wins: 0
+    }
+  }
+  
+  console.log('baseObj', baseObj)
 
   return results.reduce((resultsObj, result) => {
     let winners = result.winners;
 
     for (let roleName in winners) {
       let username = winners[roleName];
-
-      resultsObj[username] = resultsObj[username] || {
-        role: roleName,
-        wins: 0
-      };
+      console.log('username', username)
+      console.log('resultsObj', resultsObj)
+      
 
       resultsObj[username].wins++
     }
 
     return resultsObj;
-  }, {})
+  }, baseObj)
 }
 
 helpers.calculateMostTotalWins = function(winsObj) {

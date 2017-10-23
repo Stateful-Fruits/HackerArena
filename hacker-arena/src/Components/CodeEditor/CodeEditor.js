@@ -102,32 +102,18 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // send win event (in room.players), update results object (in room), and increment user's wins (in database)
-    let room = this.props.currentRoom;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let room = this.props.currentRoom;    
 
     room.timeEnd = performance.now();
     room.timeTaken = (room.timeEnd - room.timeStart)/1000;
 
+    let username = fire.auth().currentUser.email.split('@')[0];
     let players = room.players;
     let playerNames = Object.keys(room.players);
+    let problem = room.problem; 
+    let teams = room.teams;
 
-    let roleName = helpers.getRoleFromUsername(room, username) || 'winner';
-    let partnerName = helpers.getPartnerName(room, username);
-    let partnerRole = helpers.getPartnerRole(room, username);
-    
-    let resultForThisRound = {
-      players: playerNames,
-      winners: {
-        [roleName]: username,
-      },
-      problem: room.problem,
-      timeTaken: room.timeTaken,
-      timeStamp: Date.now()
-    }
-
-    if (partnerName) {
-      resultForThisRound.winners[partnerRole] = partnerName;
-    }
+    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken);
 
     room.results = room.results || [];
     room.results.push(resultForThisRound);
