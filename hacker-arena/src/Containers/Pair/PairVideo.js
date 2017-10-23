@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import SimpleWebRTC from 'simplewebrtc';
 import{ connect} from 'react-redux';
 import '../../Styles/Webrtc.css';
+
 // import fire from '../../Firebase/firebase';
 
 // import shouldPureComponentUpdate from 'react-pure-render/function';
@@ -19,7 +20,7 @@ class Webrtc extends Component {
   }
    componentDidMount() {
     //    const{onReady} =this.props
-    const {room } = this.props;
+    const {videoroom } = this.props;
         const webrtc = new SimpleWebRTC({
         localVideoEl: this.refs.local,
         remoteVideosEl: "",
@@ -56,11 +57,11 @@ class Webrtc extends Component {
     //   this.webrtc = webrtc;
       webrtc.on('readyToCall', function () {
         // you can name it anything
-      webrtc.joinRoom(`spectator/${room.key}`);
+        console.log("Averyad;fja;dfjads;lfkjas;dfj",videoroom);
+      webrtc.joinRoom(`Player/${videoroom}`);
     });
     this.webrtc = webrtc;
-    console.log('video object', this.refs.remote);
-    console.log('hello',room);    
+    console.log('video object', this.refs.remote);    
     console.log(this.webrtc)
     }
 
