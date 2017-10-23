@@ -73,13 +73,21 @@ class CodeEditor extends React.Component {
     let disruptionCost = e.target.id.split(" ")[1];
     // make sure the user has enough credits to send this disruption
     if (currentRoom.players[username].credits >= disruptionCost) {
-      Object.keys(currentRoom.players).forEach((playerName) => {
-        if (playerName !== username) {
-          let currentDisruptions = currentRoom.players[playerName].disruptions;
-          fire.database().ref(`rooms/${currentRoom.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
-        }
-      });
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+      if (currentRoom.players[username].targetedPlayer) {
+        let  { targetedPlayer } = currentRoom.players[username];
+        let currentDisruptions = currentRoom.players[targetedPlayer].disruptions;
+        fire.database().ref(`rooms/${currentRoom.key}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+        fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+      } else {
+        // send the disruption to all players
+        Object.keys(currentRoom.players).forEach((playerName) => {
+          if (playerName !== username) {
+            let currentDisruptions = currentRoom.players[playerName].disruptions;
+            fire.database().ref(`rooms/${currentRoom.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+          }
+        });
+        fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+      }
     }
   }
 
