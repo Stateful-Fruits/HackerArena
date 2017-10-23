@@ -25,15 +25,18 @@ class CodeEditor extends React.Component {
   componentDidMount() {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
+    let userInfo = room.playerInfo[username];
+    let userPos = userInfo.position;
+    let problem = room.board[userPos[0]][userPos[1]][1];
     // Creates template for current problem using userFn
-    if (room.playerInfo[username].problem) {
+    if (problem) {
       this.ace.editor.on("paste", () => { //copy and pasting
         window.swal('You little cheater', '', 'warning');
         setTimeout( () => {
-          this.ace.editor.setValue(`function ${room.playerInfo[username].problem.userFn}() {\n\n}`)
+          this.ace.editor.setValue(`function ${problem.userFn}() {\n\n}`)
         }, 500);
       });
-      this.ace.editor.setValue(`function ${room.playerInfo[username].problem.userFn}() {\n\n}`, 1);
+      this.ace.editor.setValue(`function ${problem.userFn}() {\n\n}`, 1);
     }
 
 
@@ -145,8 +148,9 @@ class CodeEditor extends React.Component {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
-    let coord = room.playerInfo[username].position;
-    let problem = room.board[coord[0]][coord[1]][1];
+    let userInfo = room.playerInfo[username];
+    let userPos = userInfo.position;
+    let problem = room.board[userPos[0]][userPos[1]][1];
     let testStatus =  runTestsOnUserAnswer((code), problem.tests, problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
       // if every test is passed

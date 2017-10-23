@@ -45,8 +45,8 @@ class UserProfile extends React.Component {
           <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
           null
         }
-        <Stats />
-        <ActivityHeatMap profile={profile}/>
+        {this.props.profile.wins ? <Stats profile={profile}/> : null}
+        {this.props.profile.wins ? <ActivityHeatMap profile={profile}/> : null}
       </div>
     )
   }

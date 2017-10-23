@@ -3,11 +3,12 @@ import fire from '../../../Firebase/firebase';
 import '../../../Styles/TestSuite.css';
 
 /* Check if user is challenger or creator*/
-const TestSuite = props => {
+const TestSuite = (props) => {
   let username = fire.auth().currentUser.email.split('@')[0];
-  let room = props.room;
-  let coord = room.playerInfo[username].position;
-  let problem = room.board[coord[0]][coord[1]][1];
+  let {room} = props;
+  let userInfo = room.playerInfo[username];
+  let userPos = userInfo.position;
+  let problem = room.board[userPos[0]][userPos[1]][1];
   if (problem) {
     return(
       <div id="testSuite">
@@ -15,8 +16,8 @@ const TestSuite = props => {
         <h4> PROBLEM DESCRIPTION  </h4>
         <p id="description">{problem.description}</p>
         <h4 className="testTitle"> TESTS </h4>
-        {(props.room.playerInfo[username].testStatus && props.room.playerInfo[username].testStatus.length > 1) ? 
-          (<div className="testHolder">{props.room.playerInfo[username].testStatus.map((tests, i) => {
+        {(userInfo.testStatus && userInfo.testStatus.length > 1) ? 
+          (<div className="testHolder">{userInfo.testStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"

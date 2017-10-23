@@ -50,7 +50,7 @@ class CodeEditor extends React.Component {
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];    
     // Check for disruptions sent to the user
-    if(currentRoom.players[username].disruptions.length){
+    if(currentRoom.players[username].disruptions.length > 1){
       currentRoom.players[username].disruptions.forEach(disruption => {
         if(disruption !== "") this.receiveDisruptions(disruption);
       });
@@ -104,7 +104,7 @@ class CodeEditor extends React.Component {
     let resultForThisRound = {
       players: playerNames,
       winner: username,
-      problemID: room.problemID,
+      problem: room.problem,
       timeTaken: room.timeTaken,
       timeStamp: Date.now()
     }

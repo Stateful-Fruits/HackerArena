@@ -55,9 +55,71 @@ helpers.filterProblemsByDifficulty = function(minDifficulty = 0, maxDifficulty =
   return filteredProblems;
 }
 
-helpers.getUsernameFromEmail = (str) => {
+helpers.getUsernameFromEmail = function(str) {
   const position = str.indexOf('@')
   return str.slice(0,position)
+}
+
+// Pair mode helpers
+
+helpers._getTeam = function(room, username) {
+  let teams = room.teams;
+  
+    if (teams) {
+      return teams.find((team) => {
+        return team.driver === username || team.navigator === username
+      })
+    }
+  
+    return null;
+}
+
+helpers._getTeamIndex = function(room, username) {
+  let teams = room.teams;
+
+  if (teams) {
+    return teams.findIndex((team) => {
+      return team.driver === username || team.navigator === username
+    })
+  }
+
+  return null;
+}
+
+helpers.getRoleFromUsername = function(room, username) {
+  let team = helpers._getTeam(room, username);
+
+  if (team && team.driver === username) {
+    return 'driver';
+  } else if (team && team.navigator === username) {
+    return 'navigator';
+  }
+
+  return null;
+}
+
+helpers.getPartnerName = function(room, username) {
+  let team = helpers._getTeam(room, username);
+
+  if (team && team.driver === username) {
+    return team.navigator;
+  } else if (team && team.navigator === username) {
+    return team.driver;
+  }
+
+  return null;
+}
+
+helpers.getPartnerRole = function(room, username) {
+  let team = helpers._getTeam(room, username);
+
+  if (team && team.driver === username) {
+    return 'navigator';
+  } else if (team && team.navigator === username) {
+    return 'driver';
+  }
+
+  return null;
 }
 
 export default helpers;
