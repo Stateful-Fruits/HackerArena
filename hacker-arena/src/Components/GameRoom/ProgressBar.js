@@ -7,14 +7,16 @@ class ProgressBar extends Component {
     this.handleTargetChange = this.handleTargetChange.bind(this);
   }
 
-  componentShouldUpdate() {
+  componentWillUpdate() {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     let isSpectator = !(Object.keys(room.players).includes(username));
     let otherUsers = Object.keys(room.players).filter(name => name !== username);
     // if there is no targeted player for this user
+    console.log('Component should target a player now');
     if (!isSpectator && !room.players[username].targetedPlayer) {
       // set the first other player as targeted
+      console.log('Logic running determining whether or not to target a player');
       if (otherUsers.length) fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(otherUsers[0]);
       else fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(undefined);
     } else if (!isSpectator && !otherUsers.includes(room.players[username].targetedPlayer)) {
