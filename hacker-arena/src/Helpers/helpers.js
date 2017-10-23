@@ -2,24 +2,40 @@ const helpers = {};
 
 helpers.calculateResultsByPlayer = function(results) {
   console.log('results before calc', results);
+
   return results.reduce((resultsObj, result) => {
-    let winner = result.winner
-    resultsObj[winner] = resultsObj[winner] || 0;
-    resultsObj[winner]++;
-    return resultsObj
+    let winners = result.winners;
+
+    for (let roleName in winners) {
+      let username = winners[roleName];
+
+      resultsObj[username] = resultsObj[username] || {
+        role: roleName,
+        wins: 0
+      };
+
+      resultsObj[username].wins++
+    }
+
+    return resultsObj;
   }, {})
 }
 
 helpers.calculateMostTotalWins = function(winsObj) {
   let biggest = {
-    winner: '',
+    winners: {},
     wins: 0
   };
 
   for (let username in winsObj) {
-    if (winsObj[username] > biggest.wins) {
-      biggest.winner = username
-      biggest.wins = winsObj[username];
+    let userObj = winsObj[username];
+    if (userObj.wins > biggest.wins) {
+      biggest.winners = {
+        [userObj.role]: username
+      }
+      biggest.wins = userObj.wins;
+    } else if (userObj.wins === biggest.wins) {
+      biggest.winners[userObj.role] = username;
     }
   }
 

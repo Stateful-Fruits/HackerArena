@@ -67,11 +67,10 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
 // ---------------- Events ----------------
 
 eventHandler.winner = function(room, roomId, username, eventValue, problems) {
-  console.log('problems in eventHandler.winner', problems);
   let resultsSoFar = room.results.slice();
   let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
 
-  let winner = eventValue.winner;
+  let winners = eventValue.winners;
   let timeTaken = eventValue.timeTaken.toFixed(2);
   let isClientWinner = winner === username
   let currentRound = room.currentRound

@@ -6,6 +6,8 @@ import fire from '../../Firebase/firebase';
 import Disruptions from './disruptions';
 import DisruptionsBar from './DisruptionsBar';
 
+import helpers from '../../Helpers/helpers.js';
+
 import '../../Styles/CodeEditor.css';
 
 class CodeEditor extends React.Component {
@@ -108,14 +110,25 @@ class CodeEditor extends React.Component {
 
     let players = room.players;
     let playerNames = Object.keys(room.players);
+
+    let roleName = helpers.getRoleFromUsername(room, username) || 'winner';
+    let partnerName = helpers.getPartnerName(room, username);
+    let partnerRole = helpers.getPartnerRole(room, username);
     
     let resultForThisRound = {
       players: playerNames,
-      winner: username,
+      winners: {
+        [roleName]: username,
+      },
       problem: room.problem,
       timeTaken: room.timeTaken,
       timeStamp: Date.now()
     }
+
+    if (partnerName) {
+      resultForThisRound.winners[partnerRole] = partnerName;
+    }
+
     room.results = room.results || [];
     room.results.push(resultForThisRound);
     
