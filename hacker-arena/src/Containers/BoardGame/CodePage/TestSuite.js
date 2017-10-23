@@ -5,15 +5,18 @@ import '../../../Styles/TestSuite.css';
 /* Check if user is challenger or creator*/
 const TestSuite = props => {
   let username = fire.auth().currentUser.email.split('@')[0];
-  if (props.room.playerInfo[username].problem) {
+  let room = props.room;
+  let coord = room.playerInfo[username].position;
+  let problem = room.board[coord[0]][coord[1]][1];
+  if (problem) {
     return(
       <div id="testSuite">
-        <h3 className="problemTitle"> {props.room.problem.title} </h3>
+        <h3 className="problemTitle"> {problem.title} </h3>
         <h4> PROBLEM DESCRIPTION  </h4>
-        <p id="description">{props.room.problem.description}</p>
+        <p id="description">{problem.description}</p>
         <h4 className="testTitle"> TESTS </h4>
-        {(props.room.players[username].testStatus && props.room.players[username].testStatus.length > 1) ? 
-          (<div className="testHolder">{props.room.players[username].testStatus.map((tests, i) => {
+        {(props.room.playerInfo[username].testStatus && props.room.playerInfo[username].testStatus.length > 1) ? 
+          (<div className="testHolder">{props.room.playerInfo[username].testStatus.map((tests, i) => {
             let passing = "PASSED!"
             if(!tests.passed){
               passing = "FAILED!"

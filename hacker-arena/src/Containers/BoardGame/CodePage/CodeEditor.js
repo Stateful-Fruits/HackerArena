@@ -53,38 +53,45 @@ class CodeEditor extends React.Component {
   componentWillUpdate(){
     // Alert users if someone has won the game
     let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];    
+    let username = fire.auth().currentUser.email.split('@')[0];   
+    let disruptions = room.playerInfo[username].disruptions;
     // Check for disruptions sent to the user
-    if(room.playerInfo[username].disruptions.length){
+
+    if(disruptions.length){
       room.playerInfo[username].disruptions.forEach(disruption => {
         if(disruption !== "") this.receiveDisruptions(disruption);
       });
-      fire.database().ref(`rooms/${this.props.room.key}/players/${username}/disruptions`).set([""])
+      fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/disruptions`).set(['']);
     }
   }
 
   liveInputs(){
     // Sends live inputs of user to database
+    let {room} = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
     let liveInput = this.ace.editor.getValue();
-    fire.database().ref(`rooms/${this.props.room.key}/players/${username}/liveInput`).set(liveInput)
+    //fire.database().ref(`rooms/${this.props.room.key}/players/${username}/liveInput`).set(liveInput);
+    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).set(liveInput);
   }
 
   sendDisruptions(e){
     let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let username = fire.auth().currentUser.email.split('@')[0];
+    let disruptions = room.playerInfo[username].disruptions;
+    let playerInfo = room.playerInfo[username];
     // Sends disruptions to oppposite player
     let disruptionFunc = e.target.id.split(" ")[0];
     let disruptionCost = e.target.id.split(" ")[1];
     // make sure the user has enough credits to send this disruption
-    if (room.players[username].credits >= disruptionCost) {
+    if (playerInfo.credits >= disruptionCost) {
       Object.keys(room.players).forEach((playerName) => {
         if (playerName !== username) {
-          let currentDisruptions = room.players[playerName].disruptions;
-          fire.database().ref(`rooms/${room.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+          let currentDisruptions = disruptions;
+          fire.database().ref(`BoardRooms/${room.key}/playerInfo/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+          //fire.database().ref(`rooms/${room.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         }
       });
-      fire.database().ref(`rooms/${room.key}/players/${username}/credits`).set(room.players[username].credits - disruptionCost);
+      fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/disruptions`).set(playerInfo.credits - disruptionCost);
     }
   }
 
@@ -138,17 +145,19 @@ class CodeEditor extends React.Component {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
-    let testStatus =  runTestsOnUserAnswer((code), room.problem.tests, room.problem.userFn);
+    let coord = room.playerInfo[username].position;
+    let problem = room.board[coord[0]][coord[1]][1];
+    let testStatus =  runTestsOnUserAnswer((code), problem.tests, problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
       // if every test is passed
       if (room.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
     } else window.swal('Oops...', 'Something went wrong!', 'error');
 
-    if((testStatus.length === room.problem.tests.length) && testStatus){
+    if((testStatus.length === problem.tests.length) && testStatus){
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
       });
-      fire.database().ref(`rooms/${room.key}/players/${username}/testStatus`).set(testStatus);
+      fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/testStatus`).set(testStatus);      
     } else {
       window.swal('Oops...', 'Something went wrong!', 'error');
     }
