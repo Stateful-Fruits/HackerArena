@@ -107,40 +107,10 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // Instaed set canMove to true here;
-
-
-
-    // send win event (in room.players), update results object (in room), and increment user's wins (in database)
-    // let room = this.props.room;
-    // let username = fire.auth().currentUser.email.split('@')[0];
-
-    // room.timeEnd = performance.now();
-    // room.timeTaken = (room.timeEnd - room.timeStart)/1000;
-
-    // let players = room.players;
-    // let playerNames = Object.keys(room.players);
-    
-    // let resultForThisRound = {
-    //   players: playerNames,
-    //   winner: username,
-    //   problemID: room.problemID,
-    //   timeTaken: room.timeTaken,
-    // }
-    // room.results = room.results || [];
-    // room.results.push(resultForThisRound);
-    
-    // let winEvent = {
-    //   eventName: 'winner',
-    //   value: resultForThisRound
-    // }
-
-    // playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
-
-    // fire.database().ref(`rooms/${room.key}`).set(room)
-    // fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-    //   let wins = snapshot.val().wins + 1;
-    //   fire.database().ref(`users/${username}/wins`).set(wins);
-    // });
+    let { room, user } = this.props;
+    let userInfo = room.playerInfo[user];
+    userInfo.canMove = !userInfo.canMove;
+    fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 
   handleSubmit(){
