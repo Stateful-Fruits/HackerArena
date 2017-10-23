@@ -182,6 +182,7 @@ class PairGameRoom extends React.Component {
     let role = helpers.getRoleFromUsername(room, username);
     let partnerName = helpers.getPartnerName(room, username);
     let partnerRole = helpers.getPartnerRole(room, username);
+    let teams = room.teams;
 
     let navigatorRoom = <NavigatorRoom
       roomId={roomId}
@@ -202,7 +203,14 @@ class PairGameRoom extends React.Component {
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (
         <div className="completeWaiting">
-          <WaitingForPlayer room={room}/>
+          <WaitingForPlayer
+            roomId={roomId}
+            room={room}
+            username={username} 
+            partnerName ={partnerName}
+            partnerRole={partnerRole}
+            teams={teams}
+          />
         </div>
       );
     } else if (roomStatus === 'completed') {
@@ -249,7 +257,5 @@ const mapStateToProps = (state) => ({
 const mapDispatcherToProps = (dispatch) => ({
   navigate: (route) => dispatch(push(route))
 });
-
-console.log('pairGameRoom', PairGameRoom);
 
 export default connect(mapStateToProps, mapDispatcherToProps)(PairGameRoom);
