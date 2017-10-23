@@ -67,6 +67,14 @@ class PairGameRoom extends React.Component {
         let gameRoom = Object.assign({}, room);
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
+        // find this user's team and role
+        console.log('\n\n\nOld Teams: ', gameRoom.teams, '\n\n\n');
+        gameRoom.teams = gameRoom.teams.reduce((acc, team) => {
+          if (team.navigator === username) return (team.driver ? [...acc, {driver: team.driver}] : acc);
+          if (team.driver === username) return (team.navigator ? [...acc, {navigator: team.navigator}] : acc);
+          return [...acc, team];
+        }, []);
+        console.log('\n\n\nNew Teams: ', gameRoom.teams, '\n\n\n');
         // see if the game needs to switch to standby
         if (playerNames.length - 1 < gameRoom.playerCapacity 
             && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
@@ -87,18 +95,14 @@ class PairGameRoom extends React.Component {
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
       let players = room.players;      
-
       let playerNames = Object.keys(players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
-        console.log('player already found in room, no update to room needed')
         return;
       } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
-        console.log('room is already full, navigating to spectate')
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
-        console.log('the game room is open and user want to join, add user to room in db')
         let gameRoom = Object.assign({}, room);
         // if you're the first one in, start the game timer
         if (playerNames.length === 0) {
@@ -106,7 +110,6 @@ class PairGameRoom extends React.Component {
           gameRoom.timeStart = performance.now();
         } else if (playerNames.length + 1 === gameRoom.playerCapacity 
                    && gameRoom.gameStatus !== 'completed') {
-            console.log('about to update roomStatus!!')
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
         // add you username to the gameroom
@@ -117,7 +120,6 @@ class PairGameRoom extends React.Component {
           liveInput: ''
         };
         // and update the database
-        console.log('gameRoom before database', gameRoom)
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
