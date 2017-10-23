@@ -28,31 +28,34 @@ const ActivityHeatMap = (props) => {
         }
     }
   }
-  function customTitleForValue(value) {
-    return value ? `Date is ${value.date}` : null;
-  }
-  const customTooltipDataAttrs = (value) => ({'data-tip': this.value});
-  return (
-  <div>
-    <CalendarHeatmap
-  startDate={new Date('2016-12-31')}
-  gutterSize={1}
-  titleForValue ={customTitleForValue}
-  values={date}
-  tooltipDataAttrs={customTooltipDataAttrs}
-  classForValue={(value) => {
-    if (!value) {
-      return 'color-empty';
-    } else if (value.count > 4){
-      return 'color-scale-4';
-    }
-    return `color-scale-${value.count}`;
-  }}
   
-  //onMouseLeave={}
-/>
-  <ReactTooltip place="top" type="dark" effect="float"/>
-  </div>
+  // Creating title label for each individual day
+  function customTitleForValue(value) {
+    return value ? `${value.count} games played on ${value.date}` : null;
+  }
+  
+  // Tooltip description for each day - Play Count + Date 
+  const customTooltipDataAttrs = (value) => ({'data-tip': `${value.count} games played on ${value.date}`});
+  
+  return (
+    <div>
+      <CalendarHeatmap
+        startDate={new Date('2016-12-31')}
+        gutterSize={1}
+        titleForValue ={customTitleForValue}
+        values={date}
+        tooltipDataAttrs={customTooltipDataAttrs}
+        classForValue={(value) => {
+          if (!value) {
+            return 'color-empty';
+          } else if (value.count > 4){
+            return 'color-scale-4';
+          }
+          return `color-scale-${value.count}`;
+        }}
+      />
+      <ReactTooltip place="top" type="dark" effect="float"/>
+    </div>
 )};
 
 export default ActivityHeatMap;

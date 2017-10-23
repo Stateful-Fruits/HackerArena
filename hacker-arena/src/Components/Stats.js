@@ -13,11 +13,30 @@ class Stats extends React.Component {
   }
   componentDidMount(){
     //AN ARRAY OF TAGS FOR EACH PROBLEM
+    let losses = [];
+    let wins = [];
+    let lossesByTags = [];
+    let winsByTags = [];
+    // FIND LOSSES AND WINS BY TAGS
+    // 
     if(this.props.profile){
-      let problemTags = Object.values(this.props.profile.history).map(item => {
-        return [item[0].problem.tags];
+      wins = Object.values(this.props.profile.history).filter(game => {
+        return game[0].winner === this.props.profile.username;
       })
-      console.log(problemTags)
+      console.log('wins', wins);
+      winsByTags = wins.map(item => {
+        console.log("the problem", item[0]);
+          return [item[0].problem.tags.split(',')];
+      })
+      console.log('winsbyTag', winsByTags)
+      losses = Object.values(this.props.profile.history).filter(game => {
+        return game[0].winner !== this.props.profile.username;
+      })
+      console.log('losses', losses)
+      lossesByTags = losses.map(item => {
+          return [item[0].problem.tags.split(',')];
+      })
+      console.log('lossesbytags', lossesByTags);
     }
 
     let data =[]
@@ -88,8 +107,8 @@ class Stats extends React.Component {
       return newString;
     }
     // Variables
-    var width = 400;
-    var height = 400;
+    var width = 200;
+    var height = 200;
     var radius = Math.min(width, height) / 2;
     // var color = d3.scaleOrdinal(d3.schemeCategory20b);
     var colors = {

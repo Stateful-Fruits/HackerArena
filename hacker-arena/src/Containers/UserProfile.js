@@ -4,7 +4,8 @@ import updateUserProfile from '../Actions/updateUserProfile';
 import fire from '../Firebase/firebase';
 import EditProfile from '../Components/User/EditProfile.js';
 import ActivityHeatMap from '../Components/ActivityHeatMap';
-import Stats from '../Components/Stats'
+import Stats from '../Components/Stats';
+import History from '../Components/History';
 import { push } from 'react-router-redux';
 
 class UserProfile extends React.Component {
@@ -46,7 +47,8 @@ class UserProfile extends React.Component {
           null
         }
         {this.props.profile.wins ? <Stats profile={profile}/> : null}
-        {this.props.profile.wins ? <ActivityHeatMap profile={profile}/> : null}
+        {this.props.profile.history ? <ActivityHeatMap profile={profile}/> : null}
+        {this.props.profile.history ? <History profile={profile}/> : null}
       </div>
     )
   }
