@@ -10,6 +10,7 @@ import fire from '../../Firebase/firebase';
 import GameRoomLoading from '../../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
+import WinnerDisplay from '../../Components/GameRoom/WinnerDisplay'
 
 import NavigatorRoom from './NavigatorRoom';
 import DriverRoom from './DriverRoom';
@@ -175,7 +176,8 @@ class PairGameRoom extends React.Component {
     let results = room.results;
     let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
     let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
-    let champion = mostTotalWins ? mostTotalWins.winner : null;
+    let champions = mostTotalWins ? mostTotalWins.winners : null;
+    let isPairRoom = room.isPairRoom;
 
     let username = this.props.username;
 
@@ -214,19 +216,7 @@ class PairGameRoom extends React.Component {
         </div>
       );
     } else if (roomStatus === 'completed') {
-      return (
-        <div>
-          The grand champion is {champion}!
-          {
-            (() => {
-              for (let player in resultsByPlayer) {
-                let result = resultsByPlayer[player];
-                return <div>{player}: {result} wins </div>
-              }
-            })()
-          }
-        </div>
-      )
+      return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
     } else if (roomStatus === 'playing') {
       console.log('everyone recognizes we are playing');
       if (role === 'navigator') {

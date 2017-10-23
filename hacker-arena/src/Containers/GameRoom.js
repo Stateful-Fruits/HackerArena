@@ -143,17 +143,18 @@ class GameRoom extends React.Component {
     if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    let { gameRooms, roomId } = this.props;
+    let { gameRooms, roomId, isPairRoom } = this.props;
     let room = gameRooms[roomId];
     let { roomStatus, results } = room;
     let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
     let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
-    let champion = mostTotalWins ? mostTotalWins.winner : null;
+    console.log('mostTotalWins', mostTotalWins)
+    let champions = mostTotalWins ? mostTotalWins.winners : null;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (<div className="completeWaiting"><WaitingForPlayer room={room}/></div>);
     } else if (roomStatus === 'completed') {
-      return (<WinnerDisplay champion={champion} resultsByPlayer={resultsByPlayer} />)
+      return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
     } else if (roomStatus === 'playing') {
       return (
         <div>

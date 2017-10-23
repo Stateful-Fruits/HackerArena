@@ -215,5 +215,4 @@ describe('calculateMostTotalWins', () => {
     wins: 2
     });
   });
-
 })

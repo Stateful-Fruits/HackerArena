@@ -112,8 +112,9 @@ class CodeEditor extends React.Component {
     let playerNames = Object.keys(room.players);
     let problem = room.problem; 
     let teams = room.teams;
+    let timeStamp = Date.now();
 
-    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken);
+    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
 
     room.results = room.results || [];
     room.results.push(resultForThisRound);
