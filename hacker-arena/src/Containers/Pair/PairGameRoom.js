@@ -126,8 +126,10 @@ class PairGameRoom extends React.Component {
 
   handleIncomingEvents() {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
+      console.log('this.props in handleevents', this.props);
       let roomId = this.props.roomId;
       let room = this.props.gameRooms[roomId];
+      let problems = this.props.problems;      
       let username = fire.auth().currentUser.email.split('@')[0];
       let player = room.players[username];
       let events = player.events;
@@ -138,7 +140,7 @@ class PairGameRoom extends React.Component {
           // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
           if (events) {
             events.forEach(event => {
-              eventHandler[event.eventName](room, roomId, username, event.value)
+              eventHandler[event.eventName](room, roomId, username, event.value, problems);
             })
           }
         })

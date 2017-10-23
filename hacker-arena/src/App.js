@@ -28,6 +28,7 @@ class App extends Component {
     });
 
     db.Problems.on('value', data => {
+      console.log('problems filing into state');
       updateProblems(data.val());  
     });
 
