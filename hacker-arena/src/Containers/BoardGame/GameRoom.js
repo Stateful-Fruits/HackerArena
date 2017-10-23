@@ -42,7 +42,12 @@ class GameRoom extends React.Component {
           room.playerInfo[user] = {
             position: [0,0],
             diceResult: 0,
-            canMove: true
+            canMove: true,
+            disruptions: [''],
+            liveInput: '',
+            events: '',
+            credits: 5,
+            testStatus: []
           }
         }
         fire.database().ref('BoardRooms/' + room.key).set(room);
@@ -97,7 +102,11 @@ class GameRoom extends React.Component {
           dice = <Dice room={room} user={user}/>;
         } else {
           codePage = <div>
+<<<<<<< HEAD
             <CodeEditor room={room}/>
+=======
+            <CodeEditor room={room} user={user}/>
+>>>>>>> board
             <TestSuite room={room}/>
           </div>;
           canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
