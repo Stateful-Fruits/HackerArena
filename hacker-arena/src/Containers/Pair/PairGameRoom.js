@@ -69,13 +69,11 @@ class PairGameRoom extends React.Component {
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
         // find this user's team and role
-        console.log('\n\n\nOld Teams: ', gameRoom.teams, '\n\n\n');
         gameRoom.teams = gameRoom.teams.reduce((acc, team) => {
           if (team.navigator === username) return (team.driver ? [...acc, {driver: team.driver}] : acc);
           if (team.driver === username) return (team.navigator ? [...acc, {navigator: team.navigator}] : acc);
           return [...acc, team];
         }, []);
-        console.log('\n\n\nNew Teams: ', gameRoom.teams, '\n\n\n');
         // see if the game needs to switch to standby
         if (playerNames.length - 1 < gameRoom.playerCapacity 
             && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
@@ -220,7 +218,6 @@ class PairGameRoom extends React.Component {
     } else if (roomStatus === 'completed') {
       return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
     } else if (roomStatus === 'playing') {
-      console.log('everyone recognizes we are playing');
       if (role === 'navigator') {
         return navigatorRoom;
       } else if (role === 'driver') {
@@ -229,7 +226,6 @@ class PairGameRoom extends React.Component {
         return <div>Error - role does not seem to be navigator or driver. Fatal error.</div>
       }
     } else {
-      console.log('Room: ', room);
       return (
         <div>
           THIS ROOM HAS NO STATUS?

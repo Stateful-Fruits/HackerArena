@@ -39,7 +39,7 @@ class ProgressBar extends Component {
     let otherUsers = [];
     // see if this is being rendered by a player or spectator
     let isSpectator = !(Object.keys(room.players).includes(username));
-    let targetedPlayer = this.props.room.players[username].targetedPlayer || undefined;
+    let targetedPlayer = !isSpectator ? (this.props.room.players[username].targetedPlayer || undefined) : null;
     for (let playerName in room.players) {
       if (playerName !== username) otherUsers.push(playerName);
       let playerProgress = room.players[playerName].testStatus ? room.players[playerName].testStatus.filter((items) => items.passed).length : 0;
