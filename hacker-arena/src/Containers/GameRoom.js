@@ -124,6 +124,7 @@ class GameRoom extends React.Component {
           // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
           if (events) {
             events.forEach(event => {
+              if(event.eventName === 'winner') fire.database().ref(`rooms/${roomId}/roomStatus`).set('intermission');
               eventHandler[event.eventName](room, roomId, username, event.value, problems);
             })
           }
