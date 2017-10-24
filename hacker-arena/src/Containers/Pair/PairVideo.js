@@ -5,12 +5,13 @@ import React, {Component} from 'react';
 import SimpleWebRTC from 'simplewebrtc';
 import{ connect} from 'react-redux';
 import '../../Styles/Webrtc.css';
+import  '../../Styles/Webrtc.css';
 
 // import fire from '../../Firebase/firebase';
 
 // import shouldPureComponentUpdate from 'react-pure-render/function';
 
-class Webrtc extends Component {
+class PairVideo extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -20,7 +21,8 @@ class Webrtc extends Component {
   }
    componentDidMount() {
     //    const{onReady} =this.props
-    const {videoroom } = this.props;
+    const {videoroom, roomKey } = this.props;
+    console.log('hello',roomKey);  
         const webrtc = new SimpleWebRTC({
         localVideoEl: this.refs.local,
         remoteVideosEl: "",
@@ -58,7 +60,7 @@ class Webrtc extends Component {
       webrtc.on('readyToCall', function () {
         // you can name it anything
         console.log("Averyad;fja;dfjads;lfkjas;dfj",videoroom);
-      webrtc.joinRoom(`Player/${videoroom}`);
+      webrtc.joinRoom(`Player/${videoroom}${roomKey}`);
     });
     this.webrtc = webrtc;
     console.log('video object', this.refs.remote);    
@@ -118,4 +120,4 @@ return (
 const mapStateToProps =(state)=> ({
     room : state.gameRooms ? state.gameRooms[state.router.location.pathname.split('/')[2]] : null,   
 })
-export default connect(mapStateToProps)(Webrtc);
+export default connect(mapStateToProps)(PairVideo);
