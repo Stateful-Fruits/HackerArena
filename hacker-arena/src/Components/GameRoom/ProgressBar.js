@@ -3,6 +3,8 @@ import fire from '../../Firebase/firebase';
 
 import helpers from '../../Helpers/helpers'
 
+import '../../Styles/ProgressBar.css';
+
 class ProgressBar extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +14,10 @@ class ProgressBar extends Component {
   componentWillUpdate() {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
+
     let isSpectator = !(Object.keys(room.players).includes(username));
     let otherUsers = Object.keys(room.players).filter(name => name !== username);
+
     // if there is no targeted player for this user
     console.log('Component should target a player now');
     if (!isSpectator && !room.players[username].targetedPlayer) {
@@ -29,24 +33,31 @@ class ProgressBar extends Component {
   handleTargetChange(otherUserName) {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
+
     // firebase query to update this user's targetedPlayer obejct in firebase
     fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(otherUserName);
   }
 
   render() {
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let total = room.problem.tests.length;
     let eachPlayerTestProgress = {}
     let otherUsers = [];
-    // see if this is being rendered by a player or spectator
+
+    let { room } = this.props;
+    let username = fire.auth().currentUser.email.split('@')[0];
+
+    let totalTests = room.problem.tests.length;
+    
     let isSpectator = !(Object.keys(room.players).includes(username));
     let isPairRoom = room.isPairRoom;
+
     let userRole = helpers.getRoleFromUsername(room, username);
     let isNavigator = userRole === 'navigator';
     let partnerName = helpers.getPartnerName(room, username);
     let partnerRole = helpers.getPartnerRole(room, username);
+
+    // see if this is being rendered by a player or spectator
     let targetedPlayer = this.props.room.players[username].targetedPlayer || undefined;
+
     for (let playerName in room.players) {
       let playerRole = helpers.getRoleFromUsername(room, playerName);
       // Don't display a bar as being an opponent bar if:
@@ -57,50 +68,56 @@ class ProgressBar extends Component {
         otherUsers.push(playerName);
       }
       let playerProgress = room.players[playerName].testStatus ? room.players[playerName].testStatus.filter((items) => items.passed).length : 0;
-      eachPlayerTestProgress[playerName] = (playerProgress / total) * 100;
+      eachPlayerTestProgress[playerName] = (playerProgress / totalTests) * 100;
     }
     return (
-      <div> 
-        <div>
+      <div className="over-prog-container">
         { 
           !isSpectator ? 
-          <div style={{float:"left", margin: "10px"}}>
-           <span className="usernameLabels">{isPairRoom ? 'Your partner:' : 'You'} </span>
-           <span className="usernames">{partnerName || username}</span>
-         </div> : null
-        }
-        { 
-          otherUsers.map((otherUserName, i) => (
-            <div style={{float:"right", margin: "10px"}} key={otherUserName+i}>
-              <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '20px solid red'} : {}}>
-              <span className="opponentLabels">Player: </span>
-              <span className="opponent" onClick={isSpectator ? null : () => this.handleTargetChange(otherUserName)}>{otherUserName}</span>
-            </div>
-          </div>
-          ))
-        }
-          <div className="thebars">
-        { 
-          !isSpectator ?
-          <div className="progress">
-            <div className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuenow="70"
-              aria-valuemin="0" aria-valuemax="100" style={{width: `${eachPlayerTestProgress[partnerName || username]}%`}}>
-              <span className="sr-only">bobo Complete</span>
+          <div class="prog-container user-bar">
+            <span className="usernameLabels">{isPairRoom ? 'Your partner:' : 'You'} </span>
+            <span className="usernames">{partnerName || username}</span>
+            <div className="thebars">
+              <div className="progress">
+                <div 
+                  className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated"
+                  role="progressbar" aria-valuenow="70"
+                  aria-valuemin="0"
+                  aria-valuemax="100" 
+                  style={{width: `${eachPlayerTestProgress[partnerName || username]}%`}}
+                >
+                  <span className="sr-only">bobo Complete</span>
+                </div>
+              </div>
             </div>
           </div> : null
         }
-        {
+        <div className="opponent-bars">
+        { 
           otherUsers.map((otherUserName, i) => (
-            <div className="progress" key={otherUserName+i}>
-              <div className="progress-bar progress-bar-striped progress-bar-danger progress-bar-animated" role="progressbar" aria-valuenow="70"
-                aria-valuemin="0" aria-valuemax="100" style={{width: `${eachPlayerTestProgress[otherUserName]}%`}}>
-                <span className="sr-only">bobo Complete</span>
+            <div className="prog-container opponent-bar" key={otherUserName+i}>
+              <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '20px solid red'} : {}}>
+                <span className="opponentLabels">Player: </span>
+                <span className="opponent" onClick={isSpectator ? null : () => this.handleTargetChange(otherUserName)}>{otherUserName}</span>
+                <div className="thebars">
+                  <div className="progress">
+                    <div 
+                      className="progress-bar progress-bar-striped progress-bar-danger progress-bar-animated" 
+                      role="progressbar" 
+                      aria-valuenow="70"
+                      aria-valuemin="0" 
+                      aria-valuemax="100" 
+                      style={{width: `${eachPlayerTestProgress[otherUserName]}%`}}
+                    >
+                      <span className="sr-only">bobo Complete</span>
+                    </div>
+                  </div>  
+                </div>
               </div>
             </div>
           ))
         }
-          </div>
-          </div>
+        </div>
       </div>
     )
   }

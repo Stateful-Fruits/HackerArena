@@ -158,7 +158,9 @@ class GameRoom extends React.Component {
     } else if (roomStatus === 'playing') {
       return (
         <div>
+          <div>
             <ProgressBar room={room}/>
+          </div>
           <div id="editorAndTestSuite">
             <CodeEditor currentRoom={room}/>
             <TestSuite currentRoom={room}/>

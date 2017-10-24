@@ -93,10 +93,13 @@ class PairGameRoom extends React.Component {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
+      
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
       let players = room.players;      
       let playerNames = Object.keys(players);
+      console.log('playernames.length', playerNames.length)
+      console.log('room.playerCapacity', room.playerCapacity) 
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
