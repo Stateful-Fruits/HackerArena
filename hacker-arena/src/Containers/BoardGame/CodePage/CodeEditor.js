@@ -5,14 +5,15 @@ import runTestsOnUserAnswer from '../../../ToyProblemTesting/testUserAnswer';
 import fire from '../../../Firebase/firebase';
 import Disruptions from '../../../Components/CodeEditor/disruptions';
 import DisruptionsBar from '../../../Components/CodeEditor/DisruptionsBar';
-
+import Powers from './Power';
 import '../../../Styles/CodeEditor.css';
 
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      testStatus: ""
+      testStatus: "",
+      problem: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
@@ -28,6 +29,9 @@ class CodeEditor extends React.Component {
     let userInfo = room.playerInfo[username];
     let userPos = userInfo.position;
     let problem = room.board[userPos[0]][userPos[1]][1];
+    this.setState({
+      problem
+    })
     // Creates template for current problem using userFn
     if (problem) {
       this.ace.editor.on("paste", () => { //copy and pasting
@@ -106,10 +110,15 @@ class CodeEditor extends React.Component {
   }
 
   endRoundWithClientAsVictor() {
-    // Instaed set canMove to true here;
+    // Instead set canMove to true here;
     let { room, user } = this.props;
     let userInfo = room.playerInfo[user];
     userInfo.canMove = !userInfo.canMove;
+    room.playerInfo[user].testStatus = [];
+    let powers = Object.keys(Powers);
+    let random = Math.floor(Math.random() * powers.length);
+    console.log(powers, random);
+    userInfo.attack = powers[random];
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 
@@ -118,21 +127,26 @@ class CodeEditor extends React.Component {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
-    let userInfo = room.playerInfo[username];
-    let userPos = userInfo.position;
-    let problem = room.board[userPos[0]][userPos[1]][1];
+    //let userInfo = room.playerInfo[username];
+    //let userPos = userInfo.position;
+    let problem = this.state.problem//room.board[userPos[0]][userPos[1]][1];
     let testStatus =  runTestsOnUserAnswer((code), problem.tests, problem.userFn);
+    let completed = false;
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
       // if every test is passed
-      if (room.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
+      // if (room.roomStatus !== 'completed') {
+      //   this.endRoundWithClientAsVictor();
+      // }
+      this.endRoundWithClientAsVictor();
+      completed = true;
     } else window.swal('Oops...', 'Something went wrong!', 'error');
 
-    if((testStatus.length === problem.tests.length) && testStatus){
+    if(!completed && (testStatus.length === problem.tests.length) && testStatus){
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
       });
       fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/testStatus`).set(testStatus);      
-    } else {
+    } else if (!completed) {
       window.swal('Oops...', 'Something went wrong!', 'error');
     }
     
