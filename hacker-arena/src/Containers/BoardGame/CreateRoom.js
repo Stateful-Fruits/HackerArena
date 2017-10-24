@@ -9,8 +9,16 @@ class CreateRoom extends React.Component {
     super (props);
     this.createRoom = this.createRoom.bind(this);
   }
-  createRoom () {
-    let problems = this.props.problems;
+  createRoom (e) {
+    e.preventDefault();
+    let allProblems = this.props.problems; //filter
+    let problems = {};
+    for (var key in allProblems) {
+      if (allProblems[key].difficulty === '1') {
+        problems[key] = allProblems[key];
+      }
+    }
+    console.log('problemsssss', problems);
     let user = fire.auth().currentUser.email.split('@')[0];
     let room = {
       players: [user],
@@ -23,7 +31,8 @@ class CreateRoom extends React.Component {
           liveInput: '',
           events: '',
           credits: 5,
-          testStatus: []
+          testStatus: [],
+          attack: ''
         }
       },
       gameStarted: false,

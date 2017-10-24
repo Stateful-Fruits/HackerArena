@@ -7,6 +7,7 @@ import Dice from './Dice';
 import MovePlayer from './MovePlayer';
 import CodeEditor from './CodePage/CodeEditor';
 import TestSuite from './CodePage/TestSuite';
+import Attack from './Attack';
 
 class GameRoom extends React.Component {
   constructor (props) {
@@ -68,9 +69,9 @@ class GameRoom extends React.Component {
       console.log('room after filter ', room);
       
       if (room.players.length > 0) {
-        fire.database().ref('BoardRooms/' + this.props.room.key).set(room);
+        fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (room.players.length === 0) {
-        fire.database().ref('BoardRooms/' + this.props.room.key).remove();
+        fire.database().ref('BoardRooms/' + room.key).remove();
       }
     }
   }
@@ -85,16 +86,18 @@ class GameRoom extends React.Component {
   render () {
     let user = this.props.user;
     let room = this.props.room;
+    console.log('render room', room);
     if (room === undefined) {
       return <div>
         <div> Please wait as we prepare your board </div>
       </div>
     } else {
       let userInfo = room.playerInfo[user];
-      let message, startButton, board, dice, diceResult, canMove, move, codePage;
+      let message, startButton, board, dice, diceResult, canMove, move, codePage, attack;
       if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
+        console.log('new board ', room.board);
         board = <Board board={room.board}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
@@ -109,6 +112,9 @@ class GameRoom extends React.Component {
         }
         if (userInfo.diceResult > 0) {
           move = <MovePlayer room={room} user={user}/>;
+        }
+        if (userInfo.attack) {
+          attack = <Attack attack={userInfo.attack} room={room} user={user}/>;
         }
       } else {
         startButton = <button value={this.props.room.key} onClick={this.startGame}>Start Game</button>;
@@ -132,6 +138,7 @@ class GameRoom extends React.Component {
           {dice}
         </div>
         {move}
+        {attack}
         <div id="editorAndTestSuite">
           {codePage}
         </div>
