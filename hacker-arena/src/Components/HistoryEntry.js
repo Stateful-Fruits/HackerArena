@@ -2,7 +2,6 @@ import React from 'react';
 import '../Styles/HistoryEntry.css';
 
 const HistoryEntry = (props) => {  
-  let games  = props.games;
   return (
     <div className="historyEntry card text-center" >
       <div className="card-header">

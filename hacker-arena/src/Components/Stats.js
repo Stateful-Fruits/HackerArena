@@ -1,8 +1,6 @@
 import React from 'react';
 import '../Styles/Stats.css';
-import fire from '../Firebase/firebase';
 import * as d3 from 'd3';
-import Sunburst from 'react-sunburst-d3-v4';
 
 class Stats extends React.Component { 
   constructor(props){
@@ -12,29 +10,32 @@ class Stats extends React.Component {
     }
   }
   componentDidMount(){
-    //AN ARRAY OF TAGS FOR EACH PROBLEM
     let losses, wins, lossesByTags, winsByTags = [];
     // FIND LOSSES AND WINS BY TAGS
-    // 
+    
     if(this.props.profile){
+      // Games where user is winner
       wins = Object.values(this.props.profile.history).filter(game => {
         return game[0].winner === this.props.profile.username;
       })
-      console.log('wins', wins);
+
+      // Tags of games where user is WINNER
       winsByTags = wins.map(item => {
         console.log("the problem", item[0]);
         return [item[0].problem.tags.replace(/ /g, "").split(',')];
       })
-      console.log('winsbyTag', winsByTags)
+      
+      // Games where user is LOSER
       losses = Object.values(this.props.profile.history).filter(game => {
         return game[0].winner !== this.props.profile.username;
       })
-      console.log('losses', losses)
+
+      // Tags of games where user is LOSER
       lossesByTags = losses.map(item => {
         return [item[0].problem.tags.replace(/ /g, "").split(',')];
       })
-      console.log('lossesbytags', lossesByTags);
-    
+      
+      //WIN DATA template
       let winData = {
         "name": "Wins",
         "children": [
@@ -45,6 +46,7 @@ class Stats extends React.Component {
           }
         ]
       }
+      // LOSS DATA template
       let lossData = {
         "name": "Losses",
         "children": [
@@ -63,6 +65,7 @@ class Stats extends React.Component {
         }
       }
       generateWinTagLineage();
+
       // Create nesting for loss tags
       function generateLossTagLineage(){
         for (let i = 0 ; i < lossesByTags.length ; i++){
@@ -71,7 +74,7 @@ class Stats extends React.Component {
       }
       generateLossTagLineage();
 
-      //
+      // Handles logic for pushing tags into data
       function generateTagLineage(theData, tagArr){
         var last = false;
         let parents = theData;
@@ -110,44 +113,22 @@ class Stats extends React.Component {
           parent.children.push(childObject);
         }
       }
+
       this.winData = winData;
       this.lossData = lossData;
     }
-
+    // Create Data object and push in WIN/LOSS data;
     let data = {
       "name": "Wins/Losses",
       "children": []
     }
-
     if(this.props.profile){
       data.children.push(this.lossData,this.winData)
-      console.log('STATS PROPS', this.props)
-      
-      function clearData(){
-        function NodeCheck(node, parent){
-          console.log("NODE", node, node.size, node.children.length);
-          if(node.size === undefined && node.children.length === 0 && node.name !== "Untagged"){
-            // es-lint-disable-next-line
-            parent.children = parent.children.filter(items => {
-              return items !== node;
-            })
-          }
-          if(node){
-            for (let i = 0 ; i < node.children.length ; i++){
-              NodeCheck(node.children[i], node);
-            }           
-          }
-        }
-        NodeCheck(data);
-      }
-      clearData();
-      console.log("THE DATA ", data);
     }
-    
+    // Creating sunburst graph
     var width = 300;
     var height = 300;
     var radius = Math.min(width, height) / 2;
-    // var color = d3.scaleOrdinal(d3.schemeCategory20b);
     var colors = {
       "Wins": "rgb(42, 158, 75)",
       "Losses": "rgb(204, 76, 44)",
@@ -156,6 +137,7 @@ class Stats extends React.Component {
       "testy": "#437759",
       "tester":  "#efc332"
     }
+
     this.setState({colors: colors});
     // Create primary <g> element
     var g = d3.select('svg')
@@ -180,7 +162,6 @@ class Stats extends React.Component {
         .innerRadius(function (d) { return d.y0 })
         .outerRadius(function (d) { return d.y1 });
 
-    // Put it all together
     g.selectAll('path')
         .data(root.descendants())
         .enter().append('path')
@@ -188,15 +169,7 @@ class Stats extends React.Component {
         .attr("d", arc)
         .style('stroke', '#fff')
         .style("fill", function (d) { 
-          if(d.parent){
-            if(colors[d.parent.data.name]){
-              return colors[d.data.name]
-            } else {
-              return colors[d.data.name];
-            }
-          } else {
             return colors[d.data.name];
-          }
         });
 
     g.selectAll('g')
@@ -206,25 +179,8 @@ class Stats extends React.Component {
       .attr("d", arc)
       .style('stroke', '#fff')
       .style("fill", function (d) { 
-        if(d.parent){
-          if(colors[d.parent.data.name]){
-            return (colors[d.data.name]);
-          } else {
-            return colors[d.data.name];
-          }
-        } else {
           return colors[d.data.name];
-        }
       });
-    // g.selectAll()
-    // g.selectAll(".node")
-    // .append("text")
-    // .attr("transform", function(d) {
-    //     return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
-    // .attr("dx", "-20") // radius margin
-    // .attr("dy", ".5em") // rotation align
-    // .text(function(d) { return d.parent ? d.data.name : "" });
-    console.log(this.colors)
   }
 
   render(){
@@ -232,8 +188,9 @@ class Stats extends React.Component {
         <div style={{display: "flex"}}>
           <svg></svg>
           {this.state.colors ? 
-          (<ul className="legend">{Object.entries(this.state.colors).map(items => {
-            return <p className="btn" style={{background : this.state.colors[items[0]]}}>{items[0]}</p>
+          (<ul className="legend">
+          {Object.entries(this.state.colors).map((items,i) => {
+            return <p className="btn" key= {i} style={{background : this.state.colors[items[0]]}}>{items[0]}</p>
           })}
           </ul>)
           :
