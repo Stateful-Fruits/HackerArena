@@ -1,0 +1,16 @@
+.leftSideProfile {
+  width: 70vw;
+  float: left;
+  height: 100vh;
+}
+
+.ProfileInfo {
+  width: 60%;
+  float:left;
+}
+
+.WinLossStats {
+  width: 50%;
+  float:right;
+  margin-top: 5%;
+}
