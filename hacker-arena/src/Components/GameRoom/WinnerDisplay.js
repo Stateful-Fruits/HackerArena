@@ -14,16 +14,15 @@ class WinnerDisplay extends Component {
         let result = resultsByPlayer[player];
         let role = result.role;
         let wins = result.wins;
-        resultsDisplay.push(<div>{player} received {wins} wins as a {role}</div>)
+        resultsDisplay.push(<div key={player+role}>{player} received {wins} wins as a {role}</div>)
       }
 
     } else {
-      console.log('champtions', champions)
       winnerDisplay = `The winner is ${champions.hacker}!!`
       for (let player in resultsByPlayer) {
         let result = resultsByPlayer[player];
         let wins = result.wins;
-        resultsDisplay.push(<div>{player}: {wins} wins </div>)
+        resultsDisplay.push(<div key={player+result}>{player}: {wins} wins </div>)
       }
     }
 
