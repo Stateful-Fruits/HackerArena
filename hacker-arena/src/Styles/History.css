@@ -1,0 +1,6 @@
+.history {
+  float: right;
+  width: 30vw;
+  overflow: scroll;
+  height: 100vh;
+}

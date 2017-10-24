@@ -4,8 +4,10 @@ import updateUserProfile from '../Actions/updateUserProfile';
 import fire from '../Firebase/firebase';
 import EditProfile from '../Components/User/EditProfile.js';
 import ActivityHeatMap from '../Components/ActivityHeatMap';
-import Stats from '../Components/Stats'
+import Stats from '../Components/Stats';
+import History from '../Components/History';
 import { push } from 'react-router-redux';
+import '../Styles/UserProfile.css';
 
 class UserProfile extends React.Component {
   componentWillMount () {
@@ -34,19 +36,28 @@ class UserProfile extends React.Component {
 
     return (
       <div>
-        <div>
-          <div>Username: {profile.username}</div><br/>
-          <div>Wins: {profile.wins}</div><br/>
-          <div>Losses: {profile.losses}</div>
+        <div className="leftSideProfile">
+          <div style={{display: "flex"}}>
+            <div className="ProfileInfo">
+              <div>Username: {profile.username}</div><br/>
+              <div>Wins: {profile.wins}</div><br/>
+              <div>Losses: {profile.losses}</div>
+            {
+              (profileUsername === clientUsername) ?
+              <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
+              null
+            }
+            </div>
+          
+            <div className="WinLossStats">
+              {this.props.profile.wins ? <Stats profile={profile}/> : null}
+            </div>
+          </div>
+          <div  className="ActivityHeatMap">
+            {this.props.profile.history ? <ActivityHeatMap profile={profile}/> : null}
+          </div>
         </div>
-        
-        {
-          (profileUsername === clientUsername) ?
-          <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
-          null
-        }
-        {this.props.profile.wins ? <Stats profile={profile}/> : null}
-        {this.props.profile.wins ? <ActivityHeatMap profile={profile}/> : null}
+        {this.props.profile.history ? <History profile={profile}/> : null}
       </div>
     )
   }
