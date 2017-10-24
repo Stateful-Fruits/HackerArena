@@ -13,10 +13,7 @@ class Stats extends React.Component {
   }
   componentDidMount(){
     //AN ARRAY OF TAGS FOR EACH PROBLEM
-    let losses = [];
-    let wins = [];
-    let lossesByTags = [];
-    let winsByTags = [];
+    let losses, wins, lossesByTags, winsByTags = [];
     // FIND LOSSES AND WINS BY TAGS
     // 
     if(this.props.profile){
@@ -26,7 +23,7 @@ class Stats extends React.Component {
       console.log('wins', wins);
       winsByTags = wins.map(item => {
         console.log("the problem", item[0]);
-          return [item[0].problem.tags.split(',')];
+        return [item[0].problem.tags.replace(/ /g, "").split(',')];
       })
       console.log('winsbyTag', winsByTags)
       losses = Object.values(this.props.profile.history).filter(game => {
@@ -34,88 +31,132 @@ class Stats extends React.Component {
       })
       console.log('losses', losses)
       lossesByTags = losses.map(item => {
-          return [item[0].problem.tags.split(',')];
+        return [item[0].problem.tags.replace(/ /g, "").split(',')];
       })
       console.log('lossesbytags', lossesByTags);
-    }
-
-    let data =[]
-    if(this.props.profile){
-
-      console.log('STATS PROPS', this.props)
-      data = {
-        "name": "Wins/Losses",
+    
+      let winData = {
+        "name": "Wins",
         "children": [
           {
-            "name": "losses",
-            "size": (this.props.profile.losses)
-          },
-          {
-            "name": "wins",
-            "size": (this.props.profile.wins)
+            "name": "Untagged",
+            "size": (this.props.profile.wins - wins.length),
+            "children": []
           }
         ]
       }
-    }
-    // let data = {
-    //   "name": "Wins/Losses",
-    //   "children": [
-    //     {
-    //       "name": "losses",
-    //       "children":[
-    //         {"name": "data structures", "size": 90},
-    //         {"name": "something",
-    //           "children": [
-    //             {"name": "fsdaaaa", "size": 33},
-    //             {"name": "yello", "size":15}
-    //           ]
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       "name": "wins",
-    //       "children": [
-    //         {"name": "data structures", "size": 100},
-    //         {"name": "algorithms", "size": 80},
-    //         {"name": "strings",
-    //           "children": [
-    //             {"name": "asdfdfsdf", "size": 25},
-    //             {"name": "dsfsdfzzzz", "size": 25}
-    //           ]},
-    //         {"name": "graphs", "size": 29},
-    //         {"name": "hahh", "size": 33},
+      let lossData = {
+        "name": "Losses",
+        "children": [
+          {
+            "name": "Untagged",
+            "size": (this.props.profile.losses - losses.length),
+            "children": []
+          }
+        ]
+      }
+      
+      // Create nesting for win tags
+      function generateWinTagLineage(){
+        for (let i = 0 ; i < winsByTags.length ; i++){
+          generateTagLineage(winData, winsByTags[i]);
+        }
+      }
+      generateWinTagLineage();
+      // Create nesting for loss tags
+      function generateLossTagLineage(){
+        for (let i = 0 ; i < lossesByTags.length ; i++){
+          generateTagLineage(lossData, lossesByTags[i]);
+        }
+      }
+      generateLossTagLineage();
 
-    //       ]
-    //     }
-    //   ]
-    // }
-    function computeTextRotation(d) {
-        var angle = (d.x0 + d.x1) / Math.PI * 90;
+      //
+      function generateTagLineage(theData, tagArr){
+        var last = false;
+        let parents = theData;
+        for (let i = 0 ; i < tagArr[0].length ; i++){
+          if(i === (tagArr[0].length - 1)) {
+            last = true;
+          }
+          nestTags(parents, tagArr[0][i], last);
+          parents = parents.children.find(item => {
+            return (item.name === tagArr[0][i] && item.size === undefined);
+          })
+        }
+        return theData;
+      }
 
-        // Avoid upside-down labels
-        return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
-        // return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
+      // Create tag lineage
+      function nestTags(parent, child, last){
+        let childObject = {
+          "name": child,
+          "children": []
+        }
+        if(last) {
+          if(parent.children.filter(item =>{
+            return (item.name === child && item.children.length === 0);
+          }).length > 0 ){
+            parent.children.forEach(item => {
+            if(item.name === child && item.children.length === 0){
+              item.size += 1;
+            } 
+          })
+        } else {
+            childObject.size = 1;
+            parent.children.push(childObject);
+          }
+        } else {
+          parent.children.push(childObject);
+        }
+      }
+      this.winData = winData;
+      this.lossData = lossData;
     }
-    function incrementColor(string, name){
-      string = string.slice(string.indexOf('(') + 1, string.indexOf(')'));
-      let rgb = string.split(',');
-      rgb[0] = (parseInt(rgb[0],10) + 6);
-      rgb[1] -= 30;
-      rgb[2] = (parseInt(rgb[2],10) + 15);
-      let newString = 'rgb('+rgb.join(',')+')';
-      colors[name] = newString;
-      return newString;
+
+    let data = {
+      "name": "Wins/Losses",
+      "children": []
     }
-    // Variables
-    var width = 200;
-    var height = 200;
+
+    if(this.props.profile){
+      data.children.push(this.lossData,this.winData)
+      console.log('STATS PROPS', this.props)
+      
+      function clearData(){
+        function NodeCheck(node, parent){
+          console.log("NODE", node, node.size, node.children.length);
+          if(node.size === undefined && node.children.length === 0 && node.name !== "Untagged"){
+            // es-lint-disable-next-line
+            parent.children = parent.children.filter(items => {
+              return items !== node;
+            })
+          }
+          if(node){
+            for (let i = 0 ; i < node.children.length ; i++){
+              NodeCheck(node.children[i], node);
+            }           
+          }
+        }
+        NodeCheck(data);
+      }
+      clearData();
+      console.log("THE DATA ", data);
+    }
+    
+    var width = 300;
+    var height = 300;
     var radius = Math.min(width, height) / 2;
     // var color = d3.scaleOrdinal(d3.schemeCategory20b);
     var colors = {
-      "wins": "rgb(42, 158, 75)",
-      "losses": "rgb(204, 76, 44)"
+      "Wins": "rgb(42, 158, 75)",
+      "Losses": "rgb(204, 76, 44)",
+      "Untagged": "#a3a3af",
+      "fundamentals": "#6088e0",
+      "testy": "#437759",
+      "tester":  "#efc332"
     }
-
+    this.setState({colors: colors});
     // Create primary <g> element
     var g = d3.select('svg')
         .attr('width', width)
@@ -149,7 +190,7 @@ class Stats extends React.Component {
         .style("fill", function (d) { 
           if(d.parent){
             if(colors[d.parent.data.name]){
-              return incrementColor(colors[d.parent.data.name],d.data.name)
+              return colors[d.data.name]
             } else {
               return colors[d.data.name];
             }
@@ -167,7 +208,7 @@ class Stats extends React.Component {
       .style("fill", function (d) { 
         if(d.parent){
           if(colors[d.parent.data.name]){
-            return incrementColor(colors[d.parent.data.name],d.data.name);
+            return (colors[d.data.name]);
           } else {
             return colors[d.data.name];
           }
@@ -175,31 +216,28 @@ class Stats extends React.Component {
           return colors[d.data.name];
         }
       });
-
-    g.selectAll(".node")
-    .append("text")
-    .attr("transform", function(d) {
-        return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
-    .attr("dx", "-20") // radius margin
-    .attr("dy", ".5em") // rotation align
-    .text(function(d) { return d.parent ? d.data.name : "" });
+    // g.selectAll()
+    // g.selectAll(".node")
+    // .append("text")
+    // .attr("transform", function(d) {
+    //     return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
+    // .attr("dx", "-20") // radius margin
+    // .attr("dy", ".5em") // rotation align
+    // .text(function(d) { return d.parent ? d.data.name : "" });
+    console.log(this.colors)
   }
 
   render(){
       return (
-        <div>
+        <div style={{display: "flex"}}>
           <svg></svg>
-          {/* <Sunburst
-          data={data}
-          onSelect={this.onSelect}
-          scale="linear"
-          tooltipContent={ <div className="sunburstTooltip" style={{position: "absolute", color:'black', zIndex: 10, background: "red", padding: "5px", textAlign: "center"}} /> }
-          tooltip
-          tooltipPosition="right"
-          keyId="anagraph"
-          width="200"
-          height="200"
-        /> */}
+          {this.state.colors ? 
+          (<ul className="legend">{Object.entries(this.state.colors).map(items => {
+            return <p className="btn" style={{background : this.state.colors[items[0]]}}>{items[0]}</p>
+          })}
+          </ul>)
+          :
+          <p>awfsfdsf</p>}
         </div>
       )
   }

@@ -35,7 +35,7 @@ const ActivityHeatMap = (props) => {
   }
   
   // Tooltip description for each day - Play Count + Date 
-  const customTooltipDataAttrs = (value) => ({'data-tip': `${value.count} games played on ${value.date}`});
+  const customTooltipDataAttrs = (value) => (value ? {'data-tip': `${value.count} game(s) played on ${value.date}`} : null);
   
   return (
     <div>

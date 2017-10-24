@@ -1,0 +1,12 @@
+.historyWin {
+  color: green;
+}
+
+.historyLoss {
+  color: red;
+}
+
+.historyEntry {
+  margin: 30px;
+  background: rgba(242, 242, 242, 0.468);
+}

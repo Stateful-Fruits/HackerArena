@@ -1,0 +1,7 @@
+.legend {
+  padding-left: 0px;
+  display: flex;
+  flex-direction: column;
+  max-width: 175px;
+  justify-content: center;
+}
