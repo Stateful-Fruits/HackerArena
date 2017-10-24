@@ -146,8 +146,8 @@ class PairCreateGameRoom extends React.Component {
             type="number" 
             value={this.state.maxPairs} 
             min="1" 
-            max="2"
-            name="playerCapacity"
+            max="3"
+            name="maxPairs"
             onChange={this.onChange}
           />
           <br/>
