@@ -18,10 +18,12 @@ class DriverRoom extends React.Component {
   render() {
     let { room, username } = this.props
     let Videoroom = Helper._getTeamIndex(room, username)
+    // console.log('hello', room.key);
     return (
       <div>
         YOU ARE A DRIVER. CODE!
-        <PairVideo videoroom= {Videoroom}/>
+        <PairVideo videoroom= {Videoroom}
+        roomKey = {room.key}/>
 
         <div id="editorAndTestSuite">
           <CodeEditor currentRoom={room}/>
