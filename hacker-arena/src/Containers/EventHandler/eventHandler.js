@@ -67,34 +67,45 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
 // ---------------- Events ----------------
 
 eventHandler.winner = function(room, roomId, username, eventValue, problems) {
-  console.log('problems in eventHandler.winner', problems);
   let resultsSoFar = room.results.slice();
   let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
+  let isPairRoom = room.isPairRoom
 
-  let winner = eventValue.winner;
+  let winners = eventValue.winners;
   let timeTaken = eventValue.timeTaken.toFixed(2);
-  let isClientWinner = winner === username
+  let isClientWinner = winners.driver === username || winners.navigator === username || winners.hacker === username;
   let currentRound = room.currentRound
 
   let scoreMessage = ``;
 
   for (let player in resultsByPlayer) {
     let result = resultsByPlayer[player];
-    scoreMessage = scoreMessage + `<div>${player}: ${result} wins \n</div>`;
+    scoreMessage = scoreMessage + `<div>${player}: ${result.wins} wins \n</div>`;
+  }
+
+  let loserMessage;
+  let winnerMessage;
+
+  if (isPairRoom) {
+    loserMessage = `The winners of round ${currentRound} are ${winners.driver} and ${winners.navigator}!`
+    winnerMessage = `You are the winners of round ${currentRound}!`
+  } else {
+    loserMessage = `The winner of round ${currentRound} is ${winners.hacker}!`
+    winnerMessage = `You are the winner of round ${currentRound}!`
   }
   
   return (() => {
     if (isClientWinner) {
       return window.swal(
         `<div>Good job! Finished in ${timeTaken} seconds!</div>`,
-        `<div>You are the winner of round ${currentRound} </div>
+        `<div>${winnerMessage}</div>
         <div>Best out of ${room.rounds} wins! </div>
         <div>Current score is:</div>
         ${scoreMessage}`,
         'success')
     } else {
       return window.swal({
-        title: `The Winner of round ${currentRound} is ${winner}!`,
+        title: loserMessage,
         html: `
           <div>Best out of ${room.rounds} wins!</div>
           <div>Current score is:</div>
@@ -106,8 +117,7 @@ eventHandler.winner = function(room, roomId, username, eventValue, problems) {
       })
     }
   })()
-  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems))
-  
+  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems)) 
 }   
 
 export default eventHandler;

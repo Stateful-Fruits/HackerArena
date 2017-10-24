@@ -6,6 +6,8 @@ import fire from '../../Firebase/firebase';
 import Disruptions from './disruptions';
 import DisruptionsBar from './DisruptionsBar';
 
+import helpers from '../../Helpers/helpers.js';
+
 import '../../Styles/CodeEditor.css';
 
 class CodeEditor extends React.Component {
@@ -100,22 +102,20 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // send win event (in room.players), update results object (in room), and increment user's wins (in database)
-    let room = this.props.currentRoom;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let room = this.props.currentRoom;    
 
     room.timeEnd = performance.now();
     room.timeTaken = (room.timeEnd - room.timeStart)/1000;
 
+    let username = fire.auth().currentUser.email.split('@')[0];
     let players = room.players;
     let playerNames = Object.keys(room.players);
-    
-    let resultForThisRound = {
-      players: playerNames,
-      winner: username,
-      problem: room.problem,
-      timeTaken: room.timeTaken,
-      timeStamp: Date.now()
-    }
+    let problem = room.problem; 
+    let teams = room.teams;
+    let timeStamp = Date.now();
+
+    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
+
     room.results = room.results || [];
     room.results.push(resultForThisRound);
     
