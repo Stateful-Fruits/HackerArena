@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import fire from '../../Firebase/firebase';
 
+import helpers from '../../Helpers/helpers'
+
 class ProgressBar extends Component {
   constructor(props) {
     super(props);
@@ -39,9 +41,21 @@ class ProgressBar extends Component {
     let otherUsers = [];
     // see if this is being rendered by a player or spectator
     let isSpectator = !(Object.keys(room.players).includes(username));
+    let isPairRoom = room.isPairRoom;
+    let userRole = helpers.getRoleFromUsername(room, username);
+    let isNavigator = userRole === 'navigator';
+    let partnerName = helpers.getPartnerName(room, username);
+    let partnerRole = helpers.getPartnerRole(room, username);
     let targetedPlayer = this.props.room.players[username].targetedPlayer || undefined;
     for (let playerName in room.players) {
-      if (playerName !== username) otherUsers.push(playerName);
+      let playerRole = helpers.getRoleFromUsername(room, playerName);
+      // Don't display a bar as being an opponent bar if:
+        // it is the user's bar
+        // the bar is for a navigator (who therefore should not get one)
+        // if the viewer is a navigator and it is their partner's bar
+      if (playerName !== username && playerRole !== 'navigator' && playerName !== partnerName) {
+        otherUsers.push(playerName);
+      }
       let playerProgress = room.players[playerName].testStatus ? room.players[playerName].testStatus.filter((items) => items.passed).length : 0;
       eachPlayerTestProgress[playerName] = (playerProgress / total) * 100;
     }
@@ -51,8 +65,8 @@ class ProgressBar extends Component {
         { 
           !isSpectator ? 
           <div style={{float:"left", margin: "10px"}}>
-           <span className="usernameLabels">You: </span>
-           <span className="usernames">{username}</span>
+           <span className="usernameLabels">{isPairRoom ? 'Your partner:' : 'You'} </span>
+           <span className="usernames">{partnerName || username}</span>
          </div> : null
         }
         { 
@@ -70,7 +84,7 @@ class ProgressBar extends Component {
           !isSpectator ?
           <div className="progress">
             <div className="progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuenow="70"
-              aria-valuemin="0" aria-valuemax="100" style={{width: `${eachPlayerTestProgress[username]}%`}}>
+              aria-valuemin="0" aria-valuemax="100" style={{width: `${eachPlayerTestProgress[partnerName || username]}%`}}>
               <span className="sr-only">bobo Complete</span>
             </div>
           </div> : null

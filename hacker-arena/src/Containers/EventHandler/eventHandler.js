@@ -10,19 +10,16 @@ eventHandler.helpers = {};
 eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roomId, username, problems) {
   fire.database().ref(`rooms/${roomId}`).once('value', snapshot => {
     let room = snapshot.val()
-    console.log('handleConfirmAlert running. room is:', room)
     let resultsSoFar = room.results;
     let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
     let mostTotalWins = helpers.calculateMostTotalWins(resultsByPlayer);
     
     let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
-    console.log('room.currentRound, mostTotalWins.wins, room.rounds, isLastRound', room.currentRound, mostTotalWins.wins, room.rounds, isLastRound)  
     
     let numPlayers = Object.keys(room.players).length;
     
     room.playersReady = room.playersReady + 1 || 1;
     
-    console.log('room.players after add', room.playersReady);
     if (room.playersReady === numPlayers && !isLastRound) {
       console.log('everyone is ready for next round!')
       room.currentRound = room.currentRound + 1;
@@ -74,7 +71,7 @@ eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let winners = eventValue.winners;
   let timeTaken = eventValue.timeTaken.toFixed(2);
   let isClientWinner = winners.driver === username || winners.navigator === username || winners.hacker === username;
-  let currentRound = room.currentRound
+  let currentRound = room.currentRound;
 
   let scoreMessage = ``;
 
