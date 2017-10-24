@@ -46,7 +46,7 @@ class ProgressBar extends Component {
     let isNavigator = userRole === 'navigator';
     let partnerName = helpers.getPartnerName(room, username);
     let partnerRole = helpers.getPartnerRole(room, username);
-    let targetedPlayer = this.props.room.players[username].targetedPlayer || undefined;
+    let targetedPlayer = !isSpectator ? (this.props.room.players[username].targetedPlayer || undefined) : null;
     for (let playerName in room.players) {
       let playerRole = helpers.getRoleFromUsername(room, playerName);
       // Don't display a bar as being an opponent bar if:
