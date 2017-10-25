@@ -14,7 +14,8 @@ class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      testStatus: ""
+      testStatus: "",
+      diffusalCodes: []
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
@@ -56,10 +57,27 @@ class CodeEditor extends React.Component {
     // Check for disruptions sent to the user
     if(currentRoom.players[username].disruptions.length > 1){
       currentRoom.players[username].disruptions.forEach(disruption => {
-        if(disruption !== "") this.receiveDisruptions(disruption);
+        if(disruption !== "") {
+          let clearCode = setTimeout(() => this.receiveDisruptions(disruption), 10000);
+          let currentCodes = this.state.diffusalCodes;
+          console.log('disruption name', disruption);
+          currentCodes.push({
+            disruptionName: disruption,
+            clearCode: clearCode
+          })
+          this.setState({
+            diffusalCodes: currentCodes
+          })
+        };
       });
       fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
     }
+  }
+
+  clearDisruption(disruptionName = 'kennify') {
+    let disruptions = this.state.diffusalCodes;
+    let clearCode = disruptions.find(disruption => disruption.disruptionName === disruptionName).clearCode;
+    clearTimeout(clearCode);
   }
 
   liveInputs(){
@@ -128,11 +146,7 @@ class CodeEditor extends React.Component {
 
     playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
 
-    fire.database().ref(`rooms/${room.key}`).set(room)
-    fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-      let wins = snapshot.val().wins + 1;
-      fire.database().ref(`users/${username}/wins`).set(wins);
-    });
+    fire.database().ref(`rooms/${room.key}`).set(room);
   }
 
   handleReset() {
