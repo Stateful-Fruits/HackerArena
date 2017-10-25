@@ -56,7 +56,10 @@ class CodeEditor extends React.Component {
     // Check for disruptions sent to the user
     if(currentRoom.players[username].disruptions.length > 1){
       currentRoom.players[username].disruptions.forEach(disruption => {
-        if(disruption !== "") this.receiveDisruptions(disruption);
+        if(disruption !== "") {
+          console.log('THE DISRUPTION', disruption)
+          this.receiveDisruptions(disruption)
+        }
       });
       fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
     }
