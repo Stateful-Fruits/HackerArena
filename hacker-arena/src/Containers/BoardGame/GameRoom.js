@@ -106,7 +106,7 @@ class GameRoom extends React.Component {
         } else {
           codePage = <div>
             <CodeEditor room={room} user={user}/>
-            <TestSuite room={room}/>
+            <TestSuite room={room} user={user}/>
           </div>;
           canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
         }
