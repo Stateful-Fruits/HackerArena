@@ -62,7 +62,7 @@ class App extends Component {
           navigate={navigate}
         />
         <div>
-          { Object.keys(this.props.gameRooms).length ? this.props.children : <GameRoomLoading />}
+          {this.props.children}
         </div>
       </div>
     );
