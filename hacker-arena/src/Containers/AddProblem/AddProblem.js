@@ -28,6 +28,14 @@ class AddProblem extends React.Component {
     problem[property] = value;
     this.props.update(problem);
   }
+  handleDifficultyChange (e) {
+    e.preventDefault();
+    let value = parseInt(e.target.value, 10);
+    let property = e.target.dataset.property;
+    let problem = Object.assign({}, this.props.problem);
+    problem[property] = value;
+    this.props.update(problem);
+  }
 
   handleSubmit (e) {
     e.preventDefault();
@@ -65,7 +73,7 @@ class AddProblem extends React.Component {
 
           Problem description: <ProblemDescription problem={problem} handleChange={this.handleChange}/>
 
-          Difficulty: <Difficulty problem={problem} handleChange={this.handleChange}/>
+          Difficulty: <Difficulty problem={problem} handleChange={this.handleDifficultyChange}/>
 
           Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
           

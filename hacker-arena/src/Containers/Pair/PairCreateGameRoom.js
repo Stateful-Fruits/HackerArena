@@ -15,12 +15,7 @@ class PairCreateGameRoom extends React.Component {
     super (props);
 
     this.state = {
-      problemID: Object.keys(props.problems)[0],
-      isPrivate: false,
-      startingCredits: 5,
-      maxPairs: 2,
-      rounds: 1,
-      creatorRole: 'driver'
+      problemID: Object.keys(props.problems)
     }
 
     this.onChange = this.onChange.bind(this);
