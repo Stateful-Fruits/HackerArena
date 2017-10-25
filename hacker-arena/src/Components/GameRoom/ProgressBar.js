@@ -71,7 +71,7 @@ class ProgressBar extends Component {
       <div className="over-prog-container">
         { 
           !isSpectator ? 
-          <div class="prog-container user-bar">
+          <div className="prog-container user-bar">
             <span className="usernameLabels">{isPairRoom ? 'Your partner:' : 'You'} </span>
             <span className="usernames">{partnerName || username}</span>
             <div className="thebars">

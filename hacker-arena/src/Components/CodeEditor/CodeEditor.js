@@ -10,6 +10,8 @@ import helpers from '../../Helpers/helpers.js';
 
 import '../../Styles/CodeEditor.css';
 
+let oldDisruptions = {};
+
 class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -55,10 +57,13 @@ class CodeEditor extends React.Component {
     let username = fire.auth().currentUser.email.split('@')[0];    
     // Check for disruptions sent to the user
     if(currentRoom.players[username].disruptions.length > 1){
-      currentRoom.players[username].disruptions.forEach(disruption => {
-        if(disruption !== "") this.receiveDisruptions(disruption);
-      });
       fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
+      currentRoom.players[username].disruptions.forEach((disruption) => {
+        if(disruption !== "" && !oldDisruptions[disruption[1]]) {
+          oldDisruptions[disruption[1]] = true;
+          this.receiveDisruptions(disruption[0]);
+        }
+      });
     }
   }
 
@@ -73,7 +78,7 @@ class CodeEditor extends React.Component {
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
     // Sends disruptions to oppposite player
-    let disruptionFunc = e.target.id.split(" ")[0];
+    let disruptionFunc = [e.target.id.split(" ")[0], Date.now()];
     let disruptionCost = e.target.id.split(" ")[1];
     // make sure the user has enough credits to send this disruption
     if (currentRoom.players[username].credits >= disruptionCost) {
