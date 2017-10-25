@@ -34,7 +34,7 @@ class App extends Component {
 
     db.BoardRooms.on('value', data => {
       updateBoardRooms(data.val());
-    })
+    });
 
   }
 
@@ -62,7 +62,7 @@ class App extends Component {
           navigate={navigate}
         />
         <div>
-          {this.props.children}
+          { this.props.children }
         </div>
       </div>
     );
