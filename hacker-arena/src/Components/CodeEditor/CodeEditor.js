@@ -60,27 +60,31 @@ class CodeEditor extends React.Component {
     if(currentRoom.players[username].disruptions.length > 1){
       currentRoom.players[username].disruptions.forEach(disruption => {
         if(disruption !== "") {
-          let clearCode = setTimeout(() => {
-            this.receiveDisruptions(disruption);
-            let disruptions = this.state.diffusalCodes;
-            let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
+          if (currentRoom.isPairRoom) {
+            let clearCode = setTimeout(() => {
+              this.receiveDisruptions(disruption);
+              let disruptions = this.state.diffusalCodes;
+              let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
             
-            disruptions.splice(indOfDisruptionToClear, 1)[0];
+              disruptions.splice(indOfDisruptionToClear, 1)[0];
 
-            this.setState({
-              diffusalCodes: disruptions
-            })
-          }, 10000)
+              this.setState({
+                diffusalCodes: disruptions
+              })
+            }, 5000);
         
-          let currentCodes = this.state.diffusalCodes;
-          console.log('disruption name', disruption);
-          currentCodes.push({
-            disruptionName: disruption,
-            clearCode: clearCode
-          })
-          this.setState({
-            diffusalCodes: currentCodes
-          })
+            let currentCodes = this.state.diffusalCodes;
+            console.log('disruption name', disruption);
+            currentCodes.push({
+              disruptionName: disruption,
+              clearCode: clearCode
+            })
+            this.setState({
+              diffusalCodes: currentCodes
+            })
+          } else {
+            this.receiveDisruptions(disruption);
+          }
         };
       });
       fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
@@ -106,8 +110,11 @@ class CodeEditor extends React.Component {
       if (currentRoom.players[username].targetedPlayer) {
         let  { targetedPlayer } = currentRoom.players[username];
         let currentDisruptions = currentRoom.players[targetedPlayer].disruptions;
+        let activity = currentRoom.activity || [];
+        activity.push(`${username} is sending a ${disruptionFunc} at ${targetedPlayer}!`)
         fire.database().ref(`rooms/${currentRoom.key}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+        fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
       } else {
         // send the disruption to all players
         Object.keys(currentRoom.players).forEach((playerName) => {
@@ -117,6 +124,7 @@ class CodeEditor extends React.Component {
           }
         });
         fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+
       }
     }
   }

@@ -8,6 +8,8 @@ import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import PairVideo from './PairVideo.js';
 import Helper from '../../Helpers/helpers.js'
 
+import '../../Styles/NavigatorRoom.css'
+
 //this should better be a view instead of room;
 class NavigatorRoom extends React.Component {
   constructor (props) {
@@ -19,7 +21,8 @@ class NavigatorRoom extends React.Component {
 
   render() {
     let { roomId, room, username, partnerName, partnerRole } = this.props
-  
+    let activityLog = room.activity || [''];
+
     let Videoroom = Helper._getTeamIndex(room, username)
     
     return (
@@ -43,6 +46,9 @@ class NavigatorRoom extends React.Component {
             partnerName ={partnerName}
             partnerRole={partnerRole}
           />
+        </div>
+        <div className="activity-log">
+            {activityLog.map((message, i) => <p className="activity-message" key={message.slice(0, 3) + i}>{message}</p>).reverse()}
         </div>
       </div>
     )

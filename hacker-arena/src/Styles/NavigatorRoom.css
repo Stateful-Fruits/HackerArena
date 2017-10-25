@@ -1,0 +1,60 @@
+#editorAndTestSuite {
+  display:flex;
+}
+.progress {
+  width: 48%;
+  height: 25px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.usernames {
+  font-size: 16px;
+  color: rgb(64, 91, 198);
+}
+
+.usernameLabels {
+  font-size: 16px;
+}
+.opponent {
+  font-size: 16px;
+  color: rgb(205, 79, 79); 
+}
+
+.opponentLabels {
+  font-size: 16px;
+}
+
+.progress-bar {
+  transition: width 2s;
+}
+
+.progress-bar-success {
+  background-color: rgb(64, 91, 198);
+}
+
+.progress-bar-warning {
+  background-color:  rgb(205, 79, 79); 
+}
+
+.completeWaiting {
+  font-size: 16px;
+}
+
+.thebars {
+  clear:both;
+  display:flex;
+}
+
+.activity-log {
+  text-align: left;
+  height: 100px;
+  overflow: scroll;
+  float: left;
+  width: 500px;
+  padding-left: 30px;
+}
+
+.activity-log > ::-webkit-scrollbar {
+  display: initial;
+}
