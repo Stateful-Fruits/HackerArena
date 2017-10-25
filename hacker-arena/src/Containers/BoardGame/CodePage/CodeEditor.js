@@ -83,22 +83,24 @@ class CodeEditor extends React.Component {
 
   sendDisruptions(e){
     let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let username = this.props.user;
     let disruptions = room.playerInfo[username].disruptions;
     let playerInfo = room.playerInfo[username];
     // Sends disruptions to oppposite player
     let disruptionFunc = e.target.id.split(" ")[0];
     let disruptionCost = e.target.id.split(" ")[1];
+    console.log('dissssssrupt', disruptionFunc, disruptionCost, disruptions);
     // make sure the user has enough credits to send this disruption
     if (playerInfo.credits >= disruptionCost) {
-      Object.keys(room.players).forEach((playerName) => {
+      room.players.forEach((playerName) => {
         if (playerName !== username) {
           let currentDisruptions = disruptions;
+          console.log('playername', playerName);
           fire.database().ref(`BoardRooms/${room.key}/playerInfo/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
           //fire.database().ref(`rooms/${room.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         }
       });
-      fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/disruptions`).set(playerInfo.credits - disruptionCost);
+      fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/credits`).set(playerInfo.credits - disruptionCost);
     }
   }
 
