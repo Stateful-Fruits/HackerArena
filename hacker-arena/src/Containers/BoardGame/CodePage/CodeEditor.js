@@ -87,7 +87,7 @@ class CodeEditor extends React.Component {
     let disruptions = room.playerInfo[username].disruptions;
     let playerInfo = room.playerInfo[username];
     // Sends disruptions to oppposite player
-    let disruptionFunc = e.target.id.split(" ")[0];
+    let disruptionFunc = [e.target.id.split(" ")[0], Date.now()];
     let disruptionCost = e.target.id.split(" ")[1];
     console.log('dissssssrupt', disruptionFunc, disruptionCost, disruptions);
     // make sure the user has enough credits to send this disruption
@@ -106,6 +106,7 @@ class CodeEditor extends React.Component {
 
   receiveDisruptions(func) {
     // Runs disruptions for user, if called
+    console.log('function is ',func);
     let oldHistory = this.ace.editor.getSession().getUndoManager();
     Disruptions[func]('ace-editor', this.ace.editor);
     this.ace.editor.getSession().setUndoManager(oldHistory);
@@ -121,6 +122,7 @@ class CodeEditor extends React.Component {
     let random = Math.floor(Math.random() * powers.length);
     console.log(powers, random);
     userInfo.attack = powers[random];
+    userInfo.credits += this.state.problem.difficulty*5;
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 
