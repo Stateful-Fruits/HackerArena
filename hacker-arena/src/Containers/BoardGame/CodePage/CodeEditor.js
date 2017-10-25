@@ -66,7 +66,7 @@ class CodeEditor extends React.Component {
 
     if(disruptions.length){
       room.playerInfo[username].disruptions.forEach(disruption => {
-        if(disruption !== "") this.receiveDisruptions(disruption);
+        if(disruption !== "") this.receiveDisruptions(disruption[0]);//[0]
       });
       fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/disruptions`).set(['']);
     }
