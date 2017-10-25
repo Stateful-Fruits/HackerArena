@@ -1,0 +1,24 @@
+.over-prog-container {
+  width: 100%;
+  margin: auto;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.prog-container {
+  width: 100%;
+  margin: auto;
+}
+
+.user-bar .progress {
+  height: 50px;
+  width: 80%;
+}
+
+.user-bar {
+}
+
+.opponent-bar {
+  margin: auto;
+}

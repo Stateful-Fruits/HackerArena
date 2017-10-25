@@ -10,18 +10,23 @@ import helpers from './../../Helpers/helpers';
 import './../../Styles/PairCreateGameRoom.css';
 import './../../Styles/nouislider.css';
 
-class PairCreateGameRoom extends React.Component {
+
+class Solo extends React.Component {
   constructor (props) {
     super (props);
 
     this.state = {
-      problemID: Object.keys(props.problems)
+      problemID: Object.keys(props.problems)[0],
+      isPrivate: false,
+      startingCredits: 5,
+      playerCapacity: 2,
+      rounds: 1,
+      invitedPlayers: []
     }
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCheck = this.onCheck.bind(this);
-
     this.createRoom = this.createRoom.bind(this);
   }
 
@@ -43,31 +48,26 @@ class PairCreateGameRoom extends React.Component {
     }))
   }
 
-  createRoom (problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty = 0, maxDifficulty = 8) {
-    let username = fire.auth().currentUser.email.split('@')[0];
+  createRoom (problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty = 0, maxDifficulty = 8) {
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
       roomStatus: 'standby',
-      isPairRoom: true,
-      startingCredits: startingCredits,
-      isPrivate: isPrivate,
-      problemID: problemID,
-      problem: problem,
+      isPairRoom: false,
+      startingCredits,
+      isPrivate: true,
+      problemID,
+      problem,
       spectators: 0,
-      rounds: rounds,
+      rounds,
       currentRound: 1,
-      minDifficulty: minDifficulty,
-      maxDifficulty: maxDifficulty,
-      maxPairs: maxPairs,
-      playerCapacity: maxPairs * 2,
-      teams: [
-        {[creatorRole]: username}
-      ]
+      minDifficulty,
+      maxDifficulty,
+      playerCapacity: 2
     };
-
+    if (room.isPrivate) room.invitedPlayers = this.state.invitedPlayers;
     db.Rooms.push(room).then(added => {
-      this.props.navigateToPairGameRoom(added.key);
+      this.props.navigateToGameRoom(added.key);
     });
   }
 
@@ -75,9 +75,7 @@ class PairCreateGameRoom extends React.Component {
     e.preventDefault();
     
     const slider = document.getElementById('slider'); 
-    console.log('slider', slider)
     let sliderValues = slider.noUiSlider.get();  
-    console.log('sliderValues', sliderValues)  
     
     let problemID = this.state.problemID;
     let minDifficulty = parseInt(sliderValues[0], 10);
@@ -91,26 +89,45 @@ class PairCreateGameRoom extends React.Component {
 
     let isPrivate = this.state.isPrivate
     let startingCredits = this.state.startingCredits;
-    let maxPairs = this.state.maxPairs;
+    let playerCapacity = this.state.playerCapacity;
     let rounds = this.state.rounds;
-    let creatorRole = this.state.creatorRole;
 
-    this.createRoom(problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty, maxDifficulty);
+    this.createRoom(problemID, isPrivate, startingCredits, playerCapacity, rounds, minDifficulty, maxDifficulty);
   }
 
   onChange(e) {
     e.preventDefault();
-    console.log('e.target.name', 'e.target.value', e.target.name, e.target.value);
-
-    this.setState({[e.target.name] : e.target.value})
+    // if changing the number of players to invite, need up update number of inputs
+    // to show the user when enter their friend's names
+    if (e.target.name === 'playerCapacity' && this.state.isPrivate) {
+      let invitedPlayers = this.state.invitedPlayers;
+      let previousCapacity = this.state.playerCapacity;
+      if (previousCapacity > e.target.value) {
+        invitedPlayers = invitedPlayers.slice(0, e.target.value);
+      } else {
+        for (let i = 0; i < (e.target.value - previousCapacity); i++) invitedPlayers.push('');
+      }
+      this.setState({
+        [e.target.name] : e.target.value,
+        invitedPlayers 
+      }); 
+    } else {
+      this.setState({[e.target.name] : e.target.value}); 
+    }
   }
 
   onCheck(e) {
     e.stopPropagation();
+    let username = fire.auth().currentUser.email.split('@')[0];
     let name = e.target.name;
-
+    let invitedPlayers = [];
+    for (let i = 0; i < this.state.playerCapacity; i++) invitedPlayers.push('');
+    invitedPlayers[0] = username;
     this.setState(({ isPrivate }) => {
-      return {[name] : !isPrivate}})
+      return {
+        [name] : !isPrivate,
+        invitedPlayers
+      }})
   }
 
   render () {
@@ -124,58 +141,12 @@ class PairCreateGameRoom extends React.Component {
     return (
       <div>
         <form>
-        Wins needed to be the champion
-          <select
-            type="number" 
-            value={this.state.rounds} 
-            name="rounds"
-            onChange={this.onChange}
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
-          <br/>
-          Max Pairs
-          <input
-            type="number" 
-            value={this.state.maxPairs} 
-            min="1" 
-            max="3"
-            name="maxPairs"
-            onChange={this.onChange}
-          />
-          <br/>
-          Make room private
-          <input
-            type="checkbox"
-            label="Make room private"
-            checked={this.state.isPrivate} 
-            name="isPrivate"
-            onChange={this.onCheck}
-          />
-          <br/>
-          Starting Attack credits<input
-            type="number" 
-            value={this.state.startingCredits} 
-            min="1" 
-            max="50" 
-            name="startingCredits"
-            onChange={this.onChange}
-          />
-          <br/>
-          Your role
-          <select name="creatorRole" value={this.state.creatorRole} onChange={this.onChange}>
-            <option value="driver">driver</option>
-            <option value="navigator">navigator</option>
-          </select>
           <br/>
           Choose a problem
           <select name="problemID" value={this.state.problemID} onChange={this.onChange}>
             {problemsArr}
             <option value="random">random!</option>
           </select>
-          <br/>
           <br/>
           Select a difficulty level for this and subsequent problems
           <div className="slider-container">
@@ -196,7 +167,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatcherToProps = (dispatch) => {
   return {
-    navigateToPairGameRoom: (id) => {dispatch(push('/Pair/GameRoom/' + id))}
+    navigateToGameRoom: (id) => {dispatch(push('Solo/GameRoom/' + id))}
   }
 }
-export default connect(mapStateToProps, mapDispatcherToProps)(PairCreateGameRoom);
+export default connect(mapStateToProps, mapDispatcherToProps)(Solo);

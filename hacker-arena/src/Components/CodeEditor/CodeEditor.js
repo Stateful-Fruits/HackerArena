@@ -22,6 +22,7 @@ class CodeEditor extends React.Component {
     this.sendDisruptions = this.sendDisruptions.bind(this);
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
     this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
   
   componentDidMount() {
@@ -31,14 +32,15 @@ class CodeEditor extends React.Component {
     this.ace.editor.on("paste", () => {
       window.swal('You little cheater', '', 'warning');
       setTimeout( () => {
-        this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`)
+        this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
       }, 500);
     });
     this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
     // Increments user credits by 5 every 30 seconds
     let intervalId = setInterval(()=> {
-      let newCreditTotal = currentRoom.players[username].credits + 5;
-      if(currentRoom.players[username].credits <= 50) fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(newCreditTotal);
+      if(this.props.currentRoom.players[username].credits <= 50) {
+        fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + 5);
+      }
     }, 30000);
     this.setState({ intervalId });
   }
@@ -133,6 +135,10 @@ class CodeEditor extends React.Component {
     });
   }
 
+  handleReset() {
+    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+  }
+
   handleSubmit(){
     let code = this.ace.editor.getValue();
     let { currentRoom } = this.props;
@@ -191,6 +197,7 @@ class CodeEditor extends React.Component {
             ref={instance => { this.ace = instance; }} // Let's put things into scope
           />
         <button className="btn submitButton" onClick={this.handleSubmit}> SUBMIT </button> 
+        <button className="btn resetButton" onClick={this.handleReset}> RESET </button>
         <button className="btn consoleHeader" color="secondary" size="lg" >
           <span>Console</span>
           <span className="clearConsole" onClick={this.handleClear}>X</span>

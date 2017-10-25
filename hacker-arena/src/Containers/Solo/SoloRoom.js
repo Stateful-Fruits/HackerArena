@@ -3,25 +3,19 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import fire from '../../Firebase/firebase';
-
-//import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
-//import TestSuite from '../../Components/TestSuite.js'; //From Simon
-//import ProgressBar from '../../Components/GameRoom/ProgressBar';
+import SoloEditor from './SoloEditor.js'
+import TestSuite from '../../Components/TestSuite.js'; //From Simon
 import GameRoomLoading from '../../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
 import WinnerDisplay from '../../Components/GameRoom/WinnerDisplay'
-
-import NavigatorRoom from './NavigatorRoom';
-import DriverRoom from './DriverRoom';
-
 import eventHandler from './../EventHandler/eventHandler';
 
 import helpers from './../../Helpers/helpers'
 
 import '../../Styles/GameRoom.css';
 
-class PairGameRoom extends React.Component {
+class SoloRoom extends React.Component {
   constructor (props) {
     super (props);
     this.state = {
@@ -33,22 +27,20 @@ class PairGameRoom extends React.Component {
   }
   
   componentDidMount () {
-    console.log('pairgameRoom mounted')
     window.addEventListener('beforeunload', this.handleLeave);
     this.handleEnter();
+    console.log("LOGGG", this.props.gameRooms[this.props.roomId])
   }
 
   componentWillUpdate() {
     // see if user is entering the room and if room needs to be updated as a result
     this.handleEnter();
-
     // processing incoming events from db
     this.handleIncomingEvents()
   }
 
   componentWillUnmount () {
     this.handleLeave();
-    // window.removeEventListener('beforeunload', this.handleLeave);
   }
 
   handleLeave () {
@@ -68,12 +60,6 @@ class PairGameRoom extends React.Component {
         let gameRoom = Object.assign({}, room);
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
-        // find this user's team and role
-        gameRoom.teams = gameRoom.teams.reduce((acc, team) => {
-          if (team.navigator === username) return (team.driver ? [...acc, {driver: team.driver}] : acc);
-          if (team.driver === username) return (team.navigator ? [...acc, {navigator: team.navigator}] : acc);
-          return [...acc, team];
-        }, []);
         // see if the game needs to switch to standby
         if (playerNames.length - 1 < gameRoom.playerCapacity 
             && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
@@ -91,13 +77,9 @@ class PairGameRoom extends React.Component {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
-      
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
-      let players = room.players;      
-      let playerNames = Object.keys(players);
-      console.log('playernames.length', playerNames.length)
-      console.log('room.playerCapacity', room.playerCapacity) 
+      let playerNames = Object.keys(room.players);
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
@@ -110,8 +92,7 @@ class PairGameRoom extends React.Component {
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
           gameRoom.timeStart = performance.now();
-        } else if (playerNames.length + 1 === gameRoom.playerCapacity 
-                   && gameRoom.gameStatus !== 'completed') {
+        } else if (playerNames.length + 2 === Number(gameRoom.playerCapacity) && gameRoom.gameStatus !== 'completed') {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
         // add you username to the gameroom
@@ -124,16 +105,14 @@ class PairGameRoom extends React.Component {
         // and update the database
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
-      // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
   }
 
   handleIncomingEvents() {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
-      console.log('this.props in handleevents', this.props);
       let roomId = this.props.roomId;
       let room = this.props.gameRooms[roomId];
-      let problems = this.props.problems;      
+      let problems = this.props.problems;
       let username = fire.auth().currentUser.email.split('@')[0];
       let player = room.players[username];
       let events = player.events;
@@ -154,88 +133,34 @@ class PairGameRoom extends React.Component {
 
   
   render () {
-    console.log('renderPairGameRoom is running', this.props.gameRooms);
-    console.log('this.props.roomId', this.props.roomId);
-    console.log('this.props.gameRooms[this.props.roomId]', this.props.gameRooms[this.props.roomId]);
-    console.log('this.props.gameRooms[this.props.roomId].players', this.props.gameRooms[this.props.roomId].players);
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
-    // TODO if there are no game rooms, this message will always show until one is created
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
-
     if (this.props.gameRooms 
         && Object.keys(this.props.gameRooms).length 
         && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
-    // If we have retrieved gameRooms from firebase and our room exists
-    if (!this.props.gameRooms 
-        || !Object.keys(this.props.gameRooms).length 
-        || !this.props.gameRooms[this.props.roomId]
+    // If we haven't retrieved gameRooms from firebase or our room doesn't exist
+    if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-
-    let { gameRooms, roomId } = this.props;
+    let { gameRooms, roomId, isPairRoom } = this.props;
     let room = gameRooms[roomId];
-    let roomStatus = room.roomStatus;
-    console.log('roomStatus is currently', roomStatus);
-    let results = room.results;
+    room.key = roomId;
+    let { roomStatus, results } = room;
     let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
-    let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
-    let champions = mostTotalWins ? mostTotalWins.winners : null;
-    let isPairRoom = room.isPairRoom;
-
-    let username = this.props.username;
-
-    let role = helpers.getRoleFromUsername(room, username);
-    let partnerName = helpers.getPartnerName(room, username);
-    let partnerRole = helpers.getPartnerRole(room, username);
-    let teams = room.teams;
-
-    let navigatorRoom = <NavigatorRoom
-      roomId={roomId}
-      room={room}
-      username={username} 
-      partnerName ={partnerName}
-      partnerRole={partnerRole}
-    />
-
-    let driverRoom = <DriverRoom
-      roomId={roomId}
-      room={room}
-      username={username} 
-      partnerName ={partnerName}
-      partnerRole={partnerRole}
-    />
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (
-        <div className="completeWaiting">
-          <WaitingForPlayer
-            roomId={roomId}
-            room={room}
-            username={username} 
-            partnerName ={partnerName}
-            partnerRole={partnerRole}
-            teams={teams}
-          />
+        <div>
+          <div id="editorAndTestSuite">
+            <SoloEditor currentRoom={room}/>
+            {/* <CodeEditor currentRoom={room}/> */}
+            <TestSuite currentRoom={room}/>
+          </div>
         </div>
       );
-    } else if (roomStatus === 'completed') {
-      return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
-    } else if (roomStatus === 'playing') {
-      if (role === 'navigator') {
-        return navigatorRoom;
-      } else if (role === 'driver') {
-        return driverRoom;
-      } else {
-        return <div>Error - role does not seem to be navigator or driver. Fatal error.</div>
-      }
-    } else {
-      return (
-        <div>
-          THIS ROOM HAS NO STATUS?
-        </div>
-      )
     } 
   }
+  
 }
 
 const mapStateToProps = (state) => ({
@@ -249,4 +174,4 @@ const mapDispatcherToProps = (dispatch) => ({
   navigate: (route) => dispatch(push(route))
 });
 
-export default connect(mapStateToProps, mapDispatcherToProps)(PairGameRoom);
+export default connect(mapStateToProps, mapDispatcherToProps)(SoloRoom);

@@ -7,6 +7,7 @@ import fire from '../../Firebase/firebase';
 import AllTests from './AllTests';
 import Title from './Title';
 import ProblemDescription from './ProblemDescription';
+import AddTags from './AddTags'
 import FunctionName from './FunctionName';
 import Difficulty from './Difficulty';
 import AddingTest from './AddingTest';
@@ -73,7 +74,9 @@ class AddProblem extends React.Component {
 
           Problem description: <ProblemDescription problem={problem} handleChange={this.handleChange}/>
 
-          Difficulty: <Difficulty problem={problem} handleChange={this.handleDifficultyChange}/>
+          Tags: <AddTags problem={problem} handleChange={this.handleChange}/>
+
+          Difficulty: <Difficulty problem={problem} handleChange={this.handleChange}/>
 
           Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
           

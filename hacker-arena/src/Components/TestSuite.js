@@ -5,7 +5,7 @@ import '../Styles/TestSuite.css';
 /* Check if user is challenger or creator*/
 const TestSuite = props => {
   let username = fire.auth().currentUser.email.split('@')[0];
-  let usernameWhoseTestsShouldBeRendered = props.partnerName || username
+  let usernameWhoseTestsShouldBeRendered = props.partnerName || username;
     return(
       <div id="testSuite">
         <h3 className="problemTitle"> {props.currentRoom.problem.title} </h3>

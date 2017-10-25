@@ -20,6 +20,9 @@ import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
 import Random from './Components/Random.js'
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
+import Solo from './Containers/Solo/CreateSolo';
+import SoloRoom from './Containers/Solo/SoloRoom';
+
 // To check Log in info
 import fire from './Firebase/firebase';
 
@@ -153,8 +156,24 @@ fire.auth().onAuthStateChanged(function(user) {
                     )
                   )}/>
 
+                <Route exact path="/Solo" render={() => (
+                  fire.auth().currentUser ? (
+                    <Solo />
+                  ) : (
+                    <Redirect to="/Login" />      
+                  )
+                )}/>
+
+                <Route exact path="/Solo/GameRoom/:roomId" render={() => (
+                  fire.auth().currentUser ? (
+                    <SoloRoom />
+                    ) : (
+                    <Redirect to="/Login" />      
+                    )
+                  )}/>
                 <Route exact path="/SignUp" component={SignUp}/>
                 <Route exact path="/Login" component={Login}/>
+                <Route exact path="/Solo" component={Solo}/>
                 <Route exact path="/Random" component={Random}/>
               </Switch>
             )

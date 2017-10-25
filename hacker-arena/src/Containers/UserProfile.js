@@ -40,13 +40,14 @@ class UserProfile extends React.Component {
           <div style={{display: "flex"}}>
             <div className="ProfileInfo">
               <div>Username: {profile.username}</div><br/>
-              <div>Wins: {profile.wins}</div><br/>
+              <div>Wins: {profile.wins}</div>
               <div>Losses: {profile.losses}</div>
             {
               (profileUsername === clientUsername) ?
               <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
               null
             }
+              <div> Description: Hey its me kfspfksdfk okfspadfksdpfoksdfpakpsdokfpsdofksapfk </div>
             </div>
           
             <div className="WinLossStats">
