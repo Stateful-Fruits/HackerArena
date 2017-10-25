@@ -16,9 +16,10 @@ class Stats extends React.Component {
     if(this.props.profile){
       // Games where user is winner
       wins = Object.values(this.props.profile.history).filter(game => {
-        return game[0].winner === this.props.profile.username;
+        return Object.values(game[0].winners) === (this.props.profile.username);
       })
-
+      
+      console.log("WINS", wins);
       // Tags of games where user is WINNER
       winsByTags = wins.map(item => {
         console.log("the problem", item[0]);
@@ -27,9 +28,9 @@ class Stats extends React.Component {
       
       // Games where user is LOSER
       losses = Object.values(this.props.profile.history).filter(game => {
-        return game[0].winner !== this.props.profile.username;
+        return Object.values(game[0].winners) !== (this.props.profile.username);
       })
-
+      console.log('LOSSES', losses);
       // Tags of games where user is LOSER
       lossesByTags = losses.map(item => {
         return [item[0].problem.tags.replace(/ /g, "").split(',')];
@@ -124,6 +125,7 @@ class Stats extends React.Component {
     }
     if(this.props.profile){
       data.children.push(this.lossData,this.winData)
+      console.log(data);
     }
     // Creating sunburst graph
     var width = 300;
@@ -134,7 +136,8 @@ class Stats extends React.Component {
       "Losses": "rgb(204, 76, 44)",
       "Untagged": "#a3a3af",
       "fundamentals": "#6088e0",
-      "testy": "#437759",
+      "math": "#f48c42"
+,      "testy": "#437759",
       "tester":  "#efc332"
     }
 
