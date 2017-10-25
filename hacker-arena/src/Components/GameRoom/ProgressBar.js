@@ -33,9 +33,10 @@ class ProgressBar extends Component {
   handleTargetChange(otherUserName) {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
+    let partnerName = helpers.getPartnerName(room, username);
 
     // firebase query to update this user's targetedPlayer obejct in firebase
-    fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(otherUserName);
+    fire.database().ref(`/rooms/${room.key}/players/${partnerName || username}/targetedPlayer`).set(otherUserName);
   }
 
   render() {
@@ -54,7 +55,7 @@ class ProgressBar extends Component {
     let isNavigator = userRole === 'navigator';
     let partnerName = helpers.getPartnerName(room, username);
     let partnerRole = helpers.getPartnerRole(room, username);
-    let targetedPlayer = !isSpectator ? (this.props.room.players[username].targetedPlayer || undefined) : null;
+    let targetedPlayer = !isSpectator ? (this.props.room.players[partnerName || username].targetedPlayer || undefined) : null;
     for (let playerName in room.players) {
       let playerRole = helpers.getRoleFromUsername(room, playerName);
       // Don't display a bar as being an opponent bar if:
