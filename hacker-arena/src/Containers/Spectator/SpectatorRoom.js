@@ -11,6 +11,8 @@ import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
 
+let oldDisruptions = {};
+
 class SpectatorRoom extends Component {
 
   sendSpectatorMessage(room, username, msg) {
@@ -72,7 +74,10 @@ class SpectatorRoom extends Component {
       //Check for disruptions sent to each user
       Object.keys(gameRoom.players).forEach(playerName => {
         gameRoom.players[playerName].disruptions.forEach(disruption => {
-          if(disruption !== "") this.receiveDisruptions(disruption, playerName);
+          if(disruption !== "" && !oldDisruptions[disruption[1]]) {
+            oldDisruptions[disruption[1]] = true;
+            this.receiveDisruptions(disruption[0], playerName);
+          }
         });
       })
     }
