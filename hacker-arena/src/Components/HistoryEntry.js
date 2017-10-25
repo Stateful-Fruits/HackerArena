@@ -2,12 +2,13 @@ import React from 'react';
 import '../Styles/HistoryEntry.css';
 
 const HistoryEntry = (props) => {  
-  let games  = props.games;
   return (
     <div className="historyEntry card text-center" >
       <div className="card-header">
-        {props.game[0].winner === props.profile.username ? <h1 className="historyWin">WIN</h1> : <h1 className="historyLoss">LOSS</h1>}
-        <p>Winner : {props.game[0].winner} </p>
+        {(Object.values(props.game[0].winners).filter(items=>{
+          return items === (props.profile.username)
+        }).length > 0 ) ? <h1 className="historyWin">WIN</h1> : <h1 className="historyLoss">LOSS</h1>}
+        <p>Winner : {Object.values(props.game[0].winners)} </p>
       </div>
       <div className="card-body">
         <h3 className="card-title">{props.game[0].problem.title}</h3>

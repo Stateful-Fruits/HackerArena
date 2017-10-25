@@ -1,14 +1,21 @@
 import React, {Component} from 'react';
+import $ from 'jquery';
 
 import fire from '../../Firebase/firebase';
 
 class NavBar extends Component {
+  componentDidMount(){
+    $(".navbar-nav li").on("click", function() {
+      $(".navbar-nav li").removeClass("active");
+      $(this).addClass("active");
+    });
+  }
   render() {
     let { navigate } = this.props;
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
+          <li className="nav-item rightNav navbar-brand active" onClick={ () => { navigate('/'); }}>
             Home </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
             About </li>
@@ -18,6 +25,8 @@ class NavBar extends Component {
             Code Run </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
           Pair Match </li>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Solo'); }}>
+          Solo </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Random'); }}>
           Random </li>
           {/* <a href='/' className='leftNav nav-item navbar-brand'>Home</a>

@@ -11,7 +11,8 @@ class EditProfile extends React.Component {
     this.state = {
       photoURL: fire.auth().currentUser.photoURL,
       photoFiles: [],
-      uploadProgress: 0
+      uploadProgress: 0,
+      showEdit: false
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -19,6 +20,7 @@ class EditProfile extends React.Component {
 
     this.onFileChange =this.onFileChange.bind(this);    
     this.onFileSubmit =this.onFileSubmit.bind(this);
+    this.handleEditPhoto = this.handleEditPhoto.bind(this);
   }
 
   onChange(e) {
@@ -81,6 +83,14 @@ class EditProfile extends React.Component {
     });
   }
 
+  handleEditPhoto(){
+    if(this.state.showEdit){
+      this.setState({showEdit: false});
+    } else {
+      this.setState({showEdit: true});
+    }
+  }
+
   render() {
     let currentUser = fire.auth().currentUser;
     return (
@@ -88,15 +98,17 @@ class EditProfile extends React.Component {
         <img className="profile-photo"
           src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
           alt='profile'
+          onClick={this.handleEditPhoto}
         >
         </img>
+        {this.state.showEdit ?
+        <div>
         <div className="photo-url-edit">
           Enter custom url to profile photo here:
-          <input className="photo-url-input" onChange={this.onChange}
+          <input className="photo-url-input form-control" onChange={this.onChange}
             value = {this.state.photoURL}
             type= 'text'
             name= 'photoURL'
-            className = 'form-control'
           />
           <button onClick={this.onSubmit}>Submit</button>
         </div>
@@ -110,6 +122,10 @@ class EditProfile extends React.Component {
             <div className="upload-bar progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="uploader" style={{width: `${this.state.uploadProgress}%`}}></div>
           </div>
         </div>
+        </div>
+        :
+        null
+        }
       </div>
     )
   }
