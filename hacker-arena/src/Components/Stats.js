@@ -16,9 +16,9 @@ class Stats extends React.Component {
     if(this.props.profile){
       // Games where user is winner
       wins = Object.values(this.props.profile.history).filter(game => {
-        return Object.values(game[0].winners) === (this.props.profile.username);
+        return (Object.values(game[0].winners).indexOf(this.props.profile.username) > -1);
       })
-      
+      console.log("WINS" ,wins)
       console.log("WINS", wins);
       // Tags of games where user is WINNER
       winsByTags = wins.map(item => {
@@ -28,7 +28,7 @@ class Stats extends React.Component {
       
       // Games where user is LOSER
       losses = Object.values(this.props.profile.history).filter(game => {
-        return Object.values(game[0].winners) !== (this.props.profile.username);
+        return (Object.values(game[0].winners).indexOf(this.props.profile.username) === -1);
       })
       console.log('LOSSES', losses);
       // Tags of games where user is LOSER
@@ -40,22 +40,12 @@ class Stats extends React.Component {
       let winData = {
         "name": "Wins",
         "children": [
-          {
-            "name": "Untagged",
-            "size": (this.props.profile.wins - wins.length),
-            "children": []
-          }
         ]
       }
       // LOSS DATA template
       let lossData = {
         "name": "Losses",
         "children": [
-          {
-            "name": "Untagged",
-            "size": (this.props.profile.losses - losses.length),
-            "children": []
-          }
         ]
       }
       
