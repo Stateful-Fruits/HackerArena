@@ -6,7 +6,9 @@ import fire from '../../../Firebase/firebase';
 import Disruptions from '../../../Components/CodeEditor/disruptions';
 import DisruptionsBar from '../../../Components/CodeEditor/DisruptionsBar';
 import Powers from './Power';
+import helpers from '../../../Helpers/helpers';
 import '../../../Styles/CodeEditor.css';
+
 
 class CodeEditor extends React.Component {
   constructor(props) {
@@ -66,7 +68,7 @@ class CodeEditor extends React.Component {
 
     if(disruptions.length){
       room.playerInfo[username].disruptions.forEach(disruption => {
-        if(disruption !== "") this.receiveDisruptions(disruption[0]);//[0]
+        if(disruption !== "") this.receiveDisruptions(disruption);
       });
       fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/disruptions`).set(['']);
     }
@@ -87,7 +89,7 @@ class CodeEditor extends React.Component {
     let disruptions = room.playerInfo[username].disruptions;
     let playerInfo = room.playerInfo[username];
     // Sends disruptions to oppposite player
-    let disruptionFunc = [e.target.id.split(" ")[0], Date.now()];
+    let disruptionFunc = e.target.id.split(" ")[0];
     let disruptionCost = e.target.id.split(" ")[1];
     console.log('dissssssrupt', disruptionFunc, disruptionCost, disruptions);
     // make sure the user has enough credits to send this disruption
@@ -106,7 +108,6 @@ class CodeEditor extends React.Component {
 
   receiveDisruptions(func) {
     // Runs disruptions for user, if called
-    console.log('function is ',func);
     let oldHistory = this.ace.editor.getSession().getUndoManager();
     Disruptions[func]('ace-editor', this.ace.editor);
     this.ace.editor.getSession().setUndoManager(oldHistory);
@@ -122,7 +123,27 @@ class CodeEditor extends React.Component {
     let random = Math.floor(Math.random() * powers.length);
     console.log(powers, random);
     userInfo.attack = powers[random];
-    userInfo.credits += this.state.problem.difficulty*5;
+    room.timeEnd = Date.now();
+    room.timeTaken = (room.timeEnd - room.timeStart)/1000;
+
+    let username = fire.auth().currentUser.email.split('@')[0];
+    let players = room.players;
+    let playerNames = Object.keys(room.players);
+    let problem = room.problem; 
+    let teams = room.teams;
+    let timeStamp = Date.now();
+
+    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
+
+    room.results = room.results || [];
+    room.results.push(resultForThisRound);
+    
+    let winEvent = {
+      eventName: 'winner',
+      value: resultForThisRound
+    }
+
+    playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 
