@@ -71,35 +71,10 @@ console.log('video object', this.refs.remote);
 componentWillUnmount(){
   // console.log(localMediaStream);
   // MediaStreamTrack.stop();
-  navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-  .then(mediaStream => {
-    console.log(mediaStream);
-    console.log(mediaStream.getVideoTracks()[0]);
-    mediaStream.getVideoTracks()[0] = null;
-    mediaStream.getVideoTracks()[0].stop();
-  })
-  .catch(e =>{
-    console.log(e)
-  })
+  this.webrtc.stopLocalVideo();
 }
 // shouldComponentUpdate = shouldPureComponentUpdate;
 mute(){
-  this.webrtc.pause();
-  navigator.mediaDevices.getUserMedia({ audio: false, video: true })
-  .then(mediaStream => {
-    let track = mediaStream.getVideoTracks()[0];
-    track.stop();
-    // mediaStream.getVideoTracks().forEach(item => {
-    //   item.stop();
-    // })
-    // mediaStream.stop();
-    console.log(mediaStream.getVideoTracks()[0]);
-    console.log(mediaStream.getVideoTracks());
-    // mediaStream = null;
-  })
-  .catch(e =>{
-    console.log(e)
-  })
   if(this.state.muted){
     this.webrtc.unmute();
     this.setState({muted: false});
