@@ -65,15 +65,17 @@ class CodeEditor extends React.Component {
           oldDisruptions[disruption[1]] = true;
           if (currentRoom.isPairRoom) {
             let clearCode = setTimeout(() => {
+              console.log('disruption activating!!', disruption[0])
               this.receiveDisruptions(disruption[0]);
               let disruptions = this.state.diffusalCodes;
-              let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
-            
-              disruptions.splice(indOfDisruptionToClear, 1);
+              if (disruptions.length > 0) {
+                let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
+                disruptions.splice(indOfDisruptionToClear, 1);
 
-              this.setState({
-                diffusalCodes: disruptions
-              })
+                this.setState({
+                  diffusalCodes: disruptions
+                })
+              }
             }, 5000);
         
             let currentCodes = this.state.diffusalCodes;
@@ -138,26 +140,35 @@ class CodeEditor extends React.Component {
         
     let disruptionFuncName = e.target.id.split(" ")[0];
     let blockCost = e.target.id.split(" ")[1];
+    let activity = currentRoom.activity || [];    
 
     if (currentRoom.players[username].credits >= blockCost) {
       let disruptions = this.state.diffusalCodes;
-      console.log('disruptions', disruptions)
       let indOfDisruptionToClear = disruptions.findIndex(disruption => disruption.disruptionName === disruptionFuncName);
       let disruptionToClear = disruptions.splice(indOfDisruptionToClear, 1)[0];
       if (disruptionToClear) {
         let clearCode = disruptionToClear.clearCode;
-        console.log('clearCode', clearCode)
         clearTimeout(clearCode);
+
+        activity.push(`${username} successfully blocked ${disruptionToClear.disruptionName[0]}!`)
+      } else {
+        activity.push(`${username} wasted ${blockCost} defending against a ${disruptionFuncName} that didn't exist!`)
       }
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - blockCost);      
+
+      fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity)
+      
+      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - blockCost);
+
     } 
   }
 
   receiveDisruptions(func) {
     // Runs disruptions for user, if called
-    let oldHistory = this.ace.editor.getSession().getUndoManager();
-    Disruptions[func]('ace-editor', this.ace.editor);
-    this.ace.editor.getSession().setUndoManager(oldHistory);
+    if (this.ace) {
+      let oldHistory = this.ace.editor.getSession().getUndoManager();
+      Disruptions[func]('ace-editor', this.ace.editor);
+      this.ace.editor.getSession().setUndoManager(oldHistory);
+    }
   }
 
   endRoundWithClientAsVictor() {
@@ -198,7 +209,7 @@ class CodeEditor extends React.Component {
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
-    let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
+    let testStatus = runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
       // if every test is passed
       if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();

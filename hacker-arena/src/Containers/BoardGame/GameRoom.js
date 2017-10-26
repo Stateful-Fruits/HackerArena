@@ -8,10 +8,14 @@ import MovePlayer from './MovePlayer';
 import CodeEditor from './CodePage/CodeEditor';
 import TestSuite from './CodePage/TestSuite';
 import Attack from './Attack';
-
+//codeeditor/
+//dice roll resets;
 class GameRoom extends React.Component {
   constructor (props) {
     super (props);
+    this.state = {
+      won: false
+    }
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.startGame = this.startGame.bind(this);
@@ -94,11 +98,32 @@ class GameRoom extends React.Component {
     } else {
       let players = room.players;
       let playerInfo = room.playerInfo;
+      let thereIsAWinner = false;
+      let winner = '';
       players.forEach(player => {
         if (playerInfo[player].position[0] === 6 && playerInfo[player].position[1] === 6) {
+          thereIsAWinner = true;
+          winner = player;
           window.swal(`${player} won!`);
         }
       })
+      if (thereIsAWinner) {
+        players.forEach(player => {
+          if (player === winner) {
+            fire.database().ref(`users/${player}`).once('value').then(snapshot => {
+              let info = snapshot.val();
+              info.wins++;
+              fire.database().ref(`users/${player}`).set(info);
+            })
+          } else {
+            fire.database().ref(`users/${player}`).once('value').then(snapshot => {
+              let info = snapshot.val();
+              info.loses++;
+              fire.database().ref(`users/${player}`).set(info);
+            })
+          }
+        })
+      }
       let userInfo = room.playerInfo[user];
       let message, startButton, board, dice, diceResult, canMove, move, codePage, attack;
       if (room.gameStarted && userInfo) {
@@ -109,7 +134,9 @@ class GameRoom extends React.Component {
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
-          dice = <Dice room={room} user={user}/>;
+          if (userInfo.diceResult === 0) {
+            dice = <Dice room={room} user={user}/>;
+          }
         } else {
           codePage = <div>
             <CodeEditor room={room} user={user}/>

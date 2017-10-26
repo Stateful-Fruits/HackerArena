@@ -154,10 +154,6 @@ class PairGameRoom extends React.Component {
 
   
   render () {
-    console.log('renderPairGameRoom is running', this.props.gameRooms);
-    console.log('this.props.roomId', this.props.roomId);
-    console.log('this.props.gameRooms[this.props.roomId]', this.props.gameRooms[this.props.roomId]);
-    console.log('this.props.gameRooms[this.props.roomId].players', this.props.gameRooms[this.props.roomId].players);
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
     // TODO if there are no game rooms, this message will always show until one is created
     // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
