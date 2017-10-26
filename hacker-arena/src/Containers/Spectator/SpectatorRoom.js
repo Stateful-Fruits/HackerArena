@@ -62,12 +62,17 @@ class SpectatorRoom extends Component {
     if(gameRoom && playerNames) {
       let events = gameRoom.players[playerNames[0]].events || [];
       events.forEach((event) => {
-        window.swal({
-          title: `The Winner is ${event.value.winner}!`,
-          width: 600,
-          padding: 100,
-          background: '#fff url(//bit.ly/1Nqn9HU)'
-        });
+        if (event !== '' && event.value && event.value.winners) {
+          let winners = Object.keys(event.value.winners).reduce((acc, key) => (
+            [...acc, (event.value.winners[key])]
+          ), []).join(', ');
+          window.swal({
+            title: `The Winner is ${winners}!`,
+            width: 600,
+            padding: 100,
+            background: '#fff url(//bit.ly/1Nqn9HU)'
+          });
+        }
       });
      }
     if(gameRoom && gameRoom.players){
@@ -95,13 +100,6 @@ class SpectatorRoom extends Component {
     Disruptions[func](user);
   }
 
-  test(){
-    console.log(this.ace.edit("abc"))
-    $('.ace_editor').css({"background": "black"});
-    $(".ace_editor").css({"transform": "scaleX(-1)"});
-    $(".ace_editor").css({"filter": "FlipH"});
-  }
-
   render() {
     if (this.props.gameRooms 
       && Object.keys(this.props.gameRooms).length 
@@ -116,7 +114,6 @@ class SpectatorRoom extends Component {
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}
         />
-        <button className="btn" onClick={this.test.bind(this)}>TESTTTTTING</button>
       </div>
     ) : (
       Object.keys(this.props.gameRooms).length === 0 ? <WaitingForPlayer /> :
