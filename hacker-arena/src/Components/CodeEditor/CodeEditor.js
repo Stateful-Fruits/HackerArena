@@ -67,13 +67,14 @@ class CodeEditor extends React.Component {
             let clearCode = setTimeout(() => {
               this.receiveDisruptions(disruption[0]);
               let disruptions = this.state.diffusalCodes;
-              let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
-            
-              disruptions.splice(indOfDisruptionToClear, 1);
+              if (disruptions.length > 0) {
+                let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
+                disruptions.splice(indOfDisruptionToClear, 1);
 
-              this.setState({
-                diffusalCodes: disruptions
-              })
+                this.setState({
+                  diffusalCodes: disruptions
+                })
+              }
             }, 5000);
         
             let currentCodes = this.state.diffusalCodes;
@@ -155,9 +156,11 @@ class CodeEditor extends React.Component {
 
   receiveDisruptions(func) {
     // Runs disruptions for user, if called
-    let oldHistory = this.ace.editor.getSession().getUndoManager();
-    Disruptions[func]('ace-editor', this.ace.editor);
-    this.ace.editor.getSession().setUndoManager(oldHistory);
+    if (this.ace) {
+      let oldHistory = this.ace.editor.getSession().getUndoManager();
+      Disruptions[func]('ace-editor', this.ace.editor);
+      this.ace.editor.getSession().setUndoManager(oldHistory);
+    }
   }
 
   endRoundWithClientAsVictor() {
@@ -198,7 +201,7 @@ class CodeEditor extends React.Component {
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     //TEST SUITE LOGIC
-    let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
+    let testStatus = runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
       // if every test is passed
       if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
