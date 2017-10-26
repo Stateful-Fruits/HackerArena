@@ -71,7 +71,7 @@ componentWillReceiveProps(nextProps) {
 console.log('video object', this.refs.remote);
 }
 componentWillUnmount(){
-  this.webrtc.stopLocalVieo();
+  this.webrtc.stopLocalVideo();
 }
 // shouldComponentUpdate = shouldPureComponentUpdate;
 mute(){
