@@ -5,7 +5,7 @@ import provider from '../Firebase/oauth/oauth.js';
 
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-
+import TopSecret from '../Containers/TopSecret';
 import * as THREE from 'three'
 
 class Random extends React.Component {
@@ -77,10 +77,13 @@ class Random extends React.Component {
 
   render() {
     return (
+      <div style={{display: "flex"}}>
       <div
         style={{ width: '400px', height: '400px' }}
         ref={(mount) => { this.mount = mount }}
       />
+        <TopSecret style={{width: '400px', height: '400px'}}/>
+      </div>
     )
   }
 }
