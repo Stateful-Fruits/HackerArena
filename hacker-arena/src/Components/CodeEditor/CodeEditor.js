@@ -7,7 +7,7 @@ import Disruptions from './disruptions';
 import DisruptionsBar from './DisruptionsBar';
 import BlockDisruptionsBar from './../Pair/BlockDisruptionsBar'
 
-import helpers from '../../Helpers/helpers.js';
+import { prepResultsObjectFromWinner } from '../../Helpers/resultsHelpers.js';
 
 import '../../Styles/CodeEditor.css';
 
@@ -185,7 +185,7 @@ class CodeEditor extends React.Component {
     let teams = room.teams;
     let timeStamp = Date.now();
 
-    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
+    let resultForThisRound = prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
 
     room.results = room.results || [];
     room.results.push(resultForThisRound);
