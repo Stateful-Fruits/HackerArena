@@ -59,10 +59,7 @@ class ProgressBar extends Component {
     let isSpectator = !(Object.keys(room.players).includes(username));
     let isPairRoom = room.isPairRoom;
 
-    let userRole = getRoleFromUsername(room, username);
-    let isNavigator = userRole === 'navigator';
     let partnerName = getPartnerName(room, username);
-    let partnerRole = getPartnerRole(room, username);
     let targetedPlayer = !isSpectator ? (this.props.room.players[partnerName || username].targetedPlayer || null) : null;
     for (let playerName in room.players) {
       let playerRole = getRoleFromUsername(room, playerName);
