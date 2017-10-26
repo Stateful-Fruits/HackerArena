@@ -7,7 +7,7 @@ import db from '../Firebase/db';
 
 import fire from '../Firebase/firebase';
 
-import helpers from './../Helpers/helpers';
+import {filterProblemsByDifficulty, chooseRandomProblem} from './../Helpers/problemHelpers';
 import './../Styles/CreateGameRoom.css';
 import './../Styles/nouislider.css';
 
@@ -84,8 +84,8 @@ class CreateGameRoom extends React.Component {
 
     if (!problemID || problemID.length === 0 || problemID === 'random') {
       let allProblems = this.props.problems;
-      let filteredProblems = helpers.filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems)
-      problemID = helpers.chooseRandomProblem(filteredProblems);
+      let filteredProblems = filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems)
+      problemID = chooseRandomProblem(filteredProblems);
     }
 
     let isPrivate = this.state.isPrivate
