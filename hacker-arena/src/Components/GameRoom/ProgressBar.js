@@ -16,26 +16,40 @@ class ProgressBar extends Component {
     let username = fire.auth().currentUser.email.split('@')[0];
 
     let isSpectator = !(Object.keys(room.players).includes(username));
-    let otherUsers = Object.keys(room.players).filter(name => name !== username);
+    let partnerName = helpers.getPartnerName(room, username)
+
+    let nameOfDisrupter = room.isPairRoom ? partnerName : username;    
+
+    let otherUsers = Object.keys(room.players).filter(name => {
+        let role = helpers.getRoleFromUsername(room, name);
+        
+        return name !== username && role !== 'navigator' && name !== partnerName;
+    });
+    console.log('otherusers', otherUsers);
 
     // if there is no targeted player for this user
     console.log('Component should target a player now');
-    if (!isSpectator && !room.players[username].targetedPlayer) {
+    console.log('!isSpectator', !isSpectator)
+    console.log('!room.players[nameOfDisrupter].targetedPlayer', !room.players[nameOfDisrupter].targetedPlayer)
+    console.log('room.players[nameOfDisrupter].targetedPlayer', room.players[nameOfDisrupter].targetedPlayer)
+    console.log('!isSpectator && !room.players[username].targetedPlayer', !isSpectator && !room.players[nameOfDisrupter].targetedPlayer)
+    if (!isSpectator && !room.players[nameOfDisrupter].targetedPlayer) {
       // set the first other player as targeted
-      console.log('Logic running determining whether or not to target a player');
-      if (otherUsers.length) fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(otherUsers[0]);
-      else fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(undefined);
-    } else if (!isSpectator && !otherUsers.includes(room.players[username].targetedPlayer)) {
-      fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(undefined);
+      console.log('Logic running determining whether or not to target a player', otherUsers[0]);
+      if (otherUsers.length) fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(otherUsers[0]);
+      else fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(undefined);
+    } else if (!isSpectator && !otherUsers.includes(room.players[nameOfDisrupter].targetedPlayer)) {
+      fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(undefined);
     }
   }
 
   handleTargetChange(otherUserName) {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
+    let partnerName = helpers.getPartnerName(room, username);
 
     // firebase query to update this user's targetedPlayer obejct in firebase
-    fire.database().ref(`/rooms/${room.key}/players/${username}/targetedPlayer`).set(otherUserName);
+    fire.database().ref(`/rooms/${room.key}/players/${partnerName || username}/targetedPlayer`).set(otherUserName);
   }
 
   render() {
@@ -54,7 +68,7 @@ class ProgressBar extends Component {
     let isNavigator = userRole === 'navigator';
     let partnerName = helpers.getPartnerName(room, username);
     let partnerRole = helpers.getPartnerRole(room, username);
-    let targetedPlayer = !isSpectator ? (this.props.room.players[username].targetedPlayer || undefined) : null;
+    let targetedPlayer = !isSpectator ? (this.props.room.players[partnerName || username].targetedPlayer || undefined) : null;
     for (let playerName in room.players) {
       let playerRole = helpers.getRoleFromUsername(room, playerName);
       // Don't display a bar as being an opponent bar if:

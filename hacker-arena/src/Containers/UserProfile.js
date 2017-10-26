@@ -32,7 +32,17 @@ class UserProfile extends React.Component {
     let profile = this.props.profile;
     let profileUsername = this.props.profileUsername;
     let clientUsername = fire.auth().currentUser.email.split('@')[0];
-    console.log('this.props', this.props);
+    let wins = 0;
+    let losses = 0;
+
+    if(profile.history){
+      wins = Object.values(this.props.profile.history).filter(game => {
+        return (Object.values(game[0].winners).indexOf(this.props.profile.username) > -1);
+      }).length;
+      losses = Object.values(this.props.profile.history).filter(game => {
+        return (Object.values(game[0].winners).indexOf(this.props.profile.username) === -1);
+      }).length;
+    }
 
     return (
       <div>
@@ -40,8 +50,8 @@ class UserProfile extends React.Component {
           <div style={{display: "flex"}}>
             <div className="ProfileInfo">
               <div>Username: {profile.username}</div><br/>
-              <div>Wins: {profile.wins}</div>
-              <div>Losses: {profile.losses}</div>
+              <div>Wins: {wins}</div>
+              <div>Losses: {losses}</div>
             {
               (profileUsername === clientUsername) ?
               <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
