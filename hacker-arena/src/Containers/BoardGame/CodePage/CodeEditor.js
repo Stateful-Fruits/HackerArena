@@ -6,9 +6,7 @@ import fire from '../../../Firebase/firebase';
 import Disruptions from '../../../Components/CodeEditor/disruptions';
 import DisruptionsBar from '../../../Components/CodeEditor/DisruptionsBar';
 import Powers from './Power';
-import helpers from '../../../Helpers/helpers';
 import '../../../Styles/CodeEditor.css';
-
 
 class CodeEditor extends React.Component {
   constructor(props) {
@@ -123,27 +121,6 @@ class CodeEditor extends React.Component {
     let random = Math.floor(Math.random() * powers.length);
     console.log(powers, random);
     userInfo.attack = powers[random];
-    room.timeEnd = Date.now();
-    room.timeTaken = (room.timeEnd - room.timeStart)/1000;
-
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let players = room.players;
-    let playerNames = Object.keys(room.players);
-    let problem = room.problem; 
-    let teams = room.teams;
-    let timeStamp = Date.now();
-
-    let resultForThisRound = helpers.prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
-
-    room.results = room.results || [];
-    room.results.push(resultForThisRound);
-    
-    let winEvent = {
-      eventName: 'winner',
-      value: resultForThisRound
-    }
-
-    playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 
