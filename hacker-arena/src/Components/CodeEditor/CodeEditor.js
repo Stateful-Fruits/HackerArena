@@ -65,6 +65,7 @@ class CodeEditor extends React.Component {
           oldDisruptions[disruption[1]] = true;
           if (currentRoom.isPairRoom) {
             let clearCode = setTimeout(() => {
+              console.log('disruption activating!!', disruption[0])
               this.receiveDisruptions(disruption[0]);
               let disruptions = this.state.diffusalCodes;
               if (disruptions.length > 0) {
@@ -139,18 +140,25 @@ class CodeEditor extends React.Component {
         
     let disruptionFuncName = e.target.id.split(" ")[0];
     let blockCost = e.target.id.split(" ")[1];
+    let activity = currentRoom.activity || [];    
 
     if (currentRoom.players[username].credits >= blockCost) {
       let disruptions = this.state.diffusalCodes;
-      console.log('disruptions', disruptions)
       let indOfDisruptionToClear = disruptions.findIndex(disruption => disruption.disruptionName === disruptionFuncName);
       let disruptionToClear = disruptions.splice(indOfDisruptionToClear, 1)[0];
       if (disruptionToClear) {
         let clearCode = disruptionToClear.clearCode;
-        console.log('clearCode', clearCode)
         clearTimeout(clearCode);
+
+        activity.push(`${username} successfully blocked ${disruptionToClear.disruptionName[0]}!`)
+      } else {
+        activity.push(`${username} wasted ${blockCost} defending against a ${disruptionFuncName} that didn't exist!`)
       }
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - blockCost);      
+
+      fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity)
+      
+      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - blockCost);
+
     } 
   }
 
