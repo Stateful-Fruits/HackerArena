@@ -92,6 +92,13 @@ class GameRoom extends React.Component {
         <div> Please wait as we prepare your board </div>
       </div>
     } else {
+      let players = room.players;
+      let playerInfo = room.playerInfo;
+      players.forEach(player => {
+        if (playerInfo[player].position[0] === 6 && playerInfo[player].position[1] === 6) {
+          window.swal(`${player} won!`);
+        }
+      })
       let userInfo = room.playerInfo[user];
       let message, startButton, board, dice, diceResult, canMove, move, codePage, attack;
       if (room.gameStarted && userInfo) {
