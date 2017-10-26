@@ -57,7 +57,6 @@ class UserProfile extends React.Component {
               <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
               null
             }
-              <div> Description: Hey its me kfspfksdfk okfspadfksdpfoksdfpakpsdokfpsdofksapfk </div>
             </div>
           
             <div className="WinLossStats">

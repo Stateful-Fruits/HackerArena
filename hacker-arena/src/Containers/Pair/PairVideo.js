@@ -70,6 +70,9 @@ class PairVideo extends Component {
 componentWillReceiveProps(nextProps) {
 console.log('video object', this.refs.remote);
 }
+componentWillUnmount(){
+  this.webrtc.stopLocalVieo();
+}
 // shouldComponentUpdate = shouldPureComponentUpdate;
 mute(){
   if(this.state.muted){

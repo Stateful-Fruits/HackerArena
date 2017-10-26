@@ -1,7 +1,16 @@
 .legend {
+  margin-top: 10px;
   padding-left: 0px;
   display: flex;
   flex-direction: column;
-  max-width: 175px;
+  width: 150px;
   justify-content: center;
+  overflow: scroll;
+}
+
+.legendHeader {
+  color:white;
+  background: black;
+  width: 130px;
+  margin-bottom: 10px;
 }
