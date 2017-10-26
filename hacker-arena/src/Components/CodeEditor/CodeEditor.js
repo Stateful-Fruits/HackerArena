@@ -164,7 +164,7 @@ class CodeEditor extends React.Component {
     // send win event (in room.players), update results object (in room), and increment user's wins (in database)
     let room = this.props.currentRoom;    
 
-    room.timeEnd = performance.now();
+    room.timeEnd = Date.now();
     room.timeTaken = (room.timeEnd - room.timeStart)/1000;
 
     let username = fire.auth().currentUser.email.split('@')[0];
