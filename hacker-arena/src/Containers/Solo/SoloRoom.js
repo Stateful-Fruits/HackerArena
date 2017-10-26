@@ -11,8 +11,6 @@ import GameRoomError from '../../Components/GameRoom/GameRoomError';
 import WinnerDisplay from '../../Components/GameRoom/WinnerDisplay'
 import eventHandler from './../EventHandler/eventHandler';
 
-import helpers from './../../Helpers/helpers'
-
 import '../../Styles/GameRoom.css';
 
 class SoloRoom extends React.Component {
@@ -146,7 +144,6 @@ class SoloRoom extends React.Component {
     let room = gameRooms[roomId];
     room.key = roomId;
     let { roomStatus, results } = room;
-    let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (

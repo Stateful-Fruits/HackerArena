@@ -1,5 +1,6 @@
 import fire from '../../Firebase/firebase';
-import helpers from '../../Helpers/helpers'
+import { filterProblemsByDifficulty, chooseRandomProblem } from '../../Helpers/problemHelpers';
+import { calculateResultsByPlayer, calculateMostTotalWins } from '../../Helpers/resultsHelpers'
 
 let eventHandler = {};
 
@@ -23,9 +24,9 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
       room.playersReady = 0;
 
       // new problem
-      let filteredProblems = helpers.filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
+      let filteredProblems = filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
       console.log('filteredProblems in eventhandler', filteredProblems)
-      room.problemID = helpers.chooseRandomProblem(filteredProblems);
+      room.problemID = chooseRandomProblem(filteredProblems);
       room.problem = problems[room.problemID]
 
       room.activity = [];
@@ -53,8 +54,8 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
 
 eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let resultsSoFar = room.results.slice();
-  let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
-  let mostTotalWins = helpers.calculateMostTotalWins(resultsByPlayer);
+  let resultsByPlayer = calculateResultsByPlayer(resultsSoFar);
+  let mostTotalWins = calculateMostTotalWins(resultsByPlayer);
   let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
   let isPairRoom = room.isPairRoom
 

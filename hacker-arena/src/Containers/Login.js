@@ -11,7 +11,7 @@ import updateBoardRooms from '../Actions/updateBoardRooms';
 import updateGameRooms from '../Actions/updateGameRooms';
 import updateProblems from '../Actions/updateProblems';
 
-import auth from './AuthHelpers/helpers';
+import { normalLogin, googleAuth, fbookAuth } from '../Helpers/authHelpers';
 import syncToDb from '../Firebase/syncToDb'
 
 import '../Styles/Login.css';
@@ -42,7 +42,7 @@ constructor(props) {
     let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;
     let email = this.state.email;
     let password = this.state.password;
-    auth.normalLogin(email, password, navigate)
+    normalLogin(email, password, navigate)
       .then(() => {
         syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
       });
@@ -50,7 +50,7 @@ constructor(props) {
 
   signInWithGoogle(e) {
     let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;    
-    auth.googleAuth(navigate, updateGameRooms, updateProblems, updateBoardRooms)
+    googleAuth(navigate, updateGameRooms, updateProblems, updateBoardRooms)
       .then(() => {
         syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
       });
@@ -58,7 +58,7 @@ constructor(props) {
 
   signInWithFacebook(e) {
     let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;    
-    auth.fbookAuth(navigate, updateGameRooms, updateProblems, updateBoardRooms)
+    fbookAuth(navigate, updateGameRooms, updateProblems, updateBoardRooms)
       .then(() => {
         syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
       });

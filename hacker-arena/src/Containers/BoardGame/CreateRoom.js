@@ -6,7 +6,7 @@ import fire from '../../Firebase/firebase';
 import noUiSlider from 'nouislider';
 import './../../Styles/nouislider.css';
 import './../../Styles/CreateBoardRoom.css';
-import helpers from './../../Helpers/helpers';
+import { filterProblemsByDifficulty } from './../../Helpers/problemHelpers';
 
 
 class CreateRoom extends React.Component {
@@ -42,7 +42,7 @@ class CreateRoom extends React.Component {
     let minDifficulty = parseInt(sliderValues[0], 10);
     let maxDifficulty = parseInt(sliderValues[1], 10);
     let allProblems = this.props.problems;
-    let problems = helpers.filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems);
+    let problems = filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems);
     console.log('problemsssss', problems);
     let user = fire.auth().currentUser.email.split('@')[0];
     let room = {

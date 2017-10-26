@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import fire from './../../Firebase/firebase';
 import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
 import ProgressBar from '../../Components/GameRoom/ProgressBar';
-import PairVideo from './PairVideo.js';
-import Helper from '../../Helpers/helpers.js'
+import PairVideo from './PairVideo';
+import { getTeamIndex } from '../../Helpers/pairHelpers'
 
 //this should better be a view instead of room;
 class DriverRoom extends React.Component {
@@ -17,7 +17,7 @@ class DriverRoom extends React.Component {
   }
   render() {
     let { room, username } = this.props
-    let Videoroom = Helper._getTeamIndex(room, username)
+    let Videoroom = getTeamIndex(room, username)
     // console.log('hello', room.key);
     return (
       <div>

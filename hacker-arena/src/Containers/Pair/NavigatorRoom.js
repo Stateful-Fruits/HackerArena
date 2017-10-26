@@ -6,7 +6,7 @@ import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import TestSuite from '../../Components/TestSuite.js'; //From Simon
 import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';
 import PairVideo from './PairVideo.js';
-import Helper from '../../Helpers/helpers.js'
+import { getTeamIndex } from '../../Helpers/pairHelpers.js'
 
 import '../../Styles/NavigatorRoom.css'
 
@@ -23,7 +23,7 @@ class NavigatorRoom extends React.Component {
     let { roomId, room, username, partnerName, partnerRole } = this.props
     let activityLog = room.activity || [''];
 
-    let Videoroom = Helper._getTeamIndex(room, username)
+    let Videoroom = getTeamIndex(room, username)
     
     return (
       <div>
