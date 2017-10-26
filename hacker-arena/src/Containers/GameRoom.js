@@ -92,7 +92,7 @@ class GameRoom extends React.Component {
         // if you're the first one in, start the game timer
         if (playerNames.length === 0) {
           gameRoom.timerStarted = true;
-          gameRoom.timeStart = performance.now();
+          gameRoom.timeStart = Date.now();
         } else if (playerNames.length + 1 === Number(gameRoom.playerCapacity) && gameRoom.gameStatus !== 'completed') {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
