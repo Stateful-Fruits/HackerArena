@@ -69,7 +69,7 @@ class CodeEditor extends React.Component {
               let disruptions = this.state.diffusalCodes;
               let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
             
-              disruptions.splice(indOfDisruptionToClear, 1)[0];
+              disruptions.splice(indOfDisruptionToClear, 1);
 
               this.setState({
                 diffusalCodes: disruptions
@@ -114,7 +114,7 @@ class CodeEditor extends React.Component {
         let  { targetedPlayer } = currentRoom.players[username];
         let currentDisruptions = currentRoom.players[targetedPlayer].disruptions;
         let activity = currentRoom.activity || [];
-        activity.push(`${username} is sending a ${disruptionFunc} at ${targetedPlayer}!`)
+        activity.push(`${username} is sending a ${disruptionFunc[0]} at ${targetedPlayer}!`)
         fire.database().ref(`rooms/${currentRoom.key}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
         fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
