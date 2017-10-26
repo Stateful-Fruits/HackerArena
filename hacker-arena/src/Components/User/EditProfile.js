@@ -98,11 +98,12 @@ class EditProfile extends React.Component {
         <img className="profile-photo"
           src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
           alt='profile'
-          onClick={this.handleEditPhoto}
         >
         </img>
+        <div> Description: Hey its me kfspfksdfk okfspadfksdpfoksdfpakpsdokfpsdofksapfk </div>
+        <button onClick={this.handleEditPhoto} > Edit Profile Picture </button>
         {this.state.showEdit ?
-        <div>
+        <div className="dropDownEdits">
         <div className="photo-url-edit">
           Enter custom url to profile photo here:
           <input className="photo-url-input form-control" onChange={this.onChange}
