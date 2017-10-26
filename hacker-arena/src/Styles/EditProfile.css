@@ -5,7 +5,6 @@
 }
 
 .upload-photo {
-  margin-top: 50px;  
 }
 
 .edit-profile .choose-file {
@@ -21,4 +20,9 @@
   margin-top: 8px;
   text-align: center;
   z-index: 10;
+}
+
+.dropDownEdits {
+  position: absolute;
+  width: 300px;
 }

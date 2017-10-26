@@ -1,6 +1,7 @@
 import React from 'react';
 import '../Styles/Stats.css';
 import * as d3 from 'd3';
+import $ from 'jquery';
 
 class Stats extends React.Component { 
   constructor(props){
@@ -126,8 +127,8 @@ class Stats extends React.Component {
       "Losses": "rgb(204, 76, 44)",
       "Untagged": "#a3a3af",
       "fundamentals": "#6088e0",
-      "math": "#f48c42"
-,      "testy": "#437759",
+      "math": "#f48c42",
+      "testy": "#437759",
       "tester":  "#efc332"
     }
 
@@ -163,7 +164,7 @@ class Stats extends React.Component {
         .style('stroke', '#fff')
         .style("fill", function (d) { 
             return colors[d.data.name];
-        });
+        })
 
     g.selectAll('g')
       .data(root.descendants())
@@ -173,19 +174,64 @@ class Stats extends React.Component {
       .style('stroke', '#fff')
       .style("fill", function (d) { 
           return colors[d.data.name];
-      });
+      })
+      .on('mouseover', handleMouseOver)
+      .on('mouseleave', handleMouseLeave)
+      function getAncestors(node) {
+        var path = [];
+        var current = node;
+        while (current.parent) {
+          path.unshift(current);
+          current = current.parent;
+        }
+        return path;
+      }
+    function handleMouseOver(d){
+      console.log(d)
+      console.log('afsdfsdfd')
+      d3.selectAll("path")
+      .style("opacity", 0.3);
+      let sequenceArray = getAncestors(d)
+  // Then highlight only those that are an ancestor of the current segment.
+      g.selectAll("path")
+      .filter(function(node) {
+                return (sequenceArray.indexOf(node) >= 0);
+              })
+      .style("opacity", 1);
+      $('.pathSelection').append(`<p name=${d.name}>${d.value}</p>`);
+      $('.legend > p').css({"opacity": 0.3})
+      sequenceArray.forEach((item) =>{
+        $('.legend').find(`p[name=${item.data.name}]`).css({"opacity": 1});
+      })
+
+    }
+    function handleMouseLeave(d){
+      console.log("i left")
+      d3.selectAll("path")
+      .style("opacity", 1);
+      $('.legend > p').css({"opacity": 1})
+      $('.pathSelection').find(`p[name=${d.name}]`).remove();
+    }
   }
 
   render(){
       return (
         <div style={{display: "flex"}}>
-          <svg></svg>
+          <div>
+            <div className="pathSelection" style={{position: "absolute"}}></div>
+            <svg></svg>
+          </div>
           {this.state.colors ? 
-          (<ul className="legend">
+          (
+            <div>
+          <p className="btn legendHeader"> LEGEND </p> 
+          <ul className="legend">
           {Object.entries(this.state.colors).map((items,i) => {
-            return <p className="btn" key= {i} style={{background : this.state.colors[items[0]]}}>{items[0]}</p>
+            return <p className="btn" key= {i} name={items[0]} style={{background : this.state.colors[items[0]]}}>{items[0]}</p>
           })}
-          </ul>)
+          </ul>
+          </div>
+          )
           :
           <p>awfsfdsf</p>}
         </div>
