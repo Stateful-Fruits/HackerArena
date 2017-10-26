@@ -19,6 +19,7 @@ class GameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.startGame = this.startGame.bind(this);
+    this.findWinner = this.findWinner.bind(this);
   }
   componentDidMount () {
     this.handleEnter();
@@ -26,12 +27,50 @@ class GameRoom extends React.Component {
 
   componentWillUpdate () {
     this.handleEnter();
+    this.findWinner();
   }
   
+  componentWillMount () {
+  }
+ 
   componentWillUnmount () {
     this.handleLeave();
   }
-  
+
+  findWinner () {
+    let {room} = this.props;
+    console.log('the room is ', room);
+    if (room) {
+      let winner, players = room.players, history;
+      players.forEach(player => {
+        let position = room.playerInfo[player].position;
+        if (position[0] === 6 && position[1] === 6) {
+          winner = player;
+          let playerObj = {};
+          players.forEach(player1 => {
+            playerObj[player1] = 'CodeRunner';
+          });
+          let problem = room.board[6][6][1];
+          history = [{
+            players: playerObj,
+            problem,
+            timeStamp: new Date(),
+            timeTaken: new Date(),
+            winners: {hacker: player}
+          }];
+          return;
+        }
+      })
+
+      if (winner) {
+        console.log('setting history');
+        players.forEach(player => {
+          fire.database().ref(`users/${player}/history/${room.key}`).set(history);
+        });
+      }
+    }
+  }
+
   handleEnter () {
     let {room, user, navigate} = this.props;
     if (room) {
@@ -95,37 +134,20 @@ class GameRoom extends React.Component {
       return <div>
         <div> Please wait as we prepare your board </div>
       </div>
-    } else {
+    } else if (this.state.won === false) {
       let players = room.players;
-      let playerInfo = room.playerInfo;
-      let thereIsAWinner = false;
-      let winner = '';
+      let message, startButton, board, dice, diceResult, canMove, move, codePage, attack;
       players.forEach(player => {
-        if (playerInfo[player].position[0] === 6 && playerInfo[player].position[1] === 6) {
-          thereIsAWinner = true;
-          winner = player;
+        let position = room.playerInfo[player].position;
+        if (position[0] === 6 && position[1] === 6) {
           window.swal(`${player} won!`);
+          this.setState({
+            won: true
+          })
+          return;
         }
       })
-      if (thereIsAWinner) {
-        players.forEach(player => {
-          if (player === winner) {
-            fire.database().ref(`users/${player}`).once('value').then(snapshot => {
-              let info = snapshot.val();
-              info.wins++;
-              fire.database().ref(`users/${player}`).set(info);
-            })
-          } else {
-            fire.database().ref(`users/${player}`).once('value').then(snapshot => {
-              let info = snapshot.val();
-              info.loses++;
-              fire.database().ref(`users/${player}`).set(info);
-            })
-          }
-        })
-      }
       let userInfo = room.playerInfo[user];
-      let message, startButton, board, dice, diceResult, canMove, move, codePage, attack;
       if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
@@ -177,6 +199,10 @@ class GameRoom extends React.Component {
           {codePage}
         </div>
         <div className='bottomend'></div>
+      </div>
+    } else {
+      return <div>
+        This game has already ended
       </div>
     }
   }
