@@ -26,13 +26,11 @@ class ProgressBar extends Component {
         
         return name !== username && role !== 'navigator' && name !== partnerName;
     });
-    console.log('otherusers', otherUsers);
 
     // if there is no targeted player for this user
     console.log('Component should target a player now');
     if (!isSpectator && !targetedPlayer) {
       // set the first other player as targeted
-      console.log('Logic running determining whether or not to target a player', otherUsers[0]);
       if (otherUsers.length) fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(otherUsers[0]);
       else fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(null);
     } else if (!isSpectator && targetedPlayer && !otherUsers.includes(targetedPlayer)) {
