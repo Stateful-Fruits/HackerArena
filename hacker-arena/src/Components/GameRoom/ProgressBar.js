@@ -29,10 +29,6 @@ class ProgressBar extends Component {
 
     // if there is no targeted player for this user
     console.log('Component should target a player now');
-    console.log('!isSpectator', !isSpectator)
-    console.log('!room.players[nameOfDisrupter].targetedPlayer', !room.players[nameOfDisrupter].targetedPlayer)
-    console.log('room.players[nameOfDisrupter].targetedPlayer', room.players[nameOfDisrupter].targetedPlayer)
-    console.log('!isSpectator && !room.players[username].targetedPlayer', !isSpectator && !room.players[nameOfDisrupter].targetedPlayer)
     if (!isSpectator && !room.players[nameOfDisrupter].targetedPlayer) {
       // set the first other player as targeted
       console.log('Logic running determining whether or not to target a player', otherUsers[0]);
