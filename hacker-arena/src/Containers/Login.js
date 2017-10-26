@@ -7,7 +7,12 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
+import updateBoardRooms from '../Actions/updateBoardRooms';
+import updateGameRooms from '../Actions/updateGameRooms';
+import updateProblems from '../Actions/updateProblems';
+
 import auth from './AuthHelpers/helpers';
+import syncToDb from '../Firebase/syncToDb'
 
 import '../Styles/Login.css';
 
@@ -34,20 +39,29 @@ constructor(props) {
 
   onSubmit(e) {
     e.preventDefault();
+    let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;
     let email = this.state.email;
     let password = this.state.password;
-    let navigate = this.props.navigate;
-    auth.normalLogin(email, password, navigate);
+    auth.normalLogin(email, password, navigate)
+      .then(() => {
+        syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
+      });
   }
 
   signInWithGoogle(e) {
-    let {navigate} = this.props;
-    auth.googleAuth(navigate);
+    let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;    
+    auth.googleAuth(navigate, updateGameRooms, updateProblems, updateBoardRooms)
+      .then(() => {
+        syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
+      });
   }
 
   signInWithFacebook(e) {
-    let {navigate} = this.props;
-    auth.fbookAuth(navigate);
+    let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;    
+    auth.fbookAuth(navigate, updateGameRooms, updateProblems, updateBoardRooms)
+      .then(() => {
+        syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
+      });
   }
 
   render() {
@@ -105,7 +119,10 @@ constructor(props) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    navigate: (route) => dispatch(push(route))
+    navigate: (route) => dispatch(push(route)),
+    updateGameRooms: (rooms) => dispatch(updateGameRooms(rooms)),
+    updateProblems: (problems) => dispatch(updateProblems(problems)),
+    updateBoardRooms: (rooms) => dispatch(updateBoardRooms(rooms)),
   });
   
-  export default withRouter(connect(null, mapDispatchToProps)(SignUp));
+export default withRouter(connect(null, mapDispatchToProps)(SignUp));

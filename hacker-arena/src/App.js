@@ -10,6 +10,7 @@ import GameRoomLoading from './Components/GameRoom/GameRoomLoading';
 
 import fire from './Firebase/firebase';
 import db from './Firebase/db';
+import syncToDb from './Firebase/syncToDb'
 
 import { push } from 'react-router-redux';
 
@@ -17,24 +18,7 @@ class App extends Component {
 
   componentWillMount() {
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
-    db.Rooms.once('value', data => {
-      // dispatch action to change game rooms array in store
-      updateGameRooms(data.val());
-    });
-    // grab and listen for game rooms from firebase db
-    db.Rooms.on('value', data => {
-      // dispatch action to change game rooms array in store
-      updateGameRooms(data.val());
-    });
-
-    db.Problems.on('value', data => {
-      console.log('problems filing into state');
-      updateProblems(data.val());  
-    });
-
-    db.BoardRooms.on('value', data => {
-      updateBoardRooms(data.val());
-    });
+    syncToDb(updateGameRooms, updateProblems, updateBoardRooms);
 
   }
 
