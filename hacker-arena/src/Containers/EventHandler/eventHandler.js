@@ -32,6 +32,8 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
       room.problemID = helpers.chooseRandomProblem(filteredProblems);
       room.problem = problems[room.problemID]
 
+      room.activity = [];
+
       // reset each player
       for (let username in room.players) {
         let player = room.players[username];

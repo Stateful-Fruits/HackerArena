@@ -9,9 +9,15 @@ class GameRoomPreview extends Component {
   }
 
   joinTeam(teamIndex, role, username, roomId) {
-    let { navigate } = this.props;
-    fire.database().ref(`/rooms/${roomId}/teams/${teamIndex}/${role}`).set(username)
-    .then(() => navigate(`Pair/GameRoom/${roomId}`));
+    let { navigate, gameRoom } = this.props;
+
+    if (gameRoom.players[username]) {
+      console.log('player is trying to add themselves to a room they are part of!!')
+      navigate(`Pair/GameRoom/${roomId}`);
+    } else {
+      fire.database().ref(`/rooms/${roomId}/teams/${teamIndex}/${role}`).set(username)
+        .then(() => navigate(`Pair/GameRoom/${roomId}`));
+    }
   }
 
   render() {
