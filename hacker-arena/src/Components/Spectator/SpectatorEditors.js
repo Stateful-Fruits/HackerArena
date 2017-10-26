@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SpectatorEditor from './SpectatorEditor';
-import helpers from '../../Helpers/helpers'
 
 class SpectatorEditors extends Component {
   render() {

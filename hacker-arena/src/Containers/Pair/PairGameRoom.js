@@ -17,7 +17,8 @@ import DriverRoom from './DriverRoom';
 
 import eventHandler from './../EventHandler/eventHandler';
 
-import helpers from './../../Helpers/helpers'
+import { calculateResultsByPlayer, calculateMostTotalWins } from './../../Helpers/resultsHelpers';
+import { getRoleFromUsername, getPartnerName, getPartnerRole } from './../../Helpers/pairHelpers';
 
 import '../../Styles/GameRoom.css';
 
@@ -173,16 +174,16 @@ class PairGameRoom extends React.Component {
     let roomStatus = room.roomStatus;
     console.log('roomStatus is currently', roomStatus);
     let results = room.results;
-    let resultsByPlayer = results ? helpers.calculateResultsByPlayer(results) : null;
-    let mostTotalWins = results ? helpers.calculateMostTotalWins(resultsByPlayer) : null;
+    let resultsByPlayer = results ? calculateResultsByPlayer(results) : null;
+    let mostTotalWins = results ? calculateMostTotalWins(resultsByPlayer) : null;
     let champions = mostTotalWins ? mostTotalWins.winners : null;
     let isPairRoom = room.isPairRoom;
 
     let username = this.props.username;
 
-    let role = helpers.getRoleFromUsername(room, username);
-    let partnerName = helpers.getPartnerName(room, username);
-    let partnerRole = helpers.getPartnerRole(room, username);
+    let role = getRoleFromUsername(room, username);
+    let partnerName = getPartnerName(room, username);
+    let partnerRole = getPartnerRole(room, username);
     let teams = room.teams;
 
     let navigatorRoom = <NavigatorRoom
