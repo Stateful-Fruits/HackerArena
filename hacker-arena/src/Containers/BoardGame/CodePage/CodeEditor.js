@@ -121,7 +121,7 @@ class CodeEditor extends React.Component {
     let random = Math.floor(Math.random() * powers.length);
     console.log(powers, random);
     userInfo.attack = powers[random];
-    userInfo.credits = Math.ceil(1.5*userInfo.credits);
+    userInfo.credits = Math.ceil(5*this.state.problem.difficulty + userInfo.credits);
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 

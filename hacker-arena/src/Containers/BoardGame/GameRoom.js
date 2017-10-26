@@ -8,10 +8,8 @@ import MovePlayer from './MovePlayer';
 import CodeEditor from './CodePage/CodeEditor';
 import TestSuite from './CodePage/TestSuite';
 import Attack from './Attack';
-//dice reroll cheat
 //codeeditor/
 //dice roll resets;
-//update points
 class GameRoom extends React.Component {
   constructor (props) {
     super (props);
@@ -112,7 +110,9 @@ class GameRoom extends React.Component {
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
-          dice = <Dice room={room} user={user}/>;
+          if (userInfo.diceResult === 0) {
+            dice = <Dice room={room} user={user}/>;
+          }
         } else {
           codePage = <div>
             <CodeEditor room={room} user={user}/>
