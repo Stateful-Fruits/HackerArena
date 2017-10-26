@@ -14,3 +14,9 @@
   width: 130px;
   margin-bottom: 10px;
 }
+
+.sunburst {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}

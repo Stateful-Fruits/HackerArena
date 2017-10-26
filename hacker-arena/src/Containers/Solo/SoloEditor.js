@@ -45,7 +45,7 @@ class SoloEditor extends React.Component {
     let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
       // if every test is passed
-      window.swal('Great Job!', 'You passed all the tests!', 'success');
+      window.swal('Great Job!', `You passed all the tests in ${((Date.now() - currentRoom.timeStart) / 1000).toFixed(2)} seconds!`, 'success');
     } else window.swal('Oops...', 'Something went wrong!', 'error');
 
     if((testStatus.length === currentRoom.problem.tests.length) && testStatus){
