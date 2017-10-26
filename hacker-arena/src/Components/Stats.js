@@ -187,8 +187,10 @@ class Stats extends React.Component {
         return path;
       }
     function handleMouseOver(d){
+      let totalSize = d3.selectAll('path').node().__data__.value;
+      let percentage = ((d.value / totalSize) * 100).toFixed(2) + '%';
       console.log(d)
-      console.log('afsdfsdfd')
+      console.log('afsdfsdfd', totalSize)
       d3.selectAll("path")
       .style("opacity", 0.3);
       let sequenceArray = getAncestors(d)
@@ -198,29 +200,35 @@ class Stats extends React.Component {
                 return (sequenceArray.indexOf(node) >= 0);
               })
       .style("opacity", 1);
-      $('.pathSelection').append(`<p name=${d.name}>${d.value}</p>`);
+      $('.percentage').append(`<p>${percentage} of games </p>`)
+      $('.pathSelection').append(`<p name=${d.name}>${d.value} games with tags: </p>`);
       $('.legend > p').css({"opacity": 0.3})
       sequenceArray.forEach((item) =>{
         $('.legend').find(`p[name=${item.data.name}]`).css({"opacity": 1});
       })
-
+      let tagsString = sequenceArray.map((item) => {
+        return (item.data.name);
+      })
+      console.log(sequenceArray, tagsString)
+      $('.highlightedTags').append(`<p>${tagsString.join(',')}</p>`);
     }
     function handleMouseLeave(d){
       console.log("i left")
       d3.selectAll("path")
       .style("opacity", 1);
-      $('.legend > p').css({"opacity": 1})
+      $('.percentage').find('p').remove();
+      $('.legend > p').css({"opacity": 1});
       $('.pathSelection').find(`p[name=${d.name}]`).remove();
+      $('.highlightedTags').find('p').remove();
     }
   }
 
   render(){
       return (
+        <div style={{display: "flex", flexDirection: "column"}}>
         <div style={{display: "flex"}}>
-          <div>
-            <div className="pathSelection" style={{position: "absolute"}}></div>
             <svg></svg>
-          </div>
+          
           {this.state.colors ? 
           (
             <div>
@@ -234,6 +242,14 @@ class Stats extends React.Component {
           )
           :
           <p>awfsfdsf</p>}
+        </div>
+        <div style={{display: "flex", justifyContent:"center"}}>
+        <div className="sunburst" style={{position: "absolute"}}>
+            <div className="percentage"></div>
+            <div className="pathSelection" ></div>
+            <div className="highlightedTags"></div>
+          </div>
+        </div>
         </div>
       )
   }
