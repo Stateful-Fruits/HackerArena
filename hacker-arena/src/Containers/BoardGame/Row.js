@@ -6,9 +6,12 @@ const Row = (props) => {
       props.row.map((block, i) => {
         if (!props.lastrow) {
           if (i === props.row.length-1) {
-            return <div id={props.i + ' ' + i} className={'bdblock lastblock'} key={i}>
-              {block[0].join(' ')}
-            </div>
+            if (props.i === 3) {
+            } else {
+              return <div id={props.i + ' ' + i} className={'bdblock lastblock'} key={i}>
+                {block[0].join(' ')}
+              </div>
+            }
           } else {
             return <div id={props.i + ' ' + i} className={'bdblock'} key={i}>
               {block[0].join(' ')}
