@@ -8,7 +8,10 @@ import MovePlayer from './MovePlayer';
 import CodeEditor from './CodePage/CodeEditor';
 import TestSuite from './CodePage/TestSuite';
 import Attack from './Attack';
-
+//dice reroll cheat
+//codeeditor/
+//dice roll resets;
+//update points
 class GameRoom extends React.Component {
   constructor (props) {
     super (props);
