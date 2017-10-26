@@ -40,6 +40,11 @@
 /* span {
   padding: 5px;
 } */
+.testHolder {
+  overflow: scroll;
+  height: 400px;
+}
+
 .testHolder > div {
   display: flex;
   margin-bottom: 7px;
