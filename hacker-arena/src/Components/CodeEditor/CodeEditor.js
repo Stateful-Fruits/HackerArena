@@ -5,6 +5,7 @@ import runTestsOnUserAnswer from '../../ToyProblemTesting/testUserAnswer';
 import fire from '../../Firebase/firebase';
 import Disruptions from './disruptions';
 import DisruptionsBar from './DisruptionsBar';
+import BlockDisruptionsBar from './../Pair/BlockDisruptionsBar'
 
 import helpers from '../../Helpers/helpers.js';
 
@@ -16,7 +17,8 @@ class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      testStatus: ""
+      testStatus: "",
+      diffusalCodes: []
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
@@ -25,6 +27,7 @@ class CodeEditor extends React.Component {
     this.receiveDisruptions = this.receiveDisruptions.bind(this);
     this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.clearDisruption = this.clearDisruption.bind(this);
   }
   
   componentDidMount() {
@@ -57,13 +60,37 @@ class CodeEditor extends React.Component {
     let username = fire.auth().currentUser.email.split('@')[0];    
     // Check for disruptions sent to the user
     if(currentRoom.players[username].disruptions.length > 1){
-      fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
-      currentRoom.players[username].disruptions.forEach((disruption) => {
+      currentRoom.players[username].disruptions.forEach(disruption => {
         if(disruption !== "" && !oldDisruptions[disruption[1]]) {
           oldDisruptions[disruption[1]] = true;
-          this.receiveDisruptions(disruption[0]);
-        }
+          if (currentRoom.isPairRoom) {
+            let clearCode = setTimeout(() => {
+              this.receiveDisruptions(disruption[0]);
+              let disruptions = this.state.diffusalCodes;
+              let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
+            
+              disruptions.splice(indOfDisruptionToClear, 1)[0];
+
+              this.setState({
+                diffusalCodes: disruptions
+              })
+            }, 5000);
+        
+            let currentCodes = this.state.diffusalCodes;
+            console.log('disruption name', disruption);
+            currentCodes.push({
+              disruptionName: disruption,
+              clearCode: clearCode
+            })
+            this.setState({
+              diffusalCodes: currentCodes
+            })
+          } else {
+            this.receiveDisruptions(disruption[0]);
+          }
+        };
       });
+      fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
     }
   }
 
@@ -75,6 +102,7 @@ class CodeEditor extends React.Component {
   }
 
   sendDisruptions(e){
+    console.log('trying to send a disruption')
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
     // Sends disruptions to oppposite player
@@ -85,8 +113,11 @@ class CodeEditor extends React.Component {
       if (currentRoom.players[username].targetedPlayer) {
         let  { targetedPlayer } = currentRoom.players[username];
         let currentDisruptions = currentRoom.players[targetedPlayer].disruptions;
+        let activity = currentRoom.activity || [];
+        activity.push(`${username} is sending a ${disruptionFunc} at ${targetedPlayer}!`)
         fire.database().ref(`rooms/${currentRoom.key}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+        fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
       } else {
         // send the disruption to all players
         Object.keys(currentRoom.players).forEach((playerName) => {
@@ -96,8 +127,30 @@ class CodeEditor extends React.Component {
           }
         });
         fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
+
       }
     }
+  }
+
+  clearDisruption(e) {
+    let { currentRoom } = this.props;    
+    let username = fire.auth().currentUser.email.split('@')[0];  
+        
+    let disruptionFuncName = e.target.id.split(" ")[0];
+    let blockCost = e.target.id.split(" ")[1];
+
+    if (currentRoom.players[username].credits >= blockCost) {
+      let disruptions = this.state.diffusalCodes;
+      console.log('disruptions', disruptions)
+      let indOfDisruptionToClear = disruptions.findIndex(disruption => disruption.disruptionName === disruptionFuncName);
+      let disruptionToClear = disruptions.splice(indOfDisruptionToClear, 1)[0];
+      if (disruptionToClear) {
+        let clearCode = disruptionToClear.clearCode;
+        console.log('clearCode', clearCode)
+        clearTimeout(clearCode);
+      }
+      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - blockCost);      
+    } 
   }
 
   receiveDisruptions(func) {
@@ -133,11 +186,7 @@ class CodeEditor extends React.Component {
 
     playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
 
-    fire.database().ref(`rooms/${room.key}`).set(room)
-    fire.database().ref(`users/${username}`).once('value').then(snapshot => {
-      let wins = snapshot.val().wins + 1;
-      fire.database().ref(`users/${username}/wins`).set(wins);
-    });
+    fire.database().ref(`rooms/${room.key}`).set(room);
   }
 
   handleReset() {
@@ -193,6 +242,15 @@ class CodeEditor extends React.Component {
             credits={currentRoom.players[username].credits}
             sendDisruptions={this.sendDisruptions}
           />
+          {
+            currentRoom.isPairRoom ?
+              <BlockDisruptionsBar
+                clearDisruption={this.clearDisruption}
+                credits={currentRoom.players[username].credits}
+              />
+              : 
+              null
+          }
           <button className="btn editorHeader" color="secondary" size="lg" >Editor</button>
           <ReactAce
             mode="javascript"
