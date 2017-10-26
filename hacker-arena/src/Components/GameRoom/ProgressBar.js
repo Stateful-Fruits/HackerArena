@@ -19,7 +19,7 @@ class ProgressBar extends Component {
     let partnerName = helpers.getPartnerName(room, username)
 
     let nameOfDisrupter = room.isPairRoom ? partnerName : username;  
-    let targetedPlayer =  room.players[nameOfDisrupter].targetedPlayer
+    let targetedPlayer =  isSpectator ? null : room.players[nameOfDisrupter].targetedPlayer;
 
     let otherUsers = Object.keys(room.players).filter(name => {
         let role = helpers.getRoleFromUsername(room, name);
