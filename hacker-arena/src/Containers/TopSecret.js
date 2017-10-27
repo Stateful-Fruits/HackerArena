@@ -8,10 +8,10 @@ OBJLoader(THREE);
 class TopSecret extends React.Component {
   componentDidMount(){
     this.THREE = THREE
-    var renderer, scene, camera, banana;
+    var renderer, scene, camera, banana, banana2;
 
-var ww = 400,
-	wh = 400;
+var ww = 600,
+	wh = 600;
 function init(){
 
 	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('scene')});
@@ -20,7 +20,7 @@ function init(){
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera(50,ww/wh, 0.1, 10000 );
-	camera.position.set(0,0,500);
+	camera.position.set(0,0,900);
 	scene.add(camera);
 
 	//Add a light in the scene
@@ -42,6 +42,8 @@ var loadOBJ = () => {
   
 	//Launch loading of the obj file, addBananaInScene is the callback when it's ready 
 	loader.load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/127738/banana.obj', addBananaInScene);
+	loader.load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/127738/banana.obj', addBanana2InScene);
+	
 
 };
 
@@ -60,17 +62,59 @@ var addBananaInScene = function(object){
 			child.geometry.computeVertexNormals();
 		}
 	});
+
 	//Add the 3D object in the scene
 	scene.add(banana);
+	
 	render();
 };
 
+var addBanana2InScene = function(object){
+	banana2 = object;
+	//Move the banana in the scene
+	banana2.rotation.x = Math.PI/3;
+	banana2.position.y = -100;
+	banana2.position.z = 50;
+	//Go through all children of the loaded object and search for a Mesh
+	object.traverse( function ( child ) {
+		//This allow us to check if the children is an instance of the Mesh constructor
+		if(child instanceof THREE.Mesh){
+			child.material.color = new THREE.Color("red");
+			// child.material.transparent = true;
+			// child.material.opacity = 0.2;
+			//Sometimes there are some vertex normals missing in the .obj files, ThreeJs will compute them
+			child.geometry.computeVertexNormals();
+		}
+	});
+
+	//Add the 3D object in the scene
+	scene.add(banana2);
+	
+	render2();
+};
+
+var render2 = function () {
+	requestAnimationFrame(render2);
+	//Turn the second banana 
+	// console.log(banana2)
+	banana2.rotation.x -= .1
+	//Turn the banana
+	// banana.rotation.z += .1;
+	// banana.rotation.x += .1;
+	// banana.rotation.y += .1;
+
+	renderer.render(scene, camera);
+};
 
 var render = function () {
 	requestAnimationFrame(render);
-
+	//Turn the second banana 
+	// console.log(banana2)
+	// banana2.rotation.z = .1
 	//Turn the banana
-	banana.rotation.z += .01;
+	banana.rotation.z += .1;
+	// banana.rotation.x += .1;
+	// banana.rotation.y += .1;
 
 	renderer.render(scene, camera);
 };

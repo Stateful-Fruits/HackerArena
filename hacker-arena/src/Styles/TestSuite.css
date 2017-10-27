@@ -3,7 +3,7 @@
   margin: 5px;
   float: right;
   width: 49vw;
-  height: 100%;
+  height: 130vh;
   background: beige;
   position: absolute;
   left: 50vw;
@@ -42,7 +42,7 @@
 } */
 .testHolder {
   overflow: scroll;
-  height: 400px;
+  height: 550px;
 }
 
 .testHolder > div {
