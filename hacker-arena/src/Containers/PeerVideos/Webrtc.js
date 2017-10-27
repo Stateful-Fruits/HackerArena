@@ -114,8 +114,8 @@ return (
         <video  ref='local' id = 'localVideo'/>
       </div>
     </div>
-      <button onClick={this.mute.bind(this)}>Mute Audio</button>
-      <button onClick={this.pause.bind(this)}>Toggle Camera</button>
+      <button className='gamePreviewButton' onClick={this.mute.bind(this)}>Mute Audio</button>
+      <button className='gamePreviewButton' onClick={this.pause.bind(this)}>Toggle Camera</button>
 
     </div>
 )
