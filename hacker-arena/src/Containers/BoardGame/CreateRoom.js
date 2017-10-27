@@ -85,7 +85,6 @@ class CreateRoom extends React.Component {
       return row.map((ele, j) => {
         var keys = Object.keys(room.problems);
         var random = Math.floor(Math.random() * keys.length);
-        console.log('keys', room.problems[keys[random]]);
         return ele.concat(room.problems[keys[random]]);
       })
     })
