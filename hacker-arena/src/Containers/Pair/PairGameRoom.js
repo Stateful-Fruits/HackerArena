@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
+import updatePendingEvents from '../../Actions/updatePendingEvents';
+
 import fire from '../../Firebase/firebase';
 
 //import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
@@ -31,8 +33,12 @@ class PairGameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.handleIncomingEvents = this.handleIncomingEvents.bind(this);
+    this.addPendingEvent = this.addPendingEvent.bind(this);
+    this.removePendingEvent = this.removePendingEvent.bind(this);
   }
   
+  // ~~~~~~~~~~~ LIFECYCLE FUNCTIONS ~~~~~~~~~~ //
+
   componentDidMount () {
     console.log('pairgameRoom mounted')
     window.addEventListener('beforeunload', this.handleLeave);
@@ -41,20 +47,20 @@ class PairGameRoom extends React.Component {
 
   componentWillUpdate() {
     let navigate = this.props.navigate;
-    // if (this.props.username 
-    //   && this.props.gameRooms
-    //   && this.props.gameRooms[this.props.roomId]
-    //   && this.props.gameRooms[this.props.roomId].roomStatus === 'standby'
-    //   && !getRoleFromUsername(this.props.gameRooms[this.props.roomId], this.props.username)) {
-    //     navigate(`/Pair`);
-    //     window.swal('You can join this room, but please choose a role from the preview page first!');
-    // } else {
+    if (this.props.username 
+      && this.props.gameRooms
+      && this.props.gameRooms[this.props.roomId]
+      && this.props.gameRooms[this.props.roomId].roomStatus === 'standby'
+      && !getRoleFromUsername(this.props.gameRooms[this.props.roomId], this.props.username)) {
+        navigate(`/Pair`);
+        window.swal('You can join this room, but please choose a role from the preview page first!');
+    } else {
       // see if user is entering the room and if room needs to be updated as a result
       this.handleEnter();
     
       // processing incoming events from db
       this.handleIncomingEvents()
-    //}
+    }
 
   }
 
@@ -62,6 +68,8 @@ class PairGameRoom extends React.Component {
     this.handleLeave();
     // window.removeEventListener('beforeunload', this.handleLeave);
   }
+
+  // ~~~~~~~~~~~ LIFECYCLE HELPERS ~~~~~~~~~~ //
 
   handleLeave () {
     // handles leaving the gameroom should only be called when gameRooms 
@@ -164,6 +172,62 @@ class PairGameRoom extends React.Component {
     }
   }
 
+  // ~~~~~~~~~~~ REDUX HELPERS ~~~~~~~~~~ //
+
+  addPendingEvent(eventName, codeToClear, otherIdentifiers) {
+    let { pendingEvents } = this.props;
+    const { updatePendingEvents } = this.props;
+
+    let event = {
+      eventName,
+      codeToClear,
+    }
+
+    otherIdentifiers ? event.otherIdentifiers = otherIdentifiers : null;
+
+    pendingEvents = pendingEvents.slice()
+    
+    pendingEvents.push(event);
+
+    console.log('adding event. pe is now', pendingEvents);
+
+    updatePendingEvents(pendingEvents);
+  }
+
+  removePendingEvent(eventName, shouldClearTimeout, otherIdentifiers) {
+    let { pendingEvents } = this.props;
+    const { updatePendingEvents } = this.props;
+    console.log('trying to remove. pe is currently', pendingEvents);
+    let indOfEventToClear = pendingEvents.findIndex(event => {
+      if (otherIdentifiers) {
+        return Object.keys(otherIdentifiers).every(key => event[key] === otherIdentifiers[key]);
+      } else {
+        console.log('eventName', eventName)
+        console.log('pendingEvents.eventName', event.eventName)
+        console.log('event.eventName === eventName', event.eventName === eventName);
+        return event.eventName === eventName;
+      }
+    });
+    console.log('indOfEventToClear', indOfEventToClear);
+
+    if (indOfEventToClear >= 0) {
+      let eventToClear = pendingEvents.splice(indOfEventToClear, 1)[0]
+      console.log('successfully removed! pe is now', pendingEvents);
+      console.log('eventToClear is', eventToClear);
+      updatePendingEvents(pendingEvents)
+      console.log('shouldClearTimeout', shouldClearTimeout);
+      if (shouldClearTimeout) {
+        let codeToClear = eventToClear.codeToClear;
+        console.log('clearCode', codeToClear)
+        clearTimeout(codeToClear);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // ~~~~~~~~~~~ RENDER ~~~~~~~~~~ //
   
   render () {
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
@@ -180,7 +244,7 @@ class PairGameRoom extends React.Component {
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
 
-    let { gameRooms, roomId } = this.props;
+    let { gameRooms, roomId, pendingEvents, updatePendingEvents } = this.props;
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
     console.log('roomStatus is currently', roomStatus);
@@ -203,6 +267,8 @@ class PairGameRoom extends React.Component {
       username={username} 
       partnerName ={partnerName}
       partnerRole={partnerRole}
+      addPendingEvent={this.addPendingEvent}
+      removePendingEvent={this.removePendingEvent}
     />
 
     let driverRoom = <DriverRoom
@@ -211,6 +277,8 @@ class PairGameRoom extends React.Component {
       username={username} 
       partnerName ={partnerName}
       partnerRole={partnerRole}
+      addPendingEvent={this.addPendingEvent}
+      removePendingEvent={this.removePendingEvent}
     />
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
@@ -250,11 +318,13 @@ const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[3],
   username: fire.auth().currentUser.email.split('@')[0],
   gameRooms: state.gameRooms,
-  problems: state.problems
+  problems: state.problems,
+  pendingEvents: state.pendingEvents
 });
 
 const mapDispatcherToProps = (dispatch) => ({
-  navigate: (route) => dispatch(push(route))
+  navigate: (route) => dispatch(push(route)),
+  updatePendingEvents: (events) => dispatch(updatePendingEvents(events))
 });
 
 export default connect(mapStateToProps, mapDispatcherToProps)(PairGameRoom);

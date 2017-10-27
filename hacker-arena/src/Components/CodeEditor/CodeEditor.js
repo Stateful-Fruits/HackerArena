@@ -17,8 +17,7 @@ class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      testStatus: "",
-      diffusalCodes: []
+      testStatus: ""
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
@@ -160,7 +159,7 @@ class CodeEditor extends React.Component {
   }
 
   clearDisruption(e) {
-    let { currentRoom } = this.props;    
+    let { currentRoom, removePendingEvent } = this.props;    
     let username = fire.auth().currentUser.email.split('@')[0];  
         
     let disruptionFuncName = e.target.id.split(" ")[0];
@@ -169,28 +168,24 @@ class CodeEditor extends React.Component {
     let activity = currentRoom.activity || [];    
 
     if (currentRoom.players[username].credits >= blockCost) {
-      let disruptions = this.state.diffusalCodes;
-      let indOfDisruptionToClear = disruptions.findIndex(disruption => disruption.disruptionName === disruptionFuncName);
-      let disruptionToClear = disruptions.splice(indOfDisruptionToClear, 1)[0];
-      if (disruptionToClear) {
-        let clearCode = disruptionToClear.clearCode;
-        clearTimeout(clearCode);
+      let didClear = removePendingEvent(disruptionFuncName, true);
 
-        activity.push(`${username} successfully blocked ${disruptionToClear.disruptionName[0]}!`)
+      if (didClear) {
+        activity.push(`${username} successfully blocked ${disruptionFuncName}!`)
       } else {
-        activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`)
+        parseInt(blockCost, 10) ? activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`) : null;
       }
 
-      fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity)
+      fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
       
       this.changeUserCreditsByVal(-1 * blockCost, username, currentRoom);
-
     } 
   }
 
   // ~~~~~~~~~~~ HELPERS ~~~~~~~~~~ //
 
   receiveDisruptions(disruptions, username, currentRoom) {
+    const { addPendingEvent, removePendingEvent } = this.props;
     // note that oldDisruptions is declared outside this function at the top of the file
     disruptions.forEach(disruption => {
       if(disruption !== "" && !oldDisruptions[disruption[1]]) {
@@ -198,29 +193,16 @@ class CodeEditor extends React.Component {
 
         if (currentRoom.isPairRoom) {
           // if we are in a pair room, the disruption should be delayed to give driver time to block
-          let clearCode = setTimeout(() => {
-            console.log('disruption activating!!', disruption[0])
-            this.receiveDisruption(disruption[0]);
-            let disruptions = this.state.diffusalCodes;
-            if (disruptions.length > 0) {
-              let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
-              disruptions.splice(indOfDisruptionToClear, 1);
+          let disruptionName = disruption[0];
 
-              this.setState({
-                diffusalCodes: disruptions
-              })
-            }
+          let clearCode = setTimeout(() => {
+            console.log('disruption activating!!', disruptionName)
+            this.receiveDisruption(disruptionName);
+            removePendingEvent(disruptionName, false)
           }, 5000);
       
-          let currentCodes = this.state.diffusalCodes;
-          console.log('disruption name', disruption);
-          currentCodes.push({
-            disruptionName: disruption,
-            clearCode: clearCode
-          })
-          this.setState({
-            diffusalCodes: currentCodes
-          })
+          addPendingEvent(disruptionName, clearCode);
+
         } else {
           // if we are not in a pair room, we should process it immediately
           this.receiveDisruption(disruption[0]);
