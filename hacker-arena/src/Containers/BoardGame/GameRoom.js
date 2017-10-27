@@ -8,6 +8,7 @@ import MovePlayer from './MovePlayer';
 import CodeEditor from './CodePage/CodeEditor';
 import TestSuite from './CodePage/TestSuite';
 import Attack from './Attack';
+import helper from './Helper/helper';
 //codeeditor/
 //dice roll resets;
 class GameRoom extends React.Component {
@@ -19,7 +20,7 @@ class GameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.startGame = this.startGame.bind(this);
-    this.findWinner = this.findWinner.bind(this);
+    this.handleBoard = this.handleBoard.bind(this);
   }
   componentDidMount () {
     this.handleEnter();
@@ -27,7 +28,7 @@ class GameRoom extends React.Component {
 
   componentWillUpdate () {
     this.handleEnter();
-    this.findWinner();
+    this.handleBoard();
   }
   
   componentWillMount () {
@@ -37,37 +38,10 @@ class GameRoom extends React.Component {
     this.handleLeave();
   }
 
-  findWinner () {
+  handleBoard () {
     let {room} = this.props;
-    console.log('the room is ', room);
     if (room) {
-      let winner, players = room.players, history;
-      players.forEach(player => {
-        let position = room.playerInfo[player].position;
-        if (position[0] === 6 && position[1] === 6) {
-          winner = player;
-          let playerObj = {};
-          players.forEach(player1 => {
-            playerObj[player1] = 'CodeRunner';
-          });
-          let problem = room.board[6][6][1];
-          history = [{
-            players: playerObj,
-            problem,
-            timeStamp: new Date(),
-            timeTaken: new Date(),
-            winners: {hacker: player}
-          }];
-          return;
-        }
-      })
-
-      if (winner) {
-        console.log('setting history');
-        players.forEach(player => {
-          fire.database().ref(`users/${player}/history/${room.key}`).set(history);
-        });
-      }
+      helper.handleBoard(room);
     }
   }
 
@@ -152,7 +126,7 @@ class GameRoom extends React.Component {
         startButton = null;
         message = 'Run run run your code hastily down the board';
         console.log('new board ', room.board);
-        board = <Board board={room.board}/>;
+        board = <Board board={room.board} whirlpools={room.whirlpools}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
@@ -199,7 +173,6 @@ class GameRoom extends React.Component {
           {codePage}
         </div>
         <div className='bottomend'></div>
-        <img src='https://orig00.deviantart.net/1a60/f/2013/001/7/6/marsh_battle_map_1_by_hero339-d5q29ua.jpg' alt='hi'/>
       </div>
     } else {
       return <div>

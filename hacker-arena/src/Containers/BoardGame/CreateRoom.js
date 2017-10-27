@@ -7,6 +7,7 @@ import noUiSlider from 'nouislider';
 import './../../Styles/nouislider.css';
 import './../../Styles/CreateBoardRoom.css';
 import { filterProblemsByDifficulty } from './../../Helpers/problemHelpers';
+import helper from './Helper/helper';
 
 
 class CreateRoom extends React.Component {
@@ -45,6 +46,7 @@ class CreateRoom extends React.Component {
     let problems = filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems);
     console.log('problemsssss', problems);
     let user = fire.auth().currentUser.email.split('@')[0];
+    let whirlpools = helper.setWhirlPools(7);
     let room = {
       players: [user],
       playerInfo: {
@@ -63,6 +65,7 @@ class CreateRoom extends React.Component {
       gameStarted: false,
       playerCount: 1,
       winner: "",
+      whirlpools,
       problems: problems,
       spectators: 0,
       playerTurn: user,
@@ -73,7 +76,7 @@ class CreateRoom extends React.Component {
         [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
         [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
         [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
-        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[['END']]]
+        [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0,'END']]]
       ]
     }
     db.BoardRooms.push(room).then(added => {
