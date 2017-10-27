@@ -16,12 +16,20 @@
   /* padding-top: 2%; */
   height: 100px;
 }
-.water {
-  background: url('/assets/water.gif');
+
+.brown {
+  background: #eadabc;
+}
+.dbrown {
+  background: #bf9053;
+}
+
+/* .treasure {
+  background: url('/assets/treasure.jpg');
   background-size: 100px 100px;
   width: 100px;
   height: 100px;
-}
+} */
 .whirlpool {
   background: url('/assets/whirlpool.gif');
   background-size: 100px 100px;
