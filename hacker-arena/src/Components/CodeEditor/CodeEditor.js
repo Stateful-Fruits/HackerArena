@@ -128,12 +128,16 @@ class CodeEditor extends React.Component {
   }
 
   sendDisruptions(e) {
+    e.stopPropagation();
+    console.log('e.target', e.target)
     console.log('trying to send a disruption')
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
     // Sends disruptions to oppposite player
-    let disruptionFunc = [e.target.id.split(" ")[0], Date.now()];
-    let disruptionCost = e.target.id.split(" ")[1];
+    let targetId = e.target.id || e.target.parentElement.id;
+
+    let disruptionFunc = [targetId.split(" ")[0], Date.now()];
+    let disruptionCost = targetId.split(" ")[1];
     // make sure the user has enough credits to send this disruption
     if (currentRoom.players[username].credits >= disruptionCost) {
       if (currentRoom.players[username].targetedPlayer) {
