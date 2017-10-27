@@ -8,9 +8,9 @@ const Board = (props) => {
     <div className='board'>
       {props.board.map((row, i) => {
         if (i === props.board.length-1) {
-          return <Row key={i} row={row} i={i} lastrow={true}/>;
+          return <div key={i}><Row key={i} row={row} i={i} lastrow={true}/></div>;
         } else {
-          return <Row key={i} row={row} i={i} lastrow={false}/>;
+          return <div key={i}><Row key={i} row={row} i={i} lastrow={false}/></div>;
         }
       })}
     </div>
