@@ -24,29 +24,35 @@ class CodeEditor extends React.Component {
     this.handleClear =  this.handleClear.bind(this);
     this.liveInputs = this.liveInputs.bind(this);
     this.sendDisruptions = this.sendDisruptions.bind(this);
-    this.receiveDisruptions = this.receiveDisruptions.bind(this);
+    this.receiveDisruption = this.receiveDisruption.bind(this);
     this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.clearDisruption = this.clearDisruption.bind(this);
+    this.resetEditor = this.resetEditor.bind(this);
   }
   
+  // ~~~~~~~~~~~ LIFECYCLE FUNCTIONS ~~~~~~~~~~ //
+
   componentDidMount() {
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
-    // Creates template for current problem using userFn
+
+    this.resetEditor();
+
+    // Watches for cheating
     this.ace.editor.on("paste", () => {
       window.swal('You little cheater', '', 'warning');
-      setTimeout( () => {
-        this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
-      }, 500);
+      
+      this.resetEditor();
     });
-    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`, 1);
-    // Increments user credits by 5 every 30 seconds
+
+    // Increments user credits
     let intervalId = setInterval(()=> {
       if(this.props.currentRoom.players[username].credits <= 50) {
-        fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + 5);
+        this.changeUserCreditsByVal(5, username, currentRoom);
       }
     }, 30000);
+
     this.setState({ intervalId });
   }
 
@@ -54,56 +60,73 @@ class CodeEditor extends React.Component {
     clearInterval(this.state.intervalId);
   }
 
-  componentWillUpdate(){
+  componentWillUpdate() {
     // Alert users if someone has won the game
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];    
+    
     // Check for disruptions sent to the user
-    if(currentRoom.players[username].disruptions.length > 1){
-      currentRoom.players[username].disruptions.forEach(disruption => {
-        if(disruption !== "" && !oldDisruptions[disruption[1]]) {
-          oldDisruptions[disruption[1]] = true;
-          if (currentRoom.isPairRoom) {
-            let clearCode = setTimeout(() => {
-              console.log('disruption activating!!', disruption[0])
-              this.receiveDisruptions(disruption[0]);
-              let disruptions = this.state.diffusalCodes;
-              if (disruptions.length > 0) {
-                let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
-                disruptions.splice(indOfDisruptionToClear, 1);
-
-                this.setState({
-                  diffusalCodes: disruptions
-                })
-              }
-            }, 5000);
-        
-            let currentCodes = this.state.diffusalCodes;
-            console.log('disruption name', disruption);
-            currentCodes.push({
-              disruptionName: disruption,
-              clearCode: clearCode
-            })
-            this.setState({
-              diffusalCodes: currentCodes
-            })
-          } else {
-            this.receiveDisruptions(disruption[0]);
-          }
-        };
-      });
-      fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
+    let disruptions = currentRoom.players[username].disruptions || [];
+    if(disruptions.length > 1) {
+      this.receiveDisruptions(disruptions, username, currentRoom);
     }
   }
 
-  liveInputs(){
+  // ~~~~~~~~~~~ EVENT HANDLERS ~~~~~~~~~~ //
+
+  handleReset() {
+    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+  }
+
+  handleSubmit() {
+    let code = this.ace.editor.getValue();
+    let { currentRoom } = this.props;
+    let username = fire.auth().currentUser.email.split('@')[0];
+    
+    //TEST SUITE LOGIC
+    let testStatus = runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
+    if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
+      // if every test is passed
+      if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
+    } else window.swal('Oops...', 'Something went wrong!', 'error');
+
+    if((testStatus.length === currentRoom.problem.tests.length) && testStatus){
+      testStatus.forEach(items => {
+        if(items.actual === undefined) items.actual = null;
+      });
+      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus);
+    } else {
+      window.swal('Oops...', 'Something went wrong!', 'error');
+    }
+    
+    // ACE CONSOLE
+    // Function to handle console.logs in the aceConsole
+    let newLog = function(...theArgs){
+      let results = ""; // eslint-disable-next-line  
+      theArgs.forEach(argument => results += eval("'" + argument + "'"));
+      $('#aceConsole').append(`<li id="log">${results}</li>`);
+    }
+    let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
+    let newCode = consoleLogChange + code;
+    try { // eslint-disable-next-line
+      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
+    }  catch(e) {
+      $('#aceConsole').append(`<li>undefined</li>`);
+    }
+  }
+  
+  handleClear() {
+    $('#aceConsole').empty(); // Clears the console
+  }
+
+  liveInputs() {
     // Sends live inputs of user to database
     let username = fire.auth().currentUser.email.split('@')[0];  
     let liveInput = this.ace.editor.getValue();
     fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/liveInput`).set(liveInput)
   }
 
-  sendDisruptions(e){
+  sendDisruptions(e) {
     console.log('trying to send a disruption')
     let { currentRoom } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
@@ -117,19 +140,21 @@ class CodeEditor extends React.Component {
         let currentDisruptions = currentRoom.players[targetedPlayer].disruptions;
         let activity = currentRoom.activity || [];
         activity.push(`${username} is sending a ${disruptionFunc[0]} at ${targetedPlayer}!`)
+        this.changeUserCreditsByVal(-1 * disruptionCost, username, currentRoom);
         fire.database().ref(`rooms/${currentRoom.key}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
-        fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
         fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
       } else {
         // send the disruption to all players
         Object.keys(currentRoom.players).forEach((playerName) => {
           if (playerName !== username) {
             let currentDisruptions = currentRoom.players[playerName].disruptions;
+            let activity = currentRoom.activity || [];
+            activity.push(`Whoa! ${username} is sending a ${disruptionFunc[0]} at all players! Even though that should not be possible!!!`)
             fire.database().ref(`rooms/${currentRoom.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+            fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
           }
         });
-        fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - disruptionCost);
-
+        this.changeUserCreditsByVal(-1 * disruptionCost, username, currentRoom);        
       }
     }
   }
@@ -140,6 +165,7 @@ class CodeEditor extends React.Component {
         
     let disruptionFuncName = e.target.id.split(" ")[0];
     let blockCost = e.target.id.split(" ")[1];
+
     let activity = currentRoom.activity || [];    
 
     if (currentRoom.players[username].credits >= blockCost) {
@@ -152,21 +178,64 @@ class CodeEditor extends React.Component {
 
         activity.push(`${username} successfully blocked ${disruptionToClear.disruptionName[0]}!`)
       } else {
-        activity.push(`${username} wasted ${blockCost} defending against a ${disruptionFuncName} that didn't exist!`)
+        activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`)
       }
 
       fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity)
       
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits - blockCost);
+      this.changeUserCreditsByVal(-1 * blockCost, username, currentRoom);
 
     } 
   }
 
-  receiveDisruptions(func) {
+  // ~~~~~~~~~~~ HELPERS ~~~~~~~~~~ //
+
+  receiveDisruptions(disruptions, username, currentRoom) {
+    // note that oldDisruptions is declared outside this function at the top of the file
+    disruptions.forEach(disruption => {
+      if(disruption !== "" && !oldDisruptions[disruption[1]]) {
+        oldDisruptions[disruption[1]] = true;
+
+        if (currentRoom.isPairRoom) {
+          // if we are in a pair room, the disruption should be delayed to give driver time to block
+          let clearCode = setTimeout(() => {
+            console.log('disruption activating!!', disruption[0])
+            this.receiveDisruption(disruption[0]);
+            let disruptions = this.state.diffusalCodes;
+            if (disruptions.length > 0) {
+              let indOfDisruptionToClear = disruptions.findIndex(clearDisr => clearDisr.disruptionName === disruption);
+              disruptions.splice(indOfDisruptionToClear, 1);
+
+              this.setState({
+                diffusalCodes: disruptions
+              })
+            }
+          }, 5000);
+      
+          let currentCodes = this.state.diffusalCodes;
+          console.log('disruption name', disruption);
+          currentCodes.push({
+            disruptionName: disruption,
+            clearCode: clearCode
+          })
+          this.setState({
+            diffusalCodes: currentCodes
+          })
+        } else {
+          // if we are not in a pair room, we should process it immediately
+          this.receiveDisruption(disruption[0]);
+        }
+      };
+    });
+
+    fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
+  }
+
+  receiveDisruption(funcName) {
     // Runs disruptions for user, if called
     if (this.ace) {
       let oldHistory = this.ace.editor.getSession().getUndoManager();
-      Disruptions[func]('ace-editor', this.ace.editor);
+      Disruptions[funcName]('ace-editor', this.ace.editor);
       this.ace.editor.getSession().setUndoManager(oldHistory);
     }
   }
@@ -200,50 +269,18 @@ class CodeEditor extends React.Component {
     fire.database().ref(`rooms/${room.key}`).set(room);
   }
 
-  handleReset() {
-    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+  resetEditor() {
+    setTimeout( () => {
+      this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+    }, 500);
   }
 
-  handleSubmit(){
-    let code = this.ace.editor.getValue();
-    let { currentRoom } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
-    //TEST SUITE LOGIC
-    let testStatus = runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
-    if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
-      // if every test is passed
-      if (currentRoom.roomStatus !== 'completed') this.endRoundWithClientAsVictor();
-    } else window.swal('Oops...', 'Something went wrong!', 'error');
+  changeUserCreditsByVal(val, username, currentRoom) {
+    fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits + val);
+  }
 
-    if((testStatus.length === currentRoom.problem.tests.length) && testStatus){
-      testStatus.forEach(items => {
-        if(items.actual === undefined) items.actual = null;
-      });
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus);
-    } else {
-      window.swal('Oops...', 'Something went wrong!', 'error');
-    }
-    
-    // ACE CONSOLE
-    // Function to handle console.logs in the aceConsole
-    let newLog = function(...theArgs){
-      let results = ""; // eslint-disable-next-line  
-      theArgs.forEach(argument => results += eval("'" + argument + "'"));
-      $('#aceConsole').append(`<li id="log">${results}</li>`);
-    }
-    let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
-    let newCode = consoleLogChange + code;
-    try { // eslint-disable-next-line
-      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
-    }  catch(e) {
-      $('#aceConsole').append(`<li>undefined</li>`);
-    }
-  }
-  
-  handleClear(){
-    $('#aceConsole').empty(); // Clears the console
-  }
-  
+  // ~~~~~~~~~~~ RENDER ~~~~~~~~~~ //
+
   render() {
     let username = fire.auth().currentUser.email.split('@')[0];
     let { currentRoom } = this.props;
