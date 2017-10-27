@@ -1,9 +1,9 @@
-import fire from '../firebase';
+// import fire from '../firebase';
 import db from '../db'
 
 import problems from './problems';
-import users from './users';
-import rooms from './rooms';
+// import users from './users';
+// import rooms from './rooms';
 
 const populateDb = function() {
   insertProblems();
@@ -19,12 +19,12 @@ const insertProblems = function() {
   .forEach(problem => db.Problems.push(problem));
 }
 
-const insertUsers = function() {
-  users.forEach(user => db.Users.push(user));
-}
+// const insertUsers = function() {
+//   users.forEach(user => db.Users.push(user));
+// }
 
-const insertRooms = function() {
-  rooms.forEach(room => db.Rooms.push(room))
-}
+// const insertRooms = function() {
+//   rooms.forEach(room => db.Rooms.push(room))
+// }
 
 export default populateDb;

@@ -3,7 +3,7 @@ import SpectatorEditor from './SpectatorEditor';
 
 class SpectatorEditors extends Component {
   render() {
-    let { gameRoom, roomId, username, partnerName, partnerRole } = this.props;
+    let { gameRoom, partnerName } = this.props;
     let players = Object.keys(gameRoom.players)
     let partner = players.filter(playerName => playerName === partnerName) 
     let playersToShow = partner.length ? partner : players;

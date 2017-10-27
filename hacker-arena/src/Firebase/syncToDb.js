@@ -12,7 +12,6 @@ const syncToDb = function(updateGameRooms, updateProblems, updateBoardRooms) {
   });
   
   db.Problems.on('value', data => {
-    console.log('problems filing into state');
     updateProblems(data.val());  
   });
   

@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import provider from './oauth/oauth.js'
+// import provider from './oauth/oauth.js'
 
 console.log('process.env', process.env);
 let config;

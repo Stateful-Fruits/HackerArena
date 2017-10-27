@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import fire from '../../Firebase/firebase';
 
-import { getPartnerName, getRoleFromUsername, getPartnerRole } from '../../Helpers/pairHelpers'
+import { getPartnerName, getRoleFromUsername } from '../../Helpers/pairHelpers'
 
 import '../../Styles/ProgressBar.css';
 
@@ -28,7 +28,6 @@ class ProgressBar extends Component {
     });
 
     // if there is no targeted player for this user
-    console.log('Component should target a player now');
     if (!isSpectator && !targetedPlayer) {
       // set the first other player as targeted
       if (otherUsers.length) fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(otherUsers[0]);
