@@ -9,8 +9,8 @@ eventHandler.helpers = {};
 // ---------------- Helpers ----------------
 
 eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roomId, username, problems) {
+  // this whole function now is only invoke when it is NOT the last round
   fire.database().ref(`rooms/${roomId}`).once('value', snapshot => {
-    // this now only runs if it is NOT the last round
     let room = snapshot.val()
         
     let numPlayers = Object.keys(room.players).length;
@@ -57,7 +57,7 @@ eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let resultsByPlayer = calculateResultsByPlayer(resultsSoFar);
   let mostTotalWins = calculateMostTotalWins(resultsByPlayer);
   let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
-  let isPairRoom = room.isPairRoom
+  let isPairRoom = room.isPairRoom;
 
   if (isLastRound) {
     fire.database().ref(`users/${username}/history/${roomId}`).set(resultsSoFar);
