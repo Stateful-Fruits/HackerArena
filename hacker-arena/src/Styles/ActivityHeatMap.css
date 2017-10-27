@@ -10,14 +10,18 @@ rect {
   padding-top: 5px;
 }
 .react-calendar-heatmap {
-  margin-top: 10%;
-  height: 80%;
-  width: 80%;
-  padding: 5px;
+  margin-left: 15px;
+  height: 90%;
+  width: 90%;
+  padding: 20px;
+  border: 0.5px solid rgb(215, 215, 215);
+  border-radius: 10px;
 }
 
 text.react-calendar-heatmap-month-label {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 100;
-  padding: 10px;
+  font-size: 12px;
+  margin-left: 10px !important
+  /* padding: 10px; */
 }

@@ -200,17 +200,15 @@ class Stats extends React.Component {
                 return (sequenceArray.indexOf(node) >= 0);
               })
       .style("opacity", 1);
-      $('.percentage').append(`<p>${percentage} of games </p>`)
-      $('.pathSelection').append(`<p name=${d.name}>${d.value} games with tags: </p>`);
+      let tagsString = sequenceArray.map((item) => {
+        return (item.data.name);
+      })
+      $('.percentage').append(`<p><strong>${percentage}</strong> of games </p>`)
+      $('.pathSelection').append(`<p name=${d.name}><strong>${d.value}</strong> games with tags: ${tagsString.join(', ')} </p>`);
       $('.legend > p').css({"opacity": 0.3})
       sequenceArray.forEach((item) =>{
         $('.legend').find(`p[name=${item.data.name}]`).css({"opacity": 1});
       })
-      let tagsString = sequenceArray.map((item) => {
-        return (item.data.name);
-      })
-      console.log(sequenceArray, tagsString)
-      $('.highlightedTags').append(`<p>${tagsString.join(',')}</p>`);
     }
     function handleMouseLeave(d){
       console.log("i left")
@@ -219,14 +217,15 @@ class Stats extends React.Component {
       $('.percentage').find('p').remove();
       $('.legend > p').css({"opacity": 1});
       $('.pathSelection').find(`p[name=${d.name}]`).remove();
-      $('.highlightedTags').find('p').remove();
     }
   }
 
   render(){
       return (
+        <div className="statsDiv">
+          <h3 className="statsHeader">Statistics</h3>
         <div style={{display: "flex", flexDirection: "column"}}>
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex", justifyContent: "space-around"}}>
             <svg></svg>
           
           {this.state.colors ? 
@@ -247,8 +246,8 @@ class Stats extends React.Component {
         <div className="sunburst" style={{position: "absolute"}}>
             <div className="percentage"></div>
             <div className="pathSelection" ></div>
-            <div className="highlightedTags"></div>
           </div>
+        </div>
         </div>
         </div>
       )

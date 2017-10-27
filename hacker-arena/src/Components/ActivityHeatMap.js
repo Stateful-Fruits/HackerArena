@@ -35,10 +35,13 @@ const ActivityHeatMap = (props) => {
   }
   
   // Tooltip description for each day - Play Count + Date 
-  const customTooltipDataAttrs = (value) => (value ? {'data-tip': `${value.count} game(s) played on ${value.date}`} : null);
+  const customTooltipDataAttrs = (value) => (value.count !== null ? {'data-tip': `${value.count} game(s) played on ${value.date}`} : {'data-tip': `No games played on this day`});
   
   return (
-    <div>
+    <div style={{marginTop: '5%'}}>
+      <div> 
+        <h3>Activity</h3>
+      </div>
       <CalendarHeatmap
         startDate={new Date('2016-12-31')}
         gutterSize={1}

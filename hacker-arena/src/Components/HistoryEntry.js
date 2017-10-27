@@ -9,7 +9,7 @@ const HistoryEntry = (props) => {
       <div className="card-header">
         {(Object.values(props.game[0].winners).filter(items=>{
           return items === (props.profile.username)
-        }).length > 0 ) ? <h1 className="historyWin">WIN</h1> : <h1 className="historyLoss">LOSS</h1>}
+        }).length > 0 ) ? <h2 className="historyWin">WIN</h2> : <h2 className="historyLoss">LOSS</h2>}
         <p>Winner : {Object.values(props.game[0].winners)} </p>
       </div> 
       <div className="card-body">
