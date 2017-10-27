@@ -1,5 +1,6 @@
 import fire from '../../Firebase/firebase';
-import helpers from '../../Helpers/helpers'
+import { filterProblemsByDifficulty, chooseRandomProblem } from '../../Helpers/problemHelpers';
+import { calculateResultsByPlayer, calculateMostTotalWins } from '../../Helpers/resultsHelpers'
 
 let eventHandler = {};
 
@@ -8,28 +9,24 @@ eventHandler.helpers = {};
 // ---------------- Helpers ----------------
 
 eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roomId, username, problems) {
+  // this whole function now is only invoke when it is NOT the last round
   fire.database().ref(`rooms/${roomId}`).once('value', snapshot => {
     let room = snapshot.val()
-    let resultsSoFar = room.results;
-    let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
-    let mostTotalWins = helpers.calculateMostTotalWins(resultsByPlayer);
-    
-    let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
-    
+        
     let numPlayers = Object.keys(room.players).length;
     
     room.playersReady = room.playersReady + 1 || 1;
     
-    if (room.playersReady === numPlayers && !isLastRound) {
+    if (room.playersReady === numPlayers) {
       console.log('everyone is ready for next round!')
       room.currentRound = room.currentRound + 1;
       room.roomStatus = 'playing';
       room.playersReady = 0;
 
       // new problem
-      let filteredProblems = helpers.filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
+      let filteredProblems = filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
       console.log('filteredProblems in eventhandler', filteredProblems)
-      room.problemID = helpers.chooseRandomProblem(filteredProblems);
+      room.problemID = chooseRandomProblem(filteredProblems);
       room.problem = problems[room.problemID]
 
       room.activity = [];
@@ -45,17 +42,7 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
     } else if (room.playersReady < numPlayers) {
       console.log('everyone is NOT ready yet.');
 
-      // still, put this user's history in the database
-      fire.database().ref(`users/${username}/history/${roomId}`).set(resultsSoFar);   
-
       room.roomStatus = 'intermission';
-    } else if (isLastRound) {
-      console.log('everyone is ready and the last round just completed')
-
-      // putting user history in firebase
-      fire.database().ref(`users/${username}/history/${roomId}`).set(resultsSoFar);        
-
-      room.roomStatus = 'completed';
     }
     
     return fire.database().ref(`rooms/${roomId}`).set(room);
@@ -67,8 +54,15 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
 
 eventHandler.winner = function(room, roomId, username, eventValue, problems) {
   let resultsSoFar = room.results.slice();
-  let resultsByPlayer = helpers.calculateResultsByPlayer(resultsSoFar);
-  let isPairRoom = room.isPairRoom
+  let resultsByPlayer = calculateResultsByPlayer(resultsSoFar);
+  let mostTotalWins = calculateMostTotalWins(resultsByPlayer);
+  let isLastRound = parseInt(mostTotalWins.wins, 10) === parseInt(room.rounds, 10);
+  let isPairRoom = room.isPairRoom;
+
+  if (isLastRound) {
+    fire.database().ref(`users/${username}/history/${roomId}`).set(resultsSoFar);
+    fire.database().ref(`rooms/${roomId}/roomStatus`).set('completed');
+  }
 
   let winners = eventValue.winners;
   let timeTaken = eventValue.timeTaken.toFixed(2);
@@ -116,7 +110,9 @@ eventHandler.winner = function(room, roomId, username, eventValue, problems) {
       })
     }
   })()
-  .then(() => this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems)) 
-}   
+  .then(() => {
+    !isLastRound ? this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems) : null
+  })
+}
 
 export default eventHandler;

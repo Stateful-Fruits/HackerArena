@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import fire from '../../Firebase/firebase';
 
-import helpers from '../../Helpers/helpers'
+import { getPartnerName, getRoleFromUsername, getPartnerRole } from '../../Helpers/pairHelpers'
 
 import '../../Styles/ProgressBar.css';
 
@@ -16,13 +16,13 @@ class ProgressBar extends Component {
     let username = fire.auth().currentUser.email.split('@')[0];
 
     let isSpectator = !(Object.keys(room.players).includes(username));
-    let partnerName = helpers.getPartnerName(room, username)
+    let partnerName = getPartnerName(room, username)
 
     let nameOfDisrupter = room.isPairRoom ? partnerName : username;  
     let targetedPlayer =  isSpectator ? null : room.players[nameOfDisrupter].targetedPlayer;
 
     let otherUsers = Object.keys(room.players).filter(name => {
-        let role = helpers.getRoleFromUsername(room, name);
+        let role = getRoleFromUsername(room, name);
         
         return name !== username && role !== 'navigator' && name !== partnerName;
     });
@@ -41,7 +41,7 @@ class ProgressBar extends Component {
   handleTargetChange(otherUserName) {
     let { room } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
-    let partnerName = helpers.getPartnerName(room, username);
+    let partnerName = getPartnerName(room, username);
 
     // firebase query to update this user's targetedPlayer obejct in firebase
     fire.database().ref(`/rooms/${room.key}/players/${partnerName || username}/targetedPlayer`).set(otherUserName);
@@ -59,13 +59,10 @@ class ProgressBar extends Component {
     let isSpectator = !(Object.keys(room.players).includes(username));
     let isPairRoom = room.isPairRoom;
 
-    let userRole = helpers.getRoleFromUsername(room, username);
-    let isNavigator = userRole === 'navigator';
-    let partnerName = helpers.getPartnerName(room, username);
-    let partnerRole = helpers.getPartnerRole(room, username);
+    let partnerName = getPartnerName(room, username);
     let targetedPlayer = !isSpectator ? (this.props.room.players[partnerName || username].targetedPlayer || null) : null;
     for (let playerName in room.players) {
-      let playerRole = helpers.getRoleFromUsername(room, playerName);
+      let playerRole = getRoleFromUsername(room, playerName);
       // Don't display a bar as being an opponent bar if:
         // it is the user's bar
         // the bar is for a navigator (who therefore should not get one)

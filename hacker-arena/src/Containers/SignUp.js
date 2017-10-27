@@ -2,7 +2,7 @@ import React from 'react';
 import firebase from '../Firebase/firebase';
 import provider from '../Firebase/oauth/oauth.js';
 
-import auth from './AuthHelpers/helpers';
+import { normalSignUp, googleAuth, fbookAuth } from '../Helpers/authHelpers';
 
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -23,7 +23,7 @@ class SignUp extends React.Component {
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange =this.onChange.bind(this);
-    this.signInWithGoogle =this.signInWithGoogle.bind(this);        
+    this.signInWithGoogle = this.signInWithGoogle.bind(this);        
   }
 
   onChange(e) {
@@ -36,7 +36,7 @@ class SignUp extends React.Component {
     let email = this.state.email;
     let password = this.state.password;
 
-    auth.normalSignUp(email, password, navigate)
+    normalSignUp(email, password, navigate)
       .then(() => {
         syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
       })
@@ -47,7 +47,7 @@ class SignUp extends React.Component {
 
   signInWithGoogle(e) {
     let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;    
-    auth.googleAuth(navigate)
+    googleAuth(navigate)
       .then(() => {
         syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
       })
@@ -55,7 +55,7 @@ class SignUp extends React.Component {
 
   signInWithFacebook(e) {
     let { updateGameRooms, updateProblems, updateBoardRooms, navigate } = this.props;    
-    auth.fbookAuth(navigate)
+    fbookAuth(navigate)
       .then(() => {
         syncToDb(updateGameRooms, updateProblems, updateBoardRooms);        
       })

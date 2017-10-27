@@ -3,7 +3,7 @@
   margin: 5px;
   float: right;
   width: 49vw;
-  height: 100%;
+  height: 130vh;
   background: beige;
   position: absolute;
   left: 50vw;
@@ -40,6 +40,11 @@
 /* span {
   padding: 5px;
 } */
+.testHolder {
+  overflow: scroll;
+  height: 550px;
+}
+
 .testHolder > div {
   display: flex;
   margin-bottom: 7px;
