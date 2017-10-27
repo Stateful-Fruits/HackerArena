@@ -43,15 +43,28 @@ class UserProfile extends React.Component {
         return (Object.values(game[0].winners).indexOf(this.props.profile.username) === -1);
       }).length;
     }
-
+    let currentUser = fire.auth().currentUser;
     return (
       <div>
         <div className="leftSideProfile">
-          <div style={{display: "flex"}}>
-            <div className="ProfileInfo">
-              <div>Username: {profile.username}</div><br/>
-              <div>Wins: {wins}</div>
-              <div>Losses: {losses}</div>
+          <div style={{display: 'flex'}}>
+          <div style={{width: '30vw'}}>
+            <div className="ProfileInfo" style={{display: "flex"}}>
+              <div className="profPic">
+                <img className="profile-photo  accProfPic"
+                  src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
+                  alt='profile'
+                >
+                </img>
+              </div>
+              <div className="userInfo">
+                <div><strong>Username</strong>: {profile.username}</div><br/>
+                <div><strong>Wins</strong>: {wins}</div>
+                <div><strong>Losses</strong>: {losses}</div>
+                <div><strong>Contact</strong>: myEmail@gmail.com</div>
+              </div>
+            </div>
+              <div> <strong>Description</strong>: Hey its me kfspfksdfk okfspadfksdpfoksdfpakpsdokfpsdofksapfk </div>
             {
               (profileUsername === clientUsername) ?
               <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :

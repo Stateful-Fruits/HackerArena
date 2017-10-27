@@ -10,7 +10,7 @@ class Home extends Component {
     let { gameRooms, navigate } = this.props;
     return (
        <div>    
-         <button className="btn" onClick={() => this.props.navigate('/CreateGameRoom')}>CREATE GAME ROOM</button>
+         <button className="btn createGameButton" onClick={() => this.props.navigate('/CreateGameRoom')}>CREATE GAME ROOM</button>
          <GameRoomList 
            gameRooms={gameRooms || {}}
            navigate={navigate}

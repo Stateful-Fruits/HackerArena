@@ -1,0 +1,26 @@
+.gameListSearch {
+  width: 20%;
+  height: 40px;
+  bottom: 50px;
+  left: 70px;
+}
+
+.searchBar {
+  height: 40px !important;
+}
+
+.filterGameSearch {
+ width: 20%;
+ height: 40px;
+ bottom: 50px;
+ right: 70px;
+}
+
+.filterBar {
+  height: 40px !important;
+}
+
+.searchAndFilter {
+  display: flex;
+  justify-content: space-around;
+}

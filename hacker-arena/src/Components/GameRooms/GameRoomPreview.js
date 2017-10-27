@@ -20,28 +20,44 @@ const GameRoomPreview = ({
       </li>);
   }
   return (
-    <div className='list-group-item' style={{ color: 'black', border: '3px solid #222', margin: '1%', marginLeft: '20%', marginRight: '20%'}}>
-        <div>
-        <ul className='list-group' style={{ width: '100%' }}>
-          { playerSpans }
-        </ul>
-      </div>
-      <div className='btn-group'>
-        <button 
-          className='btn btn-info'
-          onClick={ () => navigate(`GameRoom/${gameRoom.key}`) } 
-          disabled={playerCapacity === playerNames.length}>
-          <h3>Join Game</h3>
-        </button>
-        <button 
-          className='btn btn-warning'
-          onClick={ () => navigate(`Spectate/${gameRoom.key}`) }>
-          <h3>Spectate Game  <span className="badge badge-default badge-pill">{spectators ? spectators.length : 0}</span>
-          </h3>
-        </button>
-      </div>
+    <div className='list-group-item' style={{ color: 'black', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1)', margin: '1%', marginLeft: '20%', marginRight: '20%'}}>
+      <ul className='list-group'>
+        { playerSpans }
+      </ul>
+      <button className="btn gamePreviewButton" 
+              onClick={ () => navigate(`GameRoom/${gameRoom.key}`) } 
+              disabled={playerCapacity === playerNames.length}>
+        <h5>Join Game</h5> 
+      </button>
+      <button className="btn gamePreviewButton" 
+              onClick={ () => navigate(`Spectate/${gameRoom.key}`) }>
+        <h5>Spectate Game  <span className="badge badge-default badge-pill">{spectators ? spectators.length : 0}</span>
+        </h5>
+      </button>
     </div>
   );
 };
 
 export default GameRoomPreview;
+
+//     <div className='list-group-item' style={{ color: 'black', border: '3px solid #222', margin: '1%', marginLeft: '20%', marginRight: '20%'}}>
+//         <div>
+//         <ul className='list-group' style={{ width: '100%' }}>
+//           { playerSpans }
+//         </ul>
+//       </div>
+//       <div className='btn-group'>
+//         <button 
+//           className='btn btn-info'
+//           onClick={ () => navigate(`GameRoom/${gameRoom.key}`) } 
+//           disabled={playerCapacity === playerNames.length}>
+//           <h3>Join Game</h3>
+//         </button>
+//         <button 
+//           className='btn btn-warning'
+//           onClick={ () => navigate(`Spectate/${gameRoom.key}`) }>
+//           <h3>Spectate Game  <span className="badge badge-default badge-pill">{spectators ? spectators.length : 0}</span>
+//           </h3>
+//         </button>
+//       </div>
+// =======

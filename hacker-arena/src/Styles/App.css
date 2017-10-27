@@ -11,7 +11,9 @@
 }
 
 .App-title {
-  font-size: 3em;
+  /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
+  /* text-shadow: 0 4px 8px 0 rgba(178, 17, 17, 1), 0 6px 20px 0 rgba(178, 68, 17, 1); */
+  font-size: 3.3em;
 }
 
 .App-intro {
@@ -42,7 +44,7 @@
 .navbar {
   border-radius: 0px !important;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  
+  /* filter: opacity(0.1) */
 }
 
 .navbar-brand {
@@ -52,13 +54,25 @@
   border-bottom: 3px transparent solid;
 }
 
-.navbar-brand:hover {
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
+.navbar-brand:hover{
+  
+  transition: border-bottom 1s ease,
+              border-top 1s ease,
+              /* text-shadow 1s ease; */
+              color 1s ease;
+  color: #b24411 !important;
+
+  /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
+  border-top: 2px solid rgb(178, 68, 17);
+  border-bottom: 2px solid #b24411;
 }
+
 .active {
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
+  color: #b24411 !important;
+
+  /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
+  border-top: 2px solid #b24411;
+  border-bottom: 2px solid #b24411;
 }
 
 .nav-item {
@@ -70,4 +84,35 @@
 
 .nav-item:hover {
   cursor: pointer;
+}
+
+.createGameButton {
+  font-size: 20px !important;
+  background-color: rgb(63, 63, 70);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+  padding: 20px !important;
+}
+
+.createGameButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #b24411 !important;
+  color: #b24411 !important
+}
+
+.gamePreviewButton {
+  font-size: 20px !important;
+  background-color: rgb(63, 63, 70);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+}
+
+.gamePreviewButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #b24411 !important;
+  color: #b24411 !important
 }

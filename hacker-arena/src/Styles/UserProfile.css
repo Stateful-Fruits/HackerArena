@@ -5,12 +5,26 @@
 }
 
 .ProfileInfo {
-  width: 60%;
+  margin-left:35px;
+  margin-top: 4%;
+  margin-bottom: 35px;
+  width: 100%;
   float:left;
 }
 
 .WinLossStats {
   width: 50%;
   float:right;
+  margin-top: 20px;
+}
+
+.accProfPic {
+  height: 150px;
+  width: 150px;
+  margin: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+}
+
+.userInfo {
   margin-top: 5%;
 }

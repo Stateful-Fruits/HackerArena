@@ -1,12 +1,17 @@
 .historyWin {
   color: green;
+  margin: 0px;
+  margin-top: 10px;
 }
 
 .historyLoss {
   color: red;
+  margin: 0px;
+  margin-top: 10px;
 }
 
 .historyEntry {
   margin: 30px;
   background: rgba(242, 242, 242, 0.468);
 }
+

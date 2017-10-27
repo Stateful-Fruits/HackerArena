@@ -16,7 +16,26 @@
 }
 
 .sunburst {
+  float:right;
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+.statsHeader {
+  margin: 0 !important;
+  padding-bottom: 20px
+
+}
+
+.statsDiv {
+  width: 37vw;
+  padding: 20px;
+  height: 450px;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 10px;
+}
+
+.percentage {
+  margin-top: 10px;
 }

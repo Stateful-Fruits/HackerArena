@@ -3,4 +3,5 @@
   width: 30vw;
   overflow: scroll;
   height: 100vh;
+  border-left: 1px solid rgb(126, 126, 126);
 }
