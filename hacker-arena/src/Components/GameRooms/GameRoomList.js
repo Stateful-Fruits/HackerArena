@@ -35,22 +35,40 @@ class GameRoomList extends Component {
       roomData.key = roomKey;
       return roomData;
     });
-    let privateGames = rooms.filter(eachRoom => (
-      (Object.keys(eachRoom).includes('isPrivate') ? eachRoom.isPrivate : false) && 
-       !Object.keys(eachRoom).includes('isTrusted') &&
-       !Object.keys(eachRoom).includes('challengerName') &&
-       (Object.keys(eachRoom).includes('invitedPlayers') ? eachRoom.invitedPlayers.includes(username) : false)
+
+    // games that you were invited to
+    let privateGames = rooms
+      .filter(eachRoom => (
+        (Object.keys(eachRoom).includes('isPrivate') ? eachRoom.isPrivate : false) && 
+        !Object.keys(eachRoom).includes('isTrusted') &&
+        (Object.keys(eachRoom).includes('invitedPlayers') ? eachRoom.invitedPlayers.includes(username) : false)
       ))
       .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
       .map((room, inx) => (
-      <div key={room.key + room.problemID}>
-        <h3 style={{ color: 'green' }}>Private Game</h3>
+        <div key={room.key + room.problemID}>
+          <h3 style={{ color: 'green' }}>Private Game</h3>
+          <GameRoomPreview 
+            gameRoom={room}
+            navigate={navigate}
+          />
+        </div>
+      ));
+
+    // games open to everyone
+    let publicGameRooms = rooms
+      .filter(eachRoom => (
+        !Object.keys(eachRoom).includes('isTrusted') && 
+        (Object.keys(eachRoom).includes('isPrivate') ? !eachRoom.isPrivate : true))
+      )
+      .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
+      .reverse()
+      .map((room, inx) => (
         <GameRoomPreview 
           gameRoom={room}
+          key={room.key + inx}
           navigate={navigate}
         />
-      </div>
-    ));
+      ));
     return (
       <div>
         <h3> Sort By: </h3>
@@ -65,20 +83,7 @@ class GameRoomList extends Component {
           </div> : null
         }
         <ul className='list-group'>
-          { rooms.sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
-              .filter(eachRoom => (
-                !Object.keys(eachRoom).includes('isTrusted') && 
-                !Object.keys(eachRoom).includes('challengerName') &&
-                (Object.keys(eachRoom).includes('isPrivate') ? !eachRoom.isPrivate : true))
-              )
-              .reverse()
-              .map((room, inx) => (
-            <GameRoomPreview 
-              gameRoom={room}
-              key={room.key + inx}
-              navigate={navigate}
-            />
-          ))}
+          { publicGameRooms }
         </ul>
       </div>
   );
