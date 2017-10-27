@@ -199,6 +199,7 @@ class GameRoom extends React.Component {
           {codePage}
         </div>
         <div className='bottomend'></div>
+        <img src='https://orig00.deviantart.net/1a60/f/2013/001/7/6/marsh_battle_map_1_by_hero339-d5q29ua.jpg' alt='hi'/>
       </div>
     } else {
       return <div>

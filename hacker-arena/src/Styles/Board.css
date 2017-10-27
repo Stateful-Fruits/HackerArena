@@ -9,11 +9,24 @@
 
 .bdblock {
   display: inline-block;
+  vertical-align: middle;
   border-style: solid;
   border-width: 1.5px 0px 0px 1.5px;  /*TOP RIGHT BOTTOM LEFT*/
-  width: 8%;
-  padding-top: 2%;
-  height: 75px;
+  width: 100px;
+  /* padding-top: 2%; */
+  height: 100px;
+}
+.water {
+  background: url('/assets/water.gif');
+  background-size: 100px 100px;
+  width: 100px;
+  height: 100px;
+}
+.whirlpool {
+  background: url('/assets/whirlpool.gif');
+  background-size: 100px 100px;
+  width: 100px;
+  height: 100px;
 }
 
 .lastblock {
