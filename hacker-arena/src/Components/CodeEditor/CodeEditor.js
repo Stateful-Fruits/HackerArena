@@ -260,7 +260,7 @@ class CodeEditor extends React.Component {
   }
 
   changeUserCreditsByVal(val, username, currentRoom) {
-    console.log('changeUSerCredits running');
+    console.log('update credits');
     fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + val);
   }
 
