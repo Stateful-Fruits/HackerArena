@@ -111,7 +111,7 @@ eventHandler.winner = function(room, roomId, username, eventValue, problems) {
     }
   })()
   .then(() => {
-    !isLastRound ? this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems) : null
+    if (!isLastRound) this.helpers.handleConfirmAlert(isClientWinner, room, roomId, username, problems);
   })
 }
 

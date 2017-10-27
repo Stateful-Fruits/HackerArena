@@ -1,6 +1,6 @@
 import React from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
-import $ from 'jquery';
+// import $ from 'jquery';
 import ReactTooltip from 'react-tooltip';
 import '../Styles/ActivityHeatMap.css';
 

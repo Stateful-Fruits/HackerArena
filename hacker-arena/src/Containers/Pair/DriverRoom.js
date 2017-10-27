@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import fire from './../../Firebase/firebase';
+// import { connect } from 'react-redux';
+// import fire from './../../Firebase/firebase';
 import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
-import ProgressBar from '../../Components/GameRoom/ProgressBar';
+// import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import PairVideo from './PairVideo';
 import { getTeamIndex } from '../../Helpers/pairHelpers'
 

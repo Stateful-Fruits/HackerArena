@@ -6,9 +6,9 @@ import fire from '../../Firebase/firebase';
 import SoloEditor from './SoloEditor.js'
 import TestSuite from '../../Components/TestSuite.js'; //From Simon
 import GameRoomLoading from '../../Components/GameRoom/GameRoomLoading';
-import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
+// import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
-import WinnerDisplay from '../../Components/GameRoom/WinnerDisplay'
+// import WinnerDisplay from '../../Components/GameRoom/WinnerDisplay';
 import eventHandler from './../EventHandler/eventHandler';
 
 import '../../Styles/GameRoom.css';
@@ -140,17 +140,16 @@ class SoloRoom extends React.Component {
     if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    let { gameRooms, roomId, isPairRoom } = this.props;
+    let { gameRooms, roomId } = this.props;
     let room = gameRooms[roomId];
     room.key = roomId;
-    let { roomStatus, results } = room;
+    let { roomStatus } = room;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
       return (
         <div>
           <div id="editorAndTestSuite">
             <SoloEditor currentRoom={room}/>
-            {/* <CodeEditor currentRoom={room}/> */}
             <TestSuite currentRoom={room}/>
           </div>
         </div>

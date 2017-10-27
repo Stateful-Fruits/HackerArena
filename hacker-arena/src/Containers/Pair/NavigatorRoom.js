@@ -1,7 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import fire from './../../Firebase/firebase';
-import SpectatorEditor from '../../Components/Spectator/SpectatorEditor';
 import ProgressBar from '../../Components/GameRoom/ProgressBar';
 import TestSuite from '../../Components/TestSuite.js'; //From Simon
 import SpectatorEditors from '../../Components/Spectator/SpectatorEditors';

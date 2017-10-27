@@ -6,10 +6,9 @@ import updateBoardRooms from './Actions/updateBoardRooms';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
-import GameRoomLoading from './Components/GameRoom/GameRoomLoading';
 
 import fire from './Firebase/firebase';
-import db from './Firebase/db';
+// import db from './Firebase/db';
 import syncToDb from './Firebase/syncToDb'
 
 import { push } from 'react-router-redux';

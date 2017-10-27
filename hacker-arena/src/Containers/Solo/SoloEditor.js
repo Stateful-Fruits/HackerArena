@@ -18,8 +18,6 @@ class SoloEditor extends React.Component {
   }
   
   componentDidMount() {
-    let { currentRoom } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
     // Creates template for current problem using userFn
     this.ace.editor.on("paste", () => {
       window.swal('You little cheater', '', 'warning');
@@ -79,8 +77,6 @@ class SoloEditor extends React.Component {
   }
   
   render() {
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let { currentRoom } = this.props;
     return (
       <div id="editorSideSolo">
           <button className="btn editorHeader" color="secondary" size="lg" >Editor</button>
