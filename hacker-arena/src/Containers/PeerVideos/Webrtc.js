@@ -50,8 +50,11 @@ class Webrtc extends Component {
       // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
       Element.prototype.getElementById = function(id) {
         return document.getElementById(id);
-    }
-      document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer)).remove();
+      }
+      if (document.getElementById('remoteVideo') && 
+          document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer))) {
+        document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer)).remove();
+      }
     })
     //   this.webrtc = webrtc;
       webrtc.on('readyToCall', function () {

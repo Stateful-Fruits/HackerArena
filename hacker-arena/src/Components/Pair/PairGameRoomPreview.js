@@ -12,7 +12,6 @@ class GameRoomPreview extends Component {
     let { navigate, gameRoom } = this.props;
 
     if (gameRoom.players[username]) {
-      console.log('player is trying to add themselves to a room they are part of!!')
       navigate(`Pair/GameRoom/${roomId}`);
     } else {
       fire.database().ref(`/rooms/${roomId}/teams/${teamIndex}/${role}`).set(username)
@@ -27,10 +26,10 @@ class GameRoomPreview extends Component {
 
     let roomId = gameRoom.key;
     let maxPairs = gameRoom.maxPairs
-    let players = gameRoom.players || {};
+    // let players = gameRoom.players || {};
     let teams = gameRoom.teams || {};
 
-    let playerNames = Object.keys(players);
+    // let playerNames = Object.keys(players);
     let teamSpans = [];
 
     for (let i = 0; i < maxPairs; i++) {

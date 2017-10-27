@@ -1,6 +1,6 @@
 import React from 'react';
-import firebase from '../Firebase/firebase';
-import provider from '../Firebase/oauth/oauth.js';
+// import firebase from '../Firebase/firebase';
+// import provider from '../Firebase/oauth/oauth.js';
 
 import { normalSignUp, googleAuth, fbookAuth } from '../Helpers/authHelpers';
 
