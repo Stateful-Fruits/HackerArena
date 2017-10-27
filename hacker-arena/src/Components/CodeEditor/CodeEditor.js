@@ -23,11 +23,13 @@ class CodeEditor extends React.Component {
     this.handleClear =  this.handleClear.bind(this);
     this.liveInputs = this.liveInputs.bind(this);
     this.sendDisruptions = this.sendDisruptions.bind(this);
+    this.receiveDisruptions = this.receiveDisruptions.bind(this);
     this.receiveDisruption = this.receiveDisruption.bind(this);
     this.endRoundWithClientAsVictor = this.endRoundWithClientAsVictor.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.clearDisruption = this.clearDisruption.bind(this);
     this.resetEditor = this.resetEditor.bind(this);
+    this.changeUserCreditsByVal = this.changeUserCreditsByVal.bind(this);
   }
   
   // ~~~~~~~~~~~ LIFECYCLE FUNCTIONS ~~~~~~~~~~ //
@@ -258,7 +260,8 @@ class CodeEditor extends React.Component {
   }
 
   changeUserCreditsByVal(val, username, currentRoom) {
-    fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(currentRoom.players[username].credits + val);
+    console.log('changeUSerCredits running');
+    fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + val);
   }
 
   // ~~~~~~~~~~~ RENDER ~~~~~~~~~~ //
