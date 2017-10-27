@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
+import updatePendingEvents from '../../Actions/updatePendingEvents';
+
 import fire from '../../Firebase/firebase';
 
 //import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
@@ -18,7 +20,7 @@ import DriverRoom from './DriverRoom';
 import eventHandler from './../EventHandler/eventHandler';
 
 import { calculateResultsByPlayer, calculateMostTotalWins } from './../../Helpers/resultsHelpers';
-import { getRoleFromUsername, getPartnerName, getPartnerRole } from './../../Helpers/pairHelpers';
+import { getRoleFromUsername, getTeamIndex, getPartnerName, getPartnerRole } from './../../Helpers/pairHelpers';
 
 import '../../Styles/GameRoom.css';
 
@@ -31,8 +33,12 @@ class PairGameRoom extends React.Component {
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.handleIncomingEvents = this.handleIncomingEvents.bind(this);
+    this.addPendingEvent = this.addPendingEvent.bind(this);
+    this.removePendingEvent = this.removePendingEvent.bind(this);
   }
   
+  // ~~~~~~~~~~~ LIFECYCLE FUNCTIONS ~~~~~~~~~~ //
+
   componentDidMount () {
     console.log('pairgameRoom mounted')
     window.addEventListener('beforeunload', this.handleLeave);
@@ -40,11 +46,22 @@ class PairGameRoom extends React.Component {
   }
 
   componentWillUpdate() {
-    // see if user is entering the room and if room needs to be updated as a result
-    this.handleEnter();
+    let navigate = this.props.navigate;
+    // if (this.props.username 
+    //   && this.props.gameRooms
+    //   && this.props.gameRooms[this.props.roomId]
+    //   && this.props.gameRooms[this.props.roomId].roomStatus === 'standby'
+    //   && !getRoleFromUsername(this.props.gameRooms[this.props.roomId], this.props.username)) {
+    //     navigate(`/Pair`);
+    //     window.swal('You can join this room, but please choose a role from the preview page first!');
+    // } else {
+      // see if user is entering the room and if room needs to be updated as a result
+      this.handleEnter();
+    
+      // processing incoming events from db
+      this.handleIncomingEvents()
+   // }
 
-    // processing incoming events from db
-    this.handleIncomingEvents()
   }
 
   componentWillUnmount () {
@@ -52,7 +69,10 @@ class PairGameRoom extends React.Component {
     // window.removeEventListener('beforeunload', this.handleLeave);
   }
 
+  // ~~~~~~~~~~~ LIFECYCLE HELPERS ~~~~~~~~~~ //
+
   handleLeave () {
+    console.log('handleleave')
     // handles leaving the gameroom should only be called when gameRooms 
     // has been retrieved from Firebase, the room exists, and you are a member
     if (this.props.gameRooms 
@@ -67,17 +87,23 @@ class PairGameRoom extends React.Component {
         fire.database().ref(`/rooms/${roomId}`).remove();
       } else {
         let gameRoom = Object.assign({}, room);
+        let userRole = getRoleFromUsername(room, username);
+        let userTeam = getTeamIndex(room, username);
+
+        // add to a historical record in case they try to come back quickly
+        gameRoom.recentTeams = gameRoom.teams.slice().map(team => Object.assign({}, team));
+        gameRoom.departedPlayers = gameRoom.departedPlayers || {}
+        
+        gameRoom.departedPlayers[username] = gameRoom.players[username];
+        
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
         // find this user's team and role
-        gameRoom.teams = gameRoom.teams.reduce((acc, team) => {
-          if (team.navigator === username) return (team.driver ? [...acc, {driver: team.driver}] : acc);
-          if (team.driver === username) return (team.navigator ? [...acc, {navigator: team.navigator}] : acc);
-          return [...acc, team];
-        }, []);
+        gameRoom.teams[userTeam][userRole] = null;
         // see if the game needs to switch to standby
-        if (playerNames.length - 1 < gameRoom.playerCapacity 
-            && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
+        if (playerNames.length - 1 < gameRoom.playerCapacity && gameRoom.roomStatus !== 'completed') {
+          gameRoom.roomStatus = 'standby'; 
+        }
         // don't allow handle enter to run again 
         this.setState({ allowEnter: false });
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
@@ -86,25 +112,47 @@ class PairGameRoom extends React.Component {
   }
 
   handleEnter() {
+    console.log('handleenter')
     // handles entering the gameroom: should only be called when gameRooms
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
+      console.log('handleenter allowed')      
       let { gameRooms, roomId, username, navigate } = this.props;
       let room = gameRooms[roomId];
+
+      let recentRoom = {teams: room.recentTeams}
       
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
       let players = room.players;      
       let playerNames = Object.keys(players);
-      console.log('playernames.length', playerNames.length)
-      console.log('room.playerCapacity', room.playerCapacity) 
+
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
-      } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
-        // if the gameRoom is full or closed, redirect the user to spectate the game
+      } else if (playerNames.length >= room.playerCapacity || room.roomStatus !== 'standby') {
+        // if the gameRoom is full or closed, or if the player has not selected a role on the preview component redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
+      } else if (!getRoleFromUsername(room, username) && getRoleFromUsername(recentRoom, username)) {
+        console.log('putting player right back in where they left')
+        // if the player just left, restore their old situation
+        room.players[username] = room.departedPlayers[username];
+        let oldTeam = getTeamIndex(recentRoom, username)
+        let oldRole = getRoleFromUsername(recentRoom, username)
+        room.teams[oldTeam] = room.teams[oldTeam] || {};
+        room.teams[oldTeam][oldRole] = username;
+
+        if (playerNames.length + 1 === room.playerCapacity 
+          && room.gameStatus !== 'completed') {
+          room.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
+        }
+
+        fire.database().ref(`/rooms/${roomId}`).set(room);
+      } else if (!getRoleFromUsername(room, username)) {
+        // player does not have a role but did not just leave
+        navigate(`/Pair`);
+        window.swal('You can join this room, but please choose a role from the preview page first!');
       } else {
         let gameRoom = Object.assign({}, room);
         // if you're the first one in, start the game timer
@@ -115,6 +163,7 @@ class PairGameRoom extends React.Component {
                    && gameRoom.gameStatus !== 'completed') {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
+
         // add you username to the gameroom
         gameRoom.players[username] = {
           disruptions: [''],
@@ -131,7 +180,6 @@ class PairGameRoom extends React.Component {
 
   handleIncomingEvents() {
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
-      console.log('this.props in handleevents', this.props);
       let roomId = this.props.roomId;
       let room = this.props.gameRooms[roomId];
       let problems = this.props.problems;      
@@ -153,6 +201,53 @@ class PairGameRoom extends React.Component {
     }
   }
 
+  // ~~~~~~~~~~~ REDUX HELPERS ~~~~~~~~~~ //
+
+  addPendingEvent(eventName, codeToClear, otherIdentifiers) {
+    let { pendingEvents } = this.props;
+    const { updatePendingEvents } = this.props;
+
+    let event = {
+      eventName,
+      codeToClear,
+    }
+
+    otherIdentifiers ? event.otherIdentifiers = otherIdentifiers : null;
+
+    pendingEvents = pendingEvents.slice()
+    
+    pendingEvents.push(event);
+
+    updatePendingEvents(pendingEvents);
+  }
+
+  removePendingEvent(eventName, shouldClearTimeout, otherIdentifiers) {
+    let { pendingEvents } = this.props;
+    const { updatePendingEvents } = this.props;
+    let indOfEventToClear = pendingEvents.findIndex(event => {
+      if (otherIdentifiers) {
+        return Object.keys(otherIdentifiers).every(key => event[key] === otherIdentifiers[key]);
+      } else {
+        return event.eventName === eventName;
+      }
+    });
+
+    if (indOfEventToClear >= 0) {
+      let eventToClear = pendingEvents.splice(indOfEventToClear, 1)[0];
+
+      updatePendingEvents(pendingEvents);
+      
+      if (shouldClearTimeout) {
+        let codeToClear = eventToClear.codeToClear;
+        clearTimeout(codeToClear);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // ~~~~~~~~~~~ RENDER ~~~~~~~~~~ //
   
   render () {
     // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
@@ -169,7 +264,7 @@ class PairGameRoom extends React.Component {
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
 
-    let { gameRooms, roomId } = this.props;
+    let { gameRooms, roomId, pendingEvents, updatePendingEvents } = this.props;
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
     console.log('roomStatus is currently', roomStatus);
@@ -192,6 +287,8 @@ class PairGameRoom extends React.Component {
       username={username} 
       partnerName ={partnerName}
       partnerRole={partnerRole}
+      addPendingEvent={this.addPendingEvent}
+      removePendingEvent={this.removePendingEvent}
     />
 
     let driverRoom = <DriverRoom
@@ -200,6 +297,8 @@ class PairGameRoom extends React.Component {
       username={username} 
       partnerName ={partnerName}
       partnerRole={partnerRole}
+      addPendingEvent={this.addPendingEvent}
+      removePendingEvent={this.removePendingEvent}
     />
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
@@ -239,11 +338,13 @@ const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[3],
   username: fire.auth().currentUser.email.split('@')[0],
   gameRooms: state.gameRooms,
-  problems: state.problems
+  problems: state.problems,
+  pendingEvents: state.pendingEvents
 });
 
 const mapDispatcherToProps = (dispatch) => ({
-  navigate: (route) => dispatch(push(route))
+  navigate: (route) => dispatch(push(route)),
+  updatePendingEvents: (events) => dispatch(updatePendingEvents(events))
 });
 
 export default connect(mapStateToProps, mapDispatcherToProps)(PairGameRoom);
