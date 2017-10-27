@@ -25,7 +25,6 @@ class Lobby extends React.Component {
       <div>
         <div>Code Run</div>
         <CreateRoom />
-        <div>Games</div>
         <Rooms rooms={roomsArr} 
           deleteRoom={this.deleteRoom}
           navigate={this.props.navigate}/>        

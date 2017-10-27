@@ -125,7 +125,6 @@ class GameRoom extends React.Component {
       if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
-        console.log('new board ', room.board);
         board = <Board board={room.board} whirlpools={room.whirlpools}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
