@@ -95,12 +95,6 @@ class EditProfile extends React.Component {
     let currentUser = fire.auth().currentUser;
     return (
       <div className="edit-profile">
-        <img className="profile-photo"
-          src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
-          alt='profile'
-        >
-        </img>
-        <div> Description: Hey its me kfspfksdfk okfspadfksdpfoksdfpakpsdokfpsdofksapfk </div>
         <button onClick={this.handleEditPhoto} > Edit Profile Picture </button>
         {this.state.showEdit ?
         <div className="dropDownEdits">

@@ -1,15 +1,32 @@
 import React from 'react';
 import HistoryEntry from './HistoryEntry';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import '../Styles/History.css';
 
-const History = (props) => {  
-  let games = Object.values(props.profile.history);
-  return (
-    <div className="history">
-      {games.map((item,i) => {
-         return <HistoryEntry game={item} profile={props.profile} key={i}/>
-      })}
-    </div>
-)};
+class History extends React.Component {
+  constructor(props){
+    super(props)
+  }
+  render(){
+    let { navigate } = this.props
+    let games = Object.values(this.props.profile.history);
+    return (
+      <div className="history">
+        {games.map((item,i) => {
+           return <HistoryEntry navigate={navigate} game={item} profile={this.props.profile} key={i}/>
+        })}
+      </div>
+  )
+  }  
+};
 
-export default History;
+const mapStateToProps = (state) => ({
+});
+
+
+const mapDispatchToProps = (dispatch) => ({
+  navigate: (route) => dispatch(push(route)),
+}); 
+
+export default connect(mapStateToProps, mapDispatchToProps)(History);
