@@ -43,7 +43,8 @@ helper.setWhirlPools = (size) => {
   while (whirlpools.length < totalWP) {
     random = Math.floor(arr1.length * Math.random());
     random1 = Math.floor(arr2.length * Math.random());
-    if (!(random === 0 && random1 === 0)) {
+    let positionString = random + ' ' + random1;
+    if (!(random === 0 && random1 === 0) && !(random === 6 && random1 === 6) && whirlpools.indexOf(positionString) === -1) {
       whirlpools.push(random + ' ' + random1);
       arr1.splice(random,1);
       arr2.splice(random1,1);

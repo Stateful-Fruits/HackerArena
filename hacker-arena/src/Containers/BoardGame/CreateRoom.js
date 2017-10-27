@@ -100,7 +100,7 @@ class CreateRoom extends React.Component {
         <div className="slider-container">
           <div id="slider"></div>
         </div>
-        <button className='createBoardroom' onClick={this.createRoom}><h3>Create Board Room</h3></button>
+        <button className='btn createGameButton createBoardroom' onClick={this.createRoom}><h3>Create Board Room</h3></button>
       </div>
     )
   }
