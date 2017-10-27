@@ -40,11 +40,22 @@ class PairGameRoom extends React.Component {
   }
 
   componentWillUpdate() {
-    // see if user is entering the room and if room needs to be updated as a result
-    this.handleEnter();
+    let navigate = this.props.navigate;
+    // if (this.props.username 
+    //   && this.props.gameRooms
+    //   && this.props.gameRooms[this.props.roomId]
+    //   && this.props.gameRooms[this.props.roomId].roomStatus === 'standby'
+    //   && !getRoleFromUsername(this.props.gameRooms[this.props.roomId], this.props.username)) {
+    //     navigate(`/Pair`);
+    //     window.swal('You can join this room, but please choose a role from the preview page first!');
+    // } else {
+      // see if user is entering the room and if room needs to be updated as a result
+      this.handleEnter();
+    
+      // processing incoming events from db
+      this.handleIncomingEvents()
+    //}
 
-    // processing incoming events from db
-    this.handleIncomingEvents()
   }
 
   componentWillUnmount () {
@@ -102,8 +113,8 @@ class PairGameRoom extends React.Component {
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
-      } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
-        // if the gameRoom is full or closed, redirect the user to spectate the game
+      } else if (playerNames.length >= room.playerCapacity || room.roomStatus !== 'standby') {
+        // if the gameRoom is full or closed, or if the player has not selected a role on the preview component redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
         let gameRoom = Object.assign({}, room);
