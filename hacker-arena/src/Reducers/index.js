@@ -5,6 +5,7 @@ import testStatus from './testSuiteUpdate';
 import profile from './updateUserProfile';
 import problems from './updateProblems';
 import addingProblem from './addingProblem';
+import pendingEvents from './updatePendingEvents';
 //state.gameRooms , state.addingProblem etc...
 import boardRooms from './updateBoardRooms';
 
@@ -14,7 +15,8 @@ const appReducers = ({
   problems,
   addingProblem,
   profile,
-  boardRooms
+  boardRooms,
+  pendingEvents
 });
 
 export default appReducers;
