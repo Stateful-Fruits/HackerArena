@@ -38,7 +38,7 @@ class SpectatorChat extends Component {
           <h2>Chat: </h2>
             <p>{(spectators ? spectators.filter((spectatorName, i) => spectators.indexOf(spectatorName) === i).join(', ') : '')}</p>
           <input type="text" onChange={this.handleMsgInput} value={ this.state.msg }/>
-          <button>
+          <button className='gamePreviewButton'>
             <h3>Send</h3>
           </button>
         </form>

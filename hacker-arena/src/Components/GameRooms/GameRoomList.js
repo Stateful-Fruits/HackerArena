@@ -73,16 +73,16 @@ class GameRoomList extends Component {
         (Object.keys(eachRoom).includes('isPrivate') ? eachRoom.isPrivate : false) && 
         !Object.keys(eachRoom).includes('isTrusted') &&
         (Object.keys(eachRoom).includes('invitedPlayers') ? eachRoom.invitedPlayers.includes(username) : false)))
-      // .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
-      // .map((room, inx) => (
-      //   <div key={room.key + room.problemID}>
-      //     <h3 style={{ color: 'green' }}>Private Game</h3>
-      //     <GameRoomPreview 
-      //       gameRoom={room}
-      //       navigate={navigate}
-      //     />
-      //   </div>
-      // )))
+      .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
+      .map((room, inx) => (
+        <div key={room.key + room.problemID}>
+          <h3 style={{ color: 'green' }}>Private Game</h3>
+          <GameRoomPreview 
+            gameRoom={room}
+            navigate={navigate}
+          />
+        </div>
+      ));
 
     // games open to everyone
     let publicGameRooms = rooms
