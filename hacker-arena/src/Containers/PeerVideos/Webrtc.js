@@ -59,7 +59,7 @@ class Webrtc extends Component {
     //   this.webrtc = webrtc;
       webrtc.on('readyToCall', function () {
         // you can name it anything
-      webrtc.joinRoom(`spectator/${room.key}`);
+      webrtc.joinRoom(`spectator/a`);
     });
     this.webrtc = webrtc;
     console.log('video object', this.refs.remote);

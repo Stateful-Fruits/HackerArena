@@ -68,26 +68,35 @@ class AddProblem extends React.Component {
     let problem = this.props.problem;
     return (
       <div>
-        <div>Adding Toy Problem</div>
-        <form onSubmit={this.handleSubmit}>
-          Title: <Title problem={problem} handleChange={this.handleChange}/> 
+        <form className="createGameForm" onSubmit={this.handleSubmit}>
 
-          Problem description: <ProblemDescription problem={problem} handleChange={this.handleChange}/>
+        <h2 className="createGameHeader"> Add Problems </h2>
+          <h5>Title</h5> 
+          <Title problem={problem} handleChange={this.handleChange}/> 
 
-          Tags: <AddTags problem={problem} handleChange={this.handleChange}/>
+          <h5>Problem description</h5> 
+          <ProblemDescription problem={problem} handleChange={this.handleChange}/>
 
-          Difficulty: <Difficulty problem={problem} handleChange={this.handleChange}/>
+          <h5>Tags</h5> 
+          <AddTags problem={problem} handleChange={this.handleChange}/>
 
-          Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
+          <h5>Difficulty</h5> 
+          <Difficulty problem={problem} handleChange={this.handleChange}/>
+
+          <h5>Function Name</h5> 
+          <FunctionName problem={problem} handleChange={this.handleChange}/>
           
-          <div>NOTE: Replace actual function name with userFn when writing test</div>
+          <h5>Add Tests</h5>
+          <p className="addTestsTip">Test.assertEquals( userFn( <strong>INPUT</strong>  ), <strong>EXPECTED OUTPUT</strong> )</p>
           <AddingTest problem={problem} handleChange={this.handleChange}/>
-          <button onClick={this.addInTest}
+          <button 
+            className="submitCreateGame"
+            onClick={this.addInTest}
             type='button' 
-            value={problem.addingTest}>Add To Tests:</button>
+            value={problem.addingTest}>Add To Tests</button>
 
           <AllTests/>
-          <button className='addProblem' type='submit'> Add This Problem </button>
+          <button className='addProblem submitCreateGame' type='submit'> Add This Problem </button>
         </form>
       </div>
     )

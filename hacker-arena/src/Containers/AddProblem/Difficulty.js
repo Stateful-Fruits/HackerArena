@@ -6,9 +6,11 @@ const Difficulty = (props) => {
   return (
     <div>
       <input value={problem.difficulty}
-      className='difficulty' 
+      className='difficulty createGameInput' 
       onChange={handleChange}
-      data-property='difficulty'/>
+      data-property='difficulty'
+      placeholder="1 - 10"
+      />
     </div>
   )
 }

@@ -32,6 +32,9 @@ class GameRoomList extends Component {
   }
   handleSearchInput(e){
     this.setState({searchInput: e.target.value});
+    if(e.target.value === ""){
+      this.setState({showSearched: false})
+    }
   }
   handleShowSearch(){
     this.setState({showSearched: true});
@@ -73,16 +76,16 @@ class GameRoomList extends Component {
         (Object.keys(eachRoom).includes('isPrivate') ? eachRoom.isPrivate : false) && 
         !Object.keys(eachRoom).includes('isTrusted') &&
         (Object.keys(eachRoom).includes('invitedPlayers') ? eachRoom.invitedPlayers.includes(username) : false)))
-      // .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
-      // .map((room, inx) => (
-      //   <div key={room.key + room.problemID}>
-      //     <h3 style={{ color: 'green' }}>Private Game</h3>
-      //     <GameRoomPreview 
-      //       gameRoom={room}
-      //       navigate={navigate}
-      //     />
-      //   </div>
-      // )))
+      .sort(this.state.filterFunctions[this.state.filters[this.state.filterInx]])
+      .map((room, inx) => (
+        <div key={room.key + room.problemID}>
+          <h3 style={{ color: 'green' }}>Private Game</h3>
+          <GameRoomPreview 
+            gameRoom={room}
+            navigate={navigate}
+          />
+        </div>
+      ))
 
     // games open to everyone
     let publicGameRooms = rooms
@@ -114,6 +117,9 @@ class GameRoomList extends Component {
         </select>
         <span className="input-group-addon" onClick={this.handleShowSearch}>Sort By</span>
         </div>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          {<h4 className="gamesHeader"> Game Rooms </h4>}
         </div>
         { privateGames.length ?
           <div>

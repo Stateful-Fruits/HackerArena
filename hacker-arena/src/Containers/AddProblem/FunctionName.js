@@ -7,8 +7,10 @@ const FunctionName = (props) => {
     <div>
       <input value={problem.userFn} 
         onChange={handleChange}
-        className='fxn'
-        data-property='userFn'/>
+        className='fxn createGameInput'
+        data-property='userFn'
+        placeholder='e.g. sudokuSolver'
+        />
     </div>
   )
 }

@@ -6,9 +6,11 @@ const AddTags = (props) => {
   return (
     <div>
       <input value={problem.tags}
-      className='tags' 
+      className='tags createGameInput' 
       onChange={handleChange}
-      data-property='tags'/>
+      data-property='tags'
+      placeholder='Primary tag, Secondary tag, ...'
+      />
     </div>
   )
 }
