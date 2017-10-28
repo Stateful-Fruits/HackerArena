@@ -53,7 +53,6 @@ class GameRoom extends React.Component {
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
-      console.log('ROOOM STATUS ', room.board[0][0][0], room.playerInfo);
       let firstTile = room.board[0][0][0];
       if (notFull && notAlreadyIn) {//not full nor started and not in;
         room.players.push(user);
@@ -86,9 +85,7 @@ class GameRoom extends React.Component {
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
       let boardStart = room.board[0][0];
-      boardStart[0] = boardStart[0].filter(ele => ele !== user);
-      console.log('room after filter ', room);
-      
+      // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
       if (room.players.length > 0) {
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (room.players.length === 0) {
@@ -107,7 +104,6 @@ class GameRoom extends React.Component {
   render () {
     let user = this.props.user;
     let room = this.props.room;
-    console.log('render board game room');
     if (room === undefined) {
       return <div>
         <div> Please wait as we prepare your board </div>

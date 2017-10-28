@@ -16,9 +16,7 @@ class Lobby extends React.Component {
   render () {
     let rooms = this.props.rooms;
     let roomsArr = [];
-    console.log('rooms',rooms);
     for (var key in rooms) {
-      console.log('key',key,rooms[key]);
       roomsArr.push(rooms[key]);
     }
     return (
