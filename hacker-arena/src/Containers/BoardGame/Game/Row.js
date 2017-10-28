@@ -1,5 +1,5 @@
 import React from 'react';
-import helper from './Helper/helper';
+import helper from '../Helper/helper';
 
 const Row = (props) => { 
   return <div className='bdrow' key={props.i}>

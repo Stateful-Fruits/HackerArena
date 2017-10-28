@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import fire from '../../Firebase/firebase';
+import fire from '../../../Firebase/firebase';
 import { push } from 'react-router-redux';
 import Board from './Board';
 import Dice from './Dice';
 import MovePlayer from './MovePlayer';
-import CodeEditor from './CodePage/CodeEditor';
-import TestSuite from './CodePage/TestSuite';
+import CodeEditor from '../CodePage/CodeEditor';
+import TestSuite from '../CodePage/TestSuite';
 import Attack from './Attack';
-import helper from './Helper/helper';
+import helper from '../Helper/helper';
 //codeeditor/
 //dice roll resets;
 class GameRoom extends React.Component {

@@ -1,6 +1,6 @@
 import React from 'react';
-import attacks from './CodePage/Power';
-import fire from '../../Firebase/firebase';
+import attacks from '../CodePage/Power';
+import fire from '../../../Firebase/firebase';
 //import helper from './Helper/FirebaseCom';
 
 class Attack extends React.Component {
