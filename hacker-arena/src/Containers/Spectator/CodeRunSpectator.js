@@ -5,6 +5,7 @@ import SpectatorChat from '../../Components/Spectator/SpectatorChat';
 import SpectatorError from '../../Components/Spectator/SpectatorError';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
+import CodeRunSpectatorPlayerInfo from '../../Components/Spectator/CodeRunSpectatorPlayerInfo';
 import Board from '../BoardGame/Game/Board';
 
 class BoardRoomSpectator extends Component {
@@ -28,6 +29,9 @@ class BoardRoomSpectator extends Component {
         <Board 
           board={boardRoom.board}
           whirlpools={boardRoom.whirlpools}
+        />
+        <CodeRunSpectatorPlayerInfo 
+          boardRoom={boardRoom}
         />
         <SpectatorChat
           gameRoom={boardRoom}
