@@ -5,7 +5,7 @@ import SpectatorChat from '../../Components/Spectator/SpectatorChat';
 import SpectatorError from '../../Components/Spectator/SpectatorError';
 import WaitingForPlayer from '../../Components/GameRoom/WaitingForPlayer';
 import GameRoomError from '../../Components/GameRoom/GameRoomError';
-import Board from '../BoardGame/Board';
+import Board from '../BoardGame/Game/Board';
 
 class BoardRoomSpectator extends Component {
   constructor(props) {
