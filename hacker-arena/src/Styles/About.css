@@ -10,3 +10,46 @@ video {
   background: #1324;
   color: #423
 }
+.hero {
+    background: url('https://static.pexels.com/photos/160107/pexels-photo-160107.jpeg') no-repeat center;
+    background-size: cover;
+    height: 70vh;
+    /* height: 140% !important; */
+    display: flex;
+    align-content: center;
+    overflow: auto !important;
+}
+
+.teamPics {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+
+.teamCard {
+  border: none !important;  
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+  align-items: center;
+  padding: 25px !important;
+  background: transparent !important;
+}
+
+.team {
+    margin: 3%; 
+    margin-top: 2%;
+}
+
+.teamHeader {
+    margin-top: 3%;
+}
+
+.features {
+    height: 50vh;
+
+}
+
+.aboutFooter {
+    background: black;
+    height: 30vh;
+}
