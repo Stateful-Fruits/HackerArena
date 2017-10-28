@@ -1,5 +1,5 @@
 import React from 'react';
-import fire from '../../Firebase/firebase';
+import fire from '../../../Firebase/firebase';
 
 class Dice extends React.Component {
   constructor (props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import fire from '../../Firebase/firebase';
+import fire from '../../../Firebase/firebase';
 
 class MovePlayer extends React.Component {
   constructor (props) {
@@ -18,6 +18,14 @@ class MovePlayer extends React.Component {
     if (direction === 'Up' && room.board[row - 1]) {
       room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       row -= 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row-1][col]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row-1][col][0].push(player);
+          room.playerInfo[player].position = [row-1,col];
+        }
+      })
       room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
@@ -28,6 +36,14 @@ class MovePlayer extends React.Component {
     } else if (direction === 'Down' && room.board[row+1]) {
       room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       row += 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row+1][col]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row+1][col][0].push(player);
+          room.playerInfo[player].position = [row+1,col];
+        }
+      })
       room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
@@ -38,6 +54,14 @@ class MovePlayer extends React.Component {
     } else if (direction === 'Left' && room.board[row][col-1]) {
       room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       col -= 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row][col-1]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row][col-1][0].push(player);
+          room.playerInfo[player].position = [row,col-1];
+        }
+      })
       room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
@@ -48,6 +72,14 @@ class MovePlayer extends React.Component {
     } else if (direction === 'Right' && room.board[row][col+1]) {
       room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
       col += 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row][col+1]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row][col+1][0].push(player);
+          room.playerInfo[player].position = [row,col+1];
+        }
+      })
       room.board[row][col][0].push(user);
       userInfo.position = [row,col];
       userInfo.diceResult--;
