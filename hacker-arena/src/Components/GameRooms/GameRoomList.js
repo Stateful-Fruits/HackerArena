@@ -85,7 +85,11 @@ class GameRoomList extends Component {
             navigate={navigate}
           />
         </div>
+<<<<<<< HEAD
       ));
+=======
+      ))
+>>>>>>> 1028
 
     // games open to everyone
     let publicGameRooms = rooms
