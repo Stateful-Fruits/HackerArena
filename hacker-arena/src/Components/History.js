@@ -14,7 +14,7 @@ class History extends React.Component {
     return (
       <div className="history">
         <h3>History </h3>
-        {games.map((item,i) => {
+        {games.reverse().map((item,i) => {
            return <HistoryEntry navigate={navigate} game={item} profile={this.props.profile} key={i}/>
         })}
       </div>

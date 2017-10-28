@@ -140,19 +140,21 @@ class Solo extends React.Component {
 
     return (
       <div>
-        <form>
-          <br/>
-          Choose a problem
-          <select name="problemID" value={this.state.problemID} onChange={this.onChange}>
-            {problemsArr}
-            <option value="random">random!</option>
-          </select>
-          <br/>
-          Select a difficulty level for this and subsequent problems
-          <div className="slider-container">
-            <div id="slider"></div>
-          </div>
-          <input type="submit" value="CREATE GAME ROOM" onClick={this.onSubmit}></input>
+        <form class="createGameForm">
+
+        <h2 className="createGameHeader"> Create Solo Game </h2>
+        <h5>Select a problem</h5>
+        <select className="createGameInput" name="problemID" value={this.state.problemID} onChange={this.onChange}>
+          {problemsArr}
+          <option value="random">Random!</option>
+        </select>
+        <br/>
+        <h5>Select difficulty level of problems</h5>
+        <div className="slider-container">
+          <div id="slider"></div>
+        </div>
+
+        <input className="submitCreateGame" type="submit" value="Create Game" onClick={this.onSubmit}></input>
         </form>
       </div>
     )

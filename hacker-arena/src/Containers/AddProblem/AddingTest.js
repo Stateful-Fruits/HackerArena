@@ -6,7 +6,7 @@ const AddingTest = (props) => {
   return (
     <div>
       <input value={problem.addingTest}
-      className='addingTest' 
+      className='addingTest createGameInput' 
       onChange={handleChange}
       data-property='addingTest'/>
     </div>

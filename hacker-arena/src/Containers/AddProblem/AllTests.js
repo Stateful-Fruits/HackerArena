@@ -21,7 +21,7 @@ class AllTests extends React.Component {
     console.log('tests is ', tests, this.props);
     return (
       <div>
-        <div>Tests So Far</div>
+        <h5>Current Tests</h5>
         <div>
           {tests.length > 0 ?
             tests.map((test, i) => {

@@ -13,6 +13,11 @@ const HistoryEntry = (props) => {
         <p>Winner : {Object.values(props.game[0].winners)} </p>
       </div> 
       <div className="card-body">
+      {players.map(items =>{
+        return (
+          <a href='' onClick={() => {navigate(`/User/${items}`) }}>{items} </a>
+        )
+      })}
         <h3 className="card-title">{props.game[0].problem.title}</h3>
         <p className="card-text">{props.game[0].problem.description}</p>
         <p className="card-text">Tags : {props.game[0].problem.tags}</p>

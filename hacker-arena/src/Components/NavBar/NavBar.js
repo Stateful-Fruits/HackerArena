@@ -15,7 +15,7 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-          <li className="nav-item rightNav navbar-brand active" onClick={ () => { navigate('/'); }}>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
             Home </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
             About </li>

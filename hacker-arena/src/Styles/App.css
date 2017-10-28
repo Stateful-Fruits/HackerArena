@@ -2,7 +2,9 @@
 .App {
   text-align: center;
 }
-
+input {
+  outline: none !important;
+}
 .App-header {
   background-color: #222;
   height: 100px;

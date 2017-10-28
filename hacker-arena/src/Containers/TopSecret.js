@@ -8,7 +8,7 @@ OBJLoader(THREE);
 class TopSecret extends React.Component {
   componentDidMount(){
     this.THREE = THREE
-    var renderer, scene, camera, banana, banana2;
+    var renderer, scene, camera, banana, banana2, barrel;
 
 var ww = 600,
 	wh = 600;
@@ -39,19 +39,32 @@ var loadOBJ = () => {
 	var manager = new THREE.LoadingManager();
 	//Loader for Obj from Three.js
 	var loader = new this.THREE.OBJLoader( manager );
-  
+	let diffuse = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_d.jpg" );
+  let specular = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_s.jpg" );
+  let normal = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_n.jpg" );
+
+	var material = new THREE.MeshPhongMaterial({
+    map: diffuse,
+    specular: 0xffffff,
+    specularMap: specular,
+    shininess: 10,
+    normalMap: normal
+  });
+
 	//Launch loading of the obj file, addBananaInScene is the callback when it's ready 
 	loader.load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/127738/banana.obj', addBananaInScene);
 	loader.load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/127738/banana.obj', addBanana2InScene);
-	
 
 };
+
+
+
 
 var addBananaInScene = function(object){
 	banana = object;
 	//Move the banana in the scene
 	banana.rotation.x = Math.PI/2;
-	banana.position.y = -200;
+	banana.position.y = -210;
 	banana.position.z = 50;
 	//Go through all children of the loaded object and search for a Mesh
 	object.traverse( function ( child ) {
