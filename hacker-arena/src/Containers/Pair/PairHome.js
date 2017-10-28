@@ -10,7 +10,7 @@ class PairHome extends Component {
     let { gameRooms, navigate } = this.props;
     return (
         <div>    
-          <button onClick={() => this.props.navigate('/Pair/CreateGameRoom')}>CREATE PAIR GAME ROOM</button>
+          <button className="btn createGameButton" onClick={() => this.props.navigate('/Pair/CreateGameRoom')}>CREATE PAIR GAME ROOM</button>
           <PairGameRoomList 
             gameRooms={gameRooms || {}}
             navigate={navigate}

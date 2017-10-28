@@ -149,7 +149,6 @@ class GameRoom extends React.Component {
     let { roomStatus, results } = room;
     let resultsByPlayer = results ? calculateResultsByPlayer(results) : null;
     let mostTotalWins = results ? calculateMostTotalWins(resultsByPlayer) : null;
-    console.log('mostTotalWins', mostTotalWins)
     let champions = mostTotalWins ? mostTotalWins.winners : null;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {

@@ -97,10 +97,14 @@ class ProgressBar extends Component {
         <div className="opponent-bars">
         { 
           otherUsers.map((otherUserName, i) => (
-            <div className="prog-container opponent-bar" key={otherUserName+i}>
+            <div 
+              className="prog-container opponent-bar"
+              key={otherUserName+i}
+              onClick={isSpectator ? null : () => this.handleTargetChange(otherUserName)}
+            >
               <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '20px solid red'} : {}}>
                 <span className="opponentLabels">Player: </span>
-                <span className="opponent" onClick={isSpectator ? null : () => this.handleTargetChange(otherUserName)}>{otherUserName}</span>
+                <span className="opponent">{otherUserName}</span>
                 <div className="thebars">
                   <div className="progress">
                     <div 
