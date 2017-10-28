@@ -13,7 +13,7 @@ import AddProblem from './Containers/AddProblem/AddProblem';
 import CreateGameRoom from './Containers/CreateGameRoom'
 
 import CodeRunLobby from './Containers/BoardGame/Lobby';
-import CodeRunRoom from './Containers/BoardGame/GameRoom';
+import CodeRunRoom from './Containers/BoardGame/Game/GameRoom';
 
 import PairHome from './Containers/Pair/PairHome'
 import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';

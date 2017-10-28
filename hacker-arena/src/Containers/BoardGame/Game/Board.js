@@ -1,7 +1,6 @@
 import React from 'react';
 import Row from './Row';
-import '../../Styles/Board.css';
-
+import '../../../Styles/Board.css';
 const Board = (props) => {
   return <div>
     <div>Board</div>
