@@ -37,14 +37,12 @@ class CreateRoom extends React.Component {
   }
   createRoom (e) {
     e.preventDefault();
-    const slider = document.getElementById('slider'); 
-    console.log('slider', slider)
+    const slider = document.getElementById('slider');
     let sliderValues = slider.noUiSlider.get();
     let minDifficulty = parseInt(sliderValues[0], 10);
     let maxDifficulty = parseInt(sliderValues[1], 10);
     let allProblems = this.props.problems;
     let problems = filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems);
-    console.log('problemsssss', problems);
     let user = fire.auth().currentUser.email.split('@')[0];
     let whirlpools = helper.setWhirlPools(7);
     let room = {
@@ -106,7 +104,6 @@ class CreateRoom extends React.Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log('state is ', state);
   return {
     problems: state.problems
   }
