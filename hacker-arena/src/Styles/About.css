@@ -1,8 +1,12 @@
 video {
-    position: absolute; right: 0; bottom: 0;
+    position: relative; right: 0; bottom: 0;
     min-width: 50%; min-height: 50%;
     width:100%;
-     z-index: -50;
+    z-index: -50;
     background:  no-repeat; 
     background-size: cover;
+}
+.background{
+  background: #1324;
+  color: #423
 }
