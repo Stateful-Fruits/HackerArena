@@ -6,7 +6,7 @@ const DisruptionsBar = ({
 }) => (
   <div id="disruptionsBar">
   <button className=" btn disruptionsHeader"><span className="dc badge">{credits}</span> Disruptions</button>
-  <button className="btn" id="Blind 1" onClick={sendDisruptions}><span className="d1 badge">1</span> Blind</button>
+  <button className="btn" id="Blind 1" onClick={sendDisruptions}><span data="" className="d1 badge">1</span> Blind</button>
   <button className="btn" id="Python 1" onClick={sendDisruptions}><span className="d1 badge">1</span> Python</button>
   <button className="btn" id="Kennify 1" onClick={sendDisruptions}><span className="d1 badge">1</span> Kennify</button>
   <button className="btn" id="Fog 3" onClick={sendDisruptions}><span className="d3 badge">3</span> Fog</button>

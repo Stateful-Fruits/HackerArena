@@ -6,6 +6,8 @@ import CodeEditor from '../../Components/CodeEditor/CodeEditor.js'; //From Simon
 import PairVideo from './PairVideo';
 import { getTeamIndex } from '../../Helpers/pairHelpers'
 
+import '../../Styles/DriverRoom.css'
+
 //this should better be a view instead of room;
 class DriverRoom extends React.Component {
   constructor (props) {
@@ -16,21 +18,30 @@ class DriverRoom extends React.Component {
 
   }
   render() {
-    let { room, username, addPendingEvent, removePendingEvent } = this.props
+    let { room, username, partnerName, addPendingEvent, removePendingEvent } = this.props
     let Videoroom = getTeamIndex(room, username)
     // console.log('hello', room.key);
     return (
       <div>
-        YOU ARE A DRIVER. CODE!
-        <PairVideo videoroom= {Videoroom}
-        roomKey = {room.key}/>
-
-        <div id="editorAndTestSuite">
-          <CodeEditor
-            currentRoom={room}
-            addPendingEvent={addPendingEvent}
-            removePendingEvent={removePendingEvent}
-          />
+        <div>YOU ARE A DRIVER. CODE!</div>
+        <PairVideo 
+          videoroom={Videoroom}
+          roomKey={room.key}
+        />
+        <div className="driver-container">
+          <div id="editorAndTestSuite">
+            <CodeEditor
+              currentRoom={room}
+              addPendingEvent={addPendingEvent}
+              removePendingEvent={removePendingEvent}
+            />
+          </div>
+        
+          <div className="partner-message">
+            <p>YOUR NAVIGATOR IS {partnerName}</p>
+            <p>THEY WILL TELL YOU THE CODING CHALLENGE</p>
+            <p>AND THEY WILL TELL YOU WHAT TESTS YOU PASS OR DON'T PASS</p>
+          </div>
         </div>
       </div>
     )

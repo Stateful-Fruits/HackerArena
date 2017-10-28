@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import PairGameRoomPreview from './PairGameRoomPreview';
 
+import './../../Styles/GameRoomList.css';
+
 class GameRoomList extends Component {
   constructor(props) {
     super(props);
