@@ -118,12 +118,7 @@ return (
       <button className='gamePreviewButton' onClick={this.pause.bind(this)}>Toggle Camera</button>
 
     </div>
-)
-
+    )
+  }
 }
-}
-
-const mapStateToProps =(state)=> ({
-    room : state.gameRooms ? state.gameRooms[state.router.location.pathname.split('/')[2]] : null,   
-})
-export default connect(mapStateToProps)(Webrtc);
+export default Webrtc;

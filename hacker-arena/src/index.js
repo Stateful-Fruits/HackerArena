@@ -10,7 +10,8 @@ import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
 import Login from './Containers/Login'
 import AddProblem from './Containers/AddProblem/AddProblem';
-import CreateGameRoom from './Containers/CreateGameRoom'
+import CreateGameRoom from './Containers/CreateGameRoom';
+import CodeRunSpectator from './Containers/Spectator/CodeRunSpectator';
 
 import CodeRunLobby from './Containers/BoardGame/Lobby';
 import CodeRunRoom from './Containers/BoardGame/Game/GameRoom';
@@ -167,6 +168,13 @@ fire.auth().onAuthStateChanged(function(user) {
                 <Route exact path="/Solo/GameRoom/:roomId" render={() => (
                   fire.auth().currentUser ? (
                     <SoloRoom />
+                    ) : (
+                    <Redirect to="/Login" />      
+                    )
+                  )}/>
+                <Route exact path="/CodeRunSpectator/:roomId" render={() => (
+                  fire.auth().currentUser ? (
+                    <CodeRunSpectator />
                     ) : (
                     <Redirect to="/Login" />      
                     )

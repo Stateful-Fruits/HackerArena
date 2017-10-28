@@ -33,7 +33,7 @@ const Rooms = (props) => {
             className='btn gamePreviewButton'
             onClick={(e) => {
               e.preventDefault();
-              // props.navigate('CodeRun/' + e.target.value);
+              props.navigate('CodeRunSpectator/' + e.target.value);
           }}>Spectate</button>
           <button value={room.key} 
             className='btn gamePreviewButton'
