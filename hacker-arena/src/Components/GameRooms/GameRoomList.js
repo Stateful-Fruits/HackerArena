@@ -32,6 +32,9 @@ class GameRoomList extends Component {
   }
   handleSearchInput(e){
     this.setState({searchInput: e.target.value});
+    if(e.target.value === ""){
+      this.setState({showSearched: false})
+    }
   }
   handleShowSearch(){
     this.setState({showSearched: true});
@@ -114,6 +117,9 @@ class GameRoomList extends Component {
         </select>
         <span className="input-group-addon" onClick={this.handleShowSearch}>Sort By</span>
         </div>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          {<h4 className="gamesHeader"> Game Rooms </h4>}
         </div>
         { privateGames.length ?
           <div>
