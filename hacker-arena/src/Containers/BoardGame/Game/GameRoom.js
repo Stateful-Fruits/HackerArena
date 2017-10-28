@@ -32,7 +32,31 @@ class GameRoom extends React.Component {
     this.handleBoard();
   }
   
-  componentWillMount () {
+  componentDidUpdate () {
+    let {room, user} = this.props;
+    if (room.board) {
+      let old = document.getElementsByClassName('validMove');
+      [].forEach.call(old, (ele) => {
+        ele.classList.remove('validMove');
+      });
+      let position = room.playerInfo[user].position;
+      let x = position[0];
+      let y = position[1];
+      var validMoves = [];
+      const stringify = (x,y) => {
+        if (room.board[x] && room.board[x][y]) {
+          validMoves.push(x + ' ' + y);
+        }
+      }
+      stringify(x-1,y);
+      stringify(x+1,y);
+      stringify(x,y-1);
+      stringify(x,y+1);
+      console.log ('valid selections are',validMoves);
+      validMoves.forEach(move => {
+        document.getElementById(move).classList.add('validMove');
+      })
+    }
   }
  
   componentWillUnmount () {
@@ -84,8 +108,8 @@ class GameRoom extends React.Component {
       let user = this.props.user;
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
-      let boardStart = room.board[0][0];
-      // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
+      // let boardStart = room.board[0][0];
+      // // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
       if (room.players.length > 0) {
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (room.players.length === 0) {

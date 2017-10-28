@@ -29,7 +29,7 @@ helper.setBlockPositionName = (i, props) => {
   }
 }
 
-helper.setWhirlPools = (size) => {
+helper.setWhirlPools = (size, room) => {
   let whirlpools = [];
   let arr1 = [];
   let useThisSize = size-1;
@@ -50,7 +50,7 @@ helper.setWhirlPools = (size) => {
       arr2.splice(random1,1);
     }
   }
-  return whirlpools
+  return [whirlpools,arr1,arr2];
 }
 
 helper.handleBoard = (room) => {
@@ -61,8 +61,8 @@ helper.handleBoard = (room) => {
     let positionString = position[0] + ' ' + position[1];
     if (whirlpools.indexOf(positionString) !== -1) {
       whirled = true;
-      let random = Math.floor(Math.random() * 7);
-      let random1 = Math.floor(Math.random() * 7);
+      let random = room.validx[Math.floor(Math.random() * room.validx.length)];
+      let random1 = room.validy[Math.floor(Math.random() * room.validy.length)];
       board[position[0]][position[1]][0] = board[position[0]][position[1]][0].filter(ele => ele !== player);
       playerInfo[player].position = [random,random1];
       board[random][random1][0].push(player);
