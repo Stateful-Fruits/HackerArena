@@ -24,6 +24,8 @@ class GameRoom extends React.Component {
     this.handleBoard = this.handleBoard.bind(this);
   }
   componentDidMount () {
+    //window.addEventListener('beforeunload', this.handleLeave);
+    window.onbeforeunload = this.handleLeave;
     this.handleEnter();
   }
 
@@ -54,12 +56,15 @@ class GameRoom extends React.Component {
       stringify(x,y+1);
       console.log ('valid selections are',validMoves);
       validMoves.forEach(move => {
-        document.getElementById(move).classList.add('validMove');
+        move = document.getElementById(move)
+        if (move) {
+          move.classList.add('validMove');
+        }
       })
     }
   }
  
-  componentWillUnmount () {
+  componentWillUnmount () {//moving to different component
     this.handleLeave();
   }
 
@@ -73,7 +78,6 @@ class GameRoom extends React.Component {
   handleEnter () {
     let {room, user, navigate} = this.props;
     if (room) {
-      window.addEventListener('beforeunload', this.handleLeave);
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
@@ -109,11 +113,11 @@ class GameRoom extends React.Component {
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
       // let boardStart = room.board[0][0];
-      // // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
-      if (room.players.length > 0) {
+      // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
+      if (room.players.length === 0) {
+        fire.database().ref(`BoardRooms/${room.key}`).remove();
+      } else if (room.players.length > 0) {
         fire.database().ref('BoardRooms/' + room.key).set(room);
-      } else if (room.players.length === 0) {
-        fire.database().ref('BoardRooms/' + room.key).remove();
       }
     }
   }
