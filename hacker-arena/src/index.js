@@ -21,7 +21,7 @@ import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
 import Random from './Components/Random.js'
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
-import { checkIfUserIsAdminAsync } from './Helpers/authHelpers'
+import { checkIfUserIsAdminAsync, addUsernameToAuth } from './Helpers/authHelpers'
 
 import Solo from './Containers/Solo/CreateSolo';
 import SoloRoom from './Containers/Solo/SoloRoom';

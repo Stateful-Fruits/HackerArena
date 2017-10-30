@@ -76,7 +76,7 @@ class GameRoom extends React.Component {
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
-      let { gameRooms, roomId, username, navigate } = this.props;
+      let { gameRooms, roomId, username, currentUser, navigate } = this.props;
       let room = gameRooms[roomId];
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
@@ -101,7 +101,8 @@ class GameRoom extends React.Component {
           disruptions: [''],
           testStatus: {},
           credits: room.startingCredits || 0,
-          liveInput: ''
+          liveInput: '',
+          uid: currentUser.uid
         };
         // and update the database
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
@@ -177,7 +178,8 @@ const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
   username: fire.auth().currentUser.email.split('@')[0],
   gameRooms: state.gameRooms,
-  problems: state.problems
+  problems: state.problems,
+  currentUser: state.currentUser
 });
 
 const mapDispatcherToProps = (dispatch) => ({

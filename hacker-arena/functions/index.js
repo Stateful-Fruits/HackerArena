@@ -12,7 +12,21 @@ const cors = require('cors')({origin: true});
 
 admin.initializeApp(functions.config().firebase);
 
+exports.addUsernameToAuth =  functions.https.onRequest((req, res) => {
+  cors(req, res, function() {
+    console.log('req.body', req.body);
+    let { uid, username } = req.body
 
+    admin.auth().setCustomUserClaims(uid, {username: username})
+    .then((userRecord) => {
+      res.sendStatus(201);
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(404).send(err)
+    });
+  })
+});
 
 // exports.setUser = functions.https.onRequest((req, res) => {
 //   admin.auth().setCustomUserClaims('', {admin: true}).then(() => console.log('set custom user claim'));
