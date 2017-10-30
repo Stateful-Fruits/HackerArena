@@ -103,7 +103,7 @@ class GameRoomList extends Component {
         />
       ));
     return (
-      <div>
+      <div id='GameRoomList'>
         <div className="searchAndFilter">
         <div className="input-group gameListSearch">
           <span className="input-group-addon"><img src="/assets/search.png"/></span>
