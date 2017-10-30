@@ -20,6 +20,8 @@ class SpectatorChat extends Component {
 
   handleMsgSend(e) {
     e.preventDefault();
+    // prevent empty messages
+    if (!this.state.msg.length) return;
     let msg = this.state.msg;
     let room = this.props.gameRoom;
     let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
@@ -33,7 +35,9 @@ class SpectatorChat extends Component {
     let { spectators } = gameRoom;
     return (
       <div style={{ margin: "5%" }}>
-       <Webrtc/>
+       <Webrtc
+        room={gameRoom}
+       />
         <form onSubmit={this.handleMsgSend}>
           <h2>Chat: </h2>
             <p>{(spectators ? spectators.filter((spectatorName, i) => spectators.indexOf(spectatorName) === i).join(', ') : '')}</p>

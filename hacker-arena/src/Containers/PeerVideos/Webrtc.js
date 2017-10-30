@@ -59,8 +59,8 @@ class Webrtc extends Component {
     //   this.webrtc = webrtc;
       webrtc.on('readyToCall', function () {
         // you can name it anything
+      });
       webrtc.joinRoom(`spectator/${room.key}`);
-    });
     this.webrtc = webrtc;
     console.log('video object', this.refs.remote);
     console.log('hello',room);    
@@ -118,12 +118,7 @@ return (
       <button className='gamePreviewButton' onClick={this.pause.bind(this)}>Toggle Camera</button>
 
     </div>
-)
-
+    )
+  }
 }
-}
-
-const mapStateToProps =(state)=> ({
-    room : state.gameRooms ? state.gameRooms[state.router.location.pathname.split('/')[2]] : null,   
-})
-export default connect(mapStateToProps)(Webrtc);
+export default Webrtc;

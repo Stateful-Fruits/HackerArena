@@ -105,8 +105,8 @@ class PairGameRoom extends React.Component {
           gameRoom.roomStatus = 'standby'; 
         }
         // don't allow handle enter to run again 
-        this.setState({ allowEnter: false });
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
+        this.setState({ allowEnter: false });
       }
     } 
   }

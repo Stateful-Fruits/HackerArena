@@ -73,7 +73,7 @@ class UserProfile extends React.Component {
             </div>
           
             <div className="WinLossStats">
-              {this.props.profile.wins ? <Stats profile={profile}/> : null}
+              {this.props.profile.history ? <Stats profile={profile}/> : null}
             </div>
           </div>
           <div  className="ActivityHeatMap">

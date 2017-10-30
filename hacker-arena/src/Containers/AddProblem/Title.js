@@ -6,9 +6,11 @@ const Title = (props) => {
   return (
     <div>
       <input value={problem.title}
-          className='title' 
+          className='title createGameInput' 
           onChange={handleChange}
-          data-property='title'/><br/>
+          data-property='title'
+          placeholder='Problem Title'
+          /><br/>
     </div>
   )
 }

@@ -15,9 +15,8 @@ let oldDisruptions = {};
 class SpectatorRoom extends Component {
 
   sendSpectatorMessage(room, username, msg) {
-    let gameRoom = Object.assign({}, room);
-    gameRoom.spectatorChat = [...(gameRoom.spectatorChat || []), {username, msg}];
-    fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
+    let newChat = [...(room.spectatorChat || []), {username, msg}];
+    fire.database().ref(`rooms/${room.key}/spectatorChat`).set(newChat);
   }
 
   enterGameRoom(room) {

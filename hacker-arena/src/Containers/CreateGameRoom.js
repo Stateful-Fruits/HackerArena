@@ -141,21 +141,23 @@ class CreateGameRoom extends React.Component {
 
     return (
       <div>
-        <form>
-        Wins needed to be the champion
-          <select
+        <form className="createGameForm">
+          <h2 className="createGameHeader"> Create Game Room </h2>
+          <h5>Wins needed to be the champion</h5>
+          <input
+            className="createGameInput"
             type="number" 
+            min="1"
+            max="3"
             value={this.state.rounds} 
             name="rounds"
             onChange={this.onChange}
           >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </select>
+          </input>
           <br/>
-          Max Players
+          <h5>Maximum number of players</h5>
           <input
+            className="createGameInput"
             type="number" 
             value={this.state.playerCapacity} 
             min="1" 
@@ -163,37 +165,10 @@ class CreateGameRoom extends React.Component {
             name="playerCapacity"
             onChange={this.onChange}
           />
-          {
-            !this.state.isPrivate ? null : (
-              <div>
-                <h3>Invite Players:</h3>
-                <ul>
-                  {
-                    this.state.invitedPlayers.map((player, i) => (
-                      <li key={i}>
-                        <input type='text' value={this.state.invitedPlayers[i]} onChange={(e) => {
-                          let invitedPlayers = [...this.state.invitedPlayers];
-                          invitedPlayers[i] = e.target.value;
-                          this.setState({ invitedPlayers });
-                        }}/>
-                      </li>
-                    )).slice(1)
-                  }
-                </ul>
-              </div>
-            )
-          }
           <br/>
-          Make room private
-          <input
-            type="checkbox"
-            label="Make room private"
-            checked={this.state.isPrivate} 
-            name="isPrivate"
-            onChange={this.onCheck}
-          />
-          <br/>
-          Starting Attack credits<input
+          <h5>Set starting disruption credits</h5>
+            <input
+            className="createGameInput"
             type="number" 
             value={this.state.startingCredits} 
             min="1" 
@@ -202,17 +177,49 @@ class CreateGameRoom extends React.Component {
             onChange={this.onChange}
           />
           <br/>
-          Choose a problem
-          <select name="problemID" value={this.state.problemID} onChange={this.onChange}>
+          <h5>Select a problem</h5>
+          <select className="createGameInput" name="problemID" value={this.state.problemID} onChange={this.onChange}>
             {problemsArr}
-            <option value="random">random!</option>
+            <option value="random">Random!</option>
           </select>
           <br/>
-          Select a difficulty level for this and subsequent problems
+          <h5>Select difficulty level of problems</h5>
           <div className="slider-container">
             <div id="slider"></div>
           </div>
-          <input type="submit" value="CREATE GAME ROOM" onClick={this.onSubmit}></input>
+          <div className="form-check">
+          <label className="form-check-label privateCheck">Make room private</label>
+          <input
+            className="form-check-input"
+            type="checkbox"
+            label="Make room private"
+            checked={this.state.isPrivate} 
+            name="isPrivate"
+            onChange={this.onCheck}
+          />
+          </div>
+          {
+            !this.state.isPrivate ? null : (
+              <div>
+                <h5>Invite Players:</h5>
+                
+                  {
+                    this.state.invitedPlayers.map((player, i) => (
+                      <div>
+                        <div>Player {i}</div>
+                        <input className="createGameInput" type='text' value={this.state.invitedPlayers[i]} onChange={(e) => {
+                          let invitedPlayers = [...this.state.invitedPlayers];
+                          invitedPlayers[i] = e.target.value;
+                          this.setState({ invitedPlayers });
+                        }}/>
+                      </div>
+                    )).slice(1)
+                  }
+                
+              </div>
+            )
+          }
+          <input className="submitCreateGame" type="submit" value="Create Game" onClick={this.onSubmit}></input>
         </form>
       </div>
     )

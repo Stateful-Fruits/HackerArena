@@ -18,20 +18,20 @@ class App extends Component {
   componentWillMount() {
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
     syncToDb(updateGameRooms, updateProblems, updateBoardRooms);
-
   }
 
   render() {
-    let { navigate } = this.props;
-    let currentUser = fire.auth().currentUser;
+    let { navigate, currentUser } = this.props;
+    let username = currentUser.email ? currentUser.email.split('@')[0] : 'null';
+
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">HACKER ARENA</h1>
           {
-            currentUser ? (
-              <span className="profile-image" onClick={() => navigate('/User/' + currentUser.email.split('@')[0])}>
-                <span className="profile-greeting"> Hi { currentUser.email.split('@')[0] }! {' '} </span>
+            currentUser.email ? (
+              <span className="profile-image" onClick={() => navigate('/User/' + username)}>
+                <span className="profile-greeting"> Hi { username }! {' '} </span>
                 <img className="profile-photo"
                   src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
                   alt='profile'
@@ -43,6 +43,7 @@ class App extends Component {
         </header>
         <NavBar 
           navigate={navigate}
+          currentUser={currentUser}
         />
         <div>
           { this.props.children }
@@ -53,7 +54,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  gameRooms: state.gameRooms
+  gameRooms: state.gameRooms,
+  currentUser: state.currentUser
 });
 
 const mapDispatchToProps = (dispatch) => ({

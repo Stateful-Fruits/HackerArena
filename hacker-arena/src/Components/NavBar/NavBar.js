@@ -11,16 +11,25 @@ class NavBar extends Component {
     });
   }
   render() {
-    let { navigate } = this.props;
+    let { navigate, currentUser } = this.props;
+    let isAdmin = currentUser ? currentUser.adminStatus : null;
+
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-          <li className="nav-item rightNav navbar-brand active" onClick={ () => { navigate('/'); }}>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
             Home </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
             About </li>
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/AddProblem'); }}>
+          {isAdmin ? 
+            <li 
+              className="nav-item rightNav navbar-brand" 
+              onClick={ () => navigate('/AddProblem')}
+            >
             Add Problem </li>
+            :
+            null
+          }
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/CodeRunLobby'); }}>
             Code Run </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
