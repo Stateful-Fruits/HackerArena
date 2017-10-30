@@ -1,4 +1,4 @@
-import { prepResultsObjectFromWinner, calculateResultsByPlayer, calculateMostTotalWins  } from '../Helpers/resultsHelpers'
+import { prepResultsObjectFromWinner, calculateResultsByPlayer, calculateMostTotalWins  } from '../Helpers/resultsHelpers';
 
 describe('prepResultsObjectFromWinner', () => {
   console.log('prepResults is running')
