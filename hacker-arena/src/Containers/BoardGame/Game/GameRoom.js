@@ -8,7 +8,7 @@ import MovePlayer from './MovePlayer';
 import CodeEditor from '../CodePage/CodeEditor';
 import TestSuite from '../CodePage/TestSuite';
 import Attack from './Attack';
-import helper from '../Helper/helper';
+import helper from '../Helpers/helper';
 import '../../../Styles/CreateBoardRoom.css';
 
 
@@ -24,6 +24,8 @@ class GameRoom extends React.Component {
     this.handleBoard = this.handleBoard.bind(this);
   }
   componentDidMount () {
+    //window.addEventListener('beforeunload', this.handleLeave);
+    window.onbeforeunload = this.handleLeave;
     this.handleEnter();
   }
 
@@ -32,10 +34,37 @@ class GameRoom extends React.Component {
     this.handleBoard();
   }
   
-  componentWillMount () {
+  componentDidUpdate () {
+    let {room, user} = this.props;
+    if (room.board) {
+      let old = document.getElementsByClassName('validMove');
+      [].forEach.call(old, (ele) => {
+        ele.classList.remove('validMove');
+      });
+      let position = room.playerInfo[user].position;
+      let x = position[0];
+      let y = position[1];
+      var validMoves = [];
+      const stringify = (x,y) => {
+        if (room.board[x] && room.board[x][y]) {
+          validMoves.push(x + ' ' + y);
+        }
+      }
+      stringify(x-1,y);
+      stringify(x+1,y);
+      stringify(x,y-1);
+      stringify(x,y+1);
+      console.log ('valid selections are',validMoves);
+      validMoves.forEach(move => {
+        move = document.getElementById(move)
+        if (move) {
+          move.classList.add('validMove');
+        }
+      })
+    }
   }
  
-  componentWillUnmount () {
+  componentWillUnmount () {//moving to different component
     this.handleLeave();
   }
 
@@ -49,7 +78,6 @@ class GameRoom extends React.Component {
   handleEnter () {
     let {room, user, navigate} = this.props;
     if (room) {
-      window.addEventListener('beforeunload', this.handleLeave);
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
@@ -84,12 +112,12 @@ class GameRoom extends React.Component {
       let user = this.props.user;
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
-      let boardStart = room.board[0][0];
+      // let boardStart = room.board[0][0];
       // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
-      if (room.players.length > 0) {
+      if (room.players.length === 0) {
+        fire.database().ref(`BoardRooms/${room.key}`).remove();
+      } else if (room.players.length > 0) {
         fire.database().ref('BoardRooms/' + room.key).set(room);
-      } else if (room.players.length === 0) {
-        fire.database().ref('BoardRooms/' + room.key).remove();
       }
     }
   }

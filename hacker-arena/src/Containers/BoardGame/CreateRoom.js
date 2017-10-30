@@ -7,7 +7,7 @@ import noUiSlider from 'nouislider';
 import './../../Styles/nouislider.css';
 import './../../Styles/CreateBoardRoom.css';
 import { filterProblemsByDifficulty } from './../../Helpers/problemHelpers';
-import helper from './Helper/helper';
+import helper from './Helpers/helper';
 
 
 class CreateRoom extends React.Component {
