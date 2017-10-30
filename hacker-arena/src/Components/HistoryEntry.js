@@ -10,12 +10,12 @@ const HistoryEntry = (props) => {
         {(Object.values(props.game[0].winners).filter(items=>{
           return items === (props.profile.username)
         }).length > 0 ) ? <h2 className="historyWin">WIN</h2> : <h2 className="historyLoss">LOSS</h2>}
-        <p>Winner : {Object.values(props.game[0].winners)} </p>
+        <p>Winner : {Object.values(props.game[0].winners).join(' ')} </p>
       </div> 
       <div className="card-body">
       {players.map(items =>{
         return (
-          <a href='' onClick={() => {navigate(`/User/${items}`) }}>{items} </a>
+          <a href='' className="userNameLinks" onClick={() => {navigate(`/User/${items}`) }}>{items} </a>
         )
       })}
         <h3 className="card-title">{props.game[0].problem.title}</h3>

@@ -66,19 +66,15 @@ class SignUp extends React.Component {
     return (
       <div>
         <h1>{this.state.errmsg}</h1>
-        <div className="container">
-          <button onClick={() => navigate('/Login') }> Login </button>
-          <button onClick={this.signInWithGoogle}>Log in with google</button>
-          <button onClick={this.signInWithFacebook}>Log in with facebook</button>
+        <div className="signUpForm">
 
           <form onSubmit= {this.onSubmit}>
             <div className='header'>
-              <h2>Join in The Game Today!</h2>
-              <h2>SignUp to Create a Game Now!</h2>
+              <h3 className="h3">Sign Up Today! </h3>
             </div>
 
             <div>
-              <label className='header'>email</label>
+              <label className='header'>Email</label>
 
               <input
                 value = {this.state.email}
@@ -103,8 +99,19 @@ class SignUp extends React.Component {
             <a onClick={() => navigate('/Login') }> Login </a>
             <div>
               <button type = 'submit' value= 'submit' className="btn-login">
-                Join
+                Sign Up
               </button>
+            <div className="signUpButtons">
+              <button className="btn loginButton" onClick={() => navigate('/Login') }> Login </button>
+              <button className="btn googleLogin" onClick={this.signInWithGoogle}>
+              <img className="googleLogo" src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2000px-Google_%22G%22_Logo.svg.png'/>
+              Log in with google
+              </button>
+              <button className="btn facebookLogin" onClick={this.signInWithFacebook}>
+              <img className="fbLogo" src="http://www.classiclitho.com/wp-content/uploads/2015/05/facebook-logo-png-transparent-background-1024x1024.png"/>
+              Log in with facebook
+              </button> 
+            </div>
             </div>
           </form>
         </div>

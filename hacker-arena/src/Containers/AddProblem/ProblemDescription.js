@@ -6,7 +6,7 @@ const ProblemDescription = (props) => {
   return (
     <div>
       <textarea 
-          className="form-control"
+          className="form-control formProblemDescription"
           value={problem.problemDescription} 
           onChange={handleChange}
           rows="10"
