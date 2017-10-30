@@ -36,10 +36,35 @@ const fbookAuth = function(navigate) {
   .then((data) => navigate('/'))
 };
 
+const checkIfUserIsAdminAsync = function(uid) {  
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("cache-control", "no-cache");
+  
+  const myInit = {
+    method: 'GET',
+    headers: myHeaders,
+    mode: 'cors',
+    async: true,
+    crossDomain: true
+  };
+
+  const url = `https://us-central1-hacker-arena.cloudfunctions.net/checkIfUserIsAdmin?uid=${uid}`
+  
+  return fetch(url, myInit)
+  .then(payload => payload.json())
+  .then(payload => payload.adminStatus)
+  .catch(err => {
+    console.log('err', err)
+    return err;
+  })
+}
+
 export {
   getUsernameFromEmail,
   normalLogin,
   normalSignUp,
   googleAuth,
-  fbookAuth
+  fbookAuth,
+  checkIfUserIsAdminAsync
 };
