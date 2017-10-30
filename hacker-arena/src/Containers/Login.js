@@ -67,7 +67,7 @@ constructor(props) {
   render() {
     let { navigate } = this.props;
     return (
-      <div>
+      <div id='Login'>
         <h1>{this.state.errmsg}</h1>
         <div className="container">
           <img src='../profile.jpg' alt='Waiting' />
