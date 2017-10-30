@@ -1,6 +1,6 @@
 import React from 'react';
 // import fire from '../../../Firebase/firebase';
-import helper from '../Helper/helper';
+import helper from '../Helpers/helper';
 
 class MovePlayer extends React.Component {
   constructor (props) {
