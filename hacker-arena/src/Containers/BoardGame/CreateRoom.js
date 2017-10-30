@@ -7,7 +7,7 @@ import noUiSlider from 'nouislider';
 import './../../Styles/nouislider.css';
 import './../../Styles/CreateBoardRoom.css';
 import { filterProblemsByDifficulty } from './../../Helpers/problemHelpers';
-import helper from './Helper/helper';
+import helper from './Helpers/helper';
 
 
 class CreateRoom extends React.Component {
@@ -44,10 +44,7 @@ class CreateRoom extends React.Component {
     let allProblems = this.props.problems;
     let problems = filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems);
     let user = fire.auth().currentUser.email.split('@')[0];
-    let whirlpoolset = helper.setWhirlPools(7);
-    let whirlpools = whirlpoolset[0];
-    let validx = whirlpoolset[1];
-    let validy = whirlpoolset[1];
+    let whirlpools = helper.setWhirlPools(7);
     let room = {
       players: [user],
       playerInfo: {
@@ -67,8 +64,6 @@ class CreateRoom extends React.Component {
       playerCount: 1,
       winner: "",
       whirlpools,
-      validx,
-      validy,
       problems: problems,
       spectators: 0,
       playerTurn: user,

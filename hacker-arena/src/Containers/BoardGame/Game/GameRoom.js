@@ -8,7 +8,7 @@ import MovePlayer from './MovePlayer';
 import CodeEditor from '../CodePage/CodeEditor';
 import TestSuite from '../CodePage/TestSuite';
 import Attack from './Attack';
-import helper from '../Helper/helper';
+import helper from '../Helpers/helper';
 import '../../../Styles/CreateBoardRoom.css';
 
 
