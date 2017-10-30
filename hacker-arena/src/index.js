@@ -21,8 +21,12 @@ import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
 import Random from './Components/Random.js'
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
+import { checkIfUserIsAdminAsync } from './Helpers/authHelpers'
+
 import Solo from './Containers/Solo/CreateSolo';
 import SoloRoom from './Containers/Solo/SoloRoom';
+
+import updateCurrentUser from './Actions/updateCurrentUser';
 
 // To check Log in info
 import fire from './Firebase/firebase';
@@ -56,9 +60,21 @@ const store = createStore(
 
 fire.auth().onAuthStateChanged(function(user) {
   if (user) {
-    console.log('user is already logged in!', arguments);
-    user.updateProfile(user);
-    console.log('value of currentUser is now', fire.auth());
+    checkIfUserIsAdminAsync(user.uid)
+    .then(adminStatus => {
+      if (adminStatus) {
+        user.adminStatus = adminStatus;
+      }
+      user.updateProfile(user);
+      console.log('user is now', fire.auth().currentUser);
+      store.dispatch(updateCurrentUser(user));
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  } else {
+    user = {};
+    store.dispatch(updateCurrentUser(user));
   }
 
   ReactDOM.render(

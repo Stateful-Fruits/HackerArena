@@ -8,6 +8,7 @@ import addingProblem from './addingProblem';
 import pendingEvents from './updatePendingEvents';
 //state.gameRooms , state.addingProblem etc...
 import boardRooms from './updateBoardRooms';
+import currentUser from './updateCurrentUser';
 
 const appReducers = ({
   gameRooms,
@@ -16,7 +17,8 @@ const appReducers = ({
   addingProblem,
   profile,
   boardRooms,
-  pendingEvents
+  pendingEvents,
+  currentUser
 });
 
 export default appReducers;
