@@ -25,6 +25,8 @@ import { checkIfUserIsAdminAsync } from './Helpers/authHelpers'
 import Solo from './Containers/Solo/CreateSolo';
 import SoloRoom from './Containers/Solo/SoloRoom';
 
+import updateCurrentUser from './Actions/updateCurrentUser';
+
 // To check Log in info
 import fire from './Firebase/firebase';
 
@@ -63,12 +65,15 @@ fire.auth().onAuthStateChanged(function(user) {
         user.adminStatus = adminStatus;
       }
       user.updateProfile(user);
-      console.log('adminStatusis now ', fire.auth().currentUser.adminStatus);
       console.log('user is now', fire.auth().currentUser);
+      store.dispatch(updateCurrentUser(user));
     })
     .catch(err => {
       console.log(err);
     });
+  } else {
+    user = {};
+    store.dispatch(updateCurrentUser(user));
   }
 
   ReactDOM.render(

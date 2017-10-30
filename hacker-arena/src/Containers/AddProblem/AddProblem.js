@@ -65,39 +65,51 @@ class AddProblem extends React.Component {
   }
 
   render () {
-    let problem = this.props.problem;
-    return (
-      <div>
-        <div>Adding Toy Problem</div>
-        <form onSubmit={this.handleSubmit}>
-          Title: <Title problem={problem} handleChange={this.handleChange}/> 
+    let { problem, currentUser } = this.props
 
-          Problem description: <ProblemDescription problem={problem} handleChange={this.handleChange}/>
-
-          Tags: <AddTags problem={problem} handleChange={this.handleChange}/>
-
-          Difficulty: <Difficulty problem={problem} handleChange={this.handleChange}/>
-
-          Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
-          
-          <div>NOTE: Replace actual function name with userFn when writing test</div>
-          <AddingTest problem={problem} handleChange={this.handleChange}/>
-          <button onClick={this.addInTest}
-            type='button' 
-            value={problem.addingTest}>Add To Tests:</button>
-
-          <AllTests/>
-          <button className='addProblem' type='submit'> Add This Problem </button>
-        </form>
-      </div>
-    )
+    if (currentUser && currentUser.adminStatus) {
+      return (
+        <div>
+          <div>Adding Toy Problem</div>
+          <form onSubmit={this.handleSubmit}>
+            Title: <Title problem={problem} handleChange={this.handleChange}/> 
+  
+            Problem description: <ProblemDescription problem={problem} handleChange={this.handleChange}/>
+  
+            Tags: <AddTags problem={problem} handleChange={this.handleChange}/>
+  
+            Difficulty: <Difficulty problem={problem} handleChange={this.handleChange}/>
+  
+            Function Name: <FunctionName problem={problem} handleChange={this.handleChange}/>
+            
+            <div>NOTE: Replace actual function name with userFn when writing test</div>
+            <AddingTest problem={problem} handleChange={this.handleChange}/>
+            <button onClick={this.addInTest}
+              type='button' 
+              value={problem.addingTest}>Add To Tests:</button>
+  
+            <AllTests/>
+            <button className='addProblem' type='submit'> Add This Problem </button>
+          </form>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <div>You lack the admin status to access this page.</div>
+          <div>Please contact your sales representative to inquire about upgrading your organization to an admin account</div>
+        </div>
+      )
+    }
+    
   }
 }
 
 
 const mapStateToProps = (state) => {
   return {
-    problem: state.addingProblem
+    problem: state.addingProblem,
+    currentUser: state.currentUser
   }
 }
 
