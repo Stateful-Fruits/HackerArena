@@ -11,6 +11,7 @@ video {
   color: #423
 }
 .hero {
+    margin-top: -30px;
     background: url('https://static.pexels.com/photos/160107/pexels-photo-160107.jpeg') no-repeat center;
     background-size: cover;
     height: 70vh;

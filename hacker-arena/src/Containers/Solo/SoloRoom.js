@@ -114,6 +114,7 @@ class SoloRoom extends React.Component {
         .catch(err => console.log(err));
       }
     }
+    
   }
 
   handleIncomingEvents() {

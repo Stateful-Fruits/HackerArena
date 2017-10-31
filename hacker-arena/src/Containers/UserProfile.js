@@ -10,6 +10,14 @@ import { push } from 'react-router-redux';
 import '../Styles/UserProfile.css';
 
 class UserProfile extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      showEdit: false
+    }
+
+    this.handleEditPhoto = this.handleEditPhoto.bind(this);
+  }
   componentWillMount () {
 
     if (!this.props.profile.username) {
@@ -23,7 +31,13 @@ class UserProfile extends React.Component {
       })
     }
   }
-
+  handleEditPhoto(){
+    if(this.state.showEdit){
+      this.setState({showEdit: false});
+    } else {
+      this.setState({showEdit: true});
+    }
+  }
   render () {
     let profile = this.props.profile;
     let profileUsername = this.props.profileUsername;
@@ -41,10 +55,10 @@ class UserProfile extends React.Component {
     }
     let currentUser = fire.auth().currentUser;
     return (
-      <div>
+      <div style={{display: 'flex'}}>
         <div className="leftSideProfile">
           <div style={{display: 'flex'}}>
-          <div style={{width: '30vw'}}>
+          <div className="userInfoDiv">
             <div className="ProfileInfo" style={{display: "flex"}}>
               <div className="profPic">
                 <img className="profile-photo  accProfPic"
@@ -57,15 +71,18 @@ class UserProfile extends React.Component {
                 <div><strong>Username</strong>: {profile.username}</div><br/>
                 <div><strong>Wins</strong>: {wins}</div>
                 <div><strong>Losses</strong>: {losses}</div>
-                <div><strong>Contact</strong>: myEmail@gmail.com</div>
+                <div><strong>Contact</strong>: <div>{fire.auth().currentUser.email}</div></div>
+                <button className="btn editPhotoBtn" onClick={this.handleEditPhoto} > Edit Profile Picture </button>
               </div>
             </div>
-              <div> <strong>Description</strong>: Hey its me kfspfksdfk okfspadfksdpfoksdfpakpsdokfpsdofksapfk </div>
-            {
-              (profileUsername === clientUsername) ?
-              <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/> :
-              null
-            }
+
+        {this.state.showEdit ?
+              ((profileUsername === clientUsername) ?
+              <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/>
+              : null)
+            :
+            <div> <strong>Description</strong>: Hey its me Marky Z, I enjoy creating social media websites and long walks on the beach. </div>
+        }
             </div>
           
             <div className="WinLossStats">

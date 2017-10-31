@@ -13,14 +13,16 @@ class NavBar extends Component {
   render() {
     let { navigate, currentUser } = this.props;
     let isAdmin = currentUser ? currentUser.adminStatus : null;
-
+    let username = currentUser.email ? currentUser.email.split('@')[0] : 'null';
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
+          <li className="navbarLogo nav-item leftNav navbar-brand" onClick={ () => { navigate('/'); }}>
+           <strong>Hacker Arena Logo Here</strong></li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
             Home </li>
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
-            About </li>
+            <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Classic'); }}>
+            Classic </li>
           {isAdmin ? 
             <li 
               className="nav-item rightNav navbar-brand" 
@@ -48,11 +50,22 @@ class NavBar extends Component {
                 className="nav-item rightNav navbar-brand"
                 onClick={
                   () =>  fire.auth().signOut().then(() => {
-                    navigate('/Login');
+                    navigate('/');
                   })
                 }
               >
                 Log out
+              </li>
+            ) : null
+          }
+          {
+            currentUser.email ? (
+              <li className="navbarProfile nav-item rightNav" onClick={() => navigate('/User/' + username)}>
+                Hi { username }! {' '}
+                <img className="profile-photo"
+                  src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
+                  alt='profile'
+                />
               </li>
             ) : null
           }
@@ -63,3 +76,7 @@ class NavBar extends Component {
 }
 
 export default NavBar;
+
+
+{/* <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
+About </li> */}

@@ -52,6 +52,21 @@ input {
   /* filter: opacity(0.1) */
 }
 
+.navbarLogo {
+  left: 10px;
+  position: absolute;
+  display: none;
+  font-size: 21px !important;
+}
+
+.navbarProfile {
+  color: white;
+  display:none;
+  position: absolute;
+  right: 10px;
+  font-size: 18px !important;
+}
+
 .navbar-brand {
   transition: border-bottom 1s ease,
               border-top 1s ease;
@@ -120,4 +135,10 @@ input {
               color 1s ease;
   border: 3px solid #b24411 !important;
   color: #b24411 !important
+}
+
+.machineLearning:hover {
+  font-size: 90px;
+  height: 500px;
+  color: pink;
 }

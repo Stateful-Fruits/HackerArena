@@ -1,7 +1,9 @@
 .leftSideProfile {
-  width: 70vw;
+  /* width: 70vw; */
   float: left;
-  height: 100vh;
+  /* background-color: rgb(232, 232, 232); */
+  margin-left: 15px;
+  padding-right: 15px;
 }
 
 .ProfileInfo {
@@ -27,4 +29,13 @@
 
 .userInfo {
   margin-top: 5%;
+}
+
+.userInfoDiv {
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4); */
+  /* border-radius: 10px; */
+  padding: 0px !important;
+  width: 30vw;
+  margin: 5px;
+  height: 60vh;
 }
