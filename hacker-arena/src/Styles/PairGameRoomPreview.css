@@ -1,0 +1,8 @@
+.list-group-item .team-group {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.delete-room-button {
+  height: 50px;
+}

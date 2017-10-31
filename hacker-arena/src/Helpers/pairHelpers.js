@@ -3,7 +3,7 @@ const _getTeam = function(room, username) {
   
     if (teams) {
       return teams.find((team) => {
-        return team.driver === username || team.navigator === username
+        return team ? (team.driver === username || team.navigator === username) : null;
       })
     }
   
@@ -15,7 +15,7 @@ const getTeamIndex = function(room, username) {
 
   if (teams) {
     return teams.findIndex((team) => {
-      return team.driver === username || team.navigator === username
+      return team ? (team.driver === username || team.navigator === username) : null;
     })
   }
 
