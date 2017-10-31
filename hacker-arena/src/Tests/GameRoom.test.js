@@ -4,7 +4,7 @@ describe('When on the lobby screen (game room list)', () => {
   let page = nightmare().goto('http://localhost:3000')
       .type('#Login > div > form > div.form-input > input', 'test123@gmail.com')
       .type('#Login > div > form > div:nth-child(3) > input', 'test123')
-      .click('#Login > div > form > div:nth-child(5) > button').wait(500);
+      .click('#Login > div > form > div:nth-child(5) > button').wait(1000);
 
   test('User can search the game rooms for usernames', async () => {
     let filterTextInput = await page.exists('.searchBar');
@@ -30,6 +30,11 @@ describe('When on the lobby screen (game room list)', () => {
   test('user can see the create room button', async () => {
     let createRoomButtonExists = await page.exists('.createGameButton');
     return expect(createRoomButtonExists).toBe(true);
+  }, 20000);
+
+  test('user should see their account page in the upper right', async () => {
+    let canSeeUserPannel = await page.wait(1000).exists('.profile-image');
+    return expect(canSeeUserPannel).toBe(true);
   }, 20000);
 
   test('user can click the create room button, and be navigated to create game room', async () => {
