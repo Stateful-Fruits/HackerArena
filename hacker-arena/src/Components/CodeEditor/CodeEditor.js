@@ -35,7 +35,7 @@ class CodeEditor extends React.Component {
   // ~~~~~~~~~~~ LIFECYCLE FUNCTIONS ~~~~~~~~~~ //
 
   componentDidMount() {
-    let { currentRoom } = this.props;
+    let { currentRoom, roomId } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
 
     this.resetEditor();
@@ -50,7 +50,7 @@ class CodeEditor extends React.Component {
     // Increments user credits
     let intervalId = setInterval(()=> {
       if(this.props.currentRoom.players[username].credits <= 50) {
-        this.changeUserCreditsByVal(5, username, currentRoom);
+        this.changeUserCreditsByVal(5, username, currentRoom, roomId);
       }
     }, 30000);
 
@@ -81,7 +81,7 @@ class CodeEditor extends React.Component {
 
   handleSubmit() {
     let code = this.ace.editor.getValue();
-    let { currentRoom } = this.props;
+    let { currentRoom, roomId } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     
     //TEST SUITE LOGIC
@@ -95,7 +95,7 @@ class CodeEditor extends React.Component {
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
       });
-      fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus);
+      fire.database().ref(`rooms/${roomId}/players/${username}/testStatus`).set(testStatus);
     } else {
       window.swal('Oops...', 'Something went wrong!', 'error');
     }
@@ -124,14 +124,14 @@ class CodeEditor extends React.Component {
     // Sends live inputs of user to database
     let username = fire.auth().currentUser.email.split('@')[0];  
     let liveInput = this.ace.editor.getValue();
-    fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/liveInput`).set(liveInput)
+    fire.database().ref(`rooms/${this.props.roomId}/players/${username}/liveInput`).set(liveInput)
   }
 
   sendDisruptions(e) {
     e.stopPropagation();
     console.log('e.target', e.target)
     console.log('trying to send a disruption')
-    let { currentRoom } = this.props;
+    let { currentRoom, roomId } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
     // Sends disruptions to oppposite player
     let targetId = e.target.id || e.target.parentElement.id;
@@ -145,9 +145,9 @@ class CodeEditor extends React.Component {
         let currentDisruptions = currentRoom.players[targetedPlayer].disruptions;
         let activity = currentRoom.activity || [];
         activity.push(`${username} is sending a ${disruptionFunc[0]} at ${targetedPlayer}!`)
-        this.changeUserCreditsByVal(-1 * disruptionCost, username, currentRoom);
-        fire.database().ref(`rooms/${currentRoom.key}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
-        fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
+        this.changeUserCreditsByVal(-1 * disruptionCost, username, currentRoom, roomId);
+        fire.database().ref(`rooms/${roomId}/players/${targetedPlayer}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+        fire.database().ref(`rooms/${roomId}/activity`).set(activity);
       } else {
         // send the disruption to all players
         Object.keys(currentRoom.players).forEach((playerName) => {
@@ -155,17 +155,17 @@ class CodeEditor extends React.Component {
             let currentDisruptions = currentRoom.players[playerName].disruptions;
             let activity = currentRoom.activity || [];
             activity.push(`Whoa! ${username} is sending a ${disruptionFunc[0]} at all players! Even though that should not be possible!!!`)
-            fire.database().ref(`rooms/${currentRoom.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
-            fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
+            fire.database().ref(`rooms/${roomId}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
+            fire.database().ref(`rooms/${roomId}/activity`).set(activity);
           }
         });
-        this.changeUserCreditsByVal(-1 * disruptionCost, username, currentRoom);        
+        this.changeUserCreditsByVal(-1 * disruptionCost, username, currentRoom, roomId);        
       }
     }
   }
 
   clearDisruption(e) {
-    let { currentRoom, removePendingEvent } = this.props;    
+    let { currentRoom, removePendingEvent, roomId } = this.props;    
     let username = fire.auth().currentUser.email.split('@')[0];  
         
     let disruptionFuncName = e.target.id.split(" ")[0];
@@ -182,9 +182,9 @@ class CodeEditor extends React.Component {
         parseInt(blockCost, 10) ? activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`) : null;
       }
 
-      fire.database().ref(`rooms/${currentRoom.key}/activity`).set(activity);
+      fire.database().ref(`rooms/${roomId}/activity`).set(activity);
       
-      this.changeUserCreditsByVal(-1 * blockCost, username, currentRoom);
+      this.changeUserCreditsByVal(-1 * blockCost, username, currentRoom, roomId);
     } 
   }
 
@@ -216,7 +216,7 @@ class CodeEditor extends React.Component {
       };
     });
 
-    fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/disruptions`).set([""])
+    fire.database().ref(`rooms/${this.props.roomId}/players/${username}/disruptions`).set([""])
   }
 
   receiveDisruption(funcName) {
@@ -230,7 +230,8 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // send win event (in room.players), update results object (in room), and increment user's wins (in database)
-    let room = this.props.currentRoom;    
+    let room = this.props.currentRoom;
+    let roomId = this.props.roomId;
 
     room.timeEnd = Date.now();
     room.timeTaken = (room.timeEnd - room.timeStart)/1000;
@@ -254,7 +255,7 @@ class CodeEditor extends React.Component {
 
     playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
 
-    fire.database().ref(`rooms/${room.key}`).set(room);
+    fire.database().ref(`rooms/${roomId}`).set(room);
   }
 
   resetEditor() {
@@ -263,9 +264,9 @@ class CodeEditor extends React.Component {
     }, 500);
   }
 
-  changeUserCreditsByVal(val, username, currentRoom) {
+  changeUserCreditsByVal(val, username, currentRoom, roomId) {
     console.log('update credits');
-    fire.database().ref(`rooms/${currentRoom.key}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + val);
+    fire.database().ref(`rooms/${roomId}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + val);
   }
 
   // ~~~~~~~~~~~ RENDER ~~~~~~~~~~ //
