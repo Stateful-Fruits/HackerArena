@@ -11,7 +11,7 @@ class Row extends React.Component {
   handleMove (e) {
     e.preventDefault();
     let {room, user} = this.props;
-    if (room.playerInfo[user].canMove) {
+    if (room.playerInfo[user] && room.playerInfo[user].canMove) {
       let userPos = room.playerInfo[user].position;
       let strBP = e.target.id.split(' ');
       let blockx = parseInt(strBP[0],10);
