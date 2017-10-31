@@ -21,7 +21,7 @@ import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
 import Random from './Components/Random.js'
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
-import { checkIfUserIsAdminAsync } from './Helpers/authHelpers'
+import { checkIfUserIsAdminAsync, addUsernameToAuth } from './Helpers/authHelpers'
 
 import Solo from './Containers/Solo/CreateSolo';
 import SoloRoom from './Containers/Solo/SoloRoom';
@@ -59,12 +59,16 @@ const store = createStore(
 );
 
 fire.auth().onAuthStateChanged(function(user) {
+
   if (user) {
     checkIfUserIsAdminAsync(user.uid)
-    .then(adminStatus => {
-      if (adminStatus) {
-        user.adminStatus = adminStatus;
-      }
+    .then(payload => {
+      console.log('payload from check if admin', payload)
+      const { adminStatus, username } = payload;
+      
+      user.adminStatus = adminStatus;
+      user.username = username;
+
       user.updateProfile(user);
       console.log('user is now', fire.auth().currentUser);
       store.dispatch(updateCurrentUser(user));
