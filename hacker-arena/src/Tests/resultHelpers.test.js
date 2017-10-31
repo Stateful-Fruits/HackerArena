@@ -1,7 +1,6 @@
 import { prepResultsObjectFromWinner, calculateResultsByPlayer, calculateMostTotalWins  } from '../Helpers/resultsHelpers';
 
 describe('prepResultsObjectFromWinner', () => {
-  console.log('prepResults is running')
   let username = 'paabrown';
   
   let players = {
