@@ -23,6 +23,7 @@ class GameRoomList extends Component {
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleSearchInput = this.handleSearchInput.bind(this);
     this.handleShowSearch = this.handleShowSearch.bind(this);
+    this.handleDeleteRoom = this.handleDeleteRoom.bind(this);
   }
 
   handleSortChange(e) {
@@ -39,8 +40,16 @@ class GameRoomList extends Component {
   handleShowSearch(){
     this.setState({showSearched: true});
   }
+
+  handleDeleteRoom(e) {
+    console.log('handleDeleteRoom running')
+    e.preventDefault();
+    let roomId = e.target.value;
+    fire.database().ref('rooms/' + roomId).remove();
+  }
+
   render() {
-    let { gameRooms, navigate} = this.props;
+    let { gameRooms, navigate, currentUser } = this.props;
     console.log('gameRooms in list', gameRooms);
     const roomKeys = Object.keys(gameRooms).filter(key => !gameRooms[key].isPairRoom);
     let username = fire.auth().currentUser.email.split('@')[0];
@@ -82,13 +91,19 @@ class GameRoomList extends Component {
         <div key={room.key + room.problemID}>
           <h3 style={{ color: 'green' }}>Private Game</h3>
           <GameRoomPreview 
+            roomId={room.key}
             gameRoom={room}
+            key={room.key + inx}
             navigate={navigate}
+            currentUser={currentUser}
+            handleDeleteRoom={handleDeleteRoom}
           />
         </div>
       ));
 
     // games open to everyone
+    let handleDeleteRoom = this.handleDeleteRoom
+    console.log('this.handleDeleteRoom in grl', this.handleDeleteRoom)
     let publicGameRooms = rooms
       .filter(eachRoom => (
         !Object.keys(eachRoom).includes('isTrusted') && 
@@ -98,9 +113,12 @@ class GameRoomList extends Component {
       .reverse()
       .map((room, inx) => (
         <GameRoomPreview 
+          roomId={room.key}
           gameRoom={room}
           key={room.key + inx}
           navigate={navigate}
+          currentUser={currentUser}
+          handleDeleteRoom={handleDeleteRoom}
         />
       ));
     return (
@@ -134,10 +152,13 @@ class GameRoomList extends Component {
             (publicGameRooms)
           :
           playerSearch().map((room, inx) => (
-            <GameRoomPreview 
+            <GameRoomPreview
+              roomId={room.key}
               gameRoom={room}
               key={room.key + inx}
               navigate={navigate}
+              currentUser={currentUser}
+              handleDeleteRoom={handleDeleteRoom}
             />))
           }
         </ul>

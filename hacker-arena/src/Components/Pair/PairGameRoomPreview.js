@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import fire from './../../Firebase/firebase';
 
+import '../../Styles/PairGameRoomPreview.css'
+
 class GameRoomPreview extends Component {
   constructor (props) {
     super (props);
@@ -20,11 +22,10 @@ class GameRoomPreview extends Component {
   }
 
   render() {
-    let { gameRoom, navigate } = this.props;
+    let { gameRoom, navigate, currentUser, roomId, handleDeleteRoom } = this.props;
 
     let username = fire.auth().currentUser.email.split('@')[0];   
 
-    let roomId = gameRoom.key;;
     let maxPairs = gameRoom.maxPairs;
     let spectators = gameRoom.navigate;
     // let players = gameRoom.players || {};
@@ -35,8 +36,8 @@ class GameRoomPreview extends Component {
 
     for (let i = 0; i < maxPairs; i++) {
       teamSpans.push(
-        <li className='list-group-item' style={{ textAlign: 'left'}} key={(teams[i] || "OPEN") + i}>
-          <h4> Team {i} -> 
+        <li className='list-group-item team-group' style={{ textAlign: 'left'}} key={(teams[i] || "OPEN") + i}>
+          <h4 className> Team {i} -> 
             <div className="driver-preview">
               { 
                 teams[i] && teams[i].driver ? 
@@ -86,6 +87,17 @@ class GameRoomPreview extends Component {
               }
             </div>
           </h4>
+            { currentUser.adminStatus ? 
+              (
+                <button 
+                  className="btn gamePreviewButton delete-room-button" 
+                  value={roomId}
+                  onClick={(e) => handleDeleteRoom(e)}
+                >
+                  <h5>X</h5>
+                </button>
+              ) : null
+            }
         </li>);
     }
     return (

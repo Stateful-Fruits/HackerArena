@@ -2,10 +2,13 @@ import React from 'react';
 
 const GameRoomPreview = ({ 
   dispatch, 
-  gameRoom, 
-  navigate
+  gameRoom,
+  roomId,
+  navigate,
+  currentUser,
+  handleDeleteRoom
 }) => {
-  let { spectators, playerCapacity } = gameRoom;
+  let { spectators, playerCapacity, key } = gameRoom;
   let players = gameRoom.players || {};
   let playerNames = Object.keys(players);
   let playerSpans = [];
@@ -34,6 +37,17 @@ const GameRoomPreview = ({
         <h5>Spectate Game  <span className="badge badge-default badge-pill">{spectators ? spectators.length : 0}</span>
         </h5>
       </button>
+      { currentUser.adminStatus ? 
+        (
+          <button 
+            className="btn gamePreviewButton" 
+            value={key}
+            onClick={(e) => handleDeleteRoom(e)}
+          >
+            <h5>X</h5>
+          </button>
+        ) : null
+      }
     </div>
   );
 };

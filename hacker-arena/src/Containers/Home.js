@@ -7,13 +7,14 @@ import GameRoomList from '../Components/GameRooms/GameRoomList';
 class Home extends Component {
 
   render() {
-    let { gameRooms, navigate } = this.props;
+    let { gameRooms, navigate, currentUser } = this.props;
     return (
        <div>    
          <button className="btn createGameButton" onClick={() => this.props.navigate('/CreateGameRoom')}>CREATE GAME ROOM</button>
-         <GameRoomList 
-           gameRooms={gameRooms || {}}
-           navigate={navigate}
+          <GameRoomList 
+            currentUser={currentUser}
+            gameRooms={gameRooms || {}}
+            navigate={navigate}
           />
        </div>
       );
@@ -21,7 +22,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  gameRooms: state.gameRooms
+  gameRooms: state.gameRooms,
+  currentUser: state.currentUser
 });
 
 const mapDispatchToProps = (dispatch) => ({
