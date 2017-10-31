@@ -80,9 +80,7 @@ class PairCreateGameRoom extends React.Component {
     e.preventDefault();
     
     const slider = document.getElementById('slider'); 
-    console.log('slider', slider)
     let sliderValues = slider.noUiSlider.get();  
-    console.log('sliderValues', sliderValues)  
     
     let problemID = this.state.problemID;
     let minDifficulty = parseInt(sliderValues[0], 10);
@@ -105,7 +103,6 @@ class PairCreateGameRoom extends React.Component {
 
   onChange(e) {
     e.preventDefault();
-    console.log('e.target.name', 'e.target.value', e.target.name, e.target.value);
 
     this.setState({[e.target.name] : e.target.value})
   }

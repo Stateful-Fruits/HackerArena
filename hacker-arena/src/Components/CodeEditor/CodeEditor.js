@@ -129,7 +129,6 @@ class CodeEditor extends React.Component {
 
   sendDisruptions(e) {
     e.stopPropagation();
-    console.log('e.target', e.target)
     console.log('trying to send a disruption')
     let { currentRoom, roomId } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];  
@@ -265,7 +264,6 @@ class CodeEditor extends React.Component {
   }
 
   changeUserCreditsByVal(val, username, currentRoom, roomId) {
-    console.log('update credits');
     fire.database().ref(`rooms/${roomId}/players/${username}/credits`).set(this.props.currentRoom.players[username].credits + val);
   }
 
