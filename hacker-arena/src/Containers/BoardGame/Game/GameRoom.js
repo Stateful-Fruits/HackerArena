@@ -25,8 +25,7 @@ class GameRoom extends React.Component {
     this.handleBoard = this.handleBoard.bind(this);
   }
   componentDidMount () {
-    //window.addEventListener('beforeunload', this.handleLeave);
-    window.onbeforeunload = this.handleLeave;
+    window.addEventListener('beforeunload', this.handleLeave);
     this.handleEnter();
   }
 
