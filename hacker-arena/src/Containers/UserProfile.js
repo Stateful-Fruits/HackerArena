@@ -61,11 +61,11 @@ class UserProfile extends React.Component {
           <div className="userInfoDiv">
             <div className="ProfileInfo" style={{display: "flex"}}>
               <div className="profPic">
-                <img className="profile-photo  accProfPic"
-                  src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
+                <div className="profile-photo accProfPic"
+                  style={{backgroundImage: `url(${currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'})`}}
                   alt='profile'
                 >
-                </img>
+                </div>
               </div>
               <div className="userInfo">
                 <div><strong>Username</strong>: {profile.username}</div><br/>

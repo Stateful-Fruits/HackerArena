@@ -23,7 +23,12 @@ input {
 }
 
 .profile-greeting {
-
+  vertical-align: middle;
+  height: 10px;
+  width: 100px;
+  top: 35px;
+  right: 72px;
+  position: absolute;
 }
 
 .profile-image {
@@ -41,6 +46,19 @@ input {
   border-radius: 50%;
   height: 50px;
   width: 50px;
+}
+
+.corner-profile-pic {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  margin: 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .navbar {
