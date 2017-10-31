@@ -2,7 +2,10 @@ import React from 'react';
 
 import fire from '../../Firebase/firebase';
 
+import { setUserAsAdmin } from '../../Helpers/authHelpers'
+
 import '../../Styles/EditProfile.css'
+
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -12,7 +15,8 @@ class EditProfile extends React.Component {
       photoURL: fire.auth().currentUser.photoURL,
       photoFiles: [],
       uploadProgress: 0,
-      showEdit: false
+      showEdit: false,
+      password: ''
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -21,6 +25,7 @@ class EditProfile extends React.Component {
     this.onFileChange =this.onFileChange.bind(this);    
     this.onFileSubmit =this.onFileSubmit.bind(this);
     this.handleEditPhoto = this.handleEditPhoto.bind(this);
+    this.handleUpgradeToAdmin = this.handleUpgradeToAdmin.bind(this);
   }
 
   onChange(e) {
@@ -91,6 +96,16 @@ class EditProfile extends React.Component {
     }
   }
 
+  handleUpgradeToAdmin(e) {
+    e.preventDefault();
+    let currentUser = fire.auth().currentUser;
+    let uid = currentUser.uid;
+    let password = this.state.password;
+    
+    setUserAsAdmin(uid, password)
+    .then(() => console.log())
+  }
+
   render() {
     let currentUser = fire.auth().currentUser;
     return (
@@ -98,25 +113,37 @@ class EditProfile extends React.Component {
         <button onClick={this.handleEditPhoto} > Edit Profile Picture </button>
         {this.state.showEdit ?
         <div className="dropDownEdits">
-        <div className="photo-url-edit">
-          Enter custom url to profile photo here:
-          <input className="photo-url-input form-control" onChange={this.onChange}
-            value = {this.state.photoURL}
-            type= 'text'
-            name= 'photoURL'
-          />
-          <button onClick={this.onSubmit}>Submit</button>
-        </div>
-        <div className="upload-photo">
-          OR - upload you own photo!
-          <br/>
-          <input className="choose-file" type="file" id="input" name="photoFiles" files={this.state.photoFiles} onChange={this.onFileChange}/>
-          <button className="submit-file" onClick={this.onFileSubmit}>Upload</button><br/>
-          <div className="progress">
-            <span className="progress-display">{this.state.uploadProgress}</span>
-            <div className="upload-bar progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="uploader" style={{width: `${this.state.uploadProgress}%`}}></div>
+          <div className="photo-url-edit">
+            Enter custom url to profile photo here:
+            <input className="photo-url-input form-control" onChange={this.onChange}
+              value = {this.state.photoURL}
+              type= 'text'
+              name= 'photoURL'
+            />
+            <button onClick={this.onSubmit}>Submit</button>
           </div>
-        </div>
+          <div className="upload-photo">
+            OR - upload you own photo!
+            <br/>
+            <input className="choose-file" type="file" id="input" name="photoFiles" files={this.state.photoFiles} onChange={this.onFileChange}/>
+            <button className="submit-file" onClick={this.onFileSubmit}>Upload</button><br/>
+            <div className="progress">
+              <span className="progress-display">{this.state.uploadProgress}</span>
+              <div className="upload-bar progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="uploader" style={{width: `${this.state.uploadProgress}%`}}></div>
+            </div>
+          </div>
+          <div className="upgrade-to-admin">
+            <h4>If you are a site administrator, upgrade to admin status here!</h4>
+            <form>
+              Password:
+              <input className="password form-control" onChange={this.onChange}
+                value = {this.state.password}
+                type= 'text'
+                name= 'password'
+              />
+              <input type="submit" onClick={this.handleUpgradeToAdmin}/>
+            </form>
+          </div>
         </div>
         :
         null

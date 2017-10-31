@@ -118,7 +118,7 @@ class PairGameRoom extends React.Component {
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       console.log('handleenter allowed')      
-      let { gameRooms, roomId, username, navigate } = this.props;
+      let { gameRooms, roomId, username, navigate, currentUser } = this.props;
       let room = gameRooms[roomId];
 
       let recentRoom = {teams: room.recentTeams}
@@ -148,7 +148,13 @@ class PairGameRoom extends React.Component {
           room.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
 
-        fire.database().ref(`/rooms/${roomId}`).set(room);
+        fire.database().ref(`/rooms/${roomId}/players/${username}`).set(room.players[username])
+        .then(() => {
+          console.log('re-added user, about the add the other stuff to the room');
+          return fire.database().ref(`/rooms/${roomId}`).set(room)
+        })
+        .then(() => console.log('wooo! re-set gameroom'))
+        .catch(err => console.log(err));
       } else if (!getRoleFromUsername(room, username)) {
         // player does not have a role but did not just leave
         navigate(`/Pair`);
@@ -164,15 +170,25 @@ class PairGameRoom extends React.Component {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
 
+        // to make writing database rules easier
+        gameRoom[currentUser.uid] = true;        
+
         // add you username to the gameroom
         gameRoom.players[username] = {
           disruptions: [''],
           testStatus: {},
           credits: room.startingCredits || 0,
-          liveInput: ''
+          liveInput: '',
+          uid: currentUser.uid
         };
         // and update the database
-        fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
+        fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
+        .then(() => {
+          console.log('added user, about the add the other stuff to the room');
+          return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
+        })
+        .then(() => console.log('wooo! set gameroom'))
+        .catch(err => console.log(err));
       }
       // TODO if you are the last user joining, change the gameroom status to 'closed'
     }
@@ -336,10 +352,11 @@ class PairGameRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[3],
-  username: fire.auth().currentUser.email.split('@')[0],
+  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
   gameRooms: state.gameRooms,
   problems: state.problems,
-  pendingEvents: state.pendingEvents
+  pendingEvents: state.pendingEvents,
+  currentUser: state.currentUser
 });
 
 const mapDispatcherToProps = (dispatch) => ({
