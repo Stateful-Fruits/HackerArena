@@ -20,7 +20,6 @@ class DriverRoom extends React.Component {
   render() {
     let { room, roomId, username, partnerName, addPendingEvent, removePendingEvent } = this.props
     let Videoroom = getTeamIndex(room, username)
-    // console.log('hello', room.key);
     return (
       <div>
         <div>YOU ARE A DRIVER. CODE!</div>

@@ -35,7 +35,6 @@ class EditProfile extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     let photoURL = this.state.photoURL;
-    console.log('photoURL', photoURL);
     fire.auth().currentUser.updateProfile({
       photoURL: photoURL
     })
@@ -43,18 +42,12 @@ class EditProfile extends React.Component {
   }
 
   onFileChange(e) {
-    console.log('e.target.files[0]', e.target.files[0])
-    console.log('e.target.slice', [].slice.call(e.target.files))
-    console.log('e.target.slice[0]', [].slice.call(e.target.files)[0])
-    console.log('e.name', e.target.name)
     this.setState({photoFiles: [].slice.call(e.target.files)});
   }
 
   onFileSubmit(e) {
     e.preventDefault();
     let file = this.state.photoFiles[0];
-    console.log('typeof file', typeof file);
-    console.log('file', file)
     let storageRef = fire.storage().ref('user-photos/' + file.name);
     const task = storageRef.put(file)
     // .then(ss => {
@@ -65,17 +58,14 @@ class EditProfile extends React.Component {
     //   .then(() => this.props.navigate(this.props.pathname))
     // });
 
-    console.log('task', task)
     task.on('state_changed', (snapshot) => {
       let percentage = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-      console.log('percentage', percentage);
       this.setState({
         uploadProgress: percentage
       })
     })
 
     task.then(ss => {
-      console.log('ss.downloadURL', ss.downloadURL)
       fire.auth().currentUser.updateProfile({
         photoURL: ss.downloadURL
       })
@@ -103,7 +93,7 @@ class EditProfile extends React.Component {
     let password = this.state.password;
     
     setUserAsAdmin(uid, password)
-    .then(() => console.log())
+    .then(() => console.log('user is not admin - thank you for shopping'))
   }
 
   render() {

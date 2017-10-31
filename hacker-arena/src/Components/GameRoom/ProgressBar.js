@@ -12,7 +12,7 @@ class ProgressBar extends Component {
   }
 
   componentWillUpdate() {
-    let { room } = this.props;
+    let { room, roomId } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
 
     let isSpectator = !(Object.keys(room.players).includes(username));
@@ -30,20 +30,20 @@ class ProgressBar extends Component {
     // if there is no targeted player for this user
     if (!isSpectator && !targetedPlayer) {
       // set the first other player as targeted
-      if (otherUsers.length) fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(otherUsers[0]);
-      else fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(null);
+      if (otherUsers.length) fire.database().ref(`/rooms/${roomId}/players/${nameOfDisrupter}/targetedPlayer`).set(otherUsers[0]);
+      else fire.database().ref(`/rooms/${roomId}/players/${nameOfDisrupter}/targetedPlayer`).set(null);
     } else if (!isSpectator && targetedPlayer && !otherUsers.includes(targetedPlayer)) {
-      fire.database().ref(`/rooms/${room.key}/players/${nameOfDisrupter}/targetedPlayer`).set(null);
+      fire.database().ref(`/rooms/${roomId}/players/${nameOfDisrupter}/targetedPlayer`).set(null);
     }
   }
 
   handleTargetChange(otherUserName) {
-    let { room } = this.props;
+    let { room, roomId } = this.props;
     let username = fire.auth().currentUser.email.split('@')[0];
     let partnerName = getPartnerName(room, username);
 
     // firebase query to update this user's targetedPlayer obejct in firebase
-    fire.database().ref(`/rooms/${room.key}/players/${partnerName || username}/targetedPlayer`).set(otherUserName);
+    fire.database().ref(`/rooms/${roomId}/players/${partnerName || username}/targetedPlayer`).set(otherUserName);
   }
 
   render() {

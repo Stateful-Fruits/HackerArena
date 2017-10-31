@@ -11,14 +11,10 @@ import '../Styles/UserProfile.css';
 
 class UserProfile extends React.Component {
   componentWillMount () {
-    console.log('componentWillMountRunning')
-    console.log('this.props.profile', this.props.profile)
 
     if (!this.props.profile.username) {
       const db = fire.database();
       let profileUsername = this.props.profileUsername;
-
-      console.log('profileusername', profileUsername)
 
       db.ref('users/'+ profileUsername).once('value').then(snapshot => {
         let user = snapshot.val();

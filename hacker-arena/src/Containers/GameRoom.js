@@ -66,8 +66,9 @@ class GameRoom extends React.Component {
         if (playerNames.length - 1 < gameRoom.playerCapacity 
             && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
         // don't allow handle enter to run again 
-        fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
         this.setState({ allowEnter: false });
+        
+        return fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
     } 
   }
@@ -128,7 +129,7 @@ class GameRoom extends React.Component {
       let roomId = this.props.roomId;
       let room = this.props.gameRooms[roomId];
       let problems = this.props.problems;
-      let username = fire.auth().currentUser.email.split('@')[0];
+      let username = this.props.currentUser ? this.props.currentUser.username : null;
       let player = room.players[username];
       let events = player.events;
       if (events !== '' && room.roomStatus === 'playing') {

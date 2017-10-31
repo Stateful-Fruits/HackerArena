@@ -3,7 +3,6 @@ const updateBoardRooms = (gameRooms) => {
     type: 'UPDATE_BOARD_GAMEROOMS',
     payload: gameRooms
   }
-  // console.log('board action ',action)
   return action
 };
 
