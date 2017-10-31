@@ -27,7 +27,10 @@ class NavigatorRoom extends React.Component {
         YOU ARE A NAVIGATOR - TALK!!
         <PairVideo videoroom= {Videoroom}
         roomKey = {roomId}/>
-        <ProgressBar room={ room }/>
+        <ProgressBar 
+          room={room}
+          roomId={roomId}
+        />
         <div id="editorAndTestSuite">
           <SpectatorEditors 
             gameRoom={room}
