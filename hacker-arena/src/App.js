@@ -6,7 +6,7 @@ import updateBoardRooms from './Actions/updateBoardRooms';
 import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
-
+import $ from 'jquery';
 import fire from './Firebase/firebase';
 // import db from './Firebase/db';
 import syncToDb from './Firebase/syncToDb'
@@ -18,6 +18,16 @@ class App extends Component {
   componentWillMount() {
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
     syncToDb(updateGameRooms, updateProblems, updateBoardRooms);
+    $(window).on('scroll', () => {
+      if(window.scrollY > 50){
+        $('.navbarLogo').fadeIn(1000);
+        $('.navbarProfile').fadeIn(1000);
+      } 
+      if(window.scrollY < 50){
+        $('.navbarLogo').fadeOut(1000);
+        $('.navbarProfile').fadeOut(1000);
+      }
+    })
   }
 
   render() {

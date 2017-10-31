@@ -16,6 +16,7 @@ rect {
   padding: 20px;
   border: 0.5px solid rgb(215, 215, 215);
   border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
 }
 
 text.react-calendar-heatmap-month-label {

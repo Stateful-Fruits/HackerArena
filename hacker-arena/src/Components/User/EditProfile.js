@@ -20,7 +20,6 @@ class EditProfile extends React.Component {
 
     this.onFileChange =this.onFileChange.bind(this);    
     this.onFileSubmit =this.onFileSubmit.bind(this);
-    this.handleEditPhoto = this.handleEditPhoto.bind(this);
   }
 
   onChange(e) {
@@ -83,20 +82,12 @@ class EditProfile extends React.Component {
     });
   }
 
-  handleEditPhoto(){
-    if(this.state.showEdit){
-      this.setState({showEdit: false});
-    } else {
-      this.setState({showEdit: true});
-    }
-  }
+  
 
   render() {
     let currentUser = fire.auth().currentUser;
     return (
       <div className="edit-profile">
-        <button onClick={this.handleEditPhoto} > Edit Profile Picture </button>
-        {this.state.showEdit ?
         <div className="dropDownEdits">
         <div className="photo-url-edit">
           Enter custom url to profile photo here:
@@ -118,9 +109,6 @@ class EditProfile extends React.Component {
           </div>
         </div>
         </div>
-        :
-        null
-        }
       </div>
     )
   }

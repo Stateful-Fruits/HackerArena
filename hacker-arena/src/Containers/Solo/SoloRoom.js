@@ -104,6 +104,7 @@ class SoloRoom extends React.Component {
         fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
     }
+    
   }
 
   handleIncomingEvents() {

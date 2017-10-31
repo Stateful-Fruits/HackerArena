@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './Styles/index.css';
 import App from './App';
-import About from './Components/About';
-import Home from './Containers/Home';
+import Home from './Components/Home';
+import Classic from './Containers/Classic';
 import GameRoom from './Containers/GameRoom';
 import UserProfile from './Containers/UserProfile'
 import SignUp from './Containers/SignUp'
@@ -85,67 +85,67 @@ fire.auth().onAuthStateChanged(function(user) {
           {
             (
               <Switch>
-                <Route exact path="/" render={() => (
+                {/* <Route exact path="/" render={() => (
                   fire.auth().currentUser ? (
                     <Home />
                   ) : (
-                    <Redirect to="/Login" />
+                    <Redirect to="/" />
                   )
-                )}/>
+                )}/> */}
                 <Route exact path="/AddProblem" render={() => (
                   fire.auth().currentUser ? (
                     <AddProblem />
                   ) : (
-                    <Redirect to="/Login" />
+                    <Redirect to="/" />
                   )
                 )}/>
-                <Route exact path="/About" render={() => (
+                <Route exact path="/Classic" render={() => (
                   fire.auth().currentUser ? (
-                    <About />
+                    <Classic />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/CreateGameRoom" render={() => (
                   fire.auth().currentUser ? (
                     <CreateGameRoom />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/User/:username" render={() => (
                   fire.auth().currentUser ? (
                     <UserProfile />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/GameRoom/:roomId" render={() => (
                   fire.auth().currentUser ? (
                     <GameRoom />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/Spectate/:roomId" render={() => (
                   fire.auth().currentUser ? (
                     <SpectatorRoom />
                   ) : ( 
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/CodeRunLobby" render={() => (
                   fire.auth().currentUser ? (
                     <CodeRunLobby />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/CodeRun/:roomId" render={() => (
                   fire.auth().currentUser ? (
                     <CodeRunRoom />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
 
@@ -153,7 +153,7 @@ fire.auth().onAuthStateChanged(function(user) {
                   fire.auth().currentUser ? (
                     <PairHome />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
 
@@ -161,7 +161,7 @@ fire.auth().onAuthStateChanged(function(user) {
                   fire.auth().currentUser ? (
                     <PairCreateGameRoom />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
 
@@ -169,7 +169,7 @@ fire.auth().onAuthStateChanged(function(user) {
                   fire.auth().currentUser ? (
                     <PairGameRoom />
                     ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                     )
                   )}/>
 
@@ -177,7 +177,7 @@ fire.auth().onAuthStateChanged(function(user) {
                   fire.auth().currentUser ? (
                     <Solo />
                   ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                   )
                 )}/>
 
@@ -185,19 +185,20 @@ fire.auth().onAuthStateChanged(function(user) {
                   fire.auth().currentUser ? (
                     <SoloRoom />
                     ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                     )
                   )}/>
                 <Route exact path="/CodeRunSpectator/:roomId" render={() => (
                   fire.auth().currentUser ? (
                     <CodeRunSpectator />
                     ) : (
-                    <Redirect to="/Login" />      
+                    <Redirect to="/" />      
                     )
                   )}/>
+                <Route exact path="/" component={Home}/>
                 <Route exact path="/SignUp" component={SignUp}/>
-                <Route exact path="/Login" component={Login}/>
                 <Route exact path="/Solo" component={Solo}/>
+                <Route exact path="/Classic" component={Classic}/>
                 <Route exact path="/Random" component={Random}/>
               </Switch>
             )
