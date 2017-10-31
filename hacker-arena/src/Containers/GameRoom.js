@@ -51,6 +51,7 @@ class GameRoom extends React.Component {
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
         && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
+      console.log('handleLeaveRunning')
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
@@ -96,6 +97,10 @@ class GameRoom extends React.Component {
         } else if (playerNames.length + 1 === Number(gameRoom.playerCapacity) && gameRoom.gameStatus !== 'completed') {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
+
+        // to make writing database rules easier
+        gameRoom[currentUser.uid] = true;
+
         // add you username to the gameroom
         gameRoom.players[username] = {
           disruptions: [''],
@@ -104,8 +109,16 @@ class GameRoom extends React.Component {
           liveInput: '',
           uid: currentUser.uid
         };
-        // and update the database
-        fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
+
+        // start by adding player to db to unlock power to make other changes to room
+
+        fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
+        .then(() => {
+          console.log('added uid, about the add the other stuff to the room');
+          return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
+        })
+        .then(() => console.log('wooo! set gameroom'))
+        .catch(err => console.log(err));
       }
     }
   }
@@ -160,11 +173,11 @@ class GameRoom extends React.Component {
       return (
         <div>
           <div>
-            <ProgressBar room={room}/>
+            <ProgressBar room={room} roomId={roomId}/>
           </div>
           <div id="editorAndTestSuite">
-            <CodeEditor currentRoom={room}/>
-            <TestSuite currentRoom={room}/>
+            <CodeEditor currentRoom={room} roomId={roomId}/>
+            <TestSuite currentRoom={room} roomId={roomId}/>
           </div>
         </div>
       );
@@ -176,7 +189,7 @@ class GameRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
-  username: fire.auth().currentUser.email.split('@')[0],
+  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
   gameRooms: state.gameRooms,
   problems: state.problems,
   currentUser: state.currentUser
