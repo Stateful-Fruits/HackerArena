@@ -80,9 +80,7 @@ class PairCreateGameRoom extends React.Component {
     e.preventDefault();
     
     const slider = document.getElementById('slider'); 
-    console.log('slider', slider)
     let sliderValues = slider.noUiSlider.get();  
-    console.log('sliderValues', sliderValues)  
     
     let problemID = this.state.problemID;
     let minDifficulty = parseInt(sliderValues[0], 10);

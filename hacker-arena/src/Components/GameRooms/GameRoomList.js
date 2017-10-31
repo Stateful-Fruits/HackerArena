@@ -103,7 +103,6 @@ class GameRoomList extends Component {
 
     // games open to everyone
     let handleDeleteRoom = this.handleDeleteRoom
-    console.log('this.handleDeleteRoom in grl', this.handleDeleteRoom)
     let publicGameRooms = rooms
       .filter(eachRoom => (
         !Object.keys(eachRoom).includes('isTrusted') && 

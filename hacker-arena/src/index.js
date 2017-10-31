@@ -67,7 +67,7 @@ fire.auth().onAuthStateChanged(function(user) {
       const { adminStatus, username } = payload;
       
       user.adminStatus = adminStatus;
-      user.username = username;
+      user.username = username || fire.auth().currentUser.email.split('@')[0];
 
       user.updateProfile(user);
       console.log('user is now', fire.auth().currentUser);

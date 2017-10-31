@@ -93,6 +93,10 @@ class SoloRoom extends React.Component {
         } else if (playerNames.length + 2 === Number(gameRoom.playerCapacity) && gameRoom.gameStatus !== 'completed') {
             gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
         }
+
+        // to make writing database rules easier
+        gameRoom[fire.auth().currentUser.uid] = true;    
+
         // add you username to the gameroom
         gameRoom.players[username] = {
           disruptions: [''],
@@ -101,7 +105,13 @@ class SoloRoom extends React.Component {
           liveInput: ''
         };
         // and update the database
-        fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
+        fire.database().ref(`/rooms/${roomId}/${fire.auth().currentUser.uid}`).set(true)
+        .then(() => {
+          console.log('added user, about the add the other stuff to the room');
+          return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
+        })
+        .then(() => console.log('wooo! set gameroom'))
+        .catch(err => console.log(err));
       }
     }
   }
