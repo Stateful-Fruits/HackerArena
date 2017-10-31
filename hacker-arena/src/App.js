@@ -32,11 +32,11 @@ class App extends Component {
             currentUser.email ? (
               <span className="profile-image" onClick={() => navigate('/User/' + username)}>
                 <span className="profile-greeting"> Hi { username }! {' '} </span>
-                <img className="profile-photo"
-                  src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
+                <div className="profile-photo  corner-profile-pic"
+                  style={{backgroundImage: `url(${currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'})`}}
                   alt='profile'
                 >
-                </img>
+                </div>
               </span>
             ) : null
           }
