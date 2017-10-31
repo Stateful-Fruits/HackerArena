@@ -35,7 +35,6 @@ const prepResultsObjectFromWinner = function(username, players, teams = [], prob
 const calculateResultsByPlayer = function(results) {
   let baseObj = {}
   let playersObj = results[0].players
-  console.log('playersObj', playersObj)
   
 
   for (let playerName in playersObj) {
@@ -45,17 +44,12 @@ const calculateResultsByPlayer = function(results) {
     }
   }
   
-  console.log('baseObj', baseObj)
 
   return results.reduce((resultsObj, result) => {
     let winners = result.winners;
 
     for (let roleName in winners) {
       let username = winners[roleName];
-      console.log('username', username)
-      console.log('resultsObj', resultsObj)
-      
-
       resultsObj[username].wins++
     }
 
