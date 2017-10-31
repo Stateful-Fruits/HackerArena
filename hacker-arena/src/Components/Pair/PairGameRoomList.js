@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import PairGameRoomPreview from './PairGameRoomPreview';
 
+import fire from '../../Firebase/firebase';
+
 import './../../Styles/GameRoomList.css';
 
 class GameRoomList extends Component {
@@ -20,6 +22,7 @@ class GameRoomList extends Component {
       }
     }
     this.handleSortChange = this.handleSortChange.bind(this);
+    this.handleDeleteRoom = this.handleDeleteRoom.bind(this);
   }
 
   handleSortChange(e) {
@@ -28,8 +31,16 @@ class GameRoomList extends Component {
     });
   }
 
+  handleDeleteRoom(e) {
+    console.log('handleDeleteRoom running')
+    e.preventDefault();
+    let roomId = e.target.value;
+    console.log('roomId', roomId);    
+    fire.database().ref('rooms/' + roomId).remove();
+  }
+
   render() {
-    let { gameRooms, navigate} = this.props;
+    let { gameRooms, navigate, currentUser } = this.props;
     const roomKeys = Object.keys(gameRooms).filter(key => gameRooms[key].isPairRoom);
     const rooms = roomKeys.map((roomKey) => {
       const roomData = gameRooms[roomKey];
@@ -51,6 +62,9 @@ class GameRoomList extends Component {
               gameRoom={room}
               key={room.key + inx}
               navigate={navigate}
+              roomId={room.key}
+              currentUser={currentUser}
+              handleDeleteRoom={this.handleDeleteRoom}
             />
           ))}
         </ul>

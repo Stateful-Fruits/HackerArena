@@ -7,13 +7,14 @@ import PairGameRoomList from '../../Components/Pair/PairGameRoomList';
 class PairHome extends Component {
 
   render() {
-    let { gameRooms, navigate } = this.props;
+    let { gameRooms, navigate, currentUser } = this.props;
     return (
         <div>    
           <button className="btn createGameButton" onClick={() => this.props.navigate('/Pair/CreateGameRoom')}>CREATE PAIR GAME ROOM</button>
           <PairGameRoomList 
             gameRooms={gameRooms || {}}
             navigate={navigate}
+            currentUser={currentUser}
           />
        </div>
       );
@@ -21,7 +22,8 @@ class PairHome extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  gameRooms: state.gameRooms
+  gameRooms: state.gameRooms,
+  currentUser: state.currentUser
 });
 
 const mapDispatchToProps = (dispatch) => ({
