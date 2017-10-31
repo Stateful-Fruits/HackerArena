@@ -50,13 +50,13 @@ describe ('Board Game navigation should be fine', async () => {
     .wait(1000)
     //.screenshot(folder + 'noGames.png')
     .evaluate(() => {
-      let ele = document.querySelector(`#root > div > div > div > div:nth-child(3) > div > ul > li > h4 > span`);
+      let ele = document.querySelector(`#root > div > div > div > div:nth-child(2)`);
       if (ele) {
         return ele.innerHTML.indexOf('coke') === -1;
       } return true;
     });
     expect(inner).toBe(true);
-  },10000)
+  },20000)
   test('should log out', async () => {
     let url = await page.click(`#root > div > nav > ul > li:nth-child(7)`)
     //.screenshot(folder+'end.png')
