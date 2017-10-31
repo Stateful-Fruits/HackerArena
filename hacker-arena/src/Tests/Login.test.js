@@ -9,5 +9,5 @@ describe('When on the login screen', () => {
   test('user can login and be redirected to homepage', async () => {
     let gameRoomListShows = await page.exists('#GameRoomList').end();
     return expect(gameRoomListShows).toBe(true);
-  }, 10000);
+  }, 20000);
 });
