@@ -103,7 +103,6 @@ class PairCreateGameRoom extends React.Component {
 
   onChange(e) {
     e.preventDefault();
-    console.log('e.target.name', 'e.target.value', e.target.name, e.target.value);
 
     this.setState({[e.target.name] : e.target.value})
   }
