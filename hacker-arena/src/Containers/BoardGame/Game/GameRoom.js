@@ -16,7 +16,8 @@ class GameRoom extends React.Component {
   constructor (props) {
     super (props);
     this.state = {
-      won: false
+      won: false,
+      canEnter: true
     }
     this.handleLeave = this.handleLeave.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
@@ -30,8 +31,10 @@ class GameRoom extends React.Component {
   }
 
   componentWillUpdate () {
-    this.handleEnter();
-    this.handleBoard();
+    if (this.state.canEnter) {
+      this.handleEnter();
+      this.handleBoard();
+    }
   }
   
   componentDidUpdate () {
@@ -77,7 +80,7 @@ class GameRoom extends React.Component {
 
   handleEnter () {
     let {room, user, navigate} = this.props;
-    if (room) {
+    if (room && this.state.canEnter) {
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
@@ -115,8 +118,14 @@ class GameRoom extends React.Component {
       // let boardStart = room.board[0][0];
       // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
       if (room.players.length === 0) {
+        this.setState({
+          canEnter : false
+        });
         fire.database().ref(`BoardRooms/${room.key}`).remove();
       } else if (room.players.length > 0) {
+        this.setState({
+          canEnter : false
+        });
         fire.database().ref('BoardRooms/' + room.key).set(room);
       }
     }

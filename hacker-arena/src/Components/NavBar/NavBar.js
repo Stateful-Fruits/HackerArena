@@ -30,7 +30,7 @@ class NavBar extends Component {
             :
             null
           }
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/CodeRunLobby'); }}>
+          <li className="nav-item rightNav navbar-brand codeRunLobby" onClick={ () => { navigate('/CodeRunLobby'); }}>
             Code Run </li>
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
           Pair Match </li>
