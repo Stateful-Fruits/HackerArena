@@ -88,13 +88,7 @@ class EditProfile extends React.Component {
     });
   }
 
-  handleEditPhoto(){
-    if(this.state.showEdit){
-      this.setState({showEdit: false});
-    } else {
-      this.setState({showEdit: true});
-    }
-  }
+  
 
   handleUpgradeToAdmin(e) {
     e.preventDefault();
@@ -110,8 +104,6 @@ class EditProfile extends React.Component {
     let currentUser = fire.auth().currentUser;
     return (
       <div className="edit-profile">
-        <button onClick={this.handleEditPhoto} > Edit Profile Picture </button>
-        {this.state.showEdit ?
         <div className="dropDownEdits">
           <div className="photo-url-edit">
             Enter custom url to profile photo here:
@@ -145,9 +137,6 @@ class EditProfile extends React.Component {
             </form>
           </div>
         </div>
-        :
-        null
-        }
       </div>
     )
   }

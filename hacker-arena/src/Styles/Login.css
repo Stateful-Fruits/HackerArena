@@ -50,6 +50,7 @@ content: "/f023";
     border: none;
     background-color: #2ECC71;
     border-bottom: 4px solid #27AE60;
+    margin-bottom: 0px !important;
 }
 
 .h3 {
@@ -94,6 +95,8 @@ content: "/f023";
     background-color: rgb(187, 58, 58);
     border-radius: 15px !important;
     width: 200px !important; 
+
+    border-bottom: 4px solid rgb(180, 41, 41) !important;
 }
 .signUpButtons {
     display: flex;
@@ -104,4 +107,12 @@ content: "/f023";
 
 .signUpButtons > * {
     margin: 10px;
+}
+
+.errorMsg {
+    position: absolute;
+    top: 195px;
+    left: 65px;
+    color: rgb(255, 231, 231);
+    stroke: black .3px solid;
 }

@@ -4,7 +4,7 @@ import { push } from 'react-router-redux';
 
 import GameRoomList from '../Components/GameRooms/GameRoomList';
 
-class Home extends Component {
+class Classic extends Component {
 
   render() {
     let { gameRooms, navigate, currentUser } = this.props;
@@ -30,4 +30,4 @@ const mapDispatchToProps = (dispatch) => ({
   navigate: (route) => dispatch(push(route)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Classic);

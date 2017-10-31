@@ -140,7 +140,7 @@ class Solo extends React.Component {
 
     return (
       <div>
-        <form class="createGameForm">
+        <form className="createGameForm">
 
         <h2 className="createGameHeader"> Create Solo Game </h2>
         <h5>Select a problem</h5>

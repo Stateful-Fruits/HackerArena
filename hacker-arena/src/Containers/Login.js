@@ -69,7 +69,7 @@ constructor(props) {
     return (
       <div id='Login'>
         <h1>{this.state.errmsg}</h1>
-        <div className="container">
+        <div className="container signUpForm">
           <img src='../profile.jpg' alt='Waiting' />
           <button onClick={() => navigate('/SignUp') }> SignUp </button>
           <button onClick={this.signInWithGoogle}>Log in with google</button>
@@ -111,6 +111,17 @@ constructor(props) {
               Start Now
             </button>
           </div>
+          <div className="signUpButtons">
+              <button className="btn loginButton" onClick={() => navigate('/Login') }> Login </button>
+              <button className="btn googleLogin" onClick={this.signInWithGoogle}>
+              <img className="googleLogo" src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2000px-Google_%22G%22_Logo.svg.png'/>
+              Log in with google
+              </button>
+              <button className="btn facebookLogin" onClick={this.signInWithFacebook}>
+              <img className="fbLogo" src="http://www.classiclitho.com/wp-content/uploads/2015/05/facebook-logo-png-transparent-background-1024x1024.png"/>
+              Log in with facebook
+              </button> 
+            </div>
           </form> 
         </div>
       </div>

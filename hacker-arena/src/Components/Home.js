@@ -3,8 +3,8 @@ import video from "video.js"
 import Signup from '../Containers/SignUp';
 import '../Styles/About.css';
 import twoplayers from '../two player.png'
-const About = (props) => {  
-  // <h2>This is a game for coders to compete against each other!</h2>
+
+const Home = (props) => { 
   return (
   <div>
     <div className="hero">
@@ -12,8 +12,23 @@ const About = (props) => {
     </div>
     <div>
     <div className="features">
-       SOME FEATURES AND INSTRUCTIONS
-      </div>
+      {/* Connect and Code.
+      NETWORK LOGO HERE
+      Hacker Arena is a platform for programmers 
+      MODE NAME
+      MODE LOGO
+      MODE DESCRIPTION
+        players? : (1 , 2-4, 2-6);
+        instructions:
+      CLASSIC 
+      PAIR MATCH
+      CODE RUN
+
+      HONE YOUR SKILLS
+      SOLO
+      Players: 1
+      A mode for players to practice alone,  */}
+    </div>
     {<video style={{position:'relative'}} className ="video" autoPlay muted loop>
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> }
@@ -95,4 +110,4 @@ const About = (props) => {
   </div>
 )};
 
-export default About;
+export default Home;

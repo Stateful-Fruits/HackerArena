@@ -5,3 +5,32 @@
   height: 100vh;
   border-left: 1px solid rgb(126, 126, 126);
 }
+
+.historyHeader {
+  top: 0;
+  z-index: 998;
+  background-color: rgb(250, 250, 250);
+  position: sticky;
+}
+
+
+
+.badge-primary {
+  background-color: rgb(88, 102, 133) !important
+}
+
+.winnerLink {
+  color: green !important;
+} 
+
+.winnerLink:hover {
+  color: rgb(49, 77, 49) !important;
+} 
+
+.loserLink {
+  color: red !important;
+}
+
+.loserLink:hover {
+  color: rgb(85, 41, 41) !important;
+}

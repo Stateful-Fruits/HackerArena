@@ -189,8 +189,6 @@ class Stats extends React.Component {
     function handleMouseOver(d){
       let totalSize = d3.selectAll('path').node().__data__.value;
       let percentage = ((d.value / totalSize) * 100).toFixed(2) + '%';
-      console.log(d)
-      console.log('afsdfsdfd', totalSize)
       d3.selectAll("path")
       .style("opacity", 0.3);
       let sequenceArray = getAncestors(d)
@@ -199,7 +197,8 @@ class Stats extends React.Component {
       .filter(function(node) {
                 return (sequenceArray.indexOf(node) >= 0);
               })
-      .style("opacity", 1);
+      .style("opacity", 1)
+      .style("filter", "dropShadow('10px 10p 10px black')")
       let tagsString = sequenceArray.map((item) => {
         return (item.data.name);
       })
@@ -211,7 +210,6 @@ class Stats extends React.Component {
       })
     }
     function handleMouseLeave(d){
-      console.log("i left")
       d3.selectAll("path")
       .style("opacity", 1);
       $('.percentage').find('p').remove();
