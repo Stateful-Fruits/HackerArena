@@ -15,6 +15,7 @@ class SoloEditor extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
     this.liveInputs = this.liveInputs.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
   
   componentDidMount() {
@@ -65,7 +66,7 @@ class SoloEditor extends React.Component {
     let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
     let newCode = consoleLogChange + code;
     try { // eslint-disable-next-line
-      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
+      !eval(newCode).includes('let results = ""; // eslint-disable-next-line') ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
     }  catch(e) {
       $('#aceConsole').append(`<li>undefined</li>`);
     }
@@ -75,6 +76,10 @@ class SoloEditor extends React.Component {
     $('#aceConsole').empty(); // Clears the console
   }
   
+  handleReset() {
+    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+  }
+
   render() {
     return (
       <div id="editorSideSolo">
@@ -83,10 +88,11 @@ class SoloEditor extends React.Component {
             mode="javascript"
             theme="monokai"
             onChange={this.liveInputs}
-            style={{ height: '400px', width: '50vw' }}
+            style={{ height: '400px', width: '50vw', fontSize: '13px' }}
             ref={instance => { this.ace = instance; }} // Let's put things into scope
           />
         <button className="btn submitButton" onClick={this.handleSubmit}> SUBMIT </button> 
+        <button className="btn resetButton" onClick={this.handleReset}> RESET </button>
         <button className="btn consoleHeader" color="secondary" size="lg" >
           <span>Console</span>
           <span className="clearConsole" onClick={this.handleClear}>X</span>

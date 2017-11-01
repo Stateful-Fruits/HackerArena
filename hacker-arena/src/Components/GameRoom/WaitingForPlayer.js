@@ -61,7 +61,9 @@ class WaitingForPlayer extends Component {
         <ul style={{ margin: '10%', marginBottom: '5%', marginTop: '5%'}}>
           { this.props.room ? playerSpans : null}
         </ul>
-        <i className="fa fa-circle-o-notch fa-spin" style={{fontSize: "300px", color: 'grey'}}></i>
+        <h3> Waiting... </h3>
+        <img src="https://i.imgur.com/joQlpTb.gif" style={{marginTop: '-3%'}} />
+        {/* <i className="fa fa-circle-o-notch fa-spin" style={{fontSize: "300px", color: 'grey'}}></i> */}
       </div>
     );
   }

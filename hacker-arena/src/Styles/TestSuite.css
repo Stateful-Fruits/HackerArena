@@ -1,5 +1,5 @@
 #testSuite {
-  padding: 20px;
+  padding: 35px;
   margin: 5px;
   float: right;
   width: 49vw;
@@ -20,7 +20,9 @@
   padding: 5px 5px;
   line-height: 150%;
 }
-
+.testDescriptions {
+  font-size: 16px;
+}
 .testTitle {
   border-top: 1px solid black;
   padding-top: 5px;

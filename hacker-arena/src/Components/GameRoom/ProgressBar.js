@@ -102,7 +102,7 @@ class ProgressBar extends Component {
               key={otherUserName+i}
               onClick={isSpectator ? null : () => this.handleTargetChange(otherUserName)}
             >
-              <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '20px solid red'} : {}}>
+              <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '1px solid rgba(255, 0, 0, 0.5)', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', borderRadius: '15px', marginRight: '5%'} : {}}>
                 <span className="opponentLabels">Player: </span>
                 <span className="opponent">{otherUserName}</span>
                 <div className="thebars">

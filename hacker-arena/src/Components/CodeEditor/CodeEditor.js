@@ -109,7 +109,7 @@ class CodeEditor extends React.Component {
     let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
     let newCode = consoleLogChange + code;
     try { // eslint-disable-next-line
-      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
+      !eval(newCode).includes('let results = ""; // eslint-disable-next-line') ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
     }  catch(e) {
       $('#aceConsole').append(`<li>undefined</li>`);
     }
@@ -288,7 +288,7 @@ class CodeEditor extends React.Component {
             mode="javascript"
             theme="monokai"
             onChange={this.liveInputs}
-            style={{ height: '400px', width: '50vw' }}
+            style={{ height: '400px', width: '50vw', fontSize: '13px' }}
             ref={instance => { this.ace = instance; }} // Let's put things into scope
           />
         <button className="btn submitButton" onClick={this.handleSubmit}> SUBMIT </button> 
