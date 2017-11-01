@@ -78,8 +78,9 @@ class PairGameRoom extends React.Component {
     if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
-      let { gameRooms, roomId, username } = this.props;
+        && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
+      let { gameRooms, roomId, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
       // when you're the last player inside, leaving deletes the gameroom
@@ -118,7 +119,8 @@ class PairGameRoom extends React.Component {
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       console.log('handleenter allowed')      
-      let { gameRooms, roomId, username, navigate, currentUser } = this.props;
+      let { gameRooms, roomId, navigate, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
 
       let recentRoom = {teams: room.recentTeams}
@@ -278,7 +280,7 @@ class PairGameRoom extends React.Component {
         || !Object.keys(this.props.gameRooms).length 
         || !this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
+        || !this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) return (<GameRoomLoading />);
 
     let { gameRooms, roomId, currentUser } = this.props;
     let room = gameRooms[roomId];
@@ -290,7 +292,7 @@ class PairGameRoom extends React.Component {
     let champions = mostTotalWins ? mostTotalWins.winners : null;
     let isPairRoom = room.isPairRoom;
 
-    let username = this.props.username;
+    let username = currentUser.username;
 
     let role = getRoleFromUsername(room, username);
     let partnerName = getPartnerName(room, username);
