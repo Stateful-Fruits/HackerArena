@@ -59,6 +59,7 @@ const store = createStore(
 );
 
 fire.auth().onAuthStateChanged(function(user) {
+  console.log('onAuthStateChangedRunning');
 
   if (user) {
     checkIfUserIsAdminAsync(user.uid)

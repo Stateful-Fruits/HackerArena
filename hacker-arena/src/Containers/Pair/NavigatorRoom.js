@@ -30,6 +30,7 @@ class NavigatorRoom extends React.Component {
         <ProgressBar 
           room={room}
           roomId={roomId}
+          currentUser={currentUser}
         />
         <div id="editorAndTestSuite">
           <SpectatorEditors 

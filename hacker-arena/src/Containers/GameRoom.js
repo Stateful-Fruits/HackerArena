@@ -174,7 +174,7 @@ class GameRoom extends React.Component {
       return (
         <div>
           <div>
-            <ProgressBar room={room} roomId={roomId}/>
+            <ProgressBar room={room} roomId={roomId} currentUser={currentUser}/>
           </div>
           <div id="editorAndTestSuite">
             <CodeEditor currentRoom={room} roomId={roomId} currentUser={currentUser}/>
@@ -190,7 +190,6 @@ class GameRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
-  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
   gameRooms: state.gameRooms,
   problems: state.problems,
   currentUser: state.currentUser

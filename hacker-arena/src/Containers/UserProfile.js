@@ -39,9 +39,9 @@ class UserProfile extends React.Component {
     }
   }
   render () {
-    let profile = this.props.profile;
-    let profileUsername = this.props.profileUsername;
-    let clientUsername = fire.auth().currentUser.email.split('@')[0];
+    let { profile, currentUser={}, profileUsername } = this.props.profile;
+    console.log('currentUser in profile in render', currentUser);    
+    let clientUsername = currentUser.username;
     let wins = 0;
     let losses = 0;
 
@@ -53,7 +53,6 @@ class UserProfile extends React.Component {
         return (Object.values(game[0].winners).indexOf(this.props.profile.username) === -1);
       }).length;
     }
-    let currentUser = fire.auth().currentUser;
     return (
       <div style={{display: 'flex'}}>
         <div className="leftSideProfile">
@@ -71,14 +70,14 @@ class UserProfile extends React.Component {
                 <div><strong>Username</strong>: {profile.username}</div><br/>
                 <div><strong>Wins</strong>: {wins}</div>
                 <div><strong>Losses</strong>: {losses}</div>
-                <div><strong>Contact</strong>: <div>{fire.auth().currentUser.email}</div></div>
+                <div><strong>Contact</strong>: <div>{profile.email}</div></div>
                 <button className="btn editPhotoBtn" onClick={this.handleEditPhoto} > Edit Profile Picture </button>
               </div>
             </div>
 
         {this.state.showEdit ?
               ((profileUsername === clientUsername) ?
-              <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/>
+              <EditProfile navigate={this.props.navigate} pathname={this.props.pathname} currentUser={currentUser}/>
               : null)
             :
             <div> <strong>Description</strong>: Hey its me Marky Z, I enjoy creating social media websites and long walks on the beach. </div>
@@ -103,9 +102,10 @@ const mapStateToProps = (state) => {
   let profile = state.profile;
   let profileUsername = state.router.location.pathname.split('/')[2];
   let pathname = state.router.location.pathname;
-  
-  
-  return { profile, profileUsername, pathname};
+  let currentUser = state.currentUser;
+  console.log('currentUser in profile', currentUser);
+
+  return { profile, profileUsername, pathname, currentUser };
 };
 
 const mapDispatcherToProps = (dispatch) => {

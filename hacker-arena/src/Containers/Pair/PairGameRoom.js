@@ -355,7 +355,6 @@ class PairGameRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[3],
-  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
   gameRooms: state.gameRooms,
   problems: state.problems,
   pendingEvents: state.pendingEvents,
