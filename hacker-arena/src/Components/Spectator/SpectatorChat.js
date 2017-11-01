@@ -23,9 +23,9 @@ class SpectatorChat extends Component {
     // prevent empty messages
     if (!this.state.msg.length) return;
     let msg = this.state.msg;
-    let room = this.props.gameRoom;
-    let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
-    this.props.sendSpectatorMessage(room, username, msg);
+    let { gameRoom, currentUser } = this.props;
+    let username = currentUser.username || 'UnknownUser';
+    this.props.sendSpectatorMessage(gameRoom, username, msg);
     this.setState({ msg: '' });
   }
 

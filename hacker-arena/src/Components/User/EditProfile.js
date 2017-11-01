@@ -12,7 +12,7 @@ class EditProfile extends React.Component {
     super(props);
 
     this.state = {
-      photoURL: fire.auth().currentUser.photoURL,
+      photoURL: props.currentUser.photoURL,
       photoFiles: [],
       uploadProgress: 0,
       showEdit: false,
@@ -81,7 +81,7 @@ class EditProfile extends React.Component {
 
   handleUpgradeToAdmin(e) {
     e.preventDefault();
-    let currentUser = fire.auth().currentUser;
+    let currentUser = this.props.currentUser;
     let uid = currentUser.uid;
     let password = this.state.password;
     
@@ -90,7 +90,6 @@ class EditProfile extends React.Component {
   }
 
   render() {
-    let currentUser = fire.auth().currentUser;
     return (
       <div className="edit-profile">
         <div className="dropDownEdits">

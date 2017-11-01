@@ -52,7 +52,7 @@ class GameRoomList extends Component {
     let { gameRooms, navigate, currentUser } = this.props;
     console.log('gameRooms in list', gameRooms);
     const roomKeys = Object.keys(gameRooms).filter(key => !gameRooms[key].isPairRoom);
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let username = currentUser.username;
     const rooms = roomKeys.map((roomKey) => {
       const roomData = gameRooms[roomKey];
       roomData.key = roomKey;

@@ -4,7 +4,8 @@ import '../Styles/TestSuite.css';
 
 /* Check if user is challenger or creator*/
 const TestSuite = props => {
-  let username = fire.auth().currentUser.email.split('@')[0];
+  let currentUser = props.currentUser;
+  let username = currentUser.username;
   let usernameWhoseTestsShouldBeRendered = props.partnerName || username;
   let checkMark = <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
                     <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>

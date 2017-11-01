@@ -18,7 +18,7 @@ class DriverRoom extends React.Component {
 
   }
   render() {
-    let { room, roomId, username, partnerName, addPendingEvent, removePendingEvent } = this.props
+    let { room, roomId, username, partnerName, addPendingEvent, removePendingEvent, currentUser } = this.props
     let Videoroom = getTeamIndex(room, username)
     return (
       <div>
@@ -26,6 +26,7 @@ class DriverRoom extends React.Component {
         <PairVideo 
           videoroom={Videoroom}
           roomKey={roomId}
+          currentUser={currentUser}
         />
         <div className="driver-container">
           <div id="editorAndTestSuite">
@@ -34,6 +35,7 @@ class DriverRoom extends React.Component {
               roomId={roomId}
               addPendingEvent={addPendingEvent}
               removePendingEvent={removePendingEvent}
+              currentUser={currentUser}
             />
           </div>
         

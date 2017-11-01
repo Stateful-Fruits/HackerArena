@@ -24,7 +24,7 @@ class GameRoomPreview extends Component {
   render() {
     let { gameRoom, navigate, currentUser, roomId, handleDeleteRoom } = this.props;
 
-    let username = fire.auth().currentUser.email.split('@')[0];   
+    let username = currentUser.username;
 
     let maxPairs = gameRoom.maxPairs;
     let spectators = gameRoom.navigate;

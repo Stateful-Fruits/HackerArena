@@ -24,11 +24,13 @@ class BoardRoomSpectator extends Component {
       && Object.keys(this.props.boardRooms).length 
       && !this.props.boardRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     let boardRoom = this.props.boardRooms[this.props.roomId];
+    let currentUser = this.props.currentUser;
     return boardRoom ? (
       <div>
         <Board 
           board={boardRoom.board}
           whirlpools={boardRoom.whirlpools}
+          currentUser={currentUser}
         />
         <CodeRunSpectatorPlayerInfo 
           boardRoom={boardRoom}
@@ -48,7 +50,7 @@ class BoardRoomSpectator extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: fire.auth().currentUser.email.split('@')[0],
+  currentUser: state.currentUser,
   roomId: state.router.location.pathname.split('/')[2],
   boardRooms: state.boardRooms
 });

@@ -20,14 +20,14 @@ class SpectatorRoom extends Component {
   }
 
   enterGameRoom(room) {
-    let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
+    let username = this.props.currentUser.username || 'UnknownUser';
     let gameRoom = Object.assign({}, room);
     gameRoom.spectators = [...(gameRoom.spectators || []), username];
     fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
   }
 
   leaveGameRoom(room) {
-    let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
+    let username = this.props.currentUser.username || 'UnknownUser';
     let gameRoom = Object.assign({}, room);
     if (gameRoom.spectators) {
       // each tab a user opens when logged in will add their name to the list of spectators, 
@@ -103,14 +103,17 @@ class SpectatorRoom extends Component {
       && Object.keys(this.props.gameRooms).length 
       && !this.props.gameRooms[this.props.gameRoomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    let currentUser = this.props.currentUser;
+    
     return gameRoom ? (
       <div>
         <SpectatorGameDescription gameRoom={gameRoom} />
-        <ProgressBar room={gameRoom}/>
+        <ProgressBar room={gameRoom} currentUser={currentUser}/>
         <SpectatorEditors gameRoom={gameRoom} />
         <SpectatorChat
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}
+          currentUser={currentUser}
         />
       </div>
     ) : (
@@ -125,6 +128,7 @@ class SpectatorRoom extends Component {
 const mapStateToProps = (state) => ({
   gameRooms: state.gameRooms,
   gameRoomId: state.router.location.pathname.split('/')[2],
+  currentUser: state.currentUser
 });
 
 export default connect(mapStateToProps, null)(SpectatorRoom);

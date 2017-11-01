@@ -24,8 +24,8 @@ class CodeEditor extends React.Component {
   }
   
   componentDidMount() {
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let userInfo = room.playerInfo[username];
     let userPos = userInfo.position;
     let problem = room.board[userPos[0]][userPos[1]][1];
@@ -59,8 +59,8 @@ class CodeEditor extends React.Component {
 
   componentWillUpdate(){
     // Alert users if someone has won the game
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];   
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let disruptions = room.playerInfo[username].disruptions;
     // Check for disruptions sent to the user
 
@@ -74,8 +74,8 @@ class CodeEditor extends React.Component {
 
   liveInputs(){
     // Sends live inputs of user to database
-    let {room} = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let liveInput = this.ace.editor.getValue();
     //fire.database().ref(`rooms/${this.props.room.key}/players/${username}/liveInput`).set(liveInput);
     fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).set(liveInput);
@@ -142,8 +142,8 @@ class CodeEditor extends React.Component {
 
   handleSubmit(){
     let code = this.ace.editor.getValue();
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     //TEST SUITE LOGIC
     //let userInfo = room.playerInfo[username];
     //let userPos = userInfo.position;
@@ -189,8 +189,9 @@ class CodeEditor extends React.Component {
   }
   
   render() {
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let { room } = this.props;
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
+
     return (
       <div id="editorSide">
           <DisruptionsBar 
