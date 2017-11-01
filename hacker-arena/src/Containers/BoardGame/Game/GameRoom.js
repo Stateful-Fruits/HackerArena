@@ -43,9 +43,12 @@ class GameRoom extends React.Component {
         ele.classList.remove('validMove');
         console.log('removed valid from',ele.id,ele);
       });
-      // [].forEach.call(old, (ele) => {
-      //   ele.classList.remove('validMove');
-      // });
+      [].slice.call(document.getElementsByClassName('goblin')).forEach(ele => {
+        ele.classList.remove('goblin');
+      });
+      let gobPos = room.Goblin.position;
+      let gobString = gobPos[0] + ' ' + gobPos[1];
+      document.getElementById(gobString).classList.add('goblin');
       let position = room.playerInfo[user].position;
       let x = position[0];
       let y = position[1];

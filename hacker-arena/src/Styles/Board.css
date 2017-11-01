@@ -37,6 +37,10 @@
   height: 100px;
 }
 
+.goblin {
+  background: url('/assets/Goblin.png')
+}
+
 .lastblock {
   border-width: 1.5px 1.5px 0px 1.5px;
 }
@@ -78,6 +82,7 @@
 .validMove:hover {
   background: rgb(132, 190, 132);
 }
+
 /* .analog {
   border-radius: 10px;
 	width: 20px;

@@ -122,6 +122,21 @@ class CodeEditor extends React.Component {
     console.log(powers, random);
     userInfo.attack = powers[random];
     userInfo.credits = Math.ceil(5*this.state.problem.difficulty + userInfo.credits);
+    const moveGoblin = (room, Goblin) => {
+      let pos = Goblin.position.slice();
+      // let x = pos[0];
+      // let y = pos[1];
+      let random = Math.floor(Math.random() * 2);
+      let random1 = Math.floor(Math.random() * 2);
+      if (random1 === 0) {
+        random1 = -1;
+      }
+      pos[random] += random1;
+      if (room.board[pos[0]] && room.board[pos[0]][pos[1]] && (pos[0] + pos[1] !== 0)) {
+        Goblin.position = pos;
+      } 
+    }
+    moveGoblin(room, room.Goblin);
     fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 

@@ -67,6 +67,9 @@ class CreateRoom extends React.Component {
       problems: problems,
       spectators: 0,
       playerTurn: user,
+      Goblin: {
+        position: [3,3]
+      },
       board: [
         [[[0,user]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
         [[[0]],[[0]],[[0]],[[0]],[[0]],[[0]],[[0]]],
