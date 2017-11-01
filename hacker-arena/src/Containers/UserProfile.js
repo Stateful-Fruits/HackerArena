@@ -18,8 +18,8 @@ class UserProfile extends React.Component {
 
     this.handleEditPhoto = this.handleEditPhoto.bind(this);
   }
-  componentWillMount () {
 
+  componentWillMount () {
     if (!this.props.profile.username) {
       const db = fire.database();
       let profileUsername = this.props.profileUsername;
@@ -39,7 +39,9 @@ class UserProfile extends React.Component {
     }
   }
   render () {
-    let { profile, currentUser={}, profileUsername } = this.props.profile;
+    let { profile, currentUser, profileUsername } = this.props.profile;
+    console.log('profile', profile)
+    currentUser = currentUser || {username:'UnknownUser'}
     console.log('currentUser in profile in render', currentUser);    
     let clientUsername = currentUser.username;
     let wins = 0;
