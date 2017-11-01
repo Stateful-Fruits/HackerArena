@@ -16,12 +16,12 @@ class MovePlayer extends React.Component {
   }
   render () {
     return <div>
-      <button className='up but' value='Up' onClick={this.handleMove}>Up</button>
+      <button className='up but moveButton' value='Up' onClick={this.handleMove}>Up</button>
       <div>
-        <button className='inline but' value='Left' onClick={this.handleMove}>Left</button>
-        <button className='inline but' value='Right' onClick={this.handleMove}>Right</button>
+        <button className='inline but moveButton' value='Left' onClick={this.handleMove}>Left</button>
+        <button className='inline but moveButton' value='Right' onClick={this.handleMove}>Right</button>
       </div>
-      <button className='down but' value='Down' onClick={this.handleMove}>Down</button>
+      <button className='down but moveButton' value='Down' onClick={this.handleMove}>Down</button>
     </div>
   }
 }
