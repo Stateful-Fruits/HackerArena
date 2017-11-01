@@ -27,7 +27,6 @@ class SoloRoom extends React.Component {
   componentDidMount () {
     window.addEventListener('beforeunload', this.handleLeave);
     this.handleEnter();
-    console.log("LOGGG", this.props.gameRooms[this.props.roomId])
   }
 
   componentWillUpdate() {
@@ -70,7 +69,6 @@ class SoloRoom extends React.Component {
   }
 
   handleEnter() {
-    console.log('handleEnter running')
     // handles entering the gameroom: should only be called when gameRooms
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join

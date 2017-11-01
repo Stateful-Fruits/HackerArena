@@ -89,13 +89,11 @@ class CodeEditor extends React.Component {
     // Sends disruptions to oppposite player
     let disruptionFunc = e.target.id.split(" ")[0];
     let disruptionCost = e.target.id.split(" ")[1];
-    console.log('dissssssrupt', disruptionFunc, disruptionCost, disruptions);
     // make sure the user has enough credits to send this disruption
     if (playerInfo.credits >= disruptionCost) {
       room.players.forEach((playerName) => {
         if (playerName !== username) {
           let currentDisruptions = disruptions;
-          console.log('playername', playerName);
           fire.database().ref(`BoardRooms/${room.key}/playerInfo/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
           //fire.database().ref(`rooms/${room.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         }
@@ -120,7 +118,6 @@ class CodeEditor extends React.Component {
     room.playerInfo[user].testStatus = [];
     let powers = Object.keys(Powers);
     let random = Math.floor(Math.random() * powers.length);
-    console.log(powers, random);
     userInfo.attack = powers[random];
     userInfo.credits = Math.ceil(5*this.state.problem.difficulty + userInfo.credits);
     const moveGoblin = (room, Goblin) => {

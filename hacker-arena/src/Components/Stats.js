@@ -19,11 +19,9 @@ class Stats extends React.Component {
       wins = Object.values(this.props.profile.history).filter(game => {
         return (Object.values(game[0].winners).indexOf(this.props.profile.username) > -1);
       })
-      console.log("WINS" ,wins)
-      console.log("WINS", wins);
+
       // Tags of games where user is WINNER
       winsByTags = wins.map(item => {
-        console.log("the problem", item[0]);
         return [item[0].problem.tags.replace(/ /g, "").split(',')];
       })
       
@@ -31,7 +29,6 @@ class Stats extends React.Component {
       losses = Object.values(this.props.profile.history).filter(game => {
         return (Object.values(game[0].winners).indexOf(this.props.profile.username) === -1);
       })
-      console.log('LOSSES', losses);
       // Tags of games where user is LOSER
       lossesByTags = losses.map(item => {
         return [item[0].problem.tags.replace(/ /g, "").split(',')];
@@ -116,7 +113,6 @@ class Stats extends React.Component {
     }
     if(this.props.profile){
       data.children.push(this.lossData,this.winData)
-      console.log(data);
     }
     // Creating sunburst graph
     var width = 300;

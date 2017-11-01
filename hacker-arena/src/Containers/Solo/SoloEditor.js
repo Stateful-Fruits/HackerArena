@@ -50,7 +50,6 @@ class SoloEditor extends React.Component {
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
       });
-      console.log("hey look at me", testStatus, this.props.currentRoom)
       fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus);
     } else {
       window.swal('Oops...', 'Something went wrong!', 'error');

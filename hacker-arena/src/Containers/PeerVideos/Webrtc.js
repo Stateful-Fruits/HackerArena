@@ -30,7 +30,6 @@ class Webrtc extends Component {
       });
 
     webrtc.on('videoAdded', function (video, peer) {
-      console.log('video added', peer);
       var remotes = document.getElementById('remoteVideo');
         if (remotes) {
           var container = document.createElement('div');
@@ -46,7 +45,6 @@ class Webrtc extends Component {
     });
 
     webrtc.on('videoRemoved', function(video,peer) {
-      console.log('video removed', peer);
       // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
       Element.prototype.getElementById = function(id) {
         return document.getElementById(id);
@@ -62,13 +60,9 @@ class Webrtc extends Component {
       });
       webrtc.joinRoom(`spectator/${room.key}`);
     this.webrtc = webrtc;
-    console.log('video object', this.refs.remote);
-    console.log('hello',room);    
-    console.log(this.webrtc)
     }
 
 componentWillReceiveProps(nextProps) {
-console.log('video object', this.refs.remote);
 }
 
 componentWillUnmount(){
@@ -97,7 +91,6 @@ pause(){
       
     this.setState({paused:true});
   }
-  console.log(this.webrtc);
 }
 
 render() {

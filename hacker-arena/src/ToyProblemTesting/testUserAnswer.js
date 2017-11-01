@@ -2,7 +2,6 @@ class Test {
   
     static assertEquals(actual, expected) {
       const passed = actual === expected;
-      console.log('actual', actual);
       return {
         actual: actual,
         expected: expected,
@@ -14,7 +13,6 @@ class Test {
 
   
 const runTestsOnUserAnswer = function(userInputString, tests, userFn) {
-  console.log('running tests ',tests, userFn);
   const runOneTest = function(testStr) {
     const testData = parseTestStr(testStr);
     
@@ -82,6 +80,6 @@ var sampleTests = [
   `Test.assertEquals(add(5,6), 11)`,
   `Test.assertEquals(add.add(5, 6), 'sorry!')`
 ]
-console.log(runTestsOnUserAnswer(sampleUserInput, sampleTests))
+// console.log(runTestsOnUserAnswer(sampleUserInput, sampleTests))
 
 //console.log(parseTestStr(sampleTests[0]))

@@ -42,7 +42,6 @@ class GameRoomList extends Component {
   }
 
   handleDeleteRoom(e) {
-    console.log('handleDeleteRoom running')
     e.preventDefault();
     let roomId = e.target.value;
     fire.database().ref('rooms/' + roomId).remove();
@@ -50,7 +49,6 @@ class GameRoomList extends Component {
 
   render() {
     let { gameRooms, navigate, currentUser } = this.props;
-    console.log('gameRooms in list', gameRooms);
     const roomKeys = Object.keys(gameRooms).filter(key => !gameRooms[key].isPairRoom);
     let username = currentUser.username;
     const rooms = roomKeys.map((roomKey) => {
@@ -77,7 +75,6 @@ class GameRoomList extends Component {
         :
         null
       })
-      console.log(rrr)
       return rrr;
     }
     // games that you were invited to

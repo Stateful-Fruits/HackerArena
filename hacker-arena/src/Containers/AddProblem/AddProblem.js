@@ -50,9 +50,7 @@ class AddProblem extends React.Component {
     if (truth) {
       let added = fire.database().ref('problems').push(problem).key;
       this.props.resetAddProblem();
-      console.log('id of problem that was added ',added);
     } else {
-      console.log('has empty fields', problem);
     }
   }
 
