@@ -31,9 +31,9 @@ const HistoryEntry = (props) => {
       })}
         <h3 className="card-title">{props.game[0].problem.title}</h3>
         <p className="card-text">{props.game[0].problem.description}</p>
-        <p className="card-text"><strong>Tags</strong>: {tagsArr.map(items => {
-    return <span className="badge badge-primary">{items}</span>
-  }) }</p>
+        <p className="card-text"><strong>Tags</strong>: {tagsArr.map((items,i) => {
+          return <span className="badge badge-primary" key={i}>{items}</span>
+        }) }</p>
         <p className="card-text"><strong>Duration</strong> : {Math.floor(props.game[0].timeTaken)} seconds</p>
         <p className="card-text"><strong>Date</strong> : {(new Date(props.game[0].timeStamp)+"").slice(0,15)}</p>
       </div>
@@ -41,9 +41,3 @@ const HistoryEntry = (props) => {
 )};
 
 export default HistoryEntry;
-
-// {players.map(items =>{
-//   return (
-//     <a href='' className="userNameLinks" onClick={() => {navigate(`/User/${items}`) }}>{items} </a>
-//   )
-// })}

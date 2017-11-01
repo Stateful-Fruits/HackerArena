@@ -24,7 +24,6 @@ class EditProfile extends React.Component {
 
     this.onFileChange =this.onFileChange.bind(this);    
     this.onFileSubmit =this.onFileSubmit.bind(this);
-    this.handleEditPhoto = this.handleEditPhoto.bind(this);
     this.handleUpgradeToAdmin = this.handleUpgradeToAdmin.bind(this);
   }
 
