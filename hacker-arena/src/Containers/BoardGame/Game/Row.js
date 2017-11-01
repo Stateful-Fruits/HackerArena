@@ -10,9 +10,10 @@ class Row extends React.Component {
   }
   handleMove (e) {
     e.preventDefault();
-    let {room, user} = this.props;
-    if (room.playerInfo[user] && room.playerInfo[user].canMove) {
-      let userPos = room.playerInfo[user].position;
+    let {room, currentUser} = this.props;
+    let username = currentUser.username;
+    if (room.playerInfo[username] && room.playerInfo[username].canMove) {
+      let userPos = room.playerInfo[username].position;
       let strBP = e.target.id.split(' ');
       let blockx = parseInt(strBP[0],10);
       let blocky = parseInt(strBP[1],10);
@@ -30,7 +31,7 @@ class Row extends React.Component {
         } else if (xdiff === -1) {
           direction = 'Left';
         }
-        helper.movePlayer(direction, room, user);
+        helper.movePlayer(direction, room, username);
       }
     }
   }
@@ -55,7 +56,7 @@ class Row extends React.Component {
 
 const mapStoP = (state) => {
   return {
-    user: fire.auth().currentUser.email.split('@')[0],
+    currentUser: state.currentUser,
     room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined
   }
 }

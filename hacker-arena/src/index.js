@@ -49,7 +49,6 @@ const middleware = routerMiddleware(history);
 
 // Add the reducer to your store on the `router` key
 // Also apply our middleware for navigating
-console.log('reducers', reducers);
 const store = createStore(
   combineReducers({
     ...reducers,
@@ -67,7 +66,7 @@ fire.auth().onAuthStateChanged(function(user) {
       console.log('payload from check if admin', payload)
       const { adminStatus, username } = payload;
       
-      user.adminStatus = adminStatus;
+      user.adminStatus = adminStatus || false;
       user.username = username || fire.auth().currentUser.email.split('@')[0];
 
       user.updateProfile(user);
@@ -81,6 +80,8 @@ fire.auth().onAuthStateChanged(function(user) {
     user = {};
     store.dispatch(updateCurrentUser(user));
   }
+
+  let currentUser = store.currentUser;
 
   ReactDOM.render(
     <Provider store={store}>
