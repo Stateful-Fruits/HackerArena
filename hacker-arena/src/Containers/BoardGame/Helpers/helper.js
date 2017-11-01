@@ -45,7 +45,7 @@ helper.setWhirlPools = (size, room) => {
 }
 
 helper.handleBoard = (room) => {
-  let winner, players = room.players, history, whirled;
+  let winner, players = room.players, history, whirled, metGoblin;
   let {whirlpools, playerInfo, board} = room;
   players.forEach(player => {
     let position = room.playerInfo[player].position;
@@ -72,10 +72,17 @@ helper.handleBoard = (room) => {
     });
   }
 
+  let gobPos = room.Goblin.position;
+  let gobString = gobPos[0] + ' ' + gobPos[1];
   players.forEach(player => {
     let position = room.playerInfo[player].position;
     let positionString = position[0] + ' ' + position[1];
-    if (whirlpools.indexOf(positionString) !== -1) {
+    if (gobString === positionString) {
+      metGoblin = true;
+      board[position[0]][position[1]][0] = board[position[0]][position[1]][0].filter(ele => ele !== player);
+      playerInfo[player].position = [0,0];
+      board[0][0][0].push(player);
+    } else if (whirlpools.indexOf(positionString) !== -1) {
       whirled = true;
       let invalid = true, random, random1;
       while (invalid) {
@@ -90,7 +97,7 @@ helper.handleBoard = (room) => {
       board[random][random1][0].push(player);
     }
   })
-  if (whirled) {
+  if (metGoblin || whirled) {
     fire.database().ref(`BoardRooms/${room.key}`).set(room);
   }
 }
