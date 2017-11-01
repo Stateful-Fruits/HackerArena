@@ -107,6 +107,21 @@
   background: rgb(132, 190, 132);
 }
 
+.attackButton {
+  font-size: 20px !important;
+  background-color: rgb(69, 177, 110);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+  padding: 10px 15px 10px 15px !important;
+}
+
+.attackButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #1184b2 !important;
+  color: #1184b2 !important
+}
 /* .analog {
   border-radius: 10px;
 	width: 20px;
