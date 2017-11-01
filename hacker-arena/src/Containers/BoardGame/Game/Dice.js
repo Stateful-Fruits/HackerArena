@@ -15,7 +15,7 @@ class Dice extends React.Component {
   }
   render () {
     return <div className='dice'>
-      <button onClick={this.roll}>Roll Dice</button>
+      <button className='diceButton' onClick={this.roll}>Get Moving</button>
     </div>
   }
 }
