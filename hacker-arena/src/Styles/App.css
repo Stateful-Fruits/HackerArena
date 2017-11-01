@@ -1,18 +1,162 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css';
 .App {
   text-align: center;
 }
-
+input {
+  outline: none !important;
+}
 .App-header {
   background-color: #222;
-  height: 150px;
-  padding: 20px;
+  height: 100px;
+  padding: 7px 0px 10px 0px;
   color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+  /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
+  /* text-shadow: 0 4px 8px 0 rgba(178, 17, 17, 1), 0 6px 20px 0 rgba(178, 68, 17, 1); */
+  font-size: 3.3em;
 }
 
 .App-intro {
   font-size: large;
+}
+
+.profile-greeting {
+  vertical-align: middle;
+  height: 10px;
+  width: 100px;
+  top: 35px;
+  right: 72px;
+  position: absolute;
+}
+
+.profile-image {
+  display:inline-block;
+  border-radius: 50px;
+  height: 50px;
+  right: 50px;
+  position: absolute;
+  top: 15px;
+  cursor: pointer;
+}
+
+.profile-photo {
+  display: inline-block;  
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.corner-profile-pic {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  margin: 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.navbar {
+  position: sticky !important;
+  top: 0;
+  z-index: 999;
+  border-radius: 0px !important;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  /* filter: opacity(0.1) */
+}
+
+.navbarLogo {
+  left: 10px;
+  position: absolute;
+  display: none;
+  font-size: 21px !important;
+}
+
+.navbarProfile {
+  color: white;
+  display:none;
+  position: absolute;
+  right: 10px;
+  font-size: 18px !important;
+}
+
+.navbar-brand {
+  transition: border-bottom 1s ease,
+              border-top 1s ease;
+  border-top: 3px transparent solid;
+  border-bottom: 3px transparent solid;
+}
+
+.navbar-brand:hover{
+  
+  transition: border-bottom 1s ease,
+              border-top 1s ease,
+              /* text-shadow 1s ease; */
+              color 1s ease;
+  color: #b24411 !important;
+
+  /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
+  border-top: 2px solid rgb(178, 68, 17);
+  border-bottom: 2px solid #b24411;
+}
+
+.active {
+  color: #b24411 !important;
+
+  /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
+  border-top: 2px solid #b24411;
+  border-bottom: 2px solid #b24411;
+}
+
+.nav-item {
+  margin-left: 10px; 
+  margin-right: 10px;
+  font-size: 20px;
+  font-weight: 100;
+}
+
+.nav-item:hover {
+  cursor: pointer;
+}
+
+.createGameButton {
+  font-size: 20px !important;
+  background-color: rgb(63, 63, 70);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+  padding: 20px !important;
+}
+
+.createGameButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #b24411 !important;
+  color: #b24411 !important
+}
+
+.gamePreviewButton {
+  font-size: 20px !important;
+  background-color: rgb(63, 63, 70);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+}
+
+.gamePreviewButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #b24411 !important;
+  color: #b24411 !important
+}
+
+.machineLearning:hover {
+  font-size: 90px;
+  height: 500px;
+  color: pink;
 }

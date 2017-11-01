@@ -1,0 +1,9 @@
+.driver-container {
+  display: grid;
+  grid-template-columns: 4fr 3fr;
+}
+
+.partner-message {
+  font-size: 20px;
+  font-family: Courier New, Courier, monospace;
+}

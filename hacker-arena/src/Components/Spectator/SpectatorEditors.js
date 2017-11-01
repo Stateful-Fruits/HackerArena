@@ -3,15 +3,22 @@ import SpectatorEditor from './SpectatorEditor';
 
 class SpectatorEditors extends Component {
   render() {
-    let { gameRoom } = this.props;
+    let { gameRoom, partnerName } = this.props;
+    let players = Object.keys(gameRoom.players)
+    let partner = players.filter(playerName => playerName === partnerName) 
+    let playersToShow = partner.length ? partner : players;
+    if (gameRoom.isPairRoom) {
+      let teams = gameRoom.teams;
+      let navigators = teams.reduce((acc, team) => team.navigator ? [...acc, team.navigator] : [...acc], []);
+      playersToShow = playersToShow.filter((player) => !navigators.includes(player));
+    }
     return (
             <div>
-              { [{name: gameRoom.creatorName, input: gameRoom.creatorLiveInput},
-                 {name: gameRoom.challengerName, input: gameRoom.challengerLiveInput}].map((player, i) => (
+              { playersToShow.map((playerName, i) => (
                 <SpectatorEditor 
-                  playerName={player.name}
-                  playerInput={player.input}
-                  key={String(player.name)+i}
+                  playerName={playerName}
+                  playerInput={gameRoom.players[playerName].liveInput}
+                  key={String(playerName)+i}
                 />
               )) }
             </div>

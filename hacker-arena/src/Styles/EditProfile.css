@@ -1,0 +1,28 @@
+.edit-profile {
+  display: inline-block;
+  margin-top: 10px;
+  width: 75%
+}
+
+.upload-photo {
+}
+
+.edit-profile .choose-file {
+  display: inline-block;
+}
+
+.progress-display {
+  font-size: 17px;
+  vertical-align: middle;
+  width: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
+  text-align: center;
+  z-index: 10;
+}
+
+.dropDownEdits {
+  position: absolute;
+  width: 300px;
+}

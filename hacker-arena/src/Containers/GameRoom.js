@@ -1,121 +1,203 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import swal from 'sweetalert2';
 
 import fire from '../Firebase/firebase';
-import updateSpecificRoom from '../Actions/updateSpecificRoom';
 
-import CodeEditor from './CodeEditor.js'; //From Simon
+import CodeEditor from '../Components/CodeEditor/CodeEditor.js'; //From Simon
 import TestSuite from '../Components/TestSuite.js'; //From Simon
 import ProgressBar from '../Components/GameRoom/ProgressBar';
 import GameRoomLoading from '../Components/GameRoom/GameRoomLoading';
 import WaitingForPlayer from '../Components/GameRoom/WaitingForPlayer';
+import GameRoomError from '../Components/GameRoom/GameRoomError';
+import eventHandler from './EventHandler/eventHandler';
+import WinnerDisplay from '../Components/GameRoom/WinnerDisplay';
+
+import { calculateResultsByPlayer, calculateMostTotalWins } from './../Helpers/resultsHelpers';
 
 import '../Styles/GameRoom.css';
 
 class GameRoom extends React.Component {
   constructor (props) {
     super (props);
+    this.state = {
+      allowEnter: true
+    }
     this.handleLeave = this.handleLeave.bind(this);
-    // this.handleEnter = this.handleEnter.bind(this);
+    this.handleEnter = this.handleEnter.bind(this);
+    this.handleIncomingEvents = this.handleIncomingEvents.bind(this);
   }
-
-  // componentWillReceiveProps() {
-  //   if (this.props.room) this.handleEnter();
-  // }
   
   componentDidMount () {
-    if (this.props.room) window.addEventListener('beforeunload', this.handleLeave);
+    window.addEventListener('beforeunload', this.handleLeave);
+    this.handleEnter();
+  }
+
+  componentWillUpdate() {
+    // see if user is entering the room and if room needs to be updated as a result
+    this.handleEnter();
+    // processing incoming events from db
+    this.handleIncomingEvents()
   }
 
   componentWillUnmount () {
-    if (this.props.room) this.handleLeave();
+    this.handleLeave();
   }
 
   handleLeave () {
-    var gameRoom = Object.assign({}, this.props.room);
-    let username = this.props.username;
-    if (gameRoom.players === 2) {
-      if (gameRoom.challengerName === username) {
-        gameRoom.challengerName = '';
-        gameRoom.players--;
-        console.log('challenger left', gameRoom.players);
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-      } else if (gameRoom.creatorName === username) {
-        gameRoom.creatorName = '';
-        gameRoom.players--;
-        console.log('creator left', gameRoom.players);
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
+    // handles leaving the gameroom should only be called when gameRooms 
+    // has been retrieved from Firebase, the room exists, and you are a member
+    if (this.props.gameRooms 
+        && this.props.gameRooms[this.props.roomId] 
+        && this.props.gameRooms[this.props.roomId].players
+        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
+      console.log('handleLeaveRunning')
+      let { gameRooms, roomId, username } = this.props;
+      let room = gameRooms[roomId];
+      let playerNames = Object.keys(room.players);
+      // when you're the last player inside, leaving deletes the gameroom
+      if (playerNames.length <= 1) {
+        fire.database().ref(`/rooms/${roomId}`).remove();
+      } else {
+        let gameRoom = Object.assign({}, room);
+        // otherwise, just remove the user from the players array
+        delete gameRoom.players[username];
+        // see if the game needs to switch to standby
+        if (playerNames.length - 1 < gameRoom.playerCapacity 
+            && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
+        // don't allow handle enter to run again 
+        this.setState({ allowEnter: false });
+        
+        return fire.database().ref(`/rooms/${roomId}`).set(gameRoom);
       }
-    } else if (gameRoom.players === 1) {
-      console.log(`room ${gameRoom.key} about to be destroyed`);
-      fire.database().ref('rooms/' + gameRoom.key).remove();
+    } 
+  }
+
+  handleEnter() {
+    // handles entering the gameroom: should only be called when gameRooms
+    // has been retrieved from Firebase and the room you are in exists 
+    // TODO and that game room is open for you to join
+    if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
+      let { gameRooms, roomId, username, currentUser, navigate } = this.props;
+      let room = gameRooms[roomId];
+      // if the players object is undefined (you're creating the room) set it to an empty object
+      if (!room.players) room.players = {};
+      let playerNames = Object.keys(room.players);
+      // if you're already in the game room, do nothing
+      if (playerNames.includes(username)) {
+        return;
+      } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
+        // if the gameRoom is full or closed, redirect the user to spectate the game
+        navigate(`/Spectate/${roomId}`);
+      } else {
+        let gameRoom = Object.assign({}, room);
+        // if you're the first one in, start the game timer
+        if (playerNames.length === 0) {
+          gameRoom.timerStarted = true;
+          gameRoom.timeStart = Date.now();
+        } else if (playerNames.length + 1 === Number(gameRoom.playerCapacity) && gameRoom.gameStatus !== 'completed') {
+            gameRoom.roomStatus = room.roomStatus === 'completed' ? 'completed' : 'playing';
+        }
+
+        // to make writing database rules easier
+        gameRoom[currentUser.uid] = true;
+
+        // add you username to the gameroom
+        gameRoom.players[username] = {
+          disruptions: [''],
+          testStatus: {},
+          credits: room.startingCredits || 0,
+          liveInput: '',
+          uid: currentUser.uid
+        };
+
+        // start by adding player to db to unlock power to make other changes to room
+
+        fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
+        .then(() => {
+          console.log('added uid, about the add the other stuff to the room');
+          return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
+        })
+        .then(() => console.log('wooo! set gameroom'))
+        .catch(err => console.log(err));
+      }
     }
   }
 
-  componentWillMount () {
-    // fire.database().ref('rooms/' + this.props.Key).once('value').then(snapshot => {
-    //   let gameRoom = snapshot.val();
-    //   gameRoom.key = this.props.Key;
-    //   console.log('snapshot of gameroom ',gameRoom, this.props.Key);
-    // });
-    var gameRoom = Object.assign({}, this.props.room);
-    if (gameRoom.players === 2 && gameRoom.creatorName !== this.props.username && gameRoom.creatorName !== this.props.challengerName) this.props.navigate(`/Spectate/${this.props.id}`);
-    else {
-      let creatorName = gameRoom.creatorName;
-      let challengerName = gameRoom.challengerName;
-      let username = this.props.username;
-      if (gameRoom.creatorName === '') {
-        gameRoom.creatorName = username;
-        gameRoom.players++;
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-        //this.props.updateSpecificRoom(gameRoom);
-      } else if (creatorName.length > 0 
-        && creatorName !==  username
-        && challengerName.length === 0) {
-        gameRoom.challengerName = username;
-        gameRoom.players++;
-        fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
-        //this.props.updateSpecificRoom(gameRoom);
-      } else {
-        //this.props.updateSpecificRoom(gameRoom);
-      } 
+  handleIncomingEvents() {
+    if (this.props.gameRooms && this.props.gameRooms[this.props.roomId]) {
+      let roomId = this.props.roomId;
+      let room = this.props.gameRooms[roomId];
+      let problems = this.props.problems;
+      let username = this.props.currentUser ? this.props.currentUser.username : null;
+      let player = room.players[username];
+      let events = player.events;
+      if (events !== '' && room.roomStatus === 'playing') {
+        fire.database().ref(`rooms/${roomId}/players/${username}/events`).set('')
+        .then(() => {
+          // NOTE THAT IF THERE ARE MULTIPLE EVENTS
+          // I ASSUME THEY WILL NOT CURRENTLY 'SEE' EACH OTHER'S RESULTS IN THE DB (under this implementation)
+          if (events) {
+            events.forEach(event => {
+              if(event.eventName === 'winner') fire.database().ref(`rooms/${roomId}/roomStatus`).set('intermission');
+              eventHandler[event.eventName](room, roomId, username, event.value, problems);
+            })
+          }
+        })
+      }
     }
-  } 
+  }
+
   
   render () {
-    let { room } = this.props;
-    if (!room) return (<GameRoomLoading />);
-    let players = room.players || 1;
-    let isRoomFull = players === 2;
-    return (
-      <div>
-        <div>{isRoomFull ? 'COMPLETE' : <WaitingForPlayer />}</div>
-        {isRoomFull ? <ProgressBar room={ room }/> : null}
-        <div id="editorAndTestSuite">
-        {isRoomFull ? <CodeEditor currentRoom={room}/> : null}
-        {isRoomFull ? <TestSuite currentRoom={room}/> : null}
-        </div>
-      </div>
-    )
-  }
-}
-const mapStateToProps = (state) => {
-  console.log(`state passed to GameRoom: `, state, fire.auth().currentUser);
-  let id = state.router.location.pathname.split('/')[2];
-  let room = state.gameRooms[id];
-  let username = fire.auth().currentUser.email.split('@')[0];
-  console.log('state is',state);
-  console.log('Room ', room);
-  return {room, username, id};
-};
+    // show loading screen while waiting for gameRooms from Firebase (no obj or empty obj)
+    // after retrieving gamerooms from firebase, if this room is not in that obj, let the user know
+    if (this.props.gameRooms 
+        && Object.keys(this.props.gameRooms).length 
+        && !this.props.gameRooms[this.props.roomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
+    // If we haven't retrieved gameRooms from firebase or our room doesn't exist
+    if (!this.props.gameRooms[this.props.roomId]
+        || !this.props.gameRooms[this.props.roomId].players
+        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
+    let { gameRooms, roomId, isPairRoom } = this.props;
+    let room = gameRooms[roomId];
+    let { roomStatus, results } = room;
+    let resultsByPlayer = results ? calculateResultsByPlayer(results) : null;
+    let mostTotalWins = results ? calculateMostTotalWins(resultsByPlayer) : null;
+    let champions = mostTotalWins ? mostTotalWins.winners : null;
 
-const mapDispatcherToProps = (dispatch) => {
-  return {
-    updateSpecificRoom: (room) => dispatch(updateSpecificRoom(room)),
-    navigate: (route) => dispatch(push(route))
+    if (roomStatus === 'standby' || roomStatus === 'intermission') {
+      return (<div className="completeWaiting"><WaitingForPlayer room={room}/></div>);
+    } else if (roomStatus === 'completed') {
+      return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
+    } else if (roomStatus === 'playing') {
+      return (
+        <div>
+          <div>
+            <ProgressBar room={room} roomId={roomId}/>
+          </div>
+          <div id="editorAndTestSuite">
+            <CodeEditor currentRoom={room} roomId={roomId}/>
+            <TestSuite currentRoom={room} roomId={roomId}/>
+          </div>
+        </div>
+      );
+    } else {
+      return (<div>INVALID ROOM STATUS: ${room.roomStatus}</div>)
+    } 
   }
 }
+
+const mapStateToProps = (state) => ({
+  roomId: state.router.location.pathname.split('/')[2],
+  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
+  gameRooms: state.gameRooms,
+  problems: state.problems,
+  currentUser: state.currentUser
+});
+
+const mapDispatcherToProps = (dispatch) => ({
+  navigate: (route) => dispatch(push(route))
+});
 
 export default connect(mapStateToProps, mapDispatcherToProps)(GameRoom);

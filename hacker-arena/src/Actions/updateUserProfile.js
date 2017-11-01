@@ -1,6 +1,7 @@
-const updateUserProfile = () => {
+const updateUserProfile = (profile) => {
   return ({
-    type: 'SHOW_PASS'
+    type: 'UPDATE_PROFILE',
+    payload: profile
   })
 };
 

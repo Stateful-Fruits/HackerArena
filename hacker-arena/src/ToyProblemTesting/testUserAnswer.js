@@ -14,6 +14,7 @@ class Test {
 
   
 const runTestsOnUserAnswer = function(userInputString, tests, userFn) {
+  console.log('running tests ',tests, userFn);
   const runOneTest = function(testStr) {
     const testData = parseTestStr(testStr);
     

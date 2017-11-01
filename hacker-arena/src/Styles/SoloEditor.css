@@ -1,0 +1,107 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css';
+
+#editorSideSolo {
+  max-width: 50vw;
+  margin: 5px;
+  position: absolute;
+}
+
+#editorSideSolo > #ace-editor { 
+  float:left;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 48vw !important;
+  height: 500px;
+}
+
+#editorSideSolo > #aceConsole {
+  margin-bottom: 0px;
+  list-style-type: none;
+  display : flex;
+  flex-direction: column;
+  /* list-style-position: outside; */
+  float: left;
+  right: 50%;
+  height: 400px;
+  width: 48vw;
+  background-color: black;
+  padding-top: 5px;
+  padding-left: 10px;
+  overflow: scroll;
+}
+ul#aceConsole > li:before {
+  content: "\00BB \0020";
+}
+ul#aceConsole > li {
+  color: greenyellow;
+  text-align: left;
+}
+.btn {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 15px;
+  border-radius: 0px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#editorSideSolo > .editorHeader {
+  margin: 0px;
+  width: 48vw;
+  float: left;
+  background-color: black;
+  color: white;
+}
+
+.editorHeader:hover {
+  cursor: default;
+  color: white;
+}
+
+.editorHeader:active, .editorHeader:focus {
+  outline: none !important;
+  color: white;
+}
+
+#editorSideSolo > .consoleHeader {
+  float:left;
+  margin: 0px;
+  width: 48vw;
+  background-color: #272822;
+  color: white;
+}
+
+.clearConsole {
+  float:right;
+  color: white;
+}
+
+.consoleHeader:hover {
+  cursor: default;
+  color: white;
+}
+
+.consoleHeader:active, .consoleHeader:focus {
+  outline: none !important;
+  color: white;
+}
+
+
+.submitButton {
+  background-color: rgb(130, 216, 104);
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#log {
+  color: white !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.btn:focus,.btn:active {
+  outline: none !important;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}

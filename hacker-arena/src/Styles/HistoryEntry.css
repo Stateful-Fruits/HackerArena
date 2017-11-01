@@ -1,0 +1,22 @@
+.historyWin {
+  color: green;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.historyLoss {
+  color: red;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.historyEntry {
+  margin: 30px;
+  background: rgba(242, 242, 242, 0.468);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+}
+
+.userNameLinks {
+  text-decoration: none !important;
+}
+

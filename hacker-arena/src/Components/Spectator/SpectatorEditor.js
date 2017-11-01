@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; 
 import AceEditor from 'react-ace-cdn';
 
 class SpectatorEditor extends Component {
   render() {
-    let { playerName, playerInput } = this.props;
+    let { playerName, playerInput} = this.props;
     return (
         <AceEditor
           value={playerInput}

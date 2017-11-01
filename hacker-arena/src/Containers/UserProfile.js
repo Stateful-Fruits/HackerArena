@@ -1,48 +1,119 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import updateUserProfile from '../Actions/updateUserProfile';
+import fire from '../Firebase/firebase';
+import EditProfile from '../Components/User/EditProfile.js';
+import ActivityHeatMap from '../Components/ActivityHeatMap';
+import Stats from '../Components/Stats';
+import History from '../Components/History';
+import { push } from 'react-router-redux';
+import '../Styles/UserProfile.css';
 
 class UserProfile extends React.Component {
-  render () {
-    let props = this.props;
-    let password = '', message = '';
-    if (props.showPass) {
-      password = props.password;
-      message = 'Hide Password';
-    } else {
-      password = '*'.repeat(props.password.length);
-      message = 'Show Password';
+  constructor(props){
+    super(props)
+    this.state = {
+      showEdit: false
     }
 
+    this.handleEditPhoto = this.handleEditPhoto.bind(this);
+  }
+  componentWillMount () {
+
+    if (!this.props.profile.username) {
+      const db = fire.database();
+      let profileUsername = this.props.profileUsername;
+
+      db.ref('users/'+ profileUsername).once('value').then(snapshot => {
+        let user = snapshot.val();
+        user.username = profileUsername;
+        this.props.update(user)
+      })
+    }
+  }
+  handleEditPhoto(){
+    if(this.state.showEdit){
+      this.setState({showEdit: false});
+    } else {
+      this.setState({showEdit: true});
+    }
+  }
+  render () {
+    let profile = this.props.profile;
+    let profileUsername = this.props.profileUsername;
+    let clientUsername = fire.auth().currentUser.email.split('@')[0];
+    let wins = 0;
+    let losses = 0;
+
+    if(profile.history){
+      wins = Object.values(this.props.profile.history).filter(game => {
+        return (Object.values(game[0].winners).indexOf(this.props.profile.username) > -1);
+      }).length;
+      losses = Object.values(this.props.profile.history).filter(game => {
+        return (Object.values(game[0].winners).indexOf(this.props.profile.username) === -1);
+      }).length;
+    }
+    let currentUser = fire.auth().currentUser;
     return (
-      <div>
-        <div>Username: {props.username}</div><br/>
-        <div>Password: {password}</div>
-        <button onClick={props.update}
-          value='SHOW_PASS'>{message}</button><br/>
-        <div>Won: {props.won}</div><br/>
-        <div>Lost: {props.lost}</div>
+      <div style={{display: 'flex'}}>
+        <div className="leftSideProfile">
+          <div style={{display: 'flex'}}>
+          <div className="userInfoDiv">
+            <div className="ProfileInfo" style={{display: "flex"}}>
+              <div className="profPic">
+                <div className="profile-photo accProfPic"
+                  style={{backgroundImage: `url(${currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'})`}}
+                  alt='profile'
+                >
+                </div>
+              </div>
+              <div className="userInfo">
+                <div><strong>Username</strong>: {profile.username}</div><br/>
+                <div><strong>Wins</strong>: {wins}</div>
+                <div><strong>Losses</strong>: {losses}</div>
+                <div><strong>Contact</strong>: <div>{fire.auth().currentUser.email}</div></div>
+                <button className="btn editPhotoBtn" onClick={this.handleEditPhoto} > Edit Profile Picture </button>
+              </div>
+            </div>
+
+        {this.state.showEdit ?
+              ((profileUsername === clientUsername) ?
+              <EditProfile navigate={this.props.navigate} pathname={this.props.pathname}/>
+              : null)
+            :
+            <div> <strong>Description</strong>: Hey its me Marky Z, I enjoy creating social media websites and long walks on the beach. </div>
+        }
+            </div>
+          
+            <div className="WinLossStats">
+              {this.props.profile.history ? <Stats profile={profile}/> : null}
+            </div>
+          </div>
+          <div  className="ActivityHeatMap">
+            {this.props.profile.history ? <ActivityHeatMap profile={profile}/> : null}
+          </div>
+        </div>
+        {this.props.profile.history ? <History profile={profile}/> : null}
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    username: state.user.username,
-    password: state.user.password,
-    showPass: state.user.showPass,
-    won: state.user.won,
-    lost: state.user.lost
-  }
+  let profile = state.profile;
+  let profileUsername = state.router.location.pathname.split('/')[2];
+  let pathname = state.router.location.pathname;
+  
+  
+  return { profile, profileUsername, pathname};
 };
 
 const mapDispatcherToProps = (dispatch) => {
   return {
-    update: (e) => {
-      e.preventDefault();
-      dispatch(updateUserProfile());
-    }
+    update: (profile) => {
+      dispatch(updateUserProfile(profile));
+    },
+    navigate : (route) => dispatch(push(route)),    
   }
 }
 

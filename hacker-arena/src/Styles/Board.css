@@ -1,0 +1,86 @@
+.board {
+  text-align: center;
+  width: 100%;
+}
+
+.bdrow {
+  width: 100%;
+}
+
+.bdblock {
+  display: inline-block;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: 1.5px 0px 0px 1.5px;  /*TOP RIGHT BOTTOM LEFT*/
+  width: 100px;
+  /* padding-top: 2%; */
+  height: 100px;
+}
+
+.brown {
+  background: #eadabc;
+}
+.dbrown {
+  background: #bf9053;
+}
+
+/* .treasure {
+  background: url('/assets/treasure.jpg');
+  background-size: 100px 100px;
+  width: 100px;
+  height: 100px;
+} */
+.whirlpool {
+  background: url('/assets/whirlpool.gif');
+  background-size: 100px 100px;
+  width: 100px;
+  height: 100px;
+}
+
+.lastblock {
+  border-width: 1.5px 1.5px 0px 1.5px;
+}
+
+.lastrow {
+  border-width: 1.5px 0px 1.5px 1.5px;
+}
+
+.lastrowblock {
+  border-width: 1.5px 1.5px 1.5px 1.5px;
+}
+
+.bottomend {
+  margin-bottom: 200px;
+}
+
+.dice {
+  margin: 20px 5px 10px 5px;
+  display: inline-block;
+}
+
+.inline {
+  display: inline-block;
+  margin: 0px 22px 0px 22px;
+}
+
+.but {
+  width: 100px;
+}
+
+.up {
+  margin-bottom: 5px;
+}
+
+.down {
+  margin-top: 5px;
+}
+
+.validMove:hover {
+  background: rgb(132, 190, 132);
+}
+/* .analog {
+  border-radius: 10px;
+	width: 20px;
+  height: 20px; 
+  color: red;
+} */

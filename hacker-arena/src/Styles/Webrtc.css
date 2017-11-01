@@ -1,0 +1,29 @@
+
+#remoteVideo {
+    position: relative;
+    height: 120px;
+    width: 120px;
+    top:6px;
+    bottom: 9px;
+    border-radius: 50%;
+    border :coral;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#remoteVideo > .videoContainer {
+    border-radius: 50% !important;
+    height: 100px !important;
+    width: 100px !important;
+}
+
+.videoContainer > video {
+    position: relative !important;
+    /* border-radius: 50%; */
+    height: 100px !important;
+    width: 100px !important;
+    top: 0px !important;
+}
