@@ -3,12 +3,16 @@ import video from "video.js"
 import Signup from '../Containers/SignUp';
 import '../Styles/About.css';
 import twoplayers from '../two player.png'
-
+import fire from '../Firebase/firebase';
 const Home = (props) => { 
+  let Form =null
+  let status = fire.auth().currentUser? fire.auth().currentUser.email.split('@')[0]:false;
+    if(status) {Form = <div>Hi {status}</div>}
+    else{Form = <Signup/>}
   return (
   <div>
     <div className="hero">
-      <Signup />
+    {Form}
     </div>
     <div>
     <div className="features">
