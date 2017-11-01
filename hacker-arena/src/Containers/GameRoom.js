@@ -159,7 +159,7 @@ class GameRoom extends React.Component {
     if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    let { gameRooms, roomId, isPairRoom } = this.props;
+    let { gameRooms, roomId, isPairRoom, currentUser } = this.props;
     let room = gameRooms[roomId];
     let { roomStatus, results } = room;
     let resultsByPlayer = results ? calculateResultsByPlayer(results) : null;
@@ -167,7 +167,7 @@ class GameRoom extends React.Component {
     let champions = mostTotalWins ? mostTotalWins.winners : null;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
-      return (<div className="completeWaiting"><WaitingForPlayer room={room}/></div>);
+      return (<div className="completeWaiting"><WaitingForPlayer room={room} currentUser={currentUser}/></div>);
     } else if (roomStatus === 'completed') {
       return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
     } else if (roomStatus === 'playing') {
@@ -177,8 +177,8 @@ class GameRoom extends React.Component {
             <ProgressBar room={room} roomId={roomId}/>
           </div>
           <div id="editorAndTestSuite">
-            <CodeEditor currentRoom={room} roomId={roomId}/>
-            <TestSuite currentRoom={room} roomId={roomId}/>
+            <CodeEditor currentRoom={room} roomId={roomId} currentUser={currentUser}/>
+            <TestSuite currentRoom={room} roomId={roomId} currentUser={currentUser}/>
           </div>
         </div>
       );

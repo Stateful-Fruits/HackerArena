@@ -280,7 +280,7 @@ class PairGameRoom extends React.Component {
         || !this.props.gameRooms[this.props.roomId].players
         || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
 
-    let { gameRooms, roomId, pendingEvents, updatePendingEvents } = this.props;
+    let { gameRooms, roomId, currentUser } = this.props;
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
     console.log('roomStatus is currently', roomStatus);
@@ -305,6 +305,7 @@ class PairGameRoom extends React.Component {
       partnerRole={partnerRole}
       addPendingEvent={this.addPendingEvent}
       removePendingEvent={this.removePendingEvent}
+      currentUser={currentUser}
     />
 
     let driverRoom = <DriverRoom
@@ -315,6 +316,7 @@ class PairGameRoom extends React.Component {
       partnerRole={partnerRole}
       addPendingEvent={this.addPendingEvent}
       removePendingEvent={this.removePendingEvent}
+      currentUser={currentUser}
     />
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
@@ -327,6 +329,7 @@ class PairGameRoom extends React.Component {
             partnerName ={partnerName}
             partnerRole={partnerRole}
             teams={teams}
+            currentUser={currentUser}
           />
         </div>
       );
