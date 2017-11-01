@@ -48,7 +48,10 @@ class GameRoom extends React.Component {
       });
       let gobPos = room.Goblin.position;
       let gobString = gobPos[0] + ' ' + gobPos[1];
-      document.getElementById(gobString).classList.add('goblin');
+      let ele = document.getElementById(gobString);
+      if (ele) {
+        ele.classList.add('goblin');
+      }
       let position = room.playerInfo[user].position;
       let x = position[0];
       let y = position[1];
