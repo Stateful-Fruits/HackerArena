@@ -39,10 +39,13 @@ class GameRoom extends React.Component {
   componentDidUpdate () {
     let {room, user} = this.props;
     if (room.board) {
-      let old = [].slice.call(document.getElementsByClassName('validMove'));
-      [].forEach.call(old, (ele) => {
+      [].slice.call(document.getElementsByClassName('validMove')).forEach(ele=>{
         ele.classList.remove('validMove');
+        console.log('removed valid from',ele.id,ele);
       });
+      // [].forEach.call(old, (ele) => {
+      //   ele.classList.remove('validMove');
+      // });
       let position = room.playerInfo[user].position;
       let x = position[0];
       let y = position[1];
