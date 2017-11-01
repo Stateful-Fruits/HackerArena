@@ -4,39 +4,131 @@ import Signup from '../Containers/SignUp';
 import '../Styles/About.css';
 import twoplayers from '../two player.png'
 import fire from '../Firebase/firebase';
+import $ from 'jquery';
 const Home = (props) => { 
   let Form =null
   let status = fire.auth().currentUser? fire.auth().currentUser.email.split('@')[0]:false;
     if(status) {Form = <div>Hi {status}</div>}
     else{Form = <Signup/>}
+    
+  $(document).ready(function(){
+
+    var getMax = function(){
+        return $(document).height() - $(window).height();
+    }
+    var getValue = function(){
+        return $(window).scrollTop();
+    }
+    if('max' in document.createElement('progress')){
+        var progressBar = $('progress');  
+        // Set the Max attr for the first time
+        progressBar.attr({ max: getMax() });
+        $(document).on('scroll', function(){
+          if(window.scrollY > 120){
+            progressBar.attr({ value: getValue() });
+          }
+        });
+        if(window.scrollY > 120){
+        $(window).resize(function(){
+            progressBar.attr({ max: getMax(), value: getValue() });
+        }) };   
+    }
+    else {
+        var progressBar = $('.progress-bar'), 
+            max = getMax(), 
+            value, width;
+        var getWidth = function(){
+            // Calculate width in percentage
+            value = getValue();            
+            width = (value/max) * 100;
+            width = width + '%';
+            return width;
+        }  
+        var setWidth = function(){
+            progressBar.css({ width: getWidth() });
+        }
+        $(document).on('scroll', setWidth);
+        $(window).on('resize', function(){
+            // Need to reset the Max attr
+            if(window.scrollY > 120){
+            max = getMax();
+            setWidth();
+            }
+        });
+    }
+
+  });
+  $(window).on('scroll', () => {
+  if(window.scrollY < 100){
+    $('#progressBar').css('opacity', '0');
+  } else {
+    $('#progressBar').css('opacity', '1');
+  }
+  })
   return (
   <div>
-    <div className="hero">
-    {Form}
+    <progress className="" value="0" id="progressBar">
+  <div className="">
+    <span className=""></span>
+  </div>
+</progress>
+    <div className="hero">  
+      <div>
+          <h4  style={{position: 'absolute'}} > Connect and Code </h4>
+        </div>
+      {Form}
+    </div>
+    <div className="introduction">
+      what does this app do?
+      purpose 
     </div>
     <div>
-    <div className="features">
-      {/* Connect and Code.
-      NETWORK LOGO HERE
-      Hacker Arena is a platform for programmers 
-      MODE NAME
-      MODE LOGO
-      MODE DESCRIPTION
-        players? : (1 , 2-4, 2-6);
-        instructions:
-      CLASSIC 
-      PAIR MATCH
-      CODE RUN
-
-      HONE YOUR SKILLS
-      SOLO
-      Players: 1
-      A mode for players to practice alone,  */}
+      <div className="features">
+        <h1> Game Modes </h1>
+        <div className="card-deck">
+          <div className="card">
+              <h2 className="card-title"> Classic </h2>
+            <img className="card-img-top aboutIcons" src='/assets/classic.png' />
+            <div className="card-block">
+              <p className="card-text">Hey heres our classic mode, lets describe this sometime afd</p>
+            </div>
+          </div>
+          <div className="card">
+              <h2 className="card-title"> Pair </h2>
+            <img className="card-img-top aboutIcons"  src='/assets/pair.png' />
+            <div className="card-block">
+              <p className="card-text"> Pair match, its like tinder but for coders adofiajsdfosijfodsijfsodfijsdofij </p>
+            </div>
+          </div>
+          <div className="card">
+              <h2 className="card-title"> Code Run </h2>
+            <img className="card-img-top aboutIcons" src='/assets/coderun.png' />
+            <div className="card-block">
+              <p className="card-text"> Code Run, Kais game mode heres some filler text adoisjdsdijfoasfjsodfijoj </p>
+            </div>
+          </div>
+          <div className="card">
+              <h2 className="card-title"> Solo </h2>
+            <img className="card-img-top aboutIcons" src='/assets/solo.png' />
+            <div className="card-block">
+              <p className="card-text"> Get better here sfsadfsdfsdfsdfsdfsafadsfsdfaf </p>
+            </div>
+          </div>
+          <div className="card">
+              <h2 className="card-title"> Random </h2>
+            <img className="card-img-top aboutIcons" src='/assets/random.png' />
+            <div className="card-block">
+              <p className="card-text"> Hey who put this here aaaaaaaaaaasdfsdsdfsdsdfsdffsfd</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
     {<video style={{position:'relative'}} className ="video" autoPlay muted loop>
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> }
-    </div>
+    
       <h2 className="teamHeader"> Hey Yall its the Team </h2>
     <div className="team card-deck">  
     <div className="card teamCard">

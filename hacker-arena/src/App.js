@@ -19,12 +19,14 @@ class App extends Component {
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
     syncToDb(updateGameRooms, updateProblems, updateBoardRooms);
     $(window).on('scroll', () => {
-      if(window.scrollY > 50){
+      if(window.scrollY > 100){
         $('.navbarLogo').fadeIn(1000);
+        $('.navbar').css('opacity', '0.9');
         $('.navbarProfile').fadeIn(1000);
       } 
-      if(window.scrollY < 50){
+      if(window.scrollY < 100){
         $('.navbarLogo').fadeOut(1000);
+        $('.navbar').css('opacity', '1');
         $('.navbarProfile').fadeOut(1000);
       }
     })
@@ -37,7 +39,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">HACKER ARENA</h1>
+          <img className="fullLogo" src="/assets/fullLogo.png" />
+          {/* <h1 className="App-title">HACKER ARENA</h1> */}
           {
             currentUser.email ? (
               <span className="profile-image" onClick={() => navigate('/User/' + username)}>

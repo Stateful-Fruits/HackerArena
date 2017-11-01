@@ -71,7 +71,7 @@ class UserProfile extends React.Component {
                 <div><strong>Username</strong>: {profile.username}</div><br/>
                 <div><strong>Wins</strong>: {wins}</div>
                 <div><strong>Losses</strong>: {losses}</div>
-                <div><strong>Contact</strong>: <div>{fire.auth().currentUser.email}</div></div>
+                <div><strong>Contact</strong>: <div>{profile.email}</div></div>
                 <button className="btn editPhotoBtn" onClick={this.handleEditPhoto} > Edit Profile Picture </button>
               </div>
             </div>

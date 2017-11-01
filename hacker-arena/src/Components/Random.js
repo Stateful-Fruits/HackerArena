@@ -1,5 +1,4 @@
 import React from 'react';
-import { Scene } from 'aframe-react';
 import TopSecret from '../Containers/TopSecret';
 import * as THREE from 'three'
 

@@ -17,8 +17,8 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-          <li className="navbarLogo nav-item leftNav navbar-brand" onClick={ () => { navigate('/'); }}>
-           <strong>Hacker Arena Logo Here</strong></li>
+           <img className="HAlogo navbarLogo " src="/assets/HAlogo.png" onClick={ () => { navigate('/') }}/>
+          
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
             Home </li>
             <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Classic'); }}>
@@ -60,13 +60,13 @@ class NavBar extends Component {
           }
           {
             currentUser.email ? (
-              <li className="navbarProfile nav-item rightNav" onClick={() => navigate('/User/' + username)}>
+              <a href="" className="navbarProfile nav-item rightNav" onClick={() => navigate('/User/' + username)}>
                 Hi { username }! {' '}
                 <img className="profile-photo"
                   src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
                   alt='profile'
                 />
-              </li>
+              </a>
             ) : null
           }
         </ul>
@@ -79,4 +79,8 @@ export default NavBar;
 
 
 {/* <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
-About </li> */}
+About </li> 
+<li className="navbarLogo nav-item leftNav navbar-brand" onClick={ () => { navigate('/'); }}>
+           <strong>Hacker Arena Logo Here</strong></li>
+          */}
+
