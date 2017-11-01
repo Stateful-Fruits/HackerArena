@@ -8,7 +8,6 @@ class Classic extends Component {
 
   render() {
     let { gameRooms, navigate, currentUser } = this.props;
-    console.log('currentUser in classic lobby', currentUser);
     return (
        <div>    
          <button className="btn createGameButton" onClick={() => this.props.navigate('/CreateGameRoom')}>CREATE GAME ROOM</button>

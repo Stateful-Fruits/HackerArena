@@ -27,7 +27,6 @@ class SoloRoom extends React.Component {
   componentDidMount () {
     window.addEventListener('beforeunload', this.handleLeave);
     this.handleEnter();
-    console.log("LOGGG", this.props.gameRooms[this.props.roomId])
   }
 
   componentWillUpdate() {
@@ -70,17 +69,13 @@ class SoloRoom extends React.Component {
   }
 
   handleEnter() {
-    console.log('handleEnter running')
     // handles entering the gameroom: should only be called when gameRooms
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
-      console.log('allowing enter')
       let { gameRooms, roomId, currentUser, navigate } = this.props;
       let username = currentUser.username;
-      console.log('username', username)
       let room = gameRooms[roomId];
-      console.log('room', room)
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
       let playerNames = Object.keys(room.players);
@@ -113,7 +108,6 @@ class SoloRoom extends React.Component {
         // and update the database
         fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
         .then(() => {
-          console.log('added user, about the add the other stuff to the room');
           return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
         })
         .then(() => console.log('wooo! set gameroom'))

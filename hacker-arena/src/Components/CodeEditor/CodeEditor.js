@@ -129,7 +129,6 @@ class CodeEditor extends React.Component {
 
   sendDisruptions(e) {
     e.stopPropagation();
-    console.log('trying to send a disruption')
     let { currentRoom, roomId, currentUser } = this.props;
     let username = currentUser.username;
     // Sends disruptions to oppposite player
@@ -201,7 +200,6 @@ class CodeEditor extends React.Component {
           let disruptionName = disruption[0];
 
           let clearCode = setTimeout(() => {
-            console.log('disruption activating!!', disruptionName)
             this.receiveDisruption(disruptionName);
             removePendingEvent(disruptionName, false)
           }, 5000);

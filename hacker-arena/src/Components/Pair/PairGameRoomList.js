@@ -32,10 +32,8 @@ class GameRoomList extends Component {
   }
 
   handleDeleteRoom(e) {
-    console.log('handleDeleteRoom running')
     e.preventDefault();
     let roomId = e.target.value;
-    console.log('roomId', roomId);    
     fire.database().ref('rooms/' + roomId).remove();
   }
 

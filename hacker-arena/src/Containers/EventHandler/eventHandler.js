@@ -18,14 +18,12 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
     room.playersReady = room.playersReady + 1 || 1;
     
     if (room.playersReady === numPlayers) {
-      console.log('everyone is ready for next round!')
       room.currentRound = room.currentRound + 1;
       room.roomStatus = 'playing';
       room.playersReady = 0;
 
       // new problem
       let filteredProblems = filterProblemsByDifficulty(room.minDifficulty, room.maxDifficulty, problems);
-      console.log('filteredProblems in eventhandler', filteredProblems)
       room.problemID = chooseRandomProblem(filteredProblems);
       room.problem = problems[room.problemID]
 
@@ -40,7 +38,6 @@ eventHandler.helpers.handleConfirmAlert = function(isClientWinner, roomName, roo
       }
 
     } else if (room.playersReady < numPlayers) {
-      console.log('everyone is NOT ready yet.');
 
       room.roomStatus = 'intermission';
     }

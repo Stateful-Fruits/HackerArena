@@ -102,7 +102,6 @@ const mapStateToProps = (state) => {
   let profileUsername = state.router.location.pathname.split('/')[2];
   let pathname = state.router.location.pathname;
   let currentUser = state.currentUser;
-  console.log('currentUser in profile', currentUser);
 
   return { profile, profileUsername, pathname, currentUser };
 };

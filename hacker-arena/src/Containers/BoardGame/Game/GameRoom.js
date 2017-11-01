@@ -42,7 +42,6 @@ class GameRoom extends React.Component {
     if (room.board) {
       [].slice.call(document.getElementsByClassName('validMove')).forEach(ele=>{
         ele.classList.remove('validMove');
-        console.log('removed valid from',ele.id,ele);
       });
       [].slice.call(document.getElementsByClassName('goblin')).forEach(ele => {
         ele.classList.remove('goblin');
@@ -66,7 +65,6 @@ class GameRoom extends React.Component {
       stringify(x+1,y);
       stringify(x,y-1);
       stringify(x,y+1);
-      console.log ('valid selections are',validMoves);
       validMoves.forEach(move => {
         move = document.getElementById(move)
         if (move) {
