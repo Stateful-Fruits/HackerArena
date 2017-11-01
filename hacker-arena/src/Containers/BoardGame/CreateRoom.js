@@ -108,7 +108,8 @@ class CreateRoom extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    problems: state.problems
+    problems: state.problems,
+    currentUser: state.currentUser
   }
 }
 

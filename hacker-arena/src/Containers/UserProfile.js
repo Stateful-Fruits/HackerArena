@@ -39,10 +39,7 @@ class UserProfile extends React.Component {
     }
   }
   render () {
-    let { profile, currentUser, profileUsername } = this.props.profile;
-    console.log('profile', profile)
-    currentUser = currentUser || {username:'UnknownUser'}
-    console.log('currentUser in profile in render', currentUser);    
+    let { profile, currentUser, profileUsername } = this.props;   
     let clientUsername = currentUser.username;
     let wins = 0;
     let losses = 0;
