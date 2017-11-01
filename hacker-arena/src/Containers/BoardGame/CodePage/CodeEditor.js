@@ -83,7 +83,7 @@ class CodeEditor extends React.Component {
 
   sendDisruptions(e){
     let { room } = this.props;
-    let username = this.props.user;
+    let username = this.props.currentUser.username;
     let disruptions = room.playerInfo[username].disruptions;
     let playerInfo = room.playerInfo[username];
     // Sends disruptions to oppposite player
@@ -113,7 +113,8 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // Instead set canMove to true here;
-    let { room, user } = this.props;
+    let { room, currentUser } = this.props;
+    let user = currentUser.username;
     let userInfo = room.playerInfo[user];
     userInfo.canMove = !userInfo.canMove;
     room.playerInfo[user].testStatus = [];
