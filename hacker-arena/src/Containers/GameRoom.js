@@ -51,7 +51,6 @@ class GameRoom extends React.Component {
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
         && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
-      console.log('handleLeaveRunning')
       let { gameRooms, roomId, username } = this.props;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
@@ -116,7 +115,6 @@ class GameRoom extends React.Component {
 
         fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
         .then(() => {
-          console.log('added uid, about the add the other stuff to the room');
           return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
         })
         .then(() => console.log('wooo! set gameroom'))

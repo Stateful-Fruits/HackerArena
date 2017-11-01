@@ -77,18 +77,6 @@ class EditProfile extends React.Component {
     });
   }
 
-  
-
-  handleUpgradeToAdmin(e) {
-    e.preventDefault();
-    let currentUser = this.props.currentUser;
-    let uid = currentUser.uid;
-    let password = this.state.password;
-    
-    setUserAsAdmin(uid, password)
-    .then(() => console.log('user is not admin - thank you for shopping'))
-  }
-
   render() {
     return (
       <div className="edit-profile">
@@ -111,18 +99,6 @@ class EditProfile extends React.Component {
               <span className="progress-display">{this.state.uploadProgress}</span>
               <div className="upload-bar progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="uploader" style={{width: `${this.state.uploadProgress}%`}}></div>
             </div>
-          </div>
-          <div className="upgrade-to-admin">
-            <h4>If you are a site administrator, upgrade to admin status here!</h4>
-            <form>
-              Password:
-              <input className="password form-control" onChange={this.onChange}
-                value = {this.state.password}
-                type= 'text'
-                name= 'password'
-              />
-              <input type="submit" onClick={this.handleUpgradeToAdmin}/>
-            </form>
           </div>
         </div>
       </div>

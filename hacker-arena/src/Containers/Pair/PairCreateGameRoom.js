@@ -4,11 +4,13 @@ import { push } from 'react-router-redux';
 import noUiSlider from 'nouislider'
 
 import fire from './../../Firebase/firebase';
+
 import db from './../../Firebase/db';
 
 import { filterProblemsByDifficulty, chooseRandomProblem } from './../../Helpers/problemHelpers';
 import './../../Styles/PairCreateGameRoom.css';
 import './../../Styles/nouislider.css';
+
 
 class PairCreateGameRoom extends React.Component {
   constructor (props) {

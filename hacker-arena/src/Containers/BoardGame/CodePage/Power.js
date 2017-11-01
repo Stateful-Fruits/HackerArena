@@ -32,7 +32,6 @@ const magnet = (user, room, others) => {  //reseting codeeditor
     }
     newPosition(room, player);
   })
-  console.log('rooooom', room);
   updateFireRoom(room);
 }
 

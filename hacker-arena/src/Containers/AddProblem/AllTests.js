@@ -10,7 +10,6 @@ class AllTests extends React.Component {
   
   badgeClick (e) {
     e.preventDefault();
-    console.log('clicked', e.target.id);
     if (e.target.id) {
       this.props.removeTest(e.target.id);
     }
@@ -18,7 +17,6 @@ class AllTests extends React.Component {
 
   render () {
     let tests = this.props.problem.tests;
-    console.log('tests is ', tests, this.props);
     return (
       <div>
         <h5>Current Tests</h5>
@@ -46,7 +44,6 @@ class AllTests extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state is ', state);
   return {
     problem: state.addingProblem
   }

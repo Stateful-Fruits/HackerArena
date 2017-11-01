@@ -13,7 +13,6 @@ class Attack extends React.Component {
     let {room, attack, user} = this.props;
     let others = room.players.filter(player => {
       let playerInfo = room.playerInfo[player];
-      console.log('playerInfo',playerInfo);
       if (player !== user && playerInfo.status !== 'shielded') {
         return player;
       } else if (playerInfo.status === 'shielded') {
