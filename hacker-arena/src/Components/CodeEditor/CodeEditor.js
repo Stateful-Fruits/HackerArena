@@ -229,20 +229,20 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // send win event (in room.players), update results object (in room), and increment user's wins (in database)
-    let { room, roomId, currentUser } = this.props
+    let { currentRoom, roomId, currentUser } = this.props
     let username = currentUser.username;
-    let { players, problem, teams } = room
+    let { players, problem, teams } = currentRoom
 
-    room.timeEnd = Date.now();
-    room.timeTaken = (room.timeEnd - room.timeStart)/1000;
+    currentRoom.timeEnd = Date.now();
+    currentRoom.timeTaken = (currentRoom.timeEnd - currentRoom.timeStart)/1000;
 
-    let playerNames = Object.keys(room.players);
+    let playerNames = Object.keys(currentRoom.players);
     let timeStamp = Date.now();
 
-    let resultForThisRound = prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
+    let resultForThisRound = prepResultsObjectFromWinner(username, players, teams, problem, currentRoom.timeTaken, timeStamp);
 
-    room.results = room.results || [];
-    room.results.push(resultForThisRound);
+    currentRoom.results = currentRoom.results || [];
+    currentRoom.results.push(resultForThisRound);
     
     let winEvent = {
       eventName: 'winner',
@@ -251,7 +251,7 @@ class CodeEditor extends React.Component {
 
     playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
 
-    fire.database().ref(`rooms/${roomId}`).set(room);
+    fire.database().ref(`rooms/${roomId}`).set(currentRoom);
   }
 
   resetEditor() {
