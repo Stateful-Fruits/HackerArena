@@ -8,7 +8,7 @@ import $ from 'jquery';
 const Home = (props) => { 
   let Form =null
   let status = fire.auth().currentUser? fire.auth().currentUser.email.split('@')[0]:false;
-    if(status) {Form = <div>Hi {status}</div>}
+    if(status) {Form = <div className="">Hi {status}</div>}
     else{Form = <Signup/>}
     
   $(document).ready(function(){
@@ -84,47 +84,52 @@ const Home = (props) => {
     </div>
     <div>
       <div className="features">
-        <h1> Game Modes </h1>
-        <div className="card-deck">
-          <div className="card">
+        <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> Game Modes </h1>
+
+        <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li className="nav-item">
+            <a className="pills card nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-classic" role="tab" aria-controls="pills-home" aria-selected="true">
               <h2 className="card-title"> Classic </h2>
-            <img className="card-img-top aboutIcons" src='/assets/classic.png' />
-            <div className="card-block">
-              <p className="card-text">Hey heres our classic mode, lets describe this sometime afd</p>
-            </div>
-          </div>
-          <div className="card">
+              <img className="card-img-top aboutIcons" src='/assets/classic.png' />
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="pills card nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-pair" role="tab" aria-controls="pills-profile" aria-selected="false">
               <h2 className="card-title"> Pair </h2>
-            <img className="card-img-top aboutIcons"  src='/assets/pair.png' />
-            <div className="card-block">
-              <p className="card-text"> Pair match, its like tinder but for coders adofiajsdfosijfodsijfsodfijsdofij </p>
-            </div>
+              <img className="card-img-top aboutIcons" src='/assets/pair.png' />
+            </a>
+          
+          </li>
+          <li className="nav-item">
+            <a className="pills card nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-coderun" role="tab" aria-controls="pills-contact" aria-selected="false">
+            <h2 className="card-title"> Code Run </h2>
+              <img className="card-img-top aboutIcons" src='/assets/coderun.png' />
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="pills card nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-solo" role="tab" aria-controls="pills-contact" aria-selected="false">
+
+            <h2 className="card-title"> Solo </h2>
+              <img className="card-img-top aboutIcons" src='/assets/solo.png' />
+            </a>
+          </li>
+        </ul>
+        <div className="tab-content" id="pills-tabContent">
+          <div className="tab-pane fade show active" id="pills-classic" role="tabpanel" aria-labelledby="pills-home-tab">
+            <h5><strong>Suggested Players:</strong> 2+</h5>
+            <h5><strong>Instructions:</strong> Coders face off against each other </h5>
+            <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
-          <div className="card">
-              <h2 className="card-title"> Code Run </h2>
-            <img className="card-img-top aboutIcons" src='/assets/coderun.png' />
-            <div className="card-block">
-              <p className="card-text"> Code Run, Kais game mode heres some filler text adoisjdsdijfoasfjsodfijoj </p>
-            </div>
-          </div>
-          <div className="card">
-              <h2 className="card-title"> Solo </h2>
-            <img className="card-img-top aboutIcons" src='/assets/solo.png' />
-            <div className="card-block">
-              <p className="card-text"> Get better here sfsadfsdfsdfsdfsdfsafadsfsdfaf </p>
-            </div>
-          </div>
-          <div className="card">
-              <h2 className="card-title"> Random </h2>
-            <img className="card-img-top aboutIcons" src='/assets/random.png' />
-            <div className="card-block">
-              <p className="card-text"> Hey who put this here aaaaaaaaaaasdfsdsdfsdsdfsdffsfd</p>
-            </div>
-          </div>
+          <div className="tab-pane fade" id="pills-pair" role="tabpanel" aria-labelledby="pills-profile-tab">.PAIRPAIR</div>
+          <div className="tab-pane fade" id="pills-coderun" role="tabpanel" aria-labelledby="pills-contact-tab">CODERUNCODERUN.</div>
+          <div className="tab-pane fade" id="pills-solo" role="tabpanel" aria-labelledby="pills-contact-tab">.!SOLOLSOSLSOSLOSLOL</div>
         </div>
+
       </div>
     </div>
-
+    <div className="disruptionsHome">
+    <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> DISRUPTIONS DESCRIPTION GOES HERE </h1>
+    </div>
     {<video style={{position:'relative'}} className ="video" autoPlay muted loop>
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> }
