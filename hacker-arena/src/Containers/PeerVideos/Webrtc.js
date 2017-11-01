@@ -33,14 +33,14 @@ class Webrtc extends Component {
       var remotes = document.getElementById('remoteVideo');
         if (remotes) {
           var container = document.createElement('div');
-            container.className = 'videoContainer';
-            container.id = 'container_' + webrtc.getDomId(peer);
-            container.appendChild(video);
+          container.className = 'videoContainer';
+          container.id = 'container_' + webrtc.getDomId(peer);
+          container.appendChild(video);
 
-            // suppress contextmenu
-            video.oncontextmenu = function () { return false; };
+          // suppress contextmenu
+          video.oncontextmenu = function () { return false; };
 
-            remotes.appendChild(container);
+          remotes.appendChild(container);
         }
     });
 
