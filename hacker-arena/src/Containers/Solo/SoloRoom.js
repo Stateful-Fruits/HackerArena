@@ -47,7 +47,7 @@ class SoloRoom extends React.Component {
     if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
+        && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
       let { gameRooms, roomId, currentUser } = this.props;
       let username = currentUser.username;
       let room = gameRooms[roomId];
@@ -70,13 +70,17 @@ class SoloRoom extends React.Component {
   }
 
   handleEnter() {
+    console.log('handleEnter running')
     // handles entering the gameroom: should only be called when gameRooms
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
+      console.log('allowing enter')
       let { gameRooms, roomId, currentUser, navigate } = this.props;
       let username = currentUser.username;
+      console.log('username', username)
       let room = gameRooms[roomId];
+      console.log('room', room)
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
       let playerNames = Object.keys(room.players);
@@ -152,7 +156,7 @@ class SoloRoom extends React.Component {
     // If we haven't retrieved gameRooms from firebase or our room doesn't exist
     if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
+        || !this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) return (<GameRoomLoading />);
     let { gameRooms, roomId, currentUser } = this.props;
     let room = gameRooms[roomId];
     room.key = roomId;
