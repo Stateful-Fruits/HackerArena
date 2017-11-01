@@ -60,19 +60,16 @@ const store = createStore(
 let currentUser = store.getState().currentUser;
 
 fire.auth().onAuthStateChanged(function(user) {
-  console.log('onAuthStateChangedRunning');
 
   if (user) {
     checkIfUserIsAdminAsync(user.uid)
     .then(payload => {
-      console.log('payload from check if admin', payload)
       const { adminStatus, username } = payload;
       
       user.adminStatus = adminStatus || false;
       user.username = username || fire.auth().currentUser.email.split('@')[0];
 
       user.updateProfile(user);
-      console.log('user is now', fire.auth().currentUser);
       store.dispatch(updateCurrentUser(user));
       currentUser = store.getState().currentUser;
     })
