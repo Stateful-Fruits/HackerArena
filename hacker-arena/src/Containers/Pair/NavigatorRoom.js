@@ -17,7 +17,7 @@ class NavigatorRoom extends React.Component {
   }
 
   render() {
-    let { roomId, room, username, partnerName, partnerRole } = this.props
+    let { roomId, room, username, partnerName, partnerRole, currentUser } = this.props
     let activityLog = room.activity || [''];
 
     let Videoroom = getTeamIndex(room, username)
@@ -30,6 +30,7 @@ class NavigatorRoom extends React.Component {
         <ProgressBar 
           room={room}
           roomId={roomId}
+          currentUser={currentUser}
         />
         <div id="editorAndTestSuite">
           <SpectatorEditors 
@@ -37,7 +38,8 @@ class NavigatorRoom extends React.Component {
             roomId={roomId}
             username={username} 
             partnerName ={partnerName}
-            partnerRole={partnerRole} 
+            partnerRole={partnerRole}
+            currentUser={currentUser}
           />
           <TestSuite 
             currentRoom={room}
@@ -45,6 +47,7 @@ class NavigatorRoom extends React.Component {
             username={username} 
             partnerName ={partnerName}
             partnerRole={partnerRole}
+            currentUser={currentUser}
           />
         </div>
         <div className="activity-log">

@@ -15,8 +15,8 @@ class TestSuite extends React.Component {
     }
   }
   componentDidMount () {
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let {room} = this.props;
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let userInfo = room.playerInfo[username];
     let userPos = userInfo.position;
     let problem = room.board[userPos[0]][userPos[1]][1];
@@ -37,8 +37,8 @@ class TestSuite extends React.Component {
   }
   render () {
     let testSuite = this.state.testSuite;   
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let {room} = this.props;
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let userInfo = room.playerInfo[username];
     let results = (userInfo.testStatus && userInfo.testStatus.length > 1) ? 
       (<div className="testHolder">{userInfo.testStatus.map((tests, i) => {

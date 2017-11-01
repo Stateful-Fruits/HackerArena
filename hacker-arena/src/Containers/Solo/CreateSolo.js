@@ -118,7 +118,7 @@ class Solo extends React.Component {
 
   onCheck(e) {
     e.stopPropagation();
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let username = this.props.currentUser.username;
     let name = e.target.name;
     let invitedPlayers = [];
     for (let i = 0; i < this.state.playerCapacity; i++) invitedPlayers.push('');
@@ -163,7 +163,8 @@ class Solo extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    problems: state.problems
+    problems: state.problems,
+    currentUser: state.currentUser
   }
 }
 

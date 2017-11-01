@@ -37,7 +37,8 @@ class GameRoom extends React.Component {
   }
   
   componentDidUpdate () {
-    let {room, user} = this.props;
+    let { room, currentUser } = this.props;
+    let user = currentUser.username
     if (room.board) {
       [].slice.call(document.getElementsByClassName('validMove')).forEach(ele=>{
         ele.classList.remove('validMove');
@@ -87,7 +88,8 @@ class GameRoom extends React.Component {
   }
 
   handleEnter () {
-    let {room, user, navigate} = this.props;
+    let {room, currentUser, navigate} = this.props;
+    let user = currentUser.username;
     if (room && this.state.canEnter) {
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
@@ -120,7 +122,7 @@ class GameRoom extends React.Component {
 
   handleLeave () {
     if (this.props.room !== undefined) {
-      let user = this.props.user;
+      let user = this.props.currentUser.username;
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
       // let boardStart = room.board[0][0];
@@ -147,7 +149,8 @@ class GameRoom extends React.Component {
   }
 
   render () {
-    let user = this.props.user;
+    let currentUser = this.props.currentUser;
+    let user = currentUser.username;
     let room = this.props.room;
     if (room === undefined) {
       return <div>
@@ -170,7 +173,7 @@ class GameRoom extends React.Component {
       if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
-        board = <Board board={room.board} whirlpools={room.whirlpools}/>;
+        board = <Board board={room.board} whirlpools={room.whirlpools} currentUser={currentUser}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
@@ -179,8 +182,8 @@ class GameRoom extends React.Component {
           }
         } else {
           codePage = <div>
-            <CodeEditor room={room} user={user}/>
-            <TestSuite room={room} user={user}/>
+            <CodeEditor room={room} currentUser={currentUser}/>
+            <TestSuite room={room} currentUser={currentUser}/>
           </div>;
           canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
         }
@@ -240,7 +243,7 @@ class GameRoom extends React.Component {
 
 const mapStoP = (state) => {
   return {
-    user: fire.auth().currentUser.email.split('@')[0],
+    currentUser: state.currentUser,
     room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined
   }
 }

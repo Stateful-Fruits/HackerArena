@@ -30,15 +30,15 @@ class SoloEditor extends React.Component {
 
   liveInputs(){
     // Sends live inputs of user to database
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let username = this.props.currentUser.username;
     let liveInput = this.ace.editor.getValue();
     fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/liveInput`).set(liveInput)
   }
 
   handleSubmit(){
     let code = this.ace.editor.getValue();
-    let { currentRoom } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { currentRoom, currentUser } = this.props;
+    let username = currentUser.username;
     //TEST SUITE LOGIC
     let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){

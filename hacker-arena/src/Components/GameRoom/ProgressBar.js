@@ -12,8 +12,8 @@ class ProgressBar extends Component {
   }
 
   componentWillUpdate() {
-    let { room, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, roomId, currentUser } = this.props;
+    let username = currentUser.username;
 
     let isSpectator = !(Object.keys(room.players).includes(username));
     let partnerName = getPartnerName(room, username)
@@ -38,8 +38,8 @@ class ProgressBar extends Component {
   }
 
   handleTargetChange(otherUserName) {
-    let { room, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, roomId, currentUser } = this.props;
+    let username = currentUser.username;
     let partnerName = getPartnerName(room, username);
 
     // firebase query to update this user's targetedPlayer obejct in firebase
@@ -50,8 +50,8 @@ class ProgressBar extends Component {
     let eachPlayerTestProgress = {}
     let otherUsers = [];
 
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
 
     let totalTests = room.problem.tests.length;
     

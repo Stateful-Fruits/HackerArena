@@ -49,7 +49,7 @@ class PairCreateGameRoom extends React.Component {
   }
 
   createRoom (problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty = 0, maxDifficulty = 8) {
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let username = this.props.currentUser.username;
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
@@ -192,7 +192,8 @@ class PairCreateGameRoom extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    problems: state.problems
+    problems: state.problems,
+    currentUser: state.currentUser
   }
 }
 

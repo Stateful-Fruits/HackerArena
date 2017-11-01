@@ -45,7 +45,7 @@ class NavBar extends Component {
           <a href='/AddProblem' className='leftNav nav-item navbar-brand'>Add Problem</a>
           <a href='/CodeRunLobby' className='leftNav nav-item navbar-brand'>Code Run</a> */}
           {
-            fire.auth().currentUser ? (
+            currentUser ? (
               <li
                 className="nav-item rightNav navbar-brand"
                 onClick={

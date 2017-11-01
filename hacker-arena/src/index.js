@@ -49,7 +49,6 @@ const middleware = routerMiddleware(history);
 
 // Add the reducer to your store on the `router` key
 // Also apply our middleware for navigating
-console.log('reducers', reducers);
 const store = createStore(
   combineReducers({
     ...reducers,
@@ -58,7 +57,10 @@ const store = createStore(
   applyMiddleware(middleware)
 );
 
+let currentUser = store.getState().currentUser;
+
 fire.auth().onAuthStateChanged(function(user) {
+  console.log('onAuthStateChangedRunning');
 
   if (user) {
     checkIfUserIsAdminAsync(user.uid)
@@ -66,12 +68,13 @@ fire.auth().onAuthStateChanged(function(user) {
       console.log('payload from check if admin', payload)
       const { adminStatus, username } = payload;
       
-      user.adminStatus = adminStatus;
+      user.adminStatus = adminStatus || false;
       user.username = username || fire.auth().currentUser.email.split('@')[0];
 
       user.updateProfile(user);
       console.log('user is now', fire.auth().currentUser);
       store.dispatch(updateCurrentUser(user));
+      currentUser = store.getState().currentUser;
     })
     .catch(err => {
       console.log(err);
@@ -79,6 +82,7 @@ fire.auth().onAuthStateChanged(function(user) {
   } else {
     user = {};
     store.dispatch(updateCurrentUser(user));
+    currentUser = store.getState().currentUser;
   }
 
   ReactDOM.render(
@@ -97,56 +101,56 @@ fire.auth().onAuthStateChanged(function(user) {
                   )
                 )}/> */}
                 <Route exact path="/AddProblem" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <AddProblem />
                   ) : (
                     <Redirect to="/" />
                   )
                 )}/>
                 <Route exact path="/Classic" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <Classic />
                   ) : (
                     <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/CreateGameRoom" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <CreateGameRoom />
                   ) : (
                     <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/User/:username" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <UserProfile />
                   ) : (
                     <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/GameRoom/:roomId" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <GameRoom />
                   ) : (
                     <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/Spectate/:roomId" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <SpectatorRoom />
                   ) : ( 
                     <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/CodeRunLobby" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <CodeRunLobby />
                   ) : (
                     <Redirect to="/" />      
                   )
                 )}/>
                 <Route exact path="/CodeRun/:roomId" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <CodeRunRoom />
                   ) : (
                     <Redirect to="/" />      
@@ -154,7 +158,7 @@ fire.auth().onAuthStateChanged(function(user) {
                 )}/>
 
                 <Route exact path="/Pair" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <PairHome />
                   ) : (
                     <Redirect to="/" />      
@@ -162,7 +166,7 @@ fire.auth().onAuthStateChanged(function(user) {
                 )}/>
 
                 <Route exact path="/Pair/CreateGameRoom" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <PairCreateGameRoom />
                   ) : (
                     <Redirect to="/" />      
@@ -170,7 +174,7 @@ fire.auth().onAuthStateChanged(function(user) {
                 )}/>
 
                 <Route exact path="/Pair/GameRoom/:roomId" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <PairGameRoom />
                     ) : (
                     <Redirect to="/" />      
@@ -178,7 +182,7 @@ fire.auth().onAuthStateChanged(function(user) {
                   )}/>
 
                 <Route exact path="/Solo" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <Solo />
                   ) : (
                     <Redirect to="/" />      
@@ -186,14 +190,14 @@ fire.auth().onAuthStateChanged(function(user) {
                 )}/>
 
                 <Route exact path="/Solo/GameRoom/:roomId" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <SoloRoom />
                     ) : (
                     <Redirect to="/" />      
                     )
                   )}/>
                 <Route exact path="/CodeRunSpectator/:roomId" render={() => (
-                  fire.auth().currentUser ? (
+                  currentUser.username ? (
                     <CodeRunSpectator />
                     ) : (
                     <Redirect to="/" />      
