@@ -2,9 +2,10 @@ import nightmare from 'nightmare';
 
 describe('When on the lobby screen (game room list)', () => {
   let page = nightmare().goto('http://localhost:3000')
-      .type('#Login > div > form > div.form-input > input', 'test123@gmail.com')
-      .type('#Login > div > form > div:nth-child(3) > input', 'test123')
-      .click('#Login > div > form > div:nth-child(5) > button').wait(1000);
+      .type('#root > div > div > div > div.hero > div > div > form > div:nth-child(2) > input:nth-child(2)', 'test123@gmail.com')
+      .type('#root > div > div > div > div.hero > div > div > form > div:nth-child(2) > input:nth-child(4)', 'test123')
+      .click('#root > div > div > div > div.hero > div > div > form > div:nth-child(4) > button')
+      .click('#root > div > nav > ul > li:nth-child(3)').wait(1000).click('#root > div > nav > ul > li:nth-child(3)');
 
   test('User can search the game rooms for usernames', async () => {
     let filterTextInput = await page.exists('.searchBar');
@@ -38,16 +39,8 @@ describe('When on the lobby screen (game room list)', () => {
   }, 20000);
 
   test('user can click the create room button, and be navigated to create game room', async () => {
-    let navigatedToCreateGameRoom = await page.click('.createGameButton').exists('.submitCreateGame');
+    let navigatedToCreateGameRoom = await page.click('.createGameButton')
+                                              .exists('.submitCreateGame').end();
     return expect(navigatedToCreateGameRoom).toBe(true);
-  }, 20000);
-  
-  test('user can navigate back to home page with gameroom list', async () => {
-    let navigateBackToHome = await page
-                                  .click('#root > div > nav > ul > li:nth-child(1)')
-                                  .screenshot('./src/Tests/test.png')
-                                  .exists('#GameRoomList')
-                                  .end();
-    return expect(navigateBackToHome).toBe(true);
   }, 20000);
 });
