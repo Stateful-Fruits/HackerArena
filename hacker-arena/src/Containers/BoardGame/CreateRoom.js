@@ -99,7 +99,7 @@ class CreateRoom extends React.Component {
   render () {
     return (
       <div>
-        <div className="slider-container">
+        <div className="slider-container borderized">
           <div id="slider"></div>
         </div>
         <button className='btn createGameButton createBoardroom' onClick={this.createRoom}><h3>Create Board Room</h3></button>
