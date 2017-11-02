@@ -104,12 +104,14 @@ class SpectatorRoom extends Component {
       && !this.props.gameRooms[this.props.gameRoomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     let currentUser = this.props.currentUser;
+
+    let colors = ['blue', 'orange', 'purple', 'green', 'yellow', 'red', 'cyan'];
     
     return gameRoom ? (
       <div>
         <SpectatorGameDescription gameRoom={gameRoom} />
-        <ProgressBar room={gameRoom} currentUser={currentUser}/>
-        <SpectatorEditors gameRoom={gameRoom} />
+        <ProgressBar room={gameRoom} currentUser={currentUser} colors={colors}/>
+        <SpectatorEditors gameRoom={gameRoom} colors={colors}/>
         <SpectatorChat
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}

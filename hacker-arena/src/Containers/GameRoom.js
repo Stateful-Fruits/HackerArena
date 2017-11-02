@@ -51,7 +51,8 @@ class GameRoom extends React.Component {
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
         && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
-      let { gameRooms, roomId, username } = this.props;
+      let { gameRooms, roomId, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
       // when you're the last player inside, leaving deletes the gameroom
@@ -62,8 +63,8 @@ class GameRoom extends React.Component {
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
         // see if the game needs to switch to standby
-        if (playerNames.length - 1 < gameRoom.playerCapacity 
-            && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
+        // if (playerNames.length - 1 < gameRoom.playerCapacity 
+        //     && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
         // don't allow handle enter to run again 
         this.setState({ allowEnter: false });
         
