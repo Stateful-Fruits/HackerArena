@@ -237,84 +237,84 @@ const Home = (props) => {
       <div className="tab-pane vertPane fade" id="v-pills-blind" role="tabpanel" aria-labelledby="v-pills-blind">
         <h3 className="disPrevHeader"><strong>Blind</strong></h3>
         <h5> Cost: <span className="d1 badge">1</span> </h5>
-        <h5>Darkens opponent's editor for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Darkens opponent's editor for 5 seconds.</h5>
         <h5><em>Ahhhhh! Help I can't C...++</em></h5>
         <img src ="/assets/Blind.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-python" role="tabpanel" aria-labelledby="v-pills-python">
         <h3 className="disPrevHeader"><strong>Python</strong></h3>
         <h5> Cost: <span className="d1 badge">1</span> </h5>
-        <h5>Changes opponent's editor language to Python for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Changes opponent's editor language to Python for 5 seconds.</h5>
         <h5><em>Do snakes have really long tails or just really long necks?...</em></h5>
         <img src ="/assets/Python.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-kennify" role="tabpanel" aria-labelledby="v-pills-kennify">
         <h3 className="disPrevHeader"><strong>Kennify</strong></h3>
         <h5> Cost: <span className="d1 badge">1</span> </h5>
-        <h5>Gives opponent the K-Dawg special for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Gives opponent the K-Dawg special for 5 seconds.</h5>
         <h5><em>"I'm late" - Kenneth Tso</em></h5>
         <img src ="/assets/Kennify.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-fog" role="tabpanel" aria-labelledby="v-pills-fog">
         <h3 className="disPrevHeader"><strong>Fog</strong></h3>
         <h5> Cost: <span className="d3 badge">3</span> </h5>
-        <h5>Blur opponent's editor for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Blur opponent's editor for 5 seconds.</h5>
         <h5><em>20/20 2 400/20 4 5</em></h5>
         <img style={{width: '800px', height: '500px'}}src ="/assets/Blur.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-flip" role="tabpanel" aria-labelledby="v-pills-flip">
         <h3 className="disPrevHeader"><strong>Flip</strong></h3>
         <h5> Cost: <span className="d3 badge">3</span> </h5>
-        <h5>Flips opponent's editor for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Flips opponent's editor for 5 seconds.</h5>
         <h5><em>{"Flips opponent's editor for 5 seconds.".split('').reverse().join('')}</em></h5>
         <img src ="/assets/Flip.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-oldman" role="tabpanel" aria-labelledby="v-pills-oldman">
         <h3 className="disPrevHeader"><strong>Old Man</strong></h3>
         <h5> Cost: <span className="d3 badge">3</span> </h5>
-        <h5>Increase zoom on opponent's editor.</h5>
+        <h5><strong>Effect: </strong>Increase zoom on opponent's editor.</h5>
         <h5><em>Get off my lawn!</em></h5>
         <img src ="/assets/OldMan.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-linebomb" role="tabpanel" aria-labelledby="v-pills-linebomb">
         <h3 className="disPrevHeader"><strong>Line Bomb</strong></h3>
         <h5> Cost: <span className="d5 badge">5</span> </h5>
-        <h5>Darkens opponent's editor for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Inserts random lines of letters into opponent's editor.</h5>
         <h5><em>fsdofijfoidjfoijfaodifdofjaodifjda?</em></h5>
         <img src ="/assets/LineBomb.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-sublime" role="tabpanel" aria-labelledby="v-pills-sublime">
         <h3 className="disPrevHeader"><strong>Sublime</strong></h3>
         <h5> Cost: <span className="d5 badge">5</span> </h5>
-        <h5>Display alert to opponent on text input for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Display alert to opponent on text input for 5 seconds.</h5>
         <h5><em>Sponsored by VSCode&copy;</em></h5>
         <img src ="/assets/Sublime.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-move" role="tabpanel" aria-labelledby="v-pills-move">
         <h3 className="disPrevHeader"><strong>Move</strong></h3>
         <h5> Cost: <span className="d5 badge">5</span> </h5>
-        <h5>Moves opponent's editor for 5 seconds.</h5>
+        <h5><strong>Effect: </strong>Moves opponent's editor for 5 seconds.</h5>
         <h5><em>Catch me if you can!</em></h5>
         <img src ="/assets/Move.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-undo" role="tabpanel" aria-labelledby="v-pills-undo">
         <h3 className="disPrevHeader"><strong>Undo</strong></h3>
         <h5> Cost: <span className="d5 badge">5</span> </h5>
-        <h5>Deletes the last 10 entires the opponent has made.</h5>
+        <h5><strong>Effect: </strong>Deletes the last 10 entires the opponent has made.</h5>
         <h5><em>Ooooops</em></h5>
         <img src ="/assets/Undo.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-charmin" role="tabpanel" aria-labelledby="v-pills-charmin">
         <h3 className="disPrevHeader"><strong>Charmin</strong></h3>
         <h5> Cost: <span className="d5 badge">5</span> </h5>
-        <h5><em>Displays a full length Charmin ad to opponent.</em></h5>
+        <h5><strong>Effect: </strong>Displays a full length Charmin ad to opponent.</h5>
         <h5><em>Sponsored by Charmin&copy;</em></h5>
         <img src ="/assets/Charmin.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-wipe" role="tabpanel" aria-labelledby="v-pills-wipe">
       <h3 className="disPrevHeader"><strong>Wipe</strong></h3>
       <h5> Cost: <span className="d10 badge">20</span> </h5>
-      <h5>Clears and resets opponent's editor.</h5>
+      <h5><strong>Effect: </strong>Clears and resets opponent's editor.</h5>
       <h5><em>Not to be confused with Charmin</em></h5>
       <img src ="/assets/Wipe.gif"/>
       </div>
