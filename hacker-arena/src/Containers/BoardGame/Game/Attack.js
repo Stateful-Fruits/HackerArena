@@ -28,7 +28,7 @@ class Attack extends React.Component {
   render () {
     let attack = this.props.attack;
     return <div>
-      <button onClick={this.invoke}>{attack}</button>
+      <button className='attackButton' onClick={this.invoke}>{attack}</button>
     </div>
   }
 }
