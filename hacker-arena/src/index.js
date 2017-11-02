@@ -60,6 +60,128 @@ const store = createStore(
 let currentUser = store.getState().currentUser;
 
 fire.auth().onAuthStateChanged(function(user) {
+  let app = (
+    <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <App>
+        {
+          (
+            <Switch>
+              <Route exact path="/AddProblem" render={() => (
+                currentUser.username ? (
+                  <AddProblem />
+                ) : (
+                  <Redirect to="/" />
+                )
+              )}/>
+              <Route exact path="/Classic" render={() => (
+                currentUser.username ? (
+                  <Classic />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+              <Route exact path="/CreateGameRoom" render={() => (
+                currentUser.username ? (
+                  <CreateGameRoom />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+              <Route exact path="/User/:username" render={() => (
+                currentUser.username ? (
+                  <UserProfile />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+              <Route exact path="/GameRoom/:roomId" render={() => (
+                currentUser.username ? (
+                  <GameRoom />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+              <Route exact path="/Spectate/:roomId" render={() => (
+                currentUser.username ? (
+                  <SpectatorRoom />
+                ) : ( 
+                  <Redirect to="/" />      
+                )
+              )}/>
+              <Route exact path="/CodeRunLobby" render={() => (
+                currentUser.username ? (
+                  <CodeRunLobby />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+              <Route exact path="/CodeRun/:roomId" render={() => (
+                currentUser.username ? (
+                  <CodeRunRoom />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+
+              <Route exact path="/Pair" render={() => (
+                currentUser.username ? (
+                  <PairHome />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+
+              <Route exact path="/Pair/CreateGameRoom" render={() => (
+                currentUser.username ? (
+                  <PairCreateGameRoom />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+
+              <Route exact path="/Pair/GameRoom/:roomId" render={() => (
+                currentUser.username ? (
+                  <PairGameRoom />
+                  ) : (
+                  <Redirect to="/" />      
+                  )
+                )}/>
+
+              <Route exact path="/Solo" render={() => (
+                currentUser.username ? (
+                  <Solo />
+                ) : (
+                  <Redirect to="/" />      
+                )
+              )}/>
+
+              <Route exact path="/Solo/GameRoom/:roomId" render={() => (
+                currentUser.username ? (
+                  <SoloRoom />
+                  ) : (
+                  <Redirect to="/" />      
+                  )
+                )}/>
+              <Route exact path="/CodeRunSpectator/:roomId" render={() => (
+                currentUser.username ? (
+                  <CodeRunSpectator />
+                  ) : (
+                  <Redirect to="/" />      
+                  )
+                )}/>
+              <Route exact path="/" component={Home}/>
+              <Route exact path="/SignUp" component={SignUp}/>
+              <Route exact path="/Solo" component={Solo}/>
+              <Route exact path="/Classic" component={Classic}/>
+              <Route exact path="/Random" component={Random}/>
+            </Switch>
+          )
+        }
+      </App>
+    </ConnectedRouter>
+  </Provider>
+  );
 
   if (user) {
     checkIfUserIsAdminAsync(user.uid)
@@ -72,6 +194,13 @@ fire.auth().onAuthStateChanged(function(user) {
       user.updateProfile(user);
       store.dispatch(updateCurrentUser(user));
       currentUser = store.getState().currentUser;
+
+      // render 
+      ReactDOM.render(
+        app,
+        document.getElementById('root')
+      );
+
     })
     .catch(err => {
       console.log(err);
@@ -80,129 +209,11 @@ fire.auth().onAuthStateChanged(function(user) {
     user = {};
     store.dispatch(updateCurrentUser(user));
     currentUser = store.getState().currentUser;
+
+    //rendering 
+    ReactDOM.render(
+      app,
+      document.getElementById('root')
+    );
   }
-
-  ReactDOM.render(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <App>
-          {
-            (
-              <Switch>
-                <Route exact path="/AddProblem" render={() => (
-                  currentUser.username ? (
-                    <AddProblem />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                )}/>
-                <Route exact path="/Classic" render={() => (
-                  currentUser.username ? (
-                    <Classic />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-                <Route exact path="/CreateGameRoom" render={() => (
-                  currentUser.username ? (
-                    <CreateGameRoom />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-                <Route exact path="/User/:username" render={() => (
-                  currentUser.username ? (
-                    <UserProfile />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-                <Route exact path="/GameRoom/:roomId" render={() => (
-                  currentUser.username ? (
-                    <GameRoom />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-                <Route exact path="/Spectate/:roomId" render={() => (
-                  currentUser.username ? (
-                    <SpectatorRoom />
-                  ) : ( 
-                    <Redirect to="/" />      
-                  )
-                )}/>
-                <Route exact path="/CodeRunLobby" render={() => (
-                  currentUser.username ? (
-                    <CodeRunLobby />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-                <Route exact path="/CodeRun/:roomId" render={() => (
-                  currentUser.username ? (
-                    <CodeRunRoom />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-
-                <Route exact path="/Pair" render={() => (
-                  currentUser.username ? (
-                    <PairHome />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-
-                <Route exact path="/Pair/CreateGameRoom" render={() => (
-                  currentUser.username ? (
-                    <PairCreateGameRoom />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-
-                <Route exact path="/Pair/GameRoom/:roomId" render={() => (
-                  currentUser.username ? (
-                    <PairGameRoom />
-                    ) : (
-                    <Redirect to="/" />      
-                    )
-                  )}/>
-
-                <Route exact path="/Solo" render={() => (
-                  currentUser.username ? (
-                    <Solo />
-                  ) : (
-                    <Redirect to="/" />      
-                  )
-                )}/>
-
-                <Route exact path="/Solo/GameRoom/:roomId" render={() => (
-                  currentUser.username ? (
-                    <SoloRoom />
-                    ) : (
-                    <Redirect to="/" />      
-                    )
-                  )}/>
-                <Route exact path="/CodeRunSpectator/:roomId" render={() => (
-                  currentUser.username ? (
-                    <CodeRunSpectator />
-                    ) : (
-                    <Redirect to="/" />      
-                    )
-                  )}/>
-                <Route exact path="/" component={Home}/>
-                <Route exact path="/SignUp" component={SignUp}/>
-                <Route exact path="/Solo" component={Solo}/>
-                <Route exact path="/Classic" component={Classic}/>
-                <Route exact path="/Random" component={Random}/>
-              </Switch>
-            )
-          }
-        </App>
-      </ConnectedRouter>
-    </Provider>,
-    document.getElementById('root')
-  );
 });
