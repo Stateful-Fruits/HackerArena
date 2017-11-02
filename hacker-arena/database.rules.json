@@ -13,7 +13,7 @@
     "rooms": {
       ".read": "auth !== null",
       "$room": {
-        ".write": "!data.exists() || data.child(auth.uid).exists()",
+        ".write": "(!data.exists() || data.child(auth.uid).exists()) || (auth.token.admin === true && !newData.exists())",
         "players": {
           "$username": {
             ".write": "!data.exists() || auth.uid === data.child('uid').val()"
