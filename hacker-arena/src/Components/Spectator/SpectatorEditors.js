@@ -16,7 +16,7 @@ class SpectatorEditors extends Component {
       <div className={'spectator-editors' + (isPairRoom ? ' pair-spectator-editor' : '')}>
         { playersToShow.map((playerName, i) => (
           <SpectatorEditor
-            color={colors[i] || 'blue'}
+            color={colors ? colors[i] : 'blue'}
             playerName={playerName}
             playerInput={gameRoom.players[playerName].liveInput}
             key={String(playerName)+i}
