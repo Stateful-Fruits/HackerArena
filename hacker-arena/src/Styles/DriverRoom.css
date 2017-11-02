@@ -6,4 +6,12 @@
 .partner-message {
   font-size: 20px;
   font-family: Courier New, Courier, monospace;
+  padding: 20px;
+  margin: 5px;
+  float: right;
+  width: 49vw;
+  height: 130vh;
+  background: beige;
+  position: absolute;
+  left: 50vw;
 }

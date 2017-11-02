@@ -58,3 +58,12 @@
 .activity-log > ::-webkit-scrollbar {
   display: initial;
 }
+
+.pairNav .spectator-editors {
+  width: 50vw;
+}
+
+#pairNav > #editorAndTestSuite > .spectator-editors > .ace_editor {
+  width: 47vw !important;
+  left: 15px;
+}
