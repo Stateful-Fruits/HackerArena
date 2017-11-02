@@ -55,7 +55,7 @@ class CreateGameRoom extends React.Component {
     const room = {
       roomStatus: 'standby',
       isPairRoom: false,
-      startingCredits,
+      startingCredits: parseInt(startingCredits, 10),
       isPrivate,
       problemID,
       problem,

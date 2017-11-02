@@ -32,23 +32,25 @@ class NavigatorRoom extends React.Component {
           roomId={roomId}
           currentUser={currentUser}
         />
-        <div id="editorAndTestSuite">
-          <SpectatorEditors 
-            gameRoom={room}
-            roomId={roomId}
-            username={username} 
-            partnerName ={partnerName}
-            partnerRole={partnerRole}
-            currentUser={currentUser}
-          />
-          <TestSuite 
-            currentRoom={room}
-            roomId={roomId}
-            username={username} 
-            partnerName ={partnerName}
-            partnerRole={partnerRole}
-            currentUser={currentUser}
-          />
+        <div id="pairNav">
+          <div id="editorAndTestSuite">
+            <SpectatorEditors 
+              gameRoom={room}
+              roomId={roomId}
+              username={username} 
+              partnerName ={partnerName}
+              partnerRole={partnerRole}
+              currentUser={currentUser}
+            />
+            <TestSuite 
+              currentRoom={room}
+              roomId={roomId}
+              username={username} 
+              partnerName ={partnerName}
+              partnerRole={partnerRole}
+              currentUser={currentUser}
+            />
+          </div>
         </div>
         <div className="activity-log">
             {activityLog.map((message, i) => <p className="activity-message" key={message.slice(0, 3) + i}>{message}</p>).reverse()}
