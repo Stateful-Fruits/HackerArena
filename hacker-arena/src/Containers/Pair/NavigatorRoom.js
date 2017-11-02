@@ -41,6 +41,8 @@ class NavigatorRoom extends React.Component {
               partnerName ={partnerName}
               partnerRole={partnerRole}
               currentUser={currentUser}
+              activityLog={activityLog}
+              isPairRoom={true}
             />
             <TestSuite 
               currentRoom={room}
@@ -51,9 +53,6 @@ class NavigatorRoom extends React.Component {
               currentUser={currentUser}
             />
           </div>
-        </div>
-        <div className="activity-log">
-            {activityLog.map((message, i) => <p className="activity-message" key={message.slice(0, 3) + i}>{message}</p>).reverse()}
         </div>
       </div>
     )
