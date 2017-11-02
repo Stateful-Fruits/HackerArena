@@ -1,8 +1,5 @@
 import React from 'react';
 
-// import firebase from '../Firebase/firebase';
-// import provider from '../Firebase/oauth/oauth.js';
-
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';

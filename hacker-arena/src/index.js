@@ -84,19 +84,11 @@ fire.auth().onAuthStateChanged(function(user) {
 
   ReactDOM.render(
     <Provider store={store}>
-      { /* ConnectedRouter will use the store from Provider automatically */ }
       <ConnectedRouter history={history}>
         <App>
           {
             (
               <Switch>
-                {/* <Route exact path="/" render={() => (
-                  fire.auth().currentUser ? (
-                    <Home />
-                  ) : (
-                    <Redirect to="/" />
-                  )
-                )}/> */}
                 <Route exact path="/AddProblem" render={() => (
                   currentUser.username ? (
                     <AddProblem />
@@ -213,10 +205,4 @@ fire.auth().onAuthStateChanged(function(user) {
     </Provider>,
     document.getElementById('root')
   );
-})
-
-    
-
-// Now you can dispatch navigation actions from anywhere!
-// store.dispatch(push('/foo'))
-
+});

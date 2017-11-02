@@ -8,7 +8,6 @@ import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
 import $ from 'jquery';
 import fire from './Firebase/firebase';
-// import db from './Firebase/db';
 import syncToDb from './Firebase/syncToDb'
 
 import { push } from 'react-router-redux';
@@ -40,7 +39,6 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img className="fullLogo" src="/assets/fullLogo.png" />
-          {/* <h1 className="App-title">HACKER ARENA</h1> */}
           {
             currentUser.email ? (
               <span className="profile-image" onClick={() => navigate('/User/' + username)}>
