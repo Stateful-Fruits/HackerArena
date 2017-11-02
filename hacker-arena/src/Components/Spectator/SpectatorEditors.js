@@ -13,7 +13,7 @@ class SpectatorEditors extends Component {
       playersToShow = playersToShow.filter((player) => !navigators.includes(player));
     }
     return (
-            <div>
+            <div className="spectator-editors">
               { playersToShow.map((playerName, i) => (
                 <SpectatorEditor 
                   playerName={playerName}

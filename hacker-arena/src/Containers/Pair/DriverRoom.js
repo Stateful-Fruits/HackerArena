@@ -15,8 +15,8 @@ class DriverRoom extends React.Component {
     this.state = {
       allowEnter: true
     }
-
   }
+
   render() {
     let { room, roomId, username, partnerName, addPendingEvent, removePendingEvent, currentUser } = this.props
     let Videoroom = getTeamIndex(room, username)
@@ -41,8 +41,9 @@ class DriverRoom extends React.Component {
         
           <div className="partner-message">
             <p>YOUR NAVIGATOR IS {partnerName}</p>
-            <p>THEY WILL TELL YOU THE CODING CHALLENGE</p>
-            <p>AND THEY WILL TELL YOU WHAT TESTS YOU PASS OR DON'T PASS</p>
+            <p>LISTEN! THEY WILL TELL YOU WHAT PROBLEM YOU NEED TO SOLVE</p>
+            <p>IF YOU CLICK SUBMIT, THEY WILL TELL YOU WHAT TESTS YOU PASS</p>
+            <p>THEY WILL ALSO LET YOU KNOW WHICH DISRUPTIONS ARE COMING</p>
           </div>
         </div>
       </div>
