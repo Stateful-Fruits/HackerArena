@@ -5,7 +5,7 @@ import { normalLogin, normalSignUp, googleAuth, fbookAuth } from '../Helpers/aut
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-
+import '../Styles/Login.css';
 import syncToDb from '../Firebase/syncToDb'
 import updateBoardRooms from '../Actions/updateBoardRooms';
 import updateGameRooms from '../Actions/updateGameRooms';

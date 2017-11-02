@@ -71,7 +71,7 @@ video {
 
 .introduction {
     height: 40vh;
-    background-color: rgb(34, 29, 29);
+    background-color: rgb(220, 220, 220);
 }
 
 
@@ -147,13 +147,17 @@ progress::-webkit-progress-value {
     flex-direction: column;
     border: 1px solid black;
 }
+/* .gameModes {
+    height: 1000px;
+} */
   .tab-pane {
-      height: 200px;
+      /* height: 100%; */
       width: 70vw;
       border-radius: 15px;
       /* border: 1px solid black; */
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
       margin: 25px;
+      margin-bottom: 60px;
       padding: 25px;
   }
 
@@ -162,10 +166,75 @@ progress::-webkit-progress-value {
   }
 
 .disruptionsHome {
-    height: 300px;
-
+    height: 800px;
 }
-  
+ 
+.disPrevHeader {
+    margin: 0;
+}
+#homeDisruptions {
+    display: flex;
+    justify-content: center;
+}
+#v-pills-tab > a {
+    width: 120px;
+    margin: 5px;
+    text-align: left;
+    border-radius: 15px;
+    color: white;
+    background-color: rgb(128, 128, 128);
+}
+
+#v-pills-tab > a:hover {
+    color: rgb(65, 65, 65);
+    background-color: rgb(35, 35, 46);
+}
+
+#v-pills-tab > a.active {
+    color: black;
+    background-color: rgb(255, 255, 255);
+}
+
+.vertPane {
+    width: 70vw;
+    border-radius: 15px;
+    /* border: 1px solid black; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    margin: 25px;
+    padding: 25px;
+}
+
+.disruptionsPane {
+    margin-top: 20%;
+    height: 300px;
+}
+
 .nav-pills .nav-link {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+
+.classicSnaps{
+    background: url('/assets/ClassicSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
+}
+
+.pairSnaps{
+    background: url('/assets/ClassicSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
+}
+.codeRunSnaps{
+    background: url('/assets/ClassicSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
+}
+.soloSnaps{
+    background: url('/assets/SoloSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
 }
