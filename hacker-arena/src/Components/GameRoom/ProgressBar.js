@@ -72,6 +72,9 @@ class ProgressBar extends Component {
       let playerProgress = room.players[playerName].testStatus ? room.players[playerName].testStatus.filter((items) => items.passed).length : 0;
       eachPlayerTestProgress[playerName] = (playerProgress / totalTests) * 100;
     }
+
+    let colors = this.props.colors;
+
     return (
       <div className="over-prog-container">
         { 
@@ -104,7 +107,7 @@ class ProgressBar extends Component {
             >
               <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '1px solid rgba(255, 0, 0, 0.5)', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', borderRadius: '15px', marginRight: '5%'} : {}}>
                 <span className="opponentLabels">Player: </span>
-                <span className="opponent">{otherUserName}</span>
+                <span className="opponent" style={colors ? {color: colors[i]} : {}}>{otherUserName}</span>
                 <div className="thebars">
                   <div className="progress">
                     <div 

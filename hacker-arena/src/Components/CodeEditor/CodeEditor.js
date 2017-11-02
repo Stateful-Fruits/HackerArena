@@ -43,7 +43,6 @@ class CodeEditor extends React.Component {
     // Watches for cheating
     this.ace.editor.on("paste", () => {
       window.swal('You little cheater', '', 'warning');
-      
       this.resetEditor();
     });
 
@@ -254,7 +253,9 @@ class CodeEditor extends React.Component {
 
   resetEditor() {
     setTimeout( () => {
-      this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+        let oldHistory = this.ace.editor.getSession().getUndoManager();
+        this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+        this.ace.editor.getSession().setUndoManager(oldHistory);
     }, 500);
   }
 

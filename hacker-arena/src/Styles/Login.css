@@ -70,6 +70,25 @@ content: "/f023";
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
 }
 
+.signUpForm2 {
+    color: rgb(240, 240, 240);
+    height: 50vh !important;
+    background-color: rgba(0, 0, 0, 0.351);
+    width: 23vw !important;
+    padding: 25px;
+    margin-left: 4% !important;
+    margin-top: 8% !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+/* .quoteHome {
+    opacity: 0;
+    transition: opacity 2s ease;
+} */
+
+
 .facebookLogin {
     color: white;
     background-color: rgb(57, 88, 151);
