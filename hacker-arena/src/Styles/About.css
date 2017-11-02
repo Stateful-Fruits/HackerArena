@@ -147,13 +147,17 @@ progress::-webkit-progress-value {
     flex-direction: column;
     border: 1px solid black;
 }
+/* .gameModes {
+    height: 1000px;
+} */
   .tab-pane {
-      height: 200px;
+      /* height: 100%; */
       width: 70vw;
       border-radius: 15px;
       /* border: 1px solid black; */
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
       margin: 25px;
+      margin-bottom: 60px;
       padding: 25px;
   }
 
@@ -164,7 +168,10 @@ progress::-webkit-progress-value {
 .disruptionsHome {
     height: 800px;
 }
-  
+ 
+.disPrevHeader {
+    margin: 0;
+}
 #homeDisruptions {
     display: flex;
     justify-content: center;
@@ -189,7 +196,6 @@ progress::-webkit-progress-value {
 }
 
 .vertPane {
-    height: 600px;
     width: 70vw;
     border-radius: 15px;
     /* border: 1px solid black; */
@@ -198,6 +204,37 @@ progress::-webkit-progress-value {
     padding: 25px;
 }
 
+.disruptionsPane {
+    margin-top: 20%;
+    height: 300px;
+}
+
 .nav-pills .nav-link {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+
+.classicSnaps{
+    background: url('/assets/ClassicSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
+}
+
+.pairSnaps{
+    background: url('/assets/ClassicSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
+}
+.codeRunSnaps{
+    background: url('/assets/ClassicSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
+}
+.soloSnaps{
+    background: url('/assets/SoloSS.png');
+    background-size: cover;
+    height: 500px;
+    width: auto;
 }

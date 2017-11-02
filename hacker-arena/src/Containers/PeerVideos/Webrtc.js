@@ -50,7 +50,7 @@ console.log('componentDidMount');
         // you can name it anything
       });
       webrtc.joinRoom(`spectator/${room.key}`);
-    this.webrtc = webrtc;
+      this.webrtc = webrtc;
     }
 componentDidUpdate() {
   console.log('Componentwillupdate called')

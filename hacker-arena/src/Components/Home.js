@@ -5,10 +5,30 @@ import '../Styles/About.css';
 import twoplayers from '../two player.png'
 import fire from '../Firebase/firebase';
 import $ from 'jquery';
+import HomeHelpers from './HomeHelpers/HomeHelpers';
 const Home = (props) => { 
-  let Form =null
+  setTimeout(function(){
+    $('.signUpForm2').css('opacity', 1);
+    // $('.quoteHome').css('opacity', 1);
+  }, 1000)
+  let Form;
+  let date = HomeHelpers.newDateParser();
+  let time = HomeHelpers.getTime();
+  let quote = HomeHelpers.quoteGen();
   let status = fire.auth().currentUser? fire.auth().currentUser.email.split('@')[0]:false;
-    if(status) {Form = <div className="">Hi {status}</div>}
+    if(status) {Form = 
+    <div className="signUpForm2">
+      <h5>Welcome, {status}!</h5>
+      <h2 id="time">{time}</h2>
+      <h3>{date[0]}</h3>
+      <h4>{date.slice(1,4).join(' ')}</h4>
+      <br />
+      {/* <div className="quoteHome"> */}
+      <h5><em>{quote[0]}</em></h5>
+      <h5>{quote[1]}</h5>
+      {/* </div> */}
+    </div>
+    }
     else{Form = <Signup/>}
     
   $(document).ready(function(){
@@ -65,6 +85,8 @@ const Home = (props) => {
     $('#progressBar').css('opacity', '1');
   }
   })
+  
+
   return (
   <div>
     <progress className="" value="0" id="progressBar">
@@ -82,7 +104,7 @@ const Home = (props) => {
       what does this app do?
       purpose 
     </div>
-    <div>
+    <div className="gameModes">
       <div className="features">
         <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}><strong>Game Modes</strong></h1>
         <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -116,6 +138,7 @@ const Home = (props) => {
 
         <div className="tab-content" id="pills-tabContent">
           <div className="tab-pane fade show active" id="pills-classic" role="tabpanel" aria-labelledby="pills-home-tab">
+          <div className="classicSnaps"></div>
             <h3> <strong>Classic Mode</strong></h3>
             <h5><em>Programmers face off against each other in a race to finish the coding challenge first.</em></h5>
             <h5><strong>Suggested Players: </strong>2+</h5>
@@ -126,6 +149,7 @@ const Home = (props) => {
             <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-pair" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <div className="pairSnaps"></div>
             <h3> <strong>Pair Mode</strong></h3>
             <h5><em>Players fall into the role of Navigator or Driver, </em></h5>
             <h5><strong>Suggested Players: </strong>4+</h5>
@@ -136,6 +160,7 @@ const Home = (props) => {
             <h5 className="text-muted"> Estimated Time: 15 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-coderun" role="tabpanel" aria-labelledby="pills-contact-tab">
+          <div className="codeRunSnaps"></div>
           <h3> <strong>Code Run</strong></h3>
             <h5><em>Players traverse a board, utilizing items, environment and disruptions to reach the finish line.</em></h5>
             <h5><strong>Suggested Players: </strong>2+</h5>
@@ -145,6 +170,7 @@ const Home = (props) => {
             <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-solo" role="tabpanel" aria-labelledby="pills-contact-tab">
+          <div className="soloSnaps"></div>
             <h3><strong>Solo Mode</strong></h3>
             <h5><em>Programmers can hone their skills by practicing alone in this sandbox mode.</em></h5>
             <h5><strong>Suggested Players: </strong>1</h5>
@@ -203,46 +229,94 @@ const Home = (props) => {
       </a>
     </div>
     <div className="tab-content" id="v-pills-tabContent">
-      <div className="tab-pane vertPane fade show active" id="v-pills-disruptions" role="tabpanel" aria-labelledby="v-pills-disruption">
-        Disruption
+      <div className="tab-pane vertPane disruptionsPane fade show active" id="v-pills-disruptions" role="tabpanel" aria-labelledby="v-pills-disruption">
+        <h1><strong>Disruptions</strong></h1>
+        <h3>Click on a tab to explore disruptions!</h3>
+        <img style={{height: '80px'}}src="/assets/leftArrow.png" />
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-blind" role="tabpanel" aria-labelledby="v-pills-blind">
-        BLIND GIF
+        <h3 className="disPrevHeader"><strong>Blind</strong></h3>
+        <h5> Cost: <span className="d1 badge">1</span> </h5>
+        <h5>Darkens opponent's editor for 5 seconds.</h5>
+        <h5><em>Ahhhhh! Help I can't C...++</em></h5>
+        <img src ="/assets/Blind.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-python" role="tabpanel" aria-labelledby="v-pills-python">
-        PYTHON
+        <h3 className="disPrevHeader"><strong>Python</strong></h3>
+        <h5> Cost: <span className="d1 badge">1</span> </h5>
+        <h5>Changes opponent's editor language to Python for 5 seconds.</h5>
+        <h5><em>Do snakes have really long tails or just really long necks?...</em></h5>
+        <img src ="/assets/Python.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-kennify" role="tabpanel" aria-labelledby="v-pills-kennify">
-        kenny
+        <h3 className="disPrevHeader"><strong>Kennify</strong></h3>
+        <h5> Cost: <span className="d1 badge">1</span> </h5>
+        <h5>Gives opponent the K-Dawg special for 5 seconds.</h5>
+        <h5><em>"I'm late" - Kenneth Tso</em></h5>
+        <img src ="/assets/Kennify.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-fog" role="tabpanel" aria-labelledby="v-pills-fog">
-        fog
+        <h3 className="disPrevHeader"><strong>Fog</strong></h3>
+        <h5> Cost: <span className="d3 badge">3</span> </h5>
+        <h5>Blur opponent's editor for 5 seconds.</h5>
+        <h5><em>20/20 2 400/20 4 5</em></h5>
+        <img style={{width: '800px', height: '500px'}}src ="/assets/Blur.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-flip" role="tabpanel" aria-labelledby="v-pills-flip">
-        flip
+        <h3 className="disPrevHeader"><strong>Flip</strong></h3>
+        <h5> Cost: <span className="d3 badge">3</span> </h5>
+        <h5>Flips opponent's editor for 5 seconds.</h5>
+        <h5><em>{"Flips opponent's editor for 5 seconds.".split('').reverse().join('')}</em></h5>
+        <img src ="/assets/Flip.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-oldman" role="tabpanel" aria-labelledby="v-pills-oldman">
-        oldman
-
+        <h3 className="disPrevHeader"><strong>Old Man</strong></h3>
+        <h5> Cost: <span className="d3 badge">3</span> </h5>
+        <h5>Increase zoom on opponent's editor.</h5>
+        <h5><em>Get off my lawn!</em></h5>
+        <img src ="/assets/OldMan.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-linebomb" role="tabpanel" aria-labelledby="v-pills-linebomb">
-        linebomb
-
+        <h3 className="disPrevHeader"><strong>Line Bomb</strong></h3>
+        <h5> Cost: <span className="d5 badge">5</span> </h5>
+        <h5>Darkens opponent's editor for 5 seconds.</h5>
+        <h5><em>fsdofijfoidjfoijfaodifdofjaodifjda?</em></h5>
+        <img src ="/assets/LineBomb.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-sublime" role="tabpanel" aria-labelledby="v-pills-sublime">
-        sublime
+        <h3 className="disPrevHeader"><strong>Sublime</strong></h3>
+        <h5> Cost: <span className="d5 badge">5</span> </h5>
+        <h5>Display alert to opponent on text input for 5 seconds.</h5>
+        <h5><em>Sponsored by VSCode&copy;</em></h5>
+        <img src ="/assets/Sublime.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-move" role="tabpanel" aria-labelledby="v-pills-move">
-        move
+        <h3 className="disPrevHeader"><strong>Move</strong></h3>
+        <h5> Cost: <span className="d5 badge">5</span> </h5>
+        <h5>Moves opponent's editor for 5 seconds.</h5>
+        <h5><em>Catch me if you can!</em></h5>
+        <img src ="/assets/Move.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-undo" role="tabpanel" aria-labelledby="v-pills-undo">
-        undo
+        <h3 className="disPrevHeader"><strong>Undo</strong></h3>
+        <h5> Cost: <span className="d5 badge">5</span> </h5>
+        <h5>Deletes the last 10 entires the opponent has made.</h5>
+        <h5><em>Ooooops</em></h5>
+        <img src ="/assets/Undo.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-charmin" role="tabpanel" aria-labelledby="v-pills-charmin">
-        charmin
+        <h3 className="disPrevHeader"><strong>Charmin</strong></h3>
+        <h5> Cost: <span className="d5 badge">5</span> </h5>
+        <h5><em>Displays a full length Charmin ad to opponent.</em></h5>
+        <h5><em>Sponsored by Charmin&copy;</em></h5>
+        <img src ="/assets/Charmin.gif"/>
       </div>
       <div className="tab-pane vertPane fade" id="v-pills-wipe" role="tabpanel" aria-labelledby="v-pills-wipe">
-        wipe
+      <h3 className="disPrevHeader"><strong>Wipe</strong></h3>
+      <h5> Cost: <span className="d10 badge">20</span> </h5>
+      <h5>Clears and resets opponent's editor.</h5>
+      <h5><em>Not to be confused with Charmin</em></h5>
+      <img src ="/assets/Wipe.gif"/>
       </div>
     </div>
       </div>
@@ -251,7 +325,7 @@ const Home = (props) => {
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> } */}
     
-      <h1 className="teamHeader" style={{borderTop: '1px black solid'}}> <strong>Team</strong> </h1>
+      <h1 className="teamHeader" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Team</strong> </h1>
     <div className="team card-deck">  
     <div className="card teamCard">
       <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card cap"/>
