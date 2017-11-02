@@ -4,8 +4,7 @@ import { push } from 'react-router-redux';
 import noUiSlider from 'nouislider'
 
 import db from '../Firebase/db';
-
-import fire from '../Firebase/firebase';
+// import fire from '../Firebase/firebase';
 
 import {filterProblemsByDifficulty, chooseRandomProblem} from './../Helpers/problemHelpers';
 import './../Styles/CreateGameRoom.css';

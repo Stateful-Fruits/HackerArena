@@ -19,8 +19,9 @@ const Home = (props) => {
     var getValue = function(){
         return $(window).scrollTop();
     }
+    var progressBar;
     if('max' in document.createElement('progress')){
-        var progressBar = $('progress');  
+        progressBar = $('progress');  
         // Set the Max attr for the first time
         progressBar.attr({ max: getMax() });
         $(document).on('scroll', function(){
@@ -32,10 +33,9 @@ const Home = (props) => {
         $(window).resize(function(){
             progressBar.attr({ max: getMax(), value: getValue() });
         }) };   
-    }
-    else {
-        var progressBar = $('.progress-bar'), 
-            max = getMax(), 
+      } else {
+        progressBar = $('.progress-bar');
+        var max = getMax(), 
             value, width;
         var getWidth = function(){
             // Calculate width in percentage
@@ -90,27 +90,27 @@ const Home = (props) => {
           <li className="nav-item">
             <a className="pills card nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-classic" role="tab" aria-controls="pills-home" aria-selected="true">
               <h2 className="card-title"> Classic </h2>
-              <img className="card-img-top aboutIcons" src='/assets/classic.png' />
+              <img className="card-img-top aboutIcons" alt='classic' src='/assets/classic.png' />
             </a>
           </li>
           <li className="nav-item">
             <a className="pills card nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-pair" role="tab" aria-controls="pills-profile" aria-selected="false">
               <h2 className="card-title"> Pair </h2>
-              <img className="card-img-top aboutIcons" src='/assets/pair.png' />
+              <img className="card-img-top aboutIcons" alt='pair' src='/assets/pair.png' />
             </a>
           
           </li>
           <li className="nav-item">
             <a className="pills card nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-coderun" role="tab" aria-controls="pills-contact" aria-selected="false">
             <h2 className="card-title"> Code Run </h2>
-              <img className="card-img-top aboutIcons" src='/assets/coderun.png' />
+              <img className="card-img-top aboutIcons" alt='codeRun' src='/assets/coderun.png' />
             </a>
           </li>
           <li className="nav-item">
             <a className="pills card nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-solo" role="tab" aria-controls="pills-contact" aria-selected="false">
 
             <h2 className="card-title"> Solo </h2>
-              <img className="card-img-top aboutIcons" src='/assets/solo.png' />
+              <img className="card-img-top aboutIcons" alt='solo' src='/assets/solo.png' />
             </a>
           </li>
         </ul>
@@ -137,7 +137,7 @@ const Home = (props) => {
       <h2 className="teamHeader"> Hey Yall its the Team </h2>
     <div className="team card-deck">  
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card image cap"/>
+      <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Name of Person right here</h4>
         <p className="card-text">I did these things for this project</p>
@@ -146,7 +146,7 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://i.ytimg.com/vi/LIMPxPdS4BE/maxresdefault.jpg" alt="Card image cap"/>
+      <img className="card-img-top teamPics" src="https://i.ytimg.com/vi/LIMPxPdS4BE/maxresdefault.jpg" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Name of Person right here</h4>
         <p className="card-text">I did these things for this project</p>
@@ -155,7 +155,7 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://www.theinquirer.net/w-images/0166cafa-de8b-44d6-91b4-6f210d34ddbf/1/googlealphagologo-580x358.png" alt="Card image cap"/>
+      <img className="card-img-top teamPics" src="https://www.theinquirer.net/w-images/0166cafa-de8b-44d6-91b4-6f210d34ddbf/1/googlealphagologo-580x358.png" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Name of Person right here</h4>
         <p className="card-text">I did these things for this project</p>
@@ -164,7 +164,7 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3-1020x765.jpg" alt="Card image cap"/>
+      <img className="card-img-top teamPics" src="https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3-1020x765.jpg" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Name of Person right here</h4>
         <p className="card-text">I did these things for this project</p>
@@ -173,7 +173,7 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="http://www.desartlab.com/wp-content/uploads/2015/10/jquery_logo.gif" alt="Card image cap"/>
+      <img className="card-img-top teamPics" src="http://www.desartlab.com/wp-content/uploads/2015/10/jquery_logo.gif" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Name of Person right here</h4>
         <p className="card-text">I did these things for this project</p>

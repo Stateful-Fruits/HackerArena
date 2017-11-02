@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import noUiSlider from 'nouislider'
 
-import fire from './../../Firebase/firebase';
-
 import db from './../../Firebase/db';
 
 import { filterProblemsByDifficulty, chooseRandomProblem } from './../../Helpers/problemHelpers';

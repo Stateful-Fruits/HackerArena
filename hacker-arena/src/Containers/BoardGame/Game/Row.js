@@ -1,7 +1,7 @@
 import React from 'react';
 import helper from '../Helpers/helper';
 import {connect} from 'react-redux';
-import fire from '../../../Firebase/firebase';
+// import fire from '../../../Firebase/firebase';
 
 class Row extends React.Component {
   constructor (props) {

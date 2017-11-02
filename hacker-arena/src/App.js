@@ -7,8 +7,8 @@ import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
 import $ from 'jquery';
-import fire from './Firebase/firebase';
-import syncToDb from './Firebase/syncToDb'
+// import fire from './Firebase/firebase';
+import syncToDb from './Firebase/syncToDb';
 
 import { push } from 'react-router-redux';
 
@@ -38,7 +38,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img className="fullLogo" src="/assets/fullLogo.png" />
+          <img className="fullLogo" alt='fullLogo' src="/assets/fullLogo.png" />
           {
             currentUser.email ? (
               <span className="profile-image" onClick={() => navigate('/User/' + username)}>

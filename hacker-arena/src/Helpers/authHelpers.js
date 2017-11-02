@@ -122,23 +122,6 @@ const _addNewUserToDb = function(uid, email) {
   });
 }
 
-const _addUsernameToAuth = function(uid, email) {
-  console.log('running addusernam,e to auth');
-  let username = getUsernameFromEmail(email)
-
-  let body = {
-    uid,
-    username
-  };
-
-  return _cloudHttpCall('addUsernameToAuth', 'POST', body)
-  .then(payload => console.log('username added to auth!'))
-  .catch(err => {
-    console.log('err in add username to auth', err);
-    return err;
-  })
-}
-
 const _cloudHttpCall = function(fnName, method = 'GET', body, params) {
   console.log('about to call function', fnName)
 
@@ -169,7 +152,6 @@ const _cloudHttpCall = function(fnName, method = 'GET', body, params) {
     }
     url = url.slice(0, -1);
   }
-  console.log('url' + 'myinit', url, myInit);
   
   return fetch(url, myInit);
 }

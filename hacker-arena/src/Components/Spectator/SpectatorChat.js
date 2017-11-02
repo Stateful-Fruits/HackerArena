@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import fire from '../../Firebase/firebase';
+// import fire from '../../Firebase/firebase';
 import Webrtc from '../../Containers/PeerVideos/Webrtc.js';
 import SpectatorChatMessage from './SpectatorChatMessage.js';
 

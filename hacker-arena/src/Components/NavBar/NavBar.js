@@ -17,7 +17,7 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-           <img className="HAlogo navbarLogo " src="/assets/HAlogo.png" onClick={ () => { navigate('/') }}/>
+           <img className="HAlogo navbarLogo " alt="nav logo" src="/assets/HAlogo.png" onClick={ () => { navigate('/') }}/>
           
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
             Home </li>
@@ -78,9 +78,8 @@ class NavBar extends Component {
 export default NavBar;
 
 
-{/* <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
-About </li> 
+/*
+<li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}> About </li> 
 <li className="navbarLogo nav-item leftNav navbar-brand" onClick={ () => { navigate('/'); }}>
-           <strong>Hacker Arena Logo Here</strong></li>
-          */}
-
+<strong>Hacker Arena Logo Here</strong></li>
+*/

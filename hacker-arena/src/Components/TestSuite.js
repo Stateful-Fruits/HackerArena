@@ -1,5 +1,4 @@
 import React from 'react';
-import fire from '../Firebase/firebase';
 import '../Styles/TestSuite.css';
 
 /* Check if user is challenger or creator*/

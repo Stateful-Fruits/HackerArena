@@ -8,7 +8,7 @@ import GameRoom from './Containers/GameRoom';
 import UserProfile from './Containers/UserProfile'
 import SignUp from './Containers/SignUp'
 import SpectatorRoom from './Containers/Spectator/SpectatorRoom';
-import Login from './Containers/Login'
+// import Login from './Containers/Login'
 import AddProblem from './Containers/AddProblem/AddProblem';
 import CreateGameRoom from './Containers/CreateGameRoom';
 import CodeRunSpectator from './Containers/Spectator/CodeRunSpectator';
@@ -21,7 +21,7 @@ import PairCreateGameRoom from './Containers/Pair/PairCreateGameRoom';
 import Random from './Components/Random.js'
 import PairGameRoom from './Containers/Pair/PairGameRoom';
 
-import { checkIfUserIsAdminAsync, addUsernameToAuth } from './Helpers/authHelpers'
+import { checkIfUserIsAdminAsync } from './Helpers/authHelpers'
 
 import Solo from './Containers/Solo/CreateSolo';
 import SoloRoom from './Containers/Solo/SoloRoom';

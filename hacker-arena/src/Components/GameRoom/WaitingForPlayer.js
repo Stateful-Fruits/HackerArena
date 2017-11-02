@@ -62,7 +62,7 @@ class WaitingForPlayer extends Component {
           { this.props.room ? playerSpans : null}
         </ul>
         <h3> Waiting... </h3>
-        <img src="https://i.imgur.com/joQlpTb.gif" style={{marginTop: '-3%'}} />
+        <img src="https://i.imgur.com/joQlpTb.gif" alt='waiting' style={{marginTop: '-3%'}} />
         {/* <i className="fa fa-circle-o-notch fa-spin" style={{fontSize: "300px", color: 'grey'}}></i> */}
       </div>
     );
