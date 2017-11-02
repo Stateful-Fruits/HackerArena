@@ -8,7 +8,7 @@ OBJLoader(THREE);
 class TopSecret extends React.Component {
   componentDidMount(){
     this.THREE = THREE
-    var renderer, scene, camera, banana, banana2, barrel;
+    var renderer, scene, camera, banana, banana2;
 
 var ww = 600,
 	wh = 600;
@@ -39,17 +39,17 @@ var loadOBJ = () => {
 	var manager = new THREE.LoadingManager();
 	//Loader for Obj from Three.js
 	var loader = new this.THREE.OBJLoader( manager );
-	let diffuse = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_d.jpg" );
-  let specular = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_s.jpg" );
-  let normal = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_n.jpg" );
+	// let diffuse = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_d.jpg" );
+  // let specular = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_s.jpg" );
+  // let normal = THREE.ImageUtils.loadTexture( "https://s3-us-west-2.amazonaws.com/s.cdpn.io/25480/Misc_WoodBarrelOldMold_2k_n.jpg" );
 
-	var material = new THREE.MeshPhongMaterial({
-    map: diffuse,
-    specular: 0xffffff,
-    specularMap: specular,
-    shininess: 10,
-    normalMap: normal
-  });
+	// var material = new THREE.MeshPhongMaterial({
+  //   map: diffuse,
+  //   specular: 0xffffff,
+  //   specularMap: specular,
+  //   shininess: 10,
+  //   normalMap: normal
+  // });
 
 	//Launch loading of the obj file, addBananaInScene is the callback when it's ready 
 	loader.load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/127738/banana.obj', addBananaInScene);

@@ -121,12 +121,12 @@ class GameRoomList extends Component {
       <div id='GameRoomList'>
         <div className="searchAndFilter">
         <div className="input-group gameListSearch">
-          <span className="input-group-addon"><img src="/assets/search.png"/></span>
+          <span className="input-group-addon"><img src="/assets/search.png" alt='search'/></span>
           <input onChange={this.handleSearchInput} type="text" className="form-control searchBar" placeholder="Search for players"/>
           <span className="input-group-addon" onClick={this.handleShowSearch}> Search</span>
         </div>
         <div className="input-group filterGameSearch">
-        <span className="input-group-addon"><img src="/assets/filter.png"/></span>
+        <span className="input-group-addon"><img src="/assets/filter.png" alt='filter'/></span>
         <select className='form-control filterBar' onChange={this.handleSortChange} value={this.state.filters[this.state.filterInx]}>
           { this.state.filters.map((filter) => <option key={filter} style={{ fontSize: '1.5em' }}>{filter}</option>) }
         </select>

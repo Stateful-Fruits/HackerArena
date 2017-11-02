@@ -46,7 +46,7 @@ class PairGameRoom extends React.Component {
   }
 
   componentWillUpdate() {
-    let navigate = this.props.navigate;
+    // let navigate = this.props.navigate;
     // if (this.props.username 
     //   && this.props.gameRooms
     //   && this.props.gameRooms[this.props.roomId]
@@ -230,7 +230,7 @@ class PairGameRoom extends React.Component {
       codeToClear,
     }
 
-    otherIdentifiers ? event.otherIdentifiers = otherIdentifiers : null;
+    if (otherIdentifiers) event.otherIdentifiers = otherIdentifiers;
 
     pendingEvents = pendingEvents.slice()
     

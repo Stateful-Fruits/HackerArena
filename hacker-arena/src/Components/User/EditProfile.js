@@ -1,11 +1,8 @@
 import React from 'react';
 
 import fire from '../../Firebase/firebase';
-
-import { setUserAsAdmin } from '../../Helpers/authHelpers'
-
+// import { setUserAsAdmin } from '../../Helpers/authHelpers'
 import '../../Styles/EditProfile.css'
-
 
 class EditProfile extends React.Component {
   constructor(props) {

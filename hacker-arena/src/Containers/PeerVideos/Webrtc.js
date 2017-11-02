@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 // import { List } from 'immutable';
 // import mapDispatchToProps from './actions';
 import SimpleWebRTC from 'simplewebrtc';
-import{ connect} from 'react-redux';
+// import{ connect} from 'react-redux';
 import '../../Styles/Webrtc.css';
 // import fire from '../../Firebase/firebase';
 

@@ -3,7 +3,7 @@ import '../../Styles/AddProblem.css';
 import { connect } from 'react-redux';
 import updateAddProblem from '../../Actions/addProblem/updateAddProblem';
 import updateAddProblemTests from '../../Actions/addProblem/updateAddProblemTests';
-import fire from '../../Firebase/firebase';
+// import fire from '../../Firebase/firebase';
 import AllTests from './AllTests';
 import Title from './Title';
 import ProblemDescription from './ProblemDescription';
@@ -48,7 +48,7 @@ class AddProblem extends React.Component {
       }
     }
     if (truth) {
-      let added = fire.database().ref('problems').push(problem).key;
+      // let added = fire.database().ref('problems').push(problem).key;
       this.props.resetAddProblem();
     } else {
     }

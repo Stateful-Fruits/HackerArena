@@ -177,7 +177,7 @@ class CodeEditor extends React.Component {
       if (didClear) {
         activity.push(`${username} successfully blocked ${disruptionFuncName}!`)
       } else {
-        parseInt(blockCost, 10) ? activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`) : null;
+        if(parseInt(blockCost, 10)) activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`);
       }
 
       fire.database().ref(`rooms/${roomId}/activity`).set(activity);
