@@ -3,7 +3,7 @@ import SpectatorEditor from './SpectatorEditor';
 
 class SpectatorEditors extends Component {
   render() {
-    let { gameRoom, partnerName } = this.props;
+    let { gameRoom, partnerName, colors } = this.props;
     let players = Object.keys(gameRoom.players)
     let partner = players.filter(playerName => playerName === partnerName) 
     let playersToShow = partner.length ? partner : players;
@@ -15,7 +15,8 @@ class SpectatorEditors extends Component {
     return (
             <div className="spectator-editors">
               { playersToShow.map((playerName, i) => (
-                <SpectatorEditor 
+                <SpectatorEditor
+                  color={colors[i] || 'blue'} 
                   playerName={playerName}
                   playerInput={gameRoom.players[playerName].liveInput}
                   key={String(playerName)+i}
