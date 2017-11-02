@@ -60,9 +60,9 @@ class NavBar extends Component {
           }
           {
             currentUser.email ? (
-              <a href="" className="navbarProfile nav-item rightNav" onClick={() => navigate('/User/' + username)}>
+              <a href="" className="navbarProfile nav-item rightNav" style={{top: '-15px', right: '-15px'}} onClick={() => navigate('/User/' + username)}>
                 Hi { username }! {' '}
-                <img className="profile-photo"
+                <img className="profile-photo corner-profile-pic"
                   src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
                   alt='profile'
                 />

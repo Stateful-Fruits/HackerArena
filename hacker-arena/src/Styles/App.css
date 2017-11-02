@@ -68,6 +68,14 @@ input {
   background-position: center center;
 }
 
+.corner-profile-pic2 {
+  height: 80px;
+  width: 80px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+  background-size: cover;
+  background-position: center center;
+}
+
 .navbar {
   position: sticky !important;
   top: 0;
