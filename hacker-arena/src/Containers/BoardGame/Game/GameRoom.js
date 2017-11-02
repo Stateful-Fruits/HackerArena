@@ -88,6 +88,7 @@ class GameRoom extends React.Component {
   handleEnter () {
     let {room, currentUser, navigate} = this.props;
     let user = currentUser.username;
+    console.log(room, user);
     if (room && this.state.canEnter) {
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
@@ -95,7 +96,9 @@ class GameRoom extends React.Component {
       let firstTile = room.board[0][0][0];
       if (notFull && notAlreadyIn) {//not full nor started and not in;
         room.players.push(user);
-        firstTile.push(user);
+        if (firstTile.indexOf(user) === -1) {
+          firstTile.push(user);
+        }
         if (!room.playerInfo[user]) {
           room.playerInfo[user] = {
             position: [0,0],
@@ -111,6 +114,7 @@ class GameRoom extends React.Component {
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && wasIn && notAlreadyIn) { //refresh coming back
         room.players.push(user);
+        console.log('refreshed');
         fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && notAlreadyIn) {
         navigate('/CodeRunLobby');
