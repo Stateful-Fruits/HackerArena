@@ -17,17 +17,19 @@ class Webrtc extends Component {
       paused: false
     }
   }
-   componentDidMount() {
+  
+  componentDidMount() {
     //    const{onReady} =this.props
     const { roomId } = this.props;
-        const webrtc = new SimpleWebRTC({
-        localVideoEl: this.refs.local,
-        remoteVideosEl: "",
-        // remoteVideosEl: '',
-        
-        autoRequestMedia: true,
-        detectSpeakingEvents: true,
-      });
+    const webrtc = new SimpleWebRTC({
+      localVideoEl: this.refs.local,
+      remoteVideosEl: "",
+      // remoteVideosEl: '',
+    
+      autoRequestMedia: true,
+      detectSpeakingEvents: true,
+    });
+
     console.log('componentDidMount');
     // webrtc.on('videoAdded', function (video, peer) {
     //   console.log('bbbin didmount')
@@ -44,46 +46,51 @@ class Webrtc extends Component {
     //         remotes.appendChild(container);
     //     }
     // }); 
-
+    webrtc.on('videoRemoved', function(video,peer) {
+      console.log('removed')
+      // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
+      Element.prototype.getElementById = function(id) {
+        return document.getElementById(id);
+      }
+      if (document.getElementById('remoteVideo') && 
+          document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer))) {
+        document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer)).remove();
+      }
+    })
+  
+    webrtc.on('videoAdded', function (video, peer) {
+      console.log('videoAdd is triggered', video, peer);
+      var remotes = document.getElementById('remoteVideo');
+        if (remotes) {
+          var container = document.createElement('div');
+            container.className = 'videoContainer';
+            container.id = 'container_' + webrtc.getDomId(peer);
+            container.appendChild(video);
+  
+            // suppress contextmenu
+            video.oncontextmenu = function () { return false; };
+  
+            remotes.appendChild(container);
+        }
+    });
+    
     //   this.webrtc = webrtc;
-      webrtc.on('readyToCall', function () {
-        // you can name it anything
-      });
-      console.log('roomid in webrtc', roomId)
+    webrtc.on('readyToCall', function () {
+      console.log('readytocall')
       webrtc.joinRoom(`spectator/${roomId}`);
-      this.webrtc = webrtc;
-    }
+      // you can name it anything
+    });
+
+    console.log('roomid in webrtc', roomId)
+    this.webrtc = webrtc;
+    console.log('webrtc', webrtc)
+  }
+  
 componentDidUpdate() {
   console.log('Componentwillupdate called')
-  let webrtc = this.webrtc
-  webrtc.on('videoRemoved', function(video,peer) {
-    console.log('removed')
-    // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
-    Element.prototype.getElementById = function(id) {
-      return document.getElementById(id);
-    }
-    if (document.getElementById('remoteVideo') && 
-        document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer))) {
-      document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer)).remove();
-    }
-  })
-
-  webrtc.on('videoAdded', function (video, peer) {
-    console.log('videoAdd is triggered');
-    var remotes = document.getElementById('remoteVideo');
-      if (remotes) {
-        var container = document.createElement('div');
-          container.className = 'videoContainer';
-          container.id = 'container_' + webrtc.getDomId(peer);
-          container.appendChild(video);
-
-          // suppress contextmenu
-          video.oncontextmenu = function () { return false; };
-
-          remotes.appendChild(container);
-      }
-  });
+  //let webrtc = this.webrtc
 }
+
 componentWillReceiveProps(nextProps) {
 }
 
