@@ -379,12 +379,12 @@ const Home = (props) => {
       <h1 className="teamHeader homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px', 'marginTop': '0px', 'paddingTop':'35px'}}> <strong>Team</strong> </h1>
     <div className="team card-deck">  
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card cap"/>
+      <img className="card-img-top teamPics" src="/assets/simon.png" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Simon Zheng</h4>
-        <p className="card-text">I did these things for this project</p>
-        <p className="card-text">Contact Information sits here</p>
-        <p className="card-text"><small className="text-muted">Maybe some sort of fun facts / info on person</small></p>
+        <p className="card-text">Code Editor behavior logic, Data Visualization, Design, Classic / Solo Modes</p>
+        <p className="card-text"><a href='https://github.com/skzheng'>https://github.com/skzheng</a></p>
+        <p className="card-text"><small className="text-muted">import $ from 'jquery';</small></p>
       </div>
     </div>
     <div className="card teamCard">
@@ -435,7 +435,7 @@ const Home = (props) => {
     
 
     <div className="aboutFooter">
-      <h3 style={{marginTop: '0px'}}className=""></h3>
+      <h3 style={{marginTop: '0px'}}className=""> </h3>
     </div>
   </div>
 )};
