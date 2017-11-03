@@ -19,6 +19,12 @@
             ".write": "!data.exists() || auth.uid === data.child('uid').val()"
           }
         },
+        "spectators": {
+          ".write": "auth !== null"
+        },
+        "spectatorChat": {
+          ".write": "auth !== null"
+        },
         "teams": {
           ".write": "auth!== null"
         },
