@@ -148,6 +148,7 @@ class CodeEditor extends React.Component {
       fireUserInfo.testStatus = [];
       fireUserInfo.attack = powers[random];
       fireUserInfo.credits = userInfo.credits;
+      moveGoblin(currentRoom, currentRoom.Goblin);
       return currentRoom;
     });
   }

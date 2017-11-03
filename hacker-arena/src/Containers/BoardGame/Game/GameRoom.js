@@ -79,9 +79,9 @@ class GameRoom extends React.Component {
   }
 
   handleBoard () {
-    let {room} = this.props;
+    let {room, currentUser} = this.props;
     if (room && room.gameStarted === true) {
-      helper.handleBoard(room);
+      helper.handleBoard(room, currentUser.username);
     }
   }
 
