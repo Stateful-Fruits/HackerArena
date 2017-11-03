@@ -394,12 +394,12 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://www.theinquirer.net/w-images/0166cafa-de8b-44d6-91b4-6f210d34ddbf/1/googlealphagologo-580x358.png" alt="Card cap"/>
+      <img className="card-img-top teamPics" src="assets/Colin_Crawford_Headshot.jpg" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Colin Crawford</h4>
-        <p className="card-text">I did these things for this project</p>
-        <p className="card-text">Contact Information sits here</p>
-        <p className="card-text"><small className="text-muted">Maybe some sort of fun facts / info on person</small></p>
+        <p className="card-text">Worked on the Classic game mode, spectator modes, and timing the Firebase connections</p>
+        <p className="card-text"><a href='https://github.com/ccolin84'>https://github.com/ccolin84</a></p>
+        <p className="card-text"><small className="text-muted">Avid tennis player and fan</small></p>
       </div>
     </div>
     <div className="card teamCard">
