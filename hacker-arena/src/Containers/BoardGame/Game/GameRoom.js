@@ -88,14 +88,18 @@ class GameRoom extends React.Component {
   handleEnter () {
     let {room, currentUser, navigate} = this.props;
     let user = currentUser.username;
+    console.log(room, user);
     if (room && this.state.canEnter) {
+      console.log('started checking if unstarted or started');
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
-      let firstTile = room.board[0][0][0];
+      //let firstTile = room.board[0][0][0];
       if (notFull && notAlreadyIn) {//not full nor started and not in;
-        room.players.push(user);
-        firstTile.push(user);
+/*        room.players.push(user);  //updating players
+        if (firstTile.indexOf(user) === -1) {
+          firstTile.push(user); //updating firstTile;
+        }
         if (!room.playerInfo[user]) {
           room.playerInfo[user] = {
             position: [0,0],
@@ -107,11 +111,42 @@ class GameRoom extends React.Component {
             credits: 5,
             testStatus: []
           }
-        }
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        }*/
+        // room.players , firstTile, playerInfo[user]
+        console.log('was in unstarted instead');
+        fire.database().ref(`BoardRooms/${room.key}`).transaction((currentRoom) => {
+          if (currentRoom.players.indexOf(user) === -1) {
+            currentRoom.players.push(user);
+          }
+          if (!currentRoom.playerInfo[user]) {
+            currentRoom.board[0][0][0].push(user);
+          }
+          if (!currentRoom.playerInfo[user]) {
+            currentRoom.playerInfo[user] = {
+              position: [0,0],
+              diceResult: 0,
+              canMove: true,
+              disruptions: [''],
+              liveInput: '',
+              events: '',
+              credits: 5,
+              testStatus: []
+            }
+          }
+          return currentRoom;
+        })
+        //fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && wasIn && notAlreadyIn) { //refresh coming back
-        room.players.push(user);
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        // room.players.push(user);
+        // console.log('refreshed');
+        // fire.database().ref('BoardRooms/' + room.key).set(room);
+        console.log('refreshed');
+        fire.database().ref(`BoardRooms/${room.key}`).transaction(currentRoom => {
+          if (currentRoom.players.indexOf(user) === -1) {
+            currentRoom.players.push(user);
+          }
+          return currentRoom;
+        })
       } else if (!notFull && notAlreadyIn) {
         navigate('/CodeRunLobby');
       }
@@ -134,7 +169,11 @@ class GameRoom extends React.Component {
         this.setState({
           canEnter : false
         });
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        //fire.database().ref('BoardRooms/' + room.key).set(room);
+        fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+          room.players = room.players.filter(player => player !== user);
+          return room;
+        })
       }
     }
   }

@@ -64,7 +64,7 @@ class CodeEditor extends React.Component {
     let disruptions = room.playerInfo[username].disruptions;
     // Check for disruptions sent to the user
 
-    if(disruptions.length){
+    if (disruptions[0] !== '') {
       room.playerInfo[username].disruptions.forEach(disruption => {
         if(disruption !== "") this.receiveDisruptions(disruption);
       });
@@ -78,7 +78,13 @@ class CodeEditor extends React.Component {
     let username = currentUser.username;
     let liveInput = this.ace.editor.getValue();
     //fire.database().ref(`rooms/${this.props.room.key}/players/${username}/liveInput`).set(liveInput);
-    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).set(liveInput);
+    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).transaction(live => {
+      return liveInput;
+    })
+    //.set(liveInput)
+    // .catch(err => {
+    //   console.log('err in liveinput', err);
+    // });
   }
 
   sendDisruptions(e){
@@ -135,7 +141,15 @@ class CodeEditor extends React.Component {
       } 
     }
     moveGoblin(room, room.Goblin);
-    fire.database().ref('BoardRooms/' + room.key).set(room);
+    //fire.database().ref('BoardRooms/' + room.key).set(room);
+    fire.database().ref(`BoardRooms/${room.key}/`).transaction(currentRoom => {
+      let fireUserInfo = currentRoom.playerInfo[user];
+      fireUserInfo.canMove = userInfo.canMove;
+      fireUserInfo.testStatus = [];
+      fireUserInfo.attack = powers[random];
+      fireUserInfo.credits = userInfo.credits;
+      return currentRoom;
+    });
   }
 
   handleSubmit(){
