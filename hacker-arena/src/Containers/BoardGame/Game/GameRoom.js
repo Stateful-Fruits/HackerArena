@@ -26,7 +26,7 @@ class GameRoom extends React.Component {
   }
   componentDidMount () {
     window.addEventListener('beforeunload', this.handleLeave);
-    setTimeout(this.handleEnter,500);
+    this.handleEnter();
   }
 
   componentWillUpdate () {
@@ -90,7 +90,7 @@ class GameRoom extends React.Component {
     let user = currentUser.username;
     console.log(room, user);
     if (room && this.state.canEnter) {
-      console.log('was in here');
+      console.log('started checking if unstarted or started');
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
@@ -142,9 +142,9 @@ class GameRoom extends React.Component {
         // fire.database().ref('BoardRooms/' + room.key).set(room);
         console.log('refreshed');
         fire.database().ref(`BoardRooms/${room.key}`).transaction(currentRoom => {
-          //if (currentRoom.players.indexOf(user) === -1) {
+          if (currentRoom.players.indexOf(user) === -1) {
             currentRoom.players.push(user);
-          //}
+          }
           return currentRoom;
         })
       } else if (!notFull && notAlreadyIn) {
@@ -169,7 +169,11 @@ class GameRoom extends React.Component {
         this.setState({
           canEnter : false
         });
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        //fire.database().ref('BoardRooms/' + room.key).set(room);
+        fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+          room.players = room.players.filter(player => player !== user);
+          return room;
+        })
       }
     }
   }
