@@ -2,7 +2,7 @@ import React from 'react';
 import Row from './Row';
 import '../../../Styles/Board.css';
 const Board = (props) => {
-  return <div>
+  return <div className='boardSystem'>
     <div>Board</div>
     <div className='board'>
       {props.board.map((row, i) => {
