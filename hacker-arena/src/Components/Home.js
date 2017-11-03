@@ -95,9 +95,9 @@ const Home = (props) => {
   </div>
 </progress>
     <div className="hero">  
-      <div>
+      {/* <div>
           <h4  style={{position: 'absolute'}} > Connect and Code </h4>
-        </div>
+        </div> */}
       {Form}
     </div>
     <div className="introduction" style={{ padding: '3%' }}>
@@ -154,7 +154,7 @@ const Home = (props) => {
     </div>
     <div className="gameModes">
       <div className="features">
-        <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}><strong>Game Modes</strong></h1>
+        <h1 className="homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}><strong>Game Modes</strong></h1>
         <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
           <li className="nav-item">
             <a className="pills card nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-classic" role="tab" aria-controls="pills-home" aria-selected="true">
@@ -233,9 +233,9 @@ const Home = (props) => {
     </div>
 
     <div className="disruptionsHome">
-    <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Disruptions</strong> </h1>
+    <h1 className="homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin-top': '0px', 'padding-top':'35px'}}> <strong>Disruptions</strong> </h1>
     <div id="homeDisruptions">
-    <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{marginTop: '38px'}}>
+    <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{marginTop: '55px'}}>
       <a className="nav-link active btn disruptionsHeader" id="v-pills-disruptions-tab" data-toggle="pill" href="#v-pills-disruptions" role="tab" aria-controls="v-pills-disruptions" aria-selected="true">
         <span className="dc badge"></span> Disruptions
       </a>
@@ -373,7 +373,7 @@ const Home = (props) => {
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> } */}
     
-      <h1 className="teamHeader" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Team</strong> </h1>
+      <h1 className="teamHeader homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Team</strong> </h1>
     <div className="team card-deck">  
     <div className="card teamCard">
       <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card cap"/>

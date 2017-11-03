@@ -41,10 +41,16 @@ video {
 .team {
     margin: 3%; 
     margin-top: 2%;
+    margin-bottom: 4%;
 }
 
 .teamHeader {
     margin-top: 3%;
+}
+
+.homeHeaders {
+    /* color: rgb(91, 91, 91); */
+    /* text-shadow: .2px .2px 4px #000000; */
 }
 
 .features {
@@ -147,7 +153,10 @@ progress::-webkit-progress-value {
     align-items: center;
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
+    background-color: white;
+    background-image: -webkit-linear-gradient(30deg, white 30%, rgb(225, 231, 238)  50%);
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.39) !important;
 }
 /* .gameModes {
     height: 1000px;
@@ -161,6 +170,7 @@ progress::-webkit-progress-value {
       margin: 25px;
       margin-bottom: 60px;
       padding: 25px;
+      background: white;
   }
 
   .pills {
@@ -168,7 +178,11 @@ progress::-webkit-progress-value {
   }
 
 .disruptionsHome {
-    height: 800px;
+    height: 850px;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    background-color: white;
+    background-image: -webkit-linear-gradient(330deg, white 20%, rgb(228, 224, 224)  50%);
 }
  
 .disPrevHeader {
@@ -216,27 +230,27 @@ progress::-webkit-progress-value {
 }
 
 .classicSnaps{
-    background: url('/assets/ClassicSS.png');
-    background-size: cover;
+    background: url('/assets/ClassicSSedit.png') no-repeat;
+    background-size: contain;
     height: 500px;
     width: auto;
 }
 
 .pairSnaps{
-    background: url('/assets/ClassicSS.png');
-    background-size: cover;
+    background: url('/assets/NavigatorSSedit.png') no-repeat;
+    background-size: contain;
     height: 500px;
     width: auto;
 }
 .codeRunSnaps{
-    background: url('/assets/ClassicSS.png');
-    background-size: cover;
+    background: url('/assets/CodeRunSSedit.png') no-repeat;
+    background-size: contain;
     height: 500px;
     width: auto;
 }
 .soloSnaps{
-    background: url('/assets/SoloSS.png');
-    background-size: cover;
+    background: url('/assets/SoloSSedit.png') no-repeat;
+    background-size: contain;
     height: 500px;
     width: auto;
 }

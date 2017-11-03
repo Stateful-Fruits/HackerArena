@@ -122,10 +122,11 @@ class Stats extends React.Component {
       "Wins": "rgb(42, 158, 75)",
       "Losses": "rgb(204, 76, 44)",
       "Untagged": "#a3a3af",
-      "fundamentals": "#6088e0",
-      "math": "#f48c42",
-      "testy": "#437759",
-      "tester":  "#efc332"
+      "Fundamentals": "#6088e0",
+      "Math": "#f48c42",
+      "Algorithms": "#437759",
+      "Numbers":  "#efc332",
+      "Strings": "#1fcff2"
     }
 
     this.setState({colors: colors});
