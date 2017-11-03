@@ -100,9 +100,16 @@ const Home = (props) => {
         </div>
       {Form}
     </div>
-    <div className="introduction">
-      what does this app do?
-      purpose 
+    <div className="introduction" style={{ padding: '3%' }}>
+
+      <h3>
+        Welcome to Hacker Arena!
+      </h3>
+      <h4>
+        Whether you are an experienced programmer or just starting out, we've got game modes that will make learning
+        to conquer algorithms in javascript a fun and interactive experience
+      </h4>
+
     </div>
     <div className="gameModes">
       <div className="features">
