@@ -122,6 +122,11 @@
   border: 3px solid #1184b2 !important;
   color: #1184b2 !important
 }
+
+.boardSystem {
+  width: 60%;
+  display: inline-block;
+}
 /* .analog {
   border-radius: 10px;
 	width: 20px;

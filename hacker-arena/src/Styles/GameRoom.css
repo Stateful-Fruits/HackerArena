@@ -45,3 +45,15 @@
   clear:both;
   display:flex;
 }
+
+.controlSystem {
+  width: 25%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 350px;
+}
+
+.playView {
+  height: 800px
+}
