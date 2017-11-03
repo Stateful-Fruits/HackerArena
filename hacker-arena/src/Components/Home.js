@@ -102,13 +102,54 @@ const Home = (props) => {
     </div>
     <div className="introduction" style={{ padding: '3%' }}>
 
-      <h3>
-        Welcome to Hacker Arena!
-      </h3>
-      <h4>
-        Whether you are an experienced programmer or just starting out, we've got game modes that will make learning
-        to conquer algorithms in javascript a fun and interactive experience
-      </h4>
+    <div className="team card-deck">  
+    <div className="card teamCard">
+      <img className="card-img-top" src="https://cdn1.iconfinder.com/data/icons/dotted-charts/512/links_diagram-512.png" alt="Card cap"/>
+      <div className="card-block">
+        <h4 className="card-title">Interactive</h4>
+        <p className="card-text">
+          Tired of coding alone? So were we! Practice algorithms in our fun and
+          interactive game modes!
+        </p>
+      </div>
+    </div>
+    <div className="card teamCard">
+      <img className="card-img-top" src="https://healthycities.zendesk.com/hc/en-us/article_attachments/209678408/gauge-type1-20-500px.png" alt="Card cap"/>
+      <div className="card-block">
+        <h4 className="card-title">Any Skill Level</h4>
+        <p className="card-text">
+          From beginner to coding guru, we've got a game mode for you.
+        </p>
+      </div>
+    </div>
+    <div className="card teamCard">
+      <img className="card-img-top" src="http://4vector.com/i/free-vector-free-vector-diagram_124288_PNG/Diagram%20(1).png" alt="Card cap"/>
+      <div className="card-block">
+        <h4 className="card-title">Track Your Stats</h4>
+        <p className="card-text">
+          Track your game history by the category of algorithm each game tested.
+        </p>
+      </div>
+    </div>
+    <div className="card teamCard">
+      <img className="card-img-top" src="http://www.freeiconspng.com/uploads/eye-icon--icon-search-engine-17.png" alt="Card cap"/>
+      <div className="card-block">
+        <h4 className="card-title">Spectate Other Players</h4>
+        <p className="card-text">
+          Watch other players tackle challenging problems and learn from their thought processes.
+        </p>
+      </div>
+    </div>
+    <div className="card teamCard">
+      <img className="card-img-top" src="https://cdn2.iconfinder.com/data/icons/people-icons-3/72/21-512.png" alt="Card cap"/>
+      <div className="card-block">
+        <h4 className="card-title">Connect With Other Coders</h4>
+        <p className="card-text">
+          Learn to pair program by working with other coders to solve problems in our pair mode.
+        </p>
+      </div>
+    </div>
+    </div>
 
     </div>
     <div className="gameModes">
