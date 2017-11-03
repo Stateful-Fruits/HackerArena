@@ -160,7 +160,7 @@ class CreateGameRoom extends React.Component {
             className="createGameInput"
             type="number" 
             value={this.state.playerCapacity} 
-            min="1" 
+            min="2" 
             max="4" 
             name="playerCapacity"
             onChange={this.onChange}
