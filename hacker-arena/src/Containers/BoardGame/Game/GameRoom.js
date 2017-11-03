@@ -222,7 +222,7 @@ class GameRoom extends React.Component {
             <CodeEditor room={room} currentUser={currentUser}/>
             <TestSuite room={room} currentUser={currentUser}/>
           </div>;
-          canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
+          canMove = <div className='playerTurn'>{`Do toy problem BELOW to continue`}</div>
         }
         if (userInfo.diceResult > 0) {
           move = <MovePlayer room={room} user={user}/>;
@@ -257,14 +257,18 @@ class GameRoom extends React.Component {
         <div>{message}</div>
         <div>{playerSpans}</div>
         {startButton}
-        {board}
-        {canMove}
-        <div className='diceContainer'>
-          {diceResult}
-          {dice}
+        <div className='playView'>
+          {board}
+          <div className='controlSystem'>
+            {canMove}
+            <div className='diceContainer'>
+              {diceResult}<br/>
+              {dice}
+            </div>
+            {move}
+            {attack}
+          </div>
         </div>
-        {move}
-        {attack}
         <div id="editorAndTestSuite">
           {codePage}
         </div>
