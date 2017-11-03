@@ -403,12 +403,19 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://www.organicfacts.net/wp-content/uploads/2013/05/Banana3-1020x765.jpg" alt="Card cap"/>
+      <div className="card-img-top teamPics"
+        style={
+          {
+            'background-image': 'url(https://firebasestorage.googleapis.com/v0/b/hacker-arena.appspot.com/o/user-photos%2FPaul%20Brown%20Professional%20Photo%201.jpg?alt=media&token=31e691c3-b243-4abb-acde-a6b936c317db)',
+            'background-size': '180%',
+            'background-position-y': '-3px'
+          }
+        }/>
       <div className="card-block">
         <h4 className="card-title">Paul Brown</h4>
-        <p className="card-text">I did these things for this project</p>
-        <p className="card-text">Contact Information sits here</p>
-        <p className="card-text"><small className="text-muted">Maybe some sort of fun facts / info on person</small></p>
+        <p className="card-text">Database, Authentication, Deployment, Pair Mode</p>
+        <p className="card-text"><a href="http://paulbrown.io">paulbrown.io</a></p>
+        <p className="card-text"><small className="text-muted">Wanted the site to be named maliciouscode.com</small></p>
       </div>
     </div>
     <div className="card teamCard">
