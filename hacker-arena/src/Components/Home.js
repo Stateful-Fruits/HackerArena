@@ -190,21 +190,21 @@ const Home = (props) => {
             <h3> <strong>Classic Mode</strong></h3>
             <h5><em>Programmers face off against each other in a race to finish the coding challenge first.</em></h5>
             <h5><strong>Suggested Players: </strong>2+</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
             
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-pair" role="tabpanel" aria-labelledby="pills-profile-tab">
           <div className="pairSnaps"></div>
             <h3> <strong>Pair Mode</strong></h3>
-            <h5><em>Players fall into the role of Navigator or Driver, </em></h5>
+            <h5><em>Players fall into the role of Navigator or Driver, practicing communication to solve the challenge first.</em></h5>
             <h5><strong>Suggested Players: </strong>4+</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
             
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 15 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-coderun" role="tabpanel" aria-labelledby="pills-contact-tab">
@@ -212,9 +212,9 @@ const Home = (props) => {
           <h3> <strong>Code Run</strong></h3>
             <h5><em>Players traverse a board, utilizing items, environment and disruptions to reach the finish line.</em></h5>
             <h5><strong>Suggested Players: </strong>2+</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-solo" role="tabpanel" aria-labelledby="pills-contact-tab">
@@ -222,9 +222,10 @@ const Home = (props) => {
             <h3><strong>Solo Mode</strong></h3>
             <h5><em>Programmers can hone their skills by practicing alone in this sandbox mode.</em></h5>
             <h5><strong>Suggested Players: </strong>1</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
+
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 5 mins </h5>
           </div>
         </div>
@@ -233,7 +234,7 @@ const Home = (props) => {
     </div>
 
     <div className="disruptionsHome">
-    <h1 className="homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin-top': '0px', 'padding-top':'35px'}}> <strong>Disruptions</strong> </h1>
+    <h1 className="homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'marginTop': '0px', 'paddingTop':'35px'}}> <strong>Disruptions</strong> </h1>
     <div id="homeDisruptions">
     <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{marginTop: '55px'}}>
       <a className="nav-link active btn disruptionsHeader" id="v-pills-disruptions-tab" data-toggle="pill" href="#v-pills-disruptions" role="tab" aria-controls="v-pills-disruptions" aria-selected="true">
@@ -278,7 +279,9 @@ const Home = (props) => {
     </div>
     <div className="tab-content" id="v-pills-tabContent">
       <div className="tab-pane vertPane disruptionsPane fade show active" id="v-pills-disruptions" role="tabpanel" aria-labelledby="v-pills-disruption">
-        <h1><strong>Disruptions</strong></h1>
+        {/* {<h1><strong>Disruptions</strong></h1>} */}
+        <br/>
+        <br/>
         <h3>Click on a tab to explore disruptions!</h3>
         <img style={{height: '80px'}} alt='disruption' src="/assets/leftArrow.png" />
       </div>
@@ -372,8 +375,8 @@ const Home = (props) => {
     {/* {<video style={{position:'relative'}} className ="video" autoPlay muted loop>
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> } */}
-    
-      <h1 className="teamHeader homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Team</strong> </h1>
+    <div className="teamSection">
+      <h1 className="teamHeader homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px', 'marginTop': '0px', 'paddingTop':'35px'}}> <strong>Team</strong> </h1>
     <div className="team card-deck">  
     <div className="card teamCard">
       <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card cap"/>
@@ -428,10 +431,11 @@ const Home = (props) => {
       </div>
     </div>
     </div>
+    </div>
     
 
     <div className="aboutFooter">
-      <h3 className="">Hey its me the footer</h3>
+      <h3 style={{marginTop: '0px'}}className="">Hey its me the footer</h3>
     </div>
   </div>
 )};

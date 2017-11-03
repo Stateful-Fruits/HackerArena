@@ -41,13 +41,17 @@ video {
 .team {
     margin: 3%; 
     margin-top: 2%;
-    margin-bottom: 4%;
+    margin-bottom: 0%;
 }
 
 .teamHeader {
-    margin-top: 3%;
+    margin-top: 0%;
 }
-
+.teamSection {
+    height: 600px;
+    background-color: rgb(223, 227, 231);
+    background-image: -webkit-linear-gradient(30deg,  rgb(223, 227, 231)  20%, white 50%);
+}
 .homeHeaders {
     /* color: rgb(91, 91, 91); */
     /* text-shadow: .2px .2px 4px #000000; */
@@ -78,11 +82,10 @@ video {
 }
 
 .introduction {
-    height: 40vh;
-    background-color: rgb(220, 220, 220);
+    height: 600px;
+    background-color: rgb(228, 224, 224);
+    background-image: -webkit-linear-gradient(30deg, rgb(228, 224, 224)  20%, white 50%);
 }
-
-
 
 /* progress {
   position: fixed;
@@ -154,9 +157,9 @@ progress::-webkit-progress-value {
     display: flex;
     flex-direction: column;
     background-color: white;
-    background-image: -webkit-linear-gradient(30deg, white 30%, rgb(225, 231, 238)  50%);
-
+    background-image: -webkit-linear-gradient(30deg, white 30%, rgb(223, 227, 231)  50%);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.39) !important;
+    z-index: 10;
 }
 /* .gameModes {
     height: 1000px;
