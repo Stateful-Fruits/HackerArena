@@ -388,11 +388,11 @@ const Home = (props) => {
       </div>
     </div>
     <div className="card teamCard">
-      <img className="card-img-top teamPics" src="https://i.ytimg.com/vi/LIMPxPdS4BE/maxresdefault.jpg" alt="Card cap"/>
+      <img className="card-img-top teamPics" src="assets/kai.jpg" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Kai Chen</h4>
-        <p className="card-text">I did these things for this project</p>
-        <p className="card-text">Contact Information sits here</p>
+        <p className="card-text">Made component to Create Game Rooms, Add Toy Problems and Code Run </p>
+        <p className="card-text"><a href='https://github.com/kinyusui' target='blank'>https://github.com/kinyusui</a></p>
         <p className="card-text"><small className="text-muted">Maybe some sort of fun facts / info on person</small></p>
       </div>
     </div>
@@ -425,7 +425,7 @@ const Home = (props) => {
       <img className="card-img-top teamPics" src="https://www.dropbox.com/s/5h20hrmor5epqjo/Profile.JPG?dl=1" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">David Zou</h4>
-        <p className="card-text">I did everything for this project</p>
+        <p className="card-text">I did Log In, Sign Up, and Video Chat for this project</p>
         <p className="card-text"> tel :1-8002738255</p>
         <p className="card-text"><small className="text-muted">I drink water. I sleep.</small></p>
       </div>
