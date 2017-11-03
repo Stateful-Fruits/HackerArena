@@ -10,6 +10,8 @@ getTime(){
   } else if (time[0] > 12) { 
     time[0] = '0' + (time[0] - 12) 
     ampm = 'PM';
+  } else if (time[0] === '00'){
+    time[0] = '12';
   }
   return time[0] + ':' + time[1] + ' ' + ampm;
 },

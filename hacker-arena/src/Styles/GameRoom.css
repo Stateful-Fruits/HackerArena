@@ -30,7 +30,7 @@
 }
 
 .progress-bar-success {
-  background-color: rgb(64, 91, 198);
+  background-color: rgb(64, 91, 198) !important;
 }
 
 .progress-bar-warning {

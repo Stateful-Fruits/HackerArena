@@ -23,6 +23,12 @@ class NavBar extends Component {
             Home </li>
             <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Classic'); }}>
             Classic </li>
+            <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
+          Pair Match </li>
+          <li className="nav-item rightNav navbar-brand codeRunLobby" onClick={ () => { navigate('/CodeRunLobby'); }}>
+          Code Run </li>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Solo'); }}>
+          Solo </li>
           {isAdmin ? 
             <li 
               className="nav-item rightNav navbar-brand" 
@@ -32,12 +38,7 @@ class NavBar extends Component {
             :
             null
           }
-          <li className="nav-item rightNav navbar-brand codeRunLobby" onClick={ () => { navigate('/CodeRunLobby'); }}>
-            Code Run </li>
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
-          Pair Match </li>
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Solo'); }}>
-          Solo </li>
+          
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Random'); }}>
           Random </li>
           {/* <a href='/' className='leftNav nav-item navbar-brand'>Home</a>

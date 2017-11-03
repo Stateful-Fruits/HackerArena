@@ -95,55 +95,55 @@ const Home = (props) => {
   </div>
 </progress>
     <div className="hero">  
-      <div>
+      {/* <div>
           <h4  style={{position: 'absolute'}} > Connect and Code </h4>
-        </div>
+        </div> */}
       {Form}
     </div>
     <div className="introduction" style={{ padding: '3%' }}>
 
     <div className="team card-deck">  
-    <div className="card teamCard">
-      <img className="card-img-top" src="https://cdn1.iconfinder.com/data/icons/dotted-charts/512/links_diagram-512.png" alt="Card cap"/>
+    <div className="introCard card teamCard">
+      <img style={{height: '110px', width: '120px', marginTop: '10px'}} className="card-img-top" src="/assets/connection.png" alt="Card cap"/>
       <div className="card-block">
-        <h4 className="card-title">Interactive</h4>
+        <h4 className="introTitle card-title">Interactive</h4>
         <p className="card-text">
           Tired of coding alone? So were we! Practice algorithms in our fun and
           interactive game modes!
         </p>
       </div>
     </div>
-    <div className="card teamCard">
-      <img className="card-img-top" src="https://healthycities.zendesk.com/hc/en-us/article_attachments/209678408/gauge-type1-20-500px.png" alt="Card cap"/>
+    <div className="introCard card teamCard">
+      <img style={{height: '140px', width: '120px', marginBottom: '-15px'}} className="card-img-top" src="https://healthycities.zendesk.com/hc/en-us/article_attachments/209678408/gauge-type1-20-500px.png" alt="Card cap"/>
       <div className="card-block">
-        <h4 className="card-title">Any Skill Level</h4>
+        <h4 className="introTitle card-title">Any Skill Level</h4>
         <p className="card-text">
           From beginner to coding guru, we've got a game mode for you.
         </p>
       </div>
     </div>
-    <div className="card teamCard">
-      <img className="card-img-top" src="http://4vector.com/i/free-vector-free-vector-diagram_124288_PNG/Diagram%20(1).png" alt="Card cap"/>
+    <div className="introCard card teamCard">
+      <img style={{height: '120px', width: '120px'}} className="card-img-top" src="http://image.flaticon.com/icons/png/512/199/199495.png" alt="Card cap"/>
       <div className="card-block">
-        <h4 className="card-title">Track Your Stats</h4>
+        <h4 className="introTitle card-title">Track Your Stats</h4>
         <p className="card-text">
           Track your game history by the category of algorithm each game tested.
         </p>
       </div>
     </div>
-    <div className="card teamCard">
-      <img className="card-img-top" src="http://www.freeiconspng.com/uploads/eye-icon--icon-search-engine-17.png" alt="Card cap"/>
+    <div className="introCard card teamCard">
+      <img style={{height: '120px', width: '120px'}} className="card-img-top" src="https://png.icons8.com/eye/color/1600" alt="Card cap"/>
       <div className="card-block">
-        <h4 className="card-title">Spectate Other Players</h4>
+        <h4 className="introTitle card-title">Spectate Games</h4>
         <p className="card-text">
           Watch other players tackle challenging problems and learn from their thought processes.
         </p>
       </div>
     </div>
-    <div className="card teamCard">
-      <img className="card-img-top" src="https://cdn2.iconfinder.com/data/icons/people-icons-3/72/21-512.png" alt="Card cap"/>
+    <div className="introCard card teamCard">
+      <img style={{height: '120px', width: '120px'}} className="card-img-top" src="https://techchronos.com/wp-content/uploads/SszarkLabs/icon/oxd3mQN3Z2CMe2qBPwcQ.png" alt="Card cap"/>
       <div className="card-block">
-        <h4 className="card-title">Connect With Other Coders</h4>
+        <h4 className="introTitle card-title">Connect With Others</h4>
         <p className="card-text">
           Learn to pair program by working with other coders to solve problems in our pair mode.
         </p>
@@ -154,7 +154,7 @@ const Home = (props) => {
     </div>
     <div className="gameModes">
       <div className="features">
-        <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}><strong>Game Modes</strong></h1>
+        <h1 className="homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}><strong>Game Modes</strong></h1>
         <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
           <li className="nav-item">
             <a className="pills card nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-classic" role="tab" aria-controls="pills-home" aria-selected="true">
@@ -190,21 +190,21 @@ const Home = (props) => {
             <h3> <strong>Classic Mode</strong></h3>
             <h5><em>Programmers face off against each other in a race to finish the coding challenge first.</em></h5>
             <h5><strong>Suggested Players: </strong>2+</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
             
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-pair" role="tabpanel" aria-labelledby="pills-profile-tab">
           <div className="pairSnaps"></div>
             <h3> <strong>Pair Mode</strong></h3>
-            <h5><em>Players fall into the role of Navigator or Driver, </em></h5>
+            <h5><em>Players fall into the role of Navigator or Driver, practicing communication to solve the challenge first.</em></h5>
             <h5><strong>Suggested Players: </strong>4+</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
             
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 15 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-coderun" role="tabpanel" aria-labelledby="pills-contact-tab">
@@ -212,9 +212,9 @@ const Home = (props) => {
           <h3> <strong>Code Run</strong></h3>
             <h5><em>Players traverse a board, utilizing items, environment and disruptions to reach the finish line.</em></h5>
             <h5><strong>Suggested Players: </strong>2+</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 10 mins </h5>
           </div>
           <div className="tab-pane fade" id="pills-solo" role="tabpanel" aria-labelledby="pills-contact-tab">
@@ -222,9 +222,10 @@ const Home = (props) => {
             <h3><strong>Solo Mode</strong></h3>
             <h5><em>Programmers can hone their skills by practicing alone in this sandbox mode.</em></h5>
             <h5><strong>Suggested Players: </strong>1</h5>
-            <h5><strong>Instructions: </strong> 
+            {/* <h5><strong>Instructions: </strong> 
+
             <br/>
-            </h5>
+            </h5> */}
             <h5 className="text-muted"> Estimated Time: 5 mins </h5>
           </div>
         </div>
@@ -233,9 +234,9 @@ const Home = (props) => {
     </div>
 
     <div className="disruptionsHome">
-    <h1 style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Disruptions</strong> </h1>
+    <h1 className="homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'marginTop': '0px', 'paddingTop':'35px'}}> <strong>Disruptions</strong> </h1>
     <div id="homeDisruptions">
-    <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{marginTop: '38px'}}>
+    <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{marginTop: '55px'}}>
       <a className="nav-link active btn disruptionsHeader" id="v-pills-disruptions-tab" data-toggle="pill" href="#v-pills-disruptions" role="tab" aria-controls="v-pills-disruptions" aria-selected="true">
         <span className="dc badge"></span> Disruptions
       </a>
@@ -278,7 +279,9 @@ const Home = (props) => {
     </div>
     <div className="tab-content" id="v-pills-tabContent">
       <div className="tab-pane vertPane disruptionsPane fade show active" id="v-pills-disruptions" role="tabpanel" aria-labelledby="v-pills-disruption">
-        <h1><strong>Disruptions</strong></h1>
+        {/* {<h1><strong>Disruptions</strong></h1>} */}
+        <br/>
+        <br/>
         <h3>Click on a tab to explore disruptions!</h3>
         <img style={{height: '80px'}} alt='disruption' src="/assets/leftArrow.png" />
       </div>
@@ -372,8 +375,8 @@ const Home = (props) => {
     {/* {<video style={{position:'relative'}} className ="video" autoPlay muted loop>
     <source src="/assets/aboutVideo.mp4" type="video/mp4"/>
     </video> } */}
-    
-      <h1 className="teamHeader" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px'}}> <strong>Team</strong> </h1>
+    <div className="teamSection">
+      <h1 className="teamHeader homeHeaders" style={{'fontWeight': 400, 'fontSize': '50px', 'margin': '35px', 'marginTop': '0px', 'paddingTop':'35px'}}> <strong>Team</strong> </h1>
     <div className="team card-deck">  
     <div className="card teamCard">
       <img className="card-img-top teamPics" src="https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg" alt="Card cap"/>
@@ -428,10 +431,11 @@ const Home = (props) => {
       </div>
     </div>
     </div>
+    </div>
     
 
     <div className="aboutFooter">
-      <h3 className="">Hey its me the footer</h3>
+      <h3 style={{marginTop: '0px'}}className=""></h3>
     </div>
   </div>
 )};
