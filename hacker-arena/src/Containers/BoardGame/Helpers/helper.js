@@ -100,7 +100,8 @@ helper.handleBoard = (room, user) => {
       return room;
     })
   }
-  if (room.playerInfo[user].diceResult < 0) {
+  let diceResult = room.playerInfo[user].diceResult;
+  if (diceResult < 0 || (diceResult === 0 && room.playerInfo[user].canMove)) {
     fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
       room.playerInfo[user].diceResult = 0;
       room.playerInfo[user].canMove = false;
