@@ -23,20 +23,22 @@ class SpectatorChat extends Component {
     // prevent empty messages
     if (!this.state.msg.length) return;
     let msg = this.state.msg;
-    let { gameRoom, currentUser } = this.props;
+    let { gameRoom, currentUser, roomId } = this.props;
     let username = currentUser.username || 'UnknownUser';
-    this.props.sendSpectatorMessage(gameRoom, username, msg);
+    this.props.sendSpectatorMessage(gameRoom, roomId, username, msg);
     this.setState({ msg: '' });
   }
 
   render() {
-    let { gameRoom } = this.props;
+    let { gameRoom, roomId } = this.props;
+    console.log('roomId in spectatorChat', roomId)
     let spectatorChat = gameRoom.spectatorChat || [];
     let { spectators } = gameRoom;
     return (
       <div style={{ margin: "5%" }}>
        <Webrtc
         room={gameRoom}
+        roomId={roomId}
        />
         <form onSubmit={this.handleMsgSend}>
           <h2>Chat: </h2>

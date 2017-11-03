@@ -19,7 +19,7 @@ class Webrtc extends Component {
   }
    componentDidMount() {
     //    const{onReady} =this.props
-    const {room } = this.props;
+    const { roomId } = this.props;
         const webrtc = new SimpleWebRTC({
         localVideoEl: this.refs.local,
         remoteVideosEl: "",
@@ -28,7 +28,7 @@ class Webrtc extends Component {
         autoRequestMedia: true,
         detectSpeakingEvents: true,
       });
-console.log('componentDidMount');
+    console.log('componentDidMount');
     // webrtc.on('videoAdded', function (video, peer) {
     //   console.log('bbbin didmount')
     //   var remotes = document.getElementById('remoteVideo');
@@ -49,7 +49,8 @@ console.log('componentDidMount');
       webrtc.on('readyToCall', function () {
         // you can name it anything
       });
-      webrtc.joinRoom(`spectator/${room.key}`);
+      console.log('roomid in webrtc', roomId)
+      webrtc.joinRoom(`spectator/${roomId}`);
       this.webrtc = webrtc;
     }
 componentDidUpdate() {

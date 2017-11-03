@@ -14,41 +14,49 @@ let oldDisruptions = {};
 
 class SpectatorRoom extends Component {
 
-  sendSpectatorMessage(room, username, msg) {
+  sendSpectatorMessage(room, roomId, username, msg) {
     let newChat = [...(room.spectatorChat || []), {username, msg}];
-    fire.database().ref(`rooms/${room.key}/spectatorChat`).set(newChat);
+    fire.database().ref(`rooms/${roomId}/spectatorChat`).set(newChat);
   }
 
-  enterGameRoom(room) {
+  enterGameRoom(room, roomId) {
     let username = this.props.currentUser.username || 'UnknownUser';
     let gameRoom = Object.assign({}, room);
     gameRoom.spectators = [...(gameRoom.spectators || []), username];
-    fire.database().ref(`rooms/${gameRoom.key}`).set(gameRoom);
+    console.log('about to modify spectator room')
+    fire.database().ref(`rooms/${roomId}/spectators`).set(gameRoom.spectators);
   }
 
-  leaveGameRoom(room) {
-    let username = this.props.currentUser.username || 'UnknownUser';
-    let gameRoom = Object.assign({}, room);
-    if (gameRoom.spectators) {
-      // each tab a user opens when logged in will add their name to the list of spectators, 
-      // only remove one per exit on each tab
-      let removedOne = false;
-      gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => {
-        if (removedOne || !(spectator === username)) return true;
-        else {
-          removedOne = true;
-          return false;
-        }
-      });
+  leaveGameRoom() {
+    let { currentUser, gameRoomId, gameRooms } = this.props;
+    if (gameRooms && gameRooms[gameRoomId]) {
+      let room = gameRooms[gameRoomId];
+
+      let username = currentUser.username || 'UnknownUser';
+      
+      let gameRoom = Object.assign({}, room);
+      if (gameRoom.spectators) {
+        // each tab a user opens when logged in will add their name to the list of spectators, 
+        // only remove one per exit on each tab
+        let removedOne = false;
+        gameRoom.spectators = gameRoom.spectators.filter((spectator, i) => {
+          if (removedOne || !(spectator === username)) return true;
+          else {
+            removedOne = true;
+            return false;
+          }
+        });
+      }
+      fire.database().ref(`rooms/${gameRoomId}/spectators`).set(gameRoom.spectators);
     }
-    fire.database().ref('rooms/' + gameRoom.key).set(gameRoom);
   }
   
   componentDidMount() {
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
+    let { gameRoomId } = this.props;
     if(gameRoom) {
       window.addEventListener('beforeunload', this.leaveGameRoom);
-      this.enterGameRoom(gameRoom);
+      this.enterGameRoom(gameRoom, gameRoomId);
     }
   }
 
@@ -87,9 +95,8 @@ class SpectatorRoom extends Component {
   }
 
   componentWillUnmount() {
-    let gameRoom = this.props.gameRooms[this.props.gameRoomId];
     window.removeEventListener('beforeunload', this.leaveGameRoom);
-    this.leaveGameRoom(gameRoom);
+    this.leaveGameRoom();
   }
 
 
@@ -103,19 +110,22 @@ class SpectatorRoom extends Component {
       && Object.keys(this.props.gameRooms).length 
       && !this.props.gameRooms[this.props.gameRoomId]) return (<GameRoomError errorMessage="This Game Room No Longer Exists!" />);
     let gameRoom = this.props.gameRooms[this.props.gameRoomId];
-    let currentUser = this.props.currentUser;
+    let { currentUser, gameRoomId } = this.props;
+    console.log('gameRoomId in speftatorROOM', gameRoomId);
+    console.log('currentUser', currentUser);
 
     let colors = ['blue', 'orange', 'purple', 'green', 'yellow', 'red', 'cyan'];
     
     return gameRoom ? (
       <div>
-        <SpectatorGameDescription gameRoom={gameRoom} />
-        <ProgressBar room={gameRoom} currentUser={currentUser} colors={colors}/>
-        <SpectatorEditors gameRoom={gameRoom} colors={colors}/>
+        <SpectatorGameDescription gameRoom={gameRoom} roomId={gameRoomId}/>
+        <ProgressBar room={gameRoom} currentUser={currentUser} colors={colors} roomId={gameRoomId}/>
+        <SpectatorEditors gameRoom={gameRoom} colors={colors} roomId={gameRoomId}/>
         <SpectatorChat
           gameRoom={gameRoom}
           sendSpectatorMessage={this.sendSpectatorMessage}
           currentUser={currentUser}
+          roomId={gameRoomId}
         />
       </div>
     ) : (
