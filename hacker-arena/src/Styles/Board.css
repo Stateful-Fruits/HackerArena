@@ -18,10 +18,10 @@
 }
 
 .brown {
-  background: #eadabc;
+  background-color: #eadabc;
 }
 .dbrown {
-  background: #bf9053;
+  background-color: #bf9053;
 }
 
 /* .treasure {
@@ -38,7 +38,7 @@
 }
 
 .goblin {
-  background: url('/assets/Goblin.png')
+  background-image: url('/assets/Goblin.png')
 }
 
 .lastblock {
