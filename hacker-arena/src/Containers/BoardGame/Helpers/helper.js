@@ -44,7 +44,7 @@ helper.setWhirlPools = (size, room) => {
   return whirlpools;
 }
 
-helper.handleBoard = (room) => {
+helper.handleBoard = (room, user) => {
   let winner, players = room.players, history;//, whirled, metGoblin;
   // let {whirlpools, playerInfo, board} = room;
   players.forEach(player => {
@@ -83,7 +83,7 @@ helper.handleBoard = (room) => {
       // playerInfo[player].position = [0,0];
       // board[0][0][0].push(player);
     }
-  })
+  });
   if (metGoblin.length) {
     fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
       let gobPos = room.Goblin.position;
@@ -97,6 +97,13 @@ helper.handleBoard = (room) => {
           room.board[0][0][0].push(player);
         }
       });
+      return room;
+    })
+  }
+  if (room.playerInfo[user].diceResult < 0) {
+    fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+      room.playerInfo[user].diceResult = 0;
+      room.playerInfo[user].canMove = false;
       return room;
     })
   }
