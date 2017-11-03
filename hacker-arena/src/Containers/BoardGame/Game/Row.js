@@ -12,26 +12,28 @@ class Row extends React.Component {
     e.preventDefault();
     let {room, currentUser} = this.props;
     let username = currentUser.username;
-    if (room.playerInfo[username] && room.playerInfo[username].canMove) {
-      let userPos = room.playerInfo[username].position;
-      let strBP = e.target.id.split(' ');
-      let blockx = parseInt(strBP[0],10);
-      let blocky = parseInt(strBP[1],10);
-      let ydiff = blockx - userPos[0];
-      let xdiff = blocky - userPos[1];
-      let difference = Math.abs(xdiff) + Math.abs(ydiff);
-      let direction;
-      if (difference === 1) {
-        if (ydiff === 1) {
-          direction = 'Down';
-        } else if (ydiff === -1) {
-          direction = 'Up';
-        } else if (xdiff === 1) {
-          direction = 'Right';
-        } else if (xdiff === -1) {
-          direction = 'Left';
+    if (room.playerInfo[username].diceResult > 0) {
+      if (room.playerInfo[username] && room.playerInfo[username].canMove) {
+        let userPos = room.playerInfo[username].position;
+        let strBP = e.target.id.split(' ');
+        let blockx = parseInt(strBP[0],10);
+        let blocky = parseInt(strBP[1],10);
+        let ydiff = blockx - userPos[0];
+        let xdiff = blocky - userPos[1];
+        let difference = Math.abs(xdiff) + Math.abs(ydiff);
+        let direction;
+        if (difference === 1) {
+          if (ydiff === 1) {
+            direction = 'Down';
+          } else if (ydiff === -1) {
+            direction = 'Up';
+          } else if (xdiff === 1) {
+            direction = 'Right';
+          } else if (xdiff === -1) {
+            direction = 'Left';
+          }
+          helper.movePlayer(direction, room, username);
         }
-        helper.movePlayer(direction, room, username);
       }
     }
   }
