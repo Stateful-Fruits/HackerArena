@@ -37,7 +37,7 @@ class GameRoomPreview extends Component {
     for (let i = 0; i < maxPairs; i++) {
       teamSpans.push(
         <li className='list-group-item team-group' style={{ textAlign: 'left'}} key={(teams[i] || "OPEN") + i}>
-          <h4> Team {i} -> 
+          <h4>
             <div className="driver-preview">
               { 
                 teams[i] && teams[i].driver ? 
