@@ -19,19 +19,26 @@ class PairVideo extends Component {
       paused: false
     }
   }
-   componentDidMount() {
+  
+  componentDidMount() {
     //    const{onReady} =this.props
     const {videoroom, roomKey } = this.props;
-        const webrtc = new SimpleWebRTC({
-        localVideoEl: this.refs.local,
-        remoteVideosEl: "",
-        // remoteVideosEl: '',
-        
-        autoRequestMedia: true,
-        detectSpeakingEvents: true,
-      });
+    console.log('roomKey', roomKey);
+    console.log('videoroo', videoroom);
+    const webrtc = new SimpleWebRTC({
+      localVideoEl: this.refs.local,
+      remoteVideosEl: "",
+      // remoteVideosEl: '',
+      
+      autoRequestMedia: true,
+      detectSpeakingEvents: true,
+    });
+
+    console.log('in ROOM ', webrtc);
+    
 
     webrtc.on('videoAdded', function (video, peer) {
+      console.log('video added')
       var remotes = document.getElementById('remoteVideo');
         if (remotes) {
           var container = document.createElement('div');
@@ -47,6 +54,7 @@ class PairVideo extends Component {
     });
 
     webrtc.on('videoRemoved', function(video,peer) {
+      console.log('video removed')
       // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
       Element.prototype.getElementById = function(id) {
         return document.getElementById(id);
@@ -57,12 +65,15 @@ class PairVideo extends Component {
       }
     })
     //   this.webrtc = webrtc;
-      webrtc.on('readyToCall', function () {
-        // you can name it anything
+    webrtc.on('readyToCall', function () {
+      console.log('ready to call')
+      // you can name it anything
       webrtc.joinRoom(`Player/${videoroom}${roomKey}`);
-    });
+      console.log('in ROOM ', webrtc);
+    }); 
+    
     this.webrtc = webrtc;
-    }
+  }
 
 componentWillReceiveProps(nextProps) {
 }

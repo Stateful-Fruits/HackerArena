@@ -87,7 +87,7 @@ class GameRoom extends React.Component {
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
-      } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
+      } else if (playerNames.length >= room.playerCapacity) {
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
