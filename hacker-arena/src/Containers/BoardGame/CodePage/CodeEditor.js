@@ -78,10 +78,13 @@ class CodeEditor extends React.Component {
     let username = currentUser.username;
     let liveInput = this.ace.editor.getValue();
     //fire.database().ref(`rooms/${this.props.room.key}/players/${username}/liveInput`).set(liveInput);
-    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).set(liveInput)
-    .catch(err => {
-      console.log('err in liveinput', err);
-    });
+    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).transaction(live => {
+      return liveInput;
+    })
+    //.set(liveInput)
+    // .catch(err => {
+    //   console.log('err in liveinput', err);
+    // });
   }
 
   sendDisruptions(e){
