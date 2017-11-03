@@ -35,7 +35,9 @@ video {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
   align-items: center;
   padding: 25px !important;
-  background: transparent !important;
+  /* background: transparent !important; */
+  border-radius: 15px;
+  /* background: white !important; */
 }
 
 .team {
@@ -48,7 +50,7 @@ video {
     margin-top: 0%;
 }
 .teamSection {
-    height: 600px;
+    height: 550px;
     background-color: rgb(223, 227, 231);
     background-image: -webkit-linear-gradient(30deg,  rgb(223, 227, 231)  20%, white 50%);
 }
@@ -82,11 +84,26 @@ video {
 }
 
 .introduction {
-    height: 600px;
+    height: 500px;
     background-color: rgb(228, 224, 224);
     background-image: -webkit-linear-gradient(30deg, rgb(228, 224, 224)  20%, white 50%);
 }
 
+.introCard {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    border-radius: 3px !important;
+    background: transparent !important;
+}
+
+.introTitle {
+    padding-bottom: 5px;
+    border-bottom: 1px grey solid;
+}
+
+.introduction > .team > .card {
+    width: 150px;
+}
 /* progress {
   position: fixed;
   left: 0;
