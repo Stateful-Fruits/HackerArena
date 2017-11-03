@@ -103,82 +103,112 @@ helper.handleBoard = (room) => {
 }
 
 helper.movePlayer = (direction, room, user) => {
+  console.log('room key is ',room,room.key);
   let userInfo = room.playerInfo[user];
   let position = userInfo.position;
   let row = position[0];
   let col = position[1];
   if (direction === 'Up' && room.board[row - 1]) {
-    room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
-    row -= 1;
-    room.players.forEach(player => {
-      let pushedguy = room.playerInfo[player].position;
-      if (pushedguy[0] === row && pushedguy[1] === col && room.board[row-1][col]) {
-        room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
-        room.board[row-1][col][0].push(player);
-        room.playerInfo[player].position = [row-1,col];
+    //fire.database().ref('BoardRooms/' + room.key).set(room);
+    fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+      let userInfo = room.playerInfo[user];
+      let position = userInfo.position;
+      let row = position[0];
+      let col = position[1];
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
+      row -= 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row-1][col]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row-1][col][0].push(player);
+          room.playerInfo[player].position = [row-1,col];
+        }
+      })
+      room.board[row][col][0].push(user);
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        userInfo.canMove = !userInfo.canMove;
       }
+      return room;
     })
-    room.board[row][col][0].push(user);
-    userInfo.position = [row,col];
-    userInfo.diceResult--;
-    if (userInfo.diceResult === 0) {
-      userInfo.canMove = !userInfo.canMove;
-    }
-    fire.database().ref('BoardRooms/' + room.key).set(room);
   } else if (direction === 'Down' && room.board[row+1]) {
-    room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
-    row += 1;
-    room.players.forEach(player => {
-      let pushedguy = room.playerInfo[player].position;
-      if (pushedguy[0] === row && pushedguy[1] === col && room.board[row+1][col]) {
-        room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
-        room.board[row+1][col][0].push(player);
-        room.playerInfo[player].position = [row+1,col];
+    fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+      let userInfo = room.playerInfo[user];
+      let position = userInfo.position;
+      let row = position[0];
+      let col = position[1];
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
+      row += 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row+1][col]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row+1][col][0].push(player);
+          room.playerInfo[player].position = [row+1,col];
+        }
+      })
+      room.board[row][col][0].push(user);
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        userInfo.canMove = !userInfo.canMove;
       }
-    })
-    room.board[row][col][0].push(user);
-    userInfo.position = [row,col];
-    userInfo.diceResult--;
-    if (userInfo.diceResult === 0) {
-      userInfo.canMove = !userInfo.canMove;
-    }
-    fire.database().ref('BoardRooms/' + room.key).set(room);
+      return room;
+    });
+    //fire.database().ref('BoardRooms/' + room.key).set(room);
   } else if (direction === 'Left' && room.board[row][col-1]) {
-    room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
-    col -= 1;
-    room.players.forEach(player => {
-      let pushedguy = room.playerInfo[player].position;
-      if (pushedguy[0] === row && pushedguy[1] === col && room.board[row][col-1]) {
-        room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
-        room.board[row][col-1][0].push(player);
-        room.playerInfo[player].position = [row,col-1];
+    fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+      let userInfo = room.playerInfo[user];
+      let position = userInfo.position;
+      let row = position[0];
+      let col = position[1];
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
+      col -= 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row][col-1]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row][col-1][0].push(player);
+          room.playerInfo[player].position = [row,col-1];
+        }
+      })
+      room.board[row][col][0].push(user);
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        userInfo.canMove = !userInfo.canMove;
       }
-    })
-    room.board[row][col][0].push(user);
-    userInfo.position = [row,col];
-    userInfo.diceResult--;
-    if (userInfo.diceResult === 0) {
-      userInfo.canMove = !userInfo.canMove;
-    }
-    fire.database().ref('BoardRooms/' + room.key).set(room);
+      return room;
+    });
+    //fire.database().ref('BoardRooms/' + room.key).set(room);
   } else if (direction === 'Right' && room.board[row][col+1]) {
-    room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
-    col += 1;
-    room.players.forEach(player => {
-      let pushedguy = room.playerInfo[player].position;
-      if (pushedguy[0] === row && pushedguy[1] === col && room.board[row][col+1]) {
-        room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
-        room.board[row][col+1][0].push(player);
-        room.playerInfo[player].position = [row,col+1];
+    fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+      console.log('room inside fire is',room);
+      let userInfo = room.playerInfo[user];
+      let position = userInfo.position;
+      let row = position[0];
+      let col = position[1];
+      room.board[row][col][0] = room.board[row][col][0].filter(player => player !== user);
+      col += 1;
+      room.players.forEach(player => {
+        let pushedguy = room.playerInfo[player].position;
+        if (pushedguy[0] === row && pushedguy[1] === col && room.board[row][col+1]) {
+          room.board[row][col][0] = room.board[row][col][0].filter(player1 => player1 !== player);
+          room.board[row][col+1][0].push(player);
+          room.playerInfo[player].position = [row,col+1];
+        }
+      })
+      room.board[row][col][0].push(user);
+      userInfo.position = [row,col];
+      userInfo.diceResult--;
+      if (userInfo.diceResult === 0) {
+        userInfo.canMove = !userInfo.canMove;
       }
-    })
-    room.board[row][col][0].push(user);
-    userInfo.position = [row,col];
-    userInfo.diceResult--;
-    if (userInfo.diceResult === 0) {
-      userInfo.canMove = !userInfo.canMove;
-    }
-    fire.database().ref('BoardRooms/' + room.key).set(room);
+      return room;
+    });
+    //fire.database().ref('BoardRooms/' + room.key).set(room);
   }
 }
 
