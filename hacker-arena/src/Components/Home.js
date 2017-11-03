@@ -406,9 +406,9 @@ const Home = (props) => {
       <div className="card-img-top teamPics"
         style={
           {
-            'background-image': 'url(https://firebasestorage.googleapis.com/v0/b/hacker-arena.appspot.com/o/user-photos%2FPaul%20Brown%20Professional%20Photo%201.jpg?alt=media&token=31e691c3-b243-4abb-acde-a6b936c317db)',
-            'background-size': '180%',
-            'background-position-y': '-3px'
+            'backgroundImage': 'url(https://firebasestorage.googleapis.com/v0/b/hacker-arena.appspot.com/o/user-photos%2FPaul%20Brown%20Professional%20Photo%201.jpg?alt=media&token=31e691c3-b243-4abb-acde-a6b936c317db)',
+            'backgroundSize': '180%',
+            'backgroundPositionY': '-3px'
           }
         }/>
       <div className="card-block">
