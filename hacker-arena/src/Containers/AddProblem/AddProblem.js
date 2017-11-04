@@ -3,7 +3,7 @@ import '../../Styles/AddProblem.css';
 import { connect } from 'react-redux';
 import updateAddProblem from '../../Actions/addProblem/updateAddProblem';
 import updateAddProblemTests from '../../Actions/addProblem/updateAddProblemTests';
-// import fire from '../../Firebase/firebase';
+import fire from '../../Firebase/firebase';
 import AllTests from './AllTests';
 import Title from './Title';
 import ProblemDescription from './ProblemDescription';
@@ -22,6 +22,7 @@ class AddProblem extends React.Component {
   }
 
   handleChange (e) {
+    console.log('problem is currently ',this.props.problem)
     e.preventDefault();
     let value = e.target.value;
     let property = e.target.dataset.property;
@@ -41,6 +42,7 @@ class AddProblem extends React.Component {
   handleSubmit (e) {
     e.preventDefault();
     let problem = this.props.problem;
+    console.log('submitted',problem);
     let truth = true;
     for (var key in problem) {
       if (problem[key].length === 0) {
@@ -48,7 +50,7 @@ class AddProblem extends React.Component {
       }
     }
     if (truth) {
-      // let added = fire.database().ref('problems').push(problem).key;
+      fire.database().ref('problems').push(problem);
       this.props.resetAddProblem();
     } else {
     }
@@ -59,7 +61,7 @@ class AddProblem extends React.Component {
     this.props.addTest(e.target.value);
   }
   componentDidMount () {
-    //console.log ('props is ',this.props);
+    console.log ('props is ',this.props);
   }
 
   render () {
