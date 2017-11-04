@@ -52,6 +52,7 @@ class AddProblem extends React.Component {
     if (truth) {
       fire.database().ref('problems').push(problem);
       this.props.resetAddProblem();
+      document.getElementById(`problemDescriptionTextArea`).value = '';
     } else {
     }
   }
@@ -60,8 +61,13 @@ class AddProblem extends React.Component {
     e.preventDefault();
     this.props.addTest(e.target.value);
   }
+
   componentDidMount () {
     console.log ('props is ',this.props);
+  }
+
+  componentDidUpdate () {
+    console.log('updated props is ',this.props);
   }
 
   render () {

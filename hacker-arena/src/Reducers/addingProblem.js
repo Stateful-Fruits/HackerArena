@@ -2,6 +2,7 @@ let start = {
   description: '',
   difficulty: '',
   tests: [],
+  tags: '',
   title: '',
   userFn: '',
   addingTest: 'Test.assertEquals( userFn(  ),  )'
