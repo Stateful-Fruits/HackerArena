@@ -427,6 +427,7 @@ const Home = (props) => {
         <h4 className="card-title">David Zou</h4>
         <p className="card-text">I did Log In, Sign Up, and Video Chat for this project</p>
         <p className="card-text"> tel :1-8002738255</p>
+        <p className="card-text"><a href="https://github.com/Davidzsy20">https://github.com/Davidzsy20</a></p>
         <p className="card-text"><small className="text-muted">I drink water. I sleep.</small></p>
       </div>
     </div>
