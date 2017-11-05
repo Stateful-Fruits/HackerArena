@@ -21,7 +21,6 @@ class Lobby extends React.Component {
     }
     return (
       <div>
-        <div>Code Run</div>
         <CreateRoom/>
         <Rooms rooms={roomsArr} 
           deleteRoom={this.deleteRoom}
