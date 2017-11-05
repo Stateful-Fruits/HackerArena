@@ -391,9 +391,9 @@ const Home = (props) => {
       <img className="card-img-top teamPics" src="assets/kai.jpg" alt="Card cap"/>
       <div className="card-block">
         <h4 className="card-title">Kai Chen</h4>
-        <p className="card-text">Made component to Create Game Rooms, Add Toy Problems and Code Run </p>
+        <p className="card-text">Made component to Create game rooms, Ability to add Toy Problems (for Admin), and created Code Run</p>
         <p className="card-text"><a href='https://github.com/kinyusui' target='blank'>https://github.com/kinyusui</a></p>
-        <p className="card-text"><small className="text-muted">Maybe some sort of fun facts / info on person</small></p>
+        <p className="card-text"><small className="text-muted">Avid fan of the game Go (Baduk, Weiqi)</small></p>
       </div>
     </div>
     <div className="card teamCard">
@@ -427,6 +427,7 @@ const Home = (props) => {
         <h4 className="card-title">David Zou</h4>
         <p className="card-text">I did Log In, Sign Up, and Video Chat for this project</p>
         <p className="card-text"> tel :1-8002738255</p>
+        <p className="card-text"><a href="https://github.com/Davidzsy20">https://github.com/Davidzsy20</a></p>
         <p className="card-text"><small className="text-muted">I drink water. I sleep.</small></p>
       </div>
     </div>
