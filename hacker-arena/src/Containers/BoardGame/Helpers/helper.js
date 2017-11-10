@@ -109,64 +109,6 @@ helper.handleBoard = (room, user) => {
       return room;
     })
   }
-/*
-  let gobPos = room.Goblin.position;
-  let gobString = gobPos[0] + ' ' + gobPos[1];
-  players.forEach(player => {
-    let position = room.playerInfo[player].position;
-    let positionString = position[0] + ' ' + position[1];
-    if (gobString === positionString) {
-      metGoblin = true;
-      board[position[0]][position[1]][0] = board[position[0]][position[1]][0].filter(ele => ele !== player);
-      playerInfo[player].position = [0,0];
-      board[0][0][0].push(player);
-    } else if (whirlpools.indexOf(positionString) !== -1) {
-      whirled = true;
-      let invalid = true, random, random1;
-      while (invalid) {
-        random = Math.floor(Math.random() * 7);
-        random1 = Math.floor(Math.random() * 7);
-        if (whirlpools.indexOf(random + ' ' + random1) === -1){
-          invalid = false;
-        }
-      }
-      board[position[0]][position[1]][0] = board[position[0]][position[1]][0].filter(ele => ele !== player);
-      playerInfo[player].position = [random,random1];
-      board[random][random1][0].push(player);
-    }
-  })
-  if (metGoblin || whirled) {
-    //fire.database().ref(`BoardRooms/${room.key}`).set(room);
-    fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
-      let gobPos = room.Goblin.position;
-      let gobString = gobPos[0] + ' ' + gobPos[1];
-      players.forEach(player => {
-        let position = room.playerInfo[player].position;
-        let positionString = position[0] + ' ' + position[1];
-        if (gobString === positionString) {
-          metGoblin = true;
-          board[position[0]][position[1]][0] = board[position[0]][position[1]][0].filter(ele => ele !== player);
-          playerInfo[player].position = [0,0];
-          board[0][0][0].push(player);
-        } else if (whirlpools.indexOf(positionString) !== -1) {
-          whirled = true;
-          let invalid = true, random, random1;
-          while (invalid) {
-            random = Math.floor(Math.random() * 7);
-            random1 = Math.floor(Math.random() * 7);
-            if (whirlpools.indexOf(random + ' ' + random1) === -1){
-              invalid = false;
-            }
-          }
-          board[position[0]][position[1]][0] = board[position[0]][position[1]][0].filter(ele => ele !== player);
-          playerInfo[player].position = [random,random1];
-          board[random][random1][0].push(player);
-        }
-      })
-      return room;
-    })
-  }
-  */
 }
 
 helper.checkMetGoblinOrWhirlpool = (room, pos) => {
