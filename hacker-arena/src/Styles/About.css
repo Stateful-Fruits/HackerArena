@@ -11,10 +11,10 @@ video {
   color: #423
 }
 .hero {
-    margin-top: -30px;
-    background: url('https://static.pexels.com/photos/160107/pexels-photo-160107.jpeg') no-repeat center;
+    margin-top: -80px;
+    background: url('/assets/homebg.jpeg') no-repeat center;
     background-size: cover;
-    height: 70vh;
+    height: 75vh;
     /* height: 140% !important; */
     display: flex;
     align-content: center;
@@ -26,6 +26,8 @@ video {
     height: 100px;
     width: 100px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    background-size: cover;
+    background-position: center center;
 }
 
 .teamCard {
@@ -33,24 +35,242 @@ video {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
   align-items: center;
   padding: 25px !important;
-  background: transparent !important;
+  /* background: transparent !important; */
+  border-radius: 15px;
+  /* background: white !important; */
 }
 
 .team {
     margin: 3%; 
     margin-top: 2%;
+    margin-bottom: 0%;
 }
 
 .teamHeader {
-    margin-top: 3%;
+    margin-top: 0%;
+}
+.teamSection {
+    height: 550px;
+    background-color: rgb(223, 227, 231);
+    background-image: -webkit-linear-gradient(30deg,  rgb(223, 227, 231)  20%, white 50%);
+}
+.homeHeaders {
+    /* color: rgb(91, 91, 91); */
+    /* text-shadow: .2px .2px 4px #000000; */
 }
 
 .features {
-    height: 50vh;
-
+    /* height: 50vh; */
+    height: 100%;
 }
 
 .aboutFooter {
-    background: black;
-    height: 30vh;
+    background: rgb(40, 40, 41);
+    height: 20vh;
+}
+
+.aboutIcons {
+    height: 100px !important;
+    width: 100px !important;
+}
+
+.features > .card-deck > .card {
+    align-items: center;
+    margin: 25px;
+    padding: 25px !important;
+    border: none;
+    width: 18vw !important;
+    background-color: transparent;
+}
+
+.introduction {
+    height: 500px;
+    background-color: rgb(228, 224, 224);
+    background-image: -webkit-linear-gradient(30deg, rgb(228, 224, 224)  20%, white 50%);
+}
+
+.introCard {
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    border-radius: 3px !important;
+    background: transparent !important;
+}
+
+.introTitle {
+    padding-bottom: 5px;
+    border-bottom: 1px grey solid;
+}
+
+.introduction > .team > .card {
+    width: 150px;
+}
+/* progress {
+  position: fixed;
+  left: 0;
+  top: 62px;
+  z-index: 1000;
+  width: 100%;
+  height: .25em;
+  appearance: none;
+  color: black !important;
+} */
+
+progress::-webkit-progress-bar {
+  background-color: transparent;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: .25em;
+  display: block;
+  max-width: 100vw !important;
+}
+
+.progress-bar {
+  background-color: white !important;
+  width: 50%;
+  display: block;
+  height: inherit;
+  max-width: 100vw !important;
+}
+
+#progressBar {
+    position: fixed;
+    left: 0;
+    top: 62px;
+    z-index: 1000;
+    width: 100%;
+    height: .25em;
+    opacity: 0.9;
+    border: none !important;
+    outline: none !important;
+    appearance: none;
+    /* color: black !important; */
+    max-width: 100vw !important;
+}
+
+progress::-webkit-progress-value {
+    background:transparent;
+    max-width: 100vw !important;
+
+  }
+  
+  progress::-webkit-progress-value {
+    background: rgb(41, 41, 41);
+    max-width: 100vw !important;
+  }
+  
+  progress::-webkit-progress-bar {
+    background: transparent;
+    max-width: 100vw !important;
+
+  }
+.features {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    background-image: -webkit-linear-gradient(30deg, white 30%, rgb(223, 227, 231)  50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.39) !important;
+    z-index: 10;
+}
+/* .gameModes {
+    height: 1000px;
+} */
+  .tab-pane {
+      /* height: 100%; */
+      width: 70vw;
+      border-radius: 15px;
+      /* border: 1px solid black; */
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+      margin: 25px;
+      margin-bottom: 60px;
+      padding: 25px;
+      background: white;
+  }
+
+  .pills {
+      width: 200px;
+  }
+
+.disruptionsHome {
+    height: 850px;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    background-color: white;
+    background-image: -webkit-linear-gradient(330deg, white 20%, rgb(228, 224, 224)  50%);
+}
+ 
+.disPrevHeader {
+    margin: 0;
+}
+#homeDisruptions {
+    display: flex;
+    justify-content: center;
+}
+#v-pills-tab > a {
+    width: 120px;
+    margin: 5px;
+    text-align: left;
+    border-radius: 15px;
+    color: white;
+    background-color: rgb(128, 128, 128);
+}
+
+#v-pills-tab > a:hover {
+    color: rgb(65, 65, 65);
+    background-color: rgb(35, 35, 46);
+}
+
+#v-pills-tab > a.active {
+    color: black;
+    background-color: rgb(255, 255, 255);
+}
+
+.vertPane {
+    width: 70vw;
+    border-radius: 15px;
+    /* border: 1px solid black; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+    margin: 25px;
+    padding: 25px;
+}
+
+.disruptionsPane {
+    margin-top: 20%;
+    height: 300px;
+}
+
+.nav-pills .nav-link {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+
+.classicSnaps{
+    background: url('/assets/ClassicSSedit.png') no-repeat;
+    background-size: contain;
+    height: 500px;
+    width: auto;
+}
+
+.pairSnaps{
+    background: url('/assets/NavigatorSSedit.png') no-repeat;
+    background-size: contain;
+    height: 500px;
+    width: auto;
+}
+.codeRunSnaps{
+    background: url('/assets/CodeRunSSedit.png') no-repeat;
+    background-size: contain;
+    height: 500px;
+    width: auto;
+}
+.soloSnaps{
+    background: url('/assets/SoloSSedit.png') no-repeat;
+    background-size: contain;
+    height: 500px;
+    width: auto;
 }

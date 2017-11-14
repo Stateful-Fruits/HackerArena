@@ -7,9 +7,8 @@ import updateGameRooms from './Actions/updateGameRooms';
 import updateProblems from './Actions/updateProblems';
 import NavBar from './Components/NavBar/NavBar';
 import $ from 'jquery';
-import fire from './Firebase/firebase';
-// import db from './Firebase/db';
-import syncToDb from './Firebase/syncToDb'
+// import fire from './Firebase/firebase';
+import syncToDb from './Firebase/syncToDb';
 
 import { push } from 'react-router-redux';
 
@@ -19,12 +18,14 @@ class App extends Component {
     let { updateGameRooms, updateProblems, updateBoardRooms } = this.props;
     syncToDb(updateGameRooms, updateProblems, updateBoardRooms);
     $(window).on('scroll', () => {
-      if(window.scrollY > 50){
+      if(window.scrollY > 100){
         $('.navbarLogo').fadeIn(1000);
+        $('.navbar').css('opacity', '0.9');
         $('.navbarProfile').fadeIn(1000);
       } 
-      if(window.scrollY < 50){
+      if(window.scrollY < 100){
         $('.navbarLogo').fadeOut(1000);
+        $('.navbar').css('opacity', '1');
         $('.navbarProfile').fadeOut(1000);
       }
     })
@@ -37,12 +38,12 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">HACKER ARENA</h1>
+          <img className="fullLogo" alt='fullLogo' src="/assets/fullLogo.png" />
           {
             currentUser.email ? (
               <span className="profile-image" onClick={() => navigate('/User/' + username)}>
-                <span className="profile-greeting"> Hi { username }! {' '} </span>
-                <div className="profile-photo  corner-profile-pic"
+                {/* <span className="profile-greeting"> Hi { username }! {' '} </span> */}
+                <div className="profile-photo  corner-profile-pic2"
                   style={{backgroundImage: `url(${currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'})`}}
                   alt='profile'
                 >

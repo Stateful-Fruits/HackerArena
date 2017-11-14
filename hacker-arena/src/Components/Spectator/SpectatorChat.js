@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import fire from '../../Firebase/firebase';
+// import fire from '../../Firebase/firebase';
 import Webrtc from '../../Containers/PeerVideos/Webrtc.js';
 import SpectatorChatMessage from './SpectatorChatMessage.js';
 
@@ -23,20 +23,22 @@ class SpectatorChat extends Component {
     // prevent empty messages
     if (!this.state.msg.length) return;
     let msg = this.state.msg;
-    let room = this.props.gameRoom;
-    let username = fire.auth().currentUser.email.split('@')[0] || 'UnkownUser';
-    this.props.sendSpectatorMessage(room, username, msg);
+    let { gameRoom, currentUser, roomId } = this.props;
+    let username = currentUser.username || 'UnknownUser';
+    this.props.sendSpectatorMessage(gameRoom, roomId, username, msg);
     this.setState({ msg: '' });
   }
 
   render() {
-    let { gameRoom } = this.props;
+    let { gameRoom, roomId } = this.props;
+    console.log('roomId in spectatorChat', roomId)
     let spectatorChat = gameRoom.spectatorChat || [];
     let { spectators } = gameRoom;
     return (
       <div style={{ margin: "5%" }}>
        <Webrtc
         room={gameRoom}
+        roomId={roomId}
        />
         <form onSubmit={this.handleMsgSend}>
           <h2>Chat: </h2>

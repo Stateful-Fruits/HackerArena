@@ -4,8 +4,7 @@ import { push } from 'react-router-redux';
 import noUiSlider from 'nouislider'
 
 import db from '../Firebase/db';
-
-import fire from '../Firebase/firebase';
+// import fire from '../Firebase/firebase';
 
 import {filterProblemsByDifficulty, chooseRandomProblem} from './../Helpers/problemHelpers';
 import './../Styles/CreateGameRoom.css';
@@ -55,7 +54,7 @@ class CreateGameRoom extends React.Component {
     const room = {
       roomStatus: 'standby',
       isPairRoom: false,
-      startingCredits,
+      startingCredits: parseInt(startingCredits, 10),
       isPrivate,
       problemID,
       problem,
@@ -119,7 +118,8 @@ class CreateGameRoom extends React.Component {
 
   onCheck(e) {
     e.stopPropagation();
-    let username = fire.auth().currentUser.email.split('@')[0];
+
+    let username = this.props.currentUser.username;
     let name = e.target.name;
     let invitedPlayers = [];
     for (let i = 0; i < this.state.playerCapacity; i++) invitedPlayers.push('');
@@ -160,7 +160,7 @@ class CreateGameRoom extends React.Component {
             className="createGameInput"
             type="number" 
             value={this.state.playerCapacity} 
-            min="1" 
+            min="2" 
             max="4" 
             name="playerCapacity"
             onChange={this.onChange}
@@ -228,7 +228,8 @@ class CreateGameRoom extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    problems: state.problems
+    problems: state.problems,
+    currentUser: state.currentUser
   }
 }
 

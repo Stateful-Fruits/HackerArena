@@ -1,8 +1,6 @@
-class Test {
-  
+class Test { // eslint-disable-line no-unused-vars
     static assertEquals(actual, expected) {
       const passed = actual === expected;
-      console.log('actual', actual);
       return {
         actual: actual,
         expected: expected,
@@ -14,12 +12,11 @@ class Test {
 
   
 const runTestsOnUserAnswer = function(userInputString, tests, userFn) {
-  console.log('running tests ',tests, userFn);
   const runOneTest = function(testStr) {
     const testData = parseTestStr(testStr);
     
-    try {
-      const results = eval(testStr)
+    try { 
+      const results = eval(testStr); // eslint-disable-line no-eval
       results.inputs = testData.inputs;
       return results 
     } catch(e) {
@@ -32,7 +29,7 @@ const runTestsOnUserAnswer = function(userInputString, tests, userFn) {
     }
   }
   
-  try {
+  try { // eslint-disable-next-line no-new-func
     userFn = new Function(userInputString + '\nreturn ' + userFn)();
     return tests.map(test => {
       return runOneTest(test)
@@ -64,24 +61,24 @@ export default runTestsOnUserAnswer;
 // TESTING
 
 */
-var sampleUserInput = `
-  var add = function(a, b) {
-    if (helper(a, b)) {
-      return a + b;
-    } else {
-      return 'sorry!';
-    }
-  }
+// var sampleUserInput = `
+//   var add = function(a, b) {
+//     if (helper(a, b)) {
+//       return a + b;
+//     } else {
+//       return 'sorry!';
+//     }
+//   }
 
-  const helper = function(a, b) {
-    return a && b;
-  }
-`
+//   const helper = function(a, b) {
+//     return a && b;
+//   }
+// `
 
-var sampleTests = [
-  `Test.assertEquals(add(5,6), 11)`,
-  `Test.assertEquals(add.add(5, 6), 'sorry!')`
-]
-console.log(runTestsOnUserAnswer(sampleUserInput, sampleTests))
+// var sampleTests = [
+//   `Test.assertEquals(add(5,6), 11)`,
+//   `Test.assertEquals(add.add(5, 6), 'sorry!')`
+// ]
+// console.log(runTestsOnUserAnswer(sampleUserInput, sampleTests))
 
 //console.log(parseTestStr(sampleTests[0]))

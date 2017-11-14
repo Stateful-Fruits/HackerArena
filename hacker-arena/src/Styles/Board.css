@@ -18,10 +18,10 @@
 }
 
 .brown {
-  background: #eadabc;
+  background-color: #eadabc;
 }
 .dbrown {
-  background: #bf9053;
+  background-color: #bf9053;
 }
 
 /* .treasure {
@@ -38,7 +38,7 @@
 }
 
 .goblin {
-  background: url('/assets/Goblin.png')
+  background-image: url('/assets/Goblin.png')
 }
 
 .lastblock {
@@ -62,6 +62,30 @@
   display: inline-block;
 }
 
+.moveButton {
+  font-size: 20px !important;
+  background-color: rgb(63, 63, 70);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+}
+
+.diceButton {
+  font-size: 20px !important;
+  background-color: rgb(63, 63, 70);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+  padding: 20px !important;
+}
+
+.diceButton:hover, .moveButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #b24411 !important;
+  color: #b24411 !important
+}
+
 .inline {
   display: inline-block;
   margin: 0px 22px 0px 22px;
@@ -83,6 +107,26 @@
   background: rgb(132, 190, 132);
 }
 
+.attackButton {
+  font-size: 20px !important;
+  background-color: rgb(69, 177, 110);
+  color: white;
+  border: 3px solid rgb(233, 233, 233) !important;
+  border-radius: 10px !important;
+  padding: 10px 15px 10px 15px !important;
+}
+
+.attackButton:hover {
+  transition: border 1s ease,
+              color 1s ease;
+  border: 3px solid #1184b2 !important;
+  color: #1184b2 !important
+}
+
+.boardSystem {
+  width: 60%;
+  display: inline-block;
+}
 /* .analog {
   border-radius: 10px;
 	width: 20px;

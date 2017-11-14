@@ -1,18 +1,15 @@
 import React from 'react';
 
 import fire from '../../Firebase/firebase';
-
-import { setUserAsAdmin } from '../../Helpers/authHelpers'
-
+// import { setUserAsAdmin } from '../../Helpers/authHelpers'
 import '../../Styles/EditProfile.css'
-
 
 class EditProfile extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      photoURL: fire.auth().currentUser.photoURL,
+      photoURL: props.currentUser.photoURL,
       photoFiles: [],
       uploadProgress: 0,
       showEdit: false,
@@ -24,7 +21,6 @@ class EditProfile extends React.Component {
 
     this.onFileChange =this.onFileChange.bind(this);    
     this.onFileSubmit =this.onFileSubmit.bind(this);
-    this.handleEditPhoto = this.handleEditPhoto.bind(this);
     this.handleUpgradeToAdmin = this.handleUpgradeToAdmin.bind(this);
   }
 
@@ -78,20 +74,7 @@ class EditProfile extends React.Component {
     });
   }
 
-  
-
-  handleUpgradeToAdmin(e) {
-    e.preventDefault();
-    let currentUser = fire.auth().currentUser;
-    let uid = currentUser.uid;
-    let password = this.state.password;
-    
-    setUserAsAdmin(uid, password)
-    .then(() => console.log('user is not admin - thank you for shopping'))
-  }
-
   render() {
-    let currentUser = fire.auth().currentUser;
     return (
       <div className="edit-profile">
         <div className="dropDownEdits">
@@ -113,18 +96,6 @@ class EditProfile extends React.Component {
               <span className="progress-display">{this.state.uploadProgress}</span>
               <div className="upload-bar progress-bar progress-bar-striped progress-bar-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" id="uploader" style={{width: `${this.state.uploadProgress}%`}}></div>
             </div>
-          </div>
-          <div className="upgrade-to-admin">
-            <h4>If you are a site administrator, upgrade to admin status here!</h4>
-            <form>
-              Password:
-              <input className="password form-control" onChange={this.onChange}
-                value = {this.state.password}
-                type= 'text'
-                name= 'password'
-              />
-              <input type="submit" onClick={this.handleUpgradeToAdmin}/>
-            </form>
           </div>
         </div>
       </div>

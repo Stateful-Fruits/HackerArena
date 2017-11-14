@@ -5,9 +5,6 @@ import { push } from 'react-router-redux';
 import '../Styles/History.css';
 
 class History extends React.Component {
-  constructor(props){
-    super(props)
-  }
   render(){
     let { navigate } = this.props
     let games = Object.values(this.props.profile.history);
@@ -18,7 +15,7 @@ class History extends React.Component {
            return <HistoryEntry navigate={navigate} game={item} profile={this.props.profile} key={i}/>
         })}
       </div>
-  )
+    )
   }  
 };
 

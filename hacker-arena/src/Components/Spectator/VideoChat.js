@@ -5,7 +5,6 @@ import { List } from 'immutable';
 // import Video from './Video.js';
 
 const VideoChat = ({data})=> {
-console.log('hsdfajdflakj',data)
 return (
     
     <div>

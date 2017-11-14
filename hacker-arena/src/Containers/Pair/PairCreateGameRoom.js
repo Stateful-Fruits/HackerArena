@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import noUiSlider from 'nouislider'
 
-import fire from './../../Firebase/firebase';
 import db from './../../Firebase/db';
 
 import { filterProblemsByDifficulty, chooseRandomProblem } from './../../Helpers/problemHelpers';
 import './../../Styles/PairCreateGameRoom.css';
 import './../../Styles/nouislider.css';
+
 
 class PairCreateGameRoom extends React.Component {
   constructor (props) {
@@ -49,7 +49,7 @@ class PairCreateGameRoom extends React.Component {
   }
 
   createRoom (problemID, isPrivate, startingCredits, maxPairs, rounds, creatorRole, minDifficulty = 0, maxDifficulty = 8) {
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let username = this.props.currentUser.username;
     let allProblems = this.props.problems;
     let problem = allProblems[problemID];
     const room = {
@@ -125,8 +125,9 @@ class PairCreateGameRoom extends React.Component {
 
     return (
       <div>
-        <form>
-        Wins needed to be the champion
+        <form className="createGameForm">
+        <h2 className="createGameHeader"> Create Game Room </h2>
+        <h5>Wins needed to be the champion</h5>
           <select
             type="number" 
             value={this.state.rounds} 
@@ -138,8 +139,9 @@ class PairCreateGameRoom extends React.Component {
             <option value="3">3</option>
           </select>
           <br/>
-          Max Pairs
+          <h5>Max Pairs</h5>
           <input
+            className="createGameInput"
             type="number" 
             value={this.state.maxPairs} 
             min="1" 
@@ -148,16 +150,21 @@ class PairCreateGameRoom extends React.Component {
             onChange={this.onChange}
           />
           <br/>
-          Make room private
-          <input
-            type="checkbox"
-            label="Make room private"
-            checked={this.state.isPrivate} 
-            name="isPrivate"
-            onChange={this.onCheck}
-          />
+          {/* <div className="form-check">
+            <label className="form-check-label privateCheck">Make room private</label>
+            <input
+              className="form-check-input"
+              type="checkbox"
+              label="Make room private"
+              checked={this.state.isPrivate} 
+              name="isPrivate"
+              onChange={this.onCheck}
+            />
+          </div> */}
           <br/>
-          Starting Attack credits<input
+          <h5>Starting Attack credits</h5>
+          <input
+            className="createGameInput"
             type="number" 
             value={this.state.startingCredits} 
             min="1" 
@@ -166,24 +173,24 @@ class PairCreateGameRoom extends React.Component {
             onChange={this.onChange}
           />
           <br/>
-          Your role
+          <h5>Your role</h5>
           <select name="creatorRole" value={this.state.creatorRole} onChange={this.onChange}>
             <option value="driver">driver</option>
             <option value="navigator">navigator</option>
           </select>
           <br/>
-          Choose a problem
+          <h5>Choose a problem</h5>
           <select name="problemID" value={this.state.problemID} onChange={this.onChange}>
             {problemsArr}
             <option value="random">random!</option>
           </select>
           <br/>
           <br/>
-          Select a difficulty level for this and subsequent problems
+          <h5>Select a difficulty level for this and subsequent problems</h5>
           <div className="slider-container">
             <div id="slider"></div>
           </div>
-          <input type="submit" value="CREATE GAME ROOM" onClick={this.onSubmit}></input>
+          <input className="submitCreateGame" type="submit" value="CREATE GAME ROOM" onClick={this.onSubmit}></input>
         </form>
       </div>
     )
@@ -192,7 +199,8 @@ class PairCreateGameRoom extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    problems: state.problems
+    problems: state.problems,
+    currentUser: state.currentUser
   }
 }
 

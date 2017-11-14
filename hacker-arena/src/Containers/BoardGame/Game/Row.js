@@ -1,7 +1,7 @@
 import React from 'react';
 import helper from '../Helpers/helper';
 import {connect} from 'react-redux';
-import fire from '../../../Firebase/firebase';
+// import fire from '../../../Firebase/firebase';
 
 class Row extends React.Component {
   constructor (props) {
@@ -10,27 +10,30 @@ class Row extends React.Component {
   }
   handleMove (e) {
     e.preventDefault();
-    let {room, user} = this.props;
-    if (room.playerInfo[user] && room.playerInfo[user].canMove) {
-      let userPos = room.playerInfo[user].position;
-      let strBP = e.target.id.split(' ');
-      let blockx = parseInt(strBP[0],10);
-      let blocky = parseInt(strBP[1],10);
-      let ydiff = blockx - userPos[0];
-      let xdiff = blocky - userPos[1];
-      let difference = Math.abs(xdiff) + Math.abs(ydiff);
-      let direction;
-      if (difference === 1) {
-        if (ydiff === 1) {
-          direction = 'Down';
-        } else if (ydiff === -1) {
-          direction = 'Up';
-        } else if (xdiff === 1) {
-          direction = 'Right';
-        } else if (xdiff === -1) {
-          direction = 'Left';
+    let {room, currentUser} = this.props;
+    let username = currentUser.username;
+    if (room.playerInfo[username].diceResult > 0) {
+      if (room.playerInfo[username] && room.playerInfo[username].canMove) {
+        let userPos = room.playerInfo[username].position;
+        let strBP = e.target.id.split(' ');
+        let blockx = parseInt(strBP[0],10);
+        let blocky = parseInt(strBP[1],10);
+        let ydiff = blockx - userPos[0];
+        let xdiff = blocky - userPos[1];
+        let difference = Math.abs(xdiff) + Math.abs(ydiff);
+        let direction;
+        if (difference === 1) {
+          if (ydiff === 1) {
+            direction = 'Down';
+          } else if (ydiff === -1) {
+            direction = 'Up';
+          } else if (xdiff === 1) {
+            direction = 'Right';
+          } else if (xdiff === -1) {
+            direction = 'Left';
+          }
+          helper.movePlayer(direction, room, username);
         }
-        helper.movePlayer(direction, room, user);
       }
     }
   }
@@ -55,7 +58,7 @@ class Row extends React.Component {
 
 const mapStoP = (state) => {
   return {
-    user: fire.auth().currentUser.email.split('@')[0],
+    currentUser: state.currentUser,
     room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined
   }
 }

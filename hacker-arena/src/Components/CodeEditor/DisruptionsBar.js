@@ -16,7 +16,7 @@ const DisruptionsBar = ({
   <button className="btn" id="Sublime 5" onClick={sendDisruptions}><span className="d5 badge">5</span> Sublime</button>
   <button className="btn" id="Move 5" onClick={sendDisruptions}><span className="d5 badge">5</span> Move</button>
   <button className="btn" id="ActualTimeTravel 5" onClick={sendDisruptions}><span className="d5 badge">5</span> Undo</button>
-  <button className="btn" id="Charmin 5" onClick={sendDisruptions}><span className="d5 badge">5</span>Charmin</button>
+  <button className="btn" id="Charmin 5" onClick={sendDisruptions}><span className="d5 badge">5</span> Charmin</button>
   <button className="btn" id="Wipe 20" onClick={sendDisruptions}><span className="d10 badge">20</span> Wipe</button>
   </div>
 );

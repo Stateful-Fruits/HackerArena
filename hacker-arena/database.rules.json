@@ -1,6 +1,44 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    "problems": {
+      ".read": "auth!== null",
+      ".write": "auth.token.admin === true"
+    },
+    "users": {
+      "$user": {
+        ".read": "auth !== null",
+        ".write": "auth.uid === data.child('id').val() || auth.uid === newData.child('id').val()",
+        "history": {
+          ".write": "auth !== null"
+        }
+      }
+    },
+    "rooms": {
+      ".read": "auth !== null",
+      "$room": {
+        ".write": "(!data.exists() || data.child(auth.uid).exists()) || (auth.token.admin === true && !newData.exists())",
+        "players": {
+          "$username": {
+            ".write": "!data.exists() || auth.uid === data.child('uid').val()"
+          }
+        },
+        "spectators": {
+          ".write": "auth !== null"
+        },
+        "spectatorChat": {
+          ".write": "auth !== null"
+        },
+        "teams": {
+          ".write": "auth!== null"
+        },
+        "$uid": {
+          ".write": "$uid === auth.uid || !data.exists()"
+        }
+      }
+    },
+    "BoardRooms": {
+      ".read": "auth!== null",
+      ".write": "auth!== null"
+    }
   }
 }

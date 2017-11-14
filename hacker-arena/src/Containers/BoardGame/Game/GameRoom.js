@@ -37,18 +37,21 @@ class GameRoom extends React.Component {
   }
   
   componentDidUpdate () {
-    let {room, user} = this.props;
-    if (room.board) {
+    let { room, currentUser } = this.props;
+    let user = currentUser.username;
+    if (room && room.board && user) {
       [].slice.call(document.getElementsByClassName('validMove')).forEach(ele=>{
         ele.classList.remove('validMove');
-        console.log('removed valid from',ele.id,ele);
       });
       [].slice.call(document.getElementsByClassName('goblin')).forEach(ele => {
         ele.classList.remove('goblin');
       });
       let gobPos = room.Goblin.position;
       let gobString = gobPos[0] + ' ' + gobPos[1];
-      document.getElementById(gobString).classList.add('goblin');
+      let ele = document.getElementById(gobString);
+      if (ele) {
+        ele.classList.add('goblin');
+      }
       let position = room.playerInfo[user].position;
       let x = position[0];
       let y = position[1];
@@ -62,7 +65,6 @@ class GameRoom extends React.Component {
       stringify(x+1,y);
       stringify(x,y-1);
       stringify(x,y+1);
-      console.log ('valid selections are',validMoves);
       validMoves.forEach(move => {
         move = document.getElementById(move)
         if (move) {
@@ -77,22 +79,27 @@ class GameRoom extends React.Component {
   }
 
   handleBoard () {
-    let {room} = this.props;
+    let {room, currentUser} = this.props;
     if (room && room.gameStarted === true) {
-      helper.handleBoard(room);
+      helper.handleBoard(room, currentUser.username);
     }
   }
 
   handleEnter () {
-    let {room, user, navigate} = this.props;
+    let {room, currentUser, navigate} = this.props;
+    let user = currentUser.username;
+    console.log(room, user);
     if (room && this.state.canEnter) {
+      console.log('started checking if unstarted or started');
       let notFull = room.players.length < 4 && !room.gameStarted; //game not started;
       let notAlreadyIn = room.players.indexOf(user) === -1;
       let wasIn = Object.keys(room.playerInfo).indexOf(user) !== -1;
-      let firstTile = room.board[0][0][0];
+      //let firstTile = room.board[0][0][0];
       if (notFull && notAlreadyIn) {//not full nor started and not in;
-        room.players.push(user);
-        firstTile.push(user);
+/*        room.players.push(user);  //updating players
+        if (firstTile.indexOf(user) === -1) {
+          firstTile.push(user); //updating firstTile;
+        }
         if (!room.playerInfo[user]) {
           room.playerInfo[user] = {
             position: [0,0],
@@ -104,11 +111,42 @@ class GameRoom extends React.Component {
             credits: 5,
             testStatus: []
           }
-        }
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        }*/
+        // room.players , firstTile, playerInfo[user]
+        console.log('was in unstarted instead');
+        fire.database().ref(`BoardRooms/${room.key}`).transaction((currentRoom) => {
+          if (currentRoom.players.indexOf(user) === -1) {
+            currentRoom.players.push(user);
+          }
+          if (!currentRoom.playerInfo[user]) {
+            currentRoom.board[0][0][0].push(user);
+          }
+          if (!currentRoom.playerInfo[user]) {
+            currentRoom.playerInfo[user] = {
+              position: [0,0],
+              diceResult: 0,
+              canMove: true,
+              disruptions: [''],
+              liveInput: '',
+              events: '',
+              credits: 5,
+              testStatus: []
+            }
+          }
+          return currentRoom;
+        })
+        //fire.database().ref('BoardRooms/' + room.key).set(room);
       } else if (!notFull && wasIn && notAlreadyIn) { //refresh coming back
-        room.players.push(user);
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        // room.players.push(user);
+        // console.log('refreshed');
+        // fire.database().ref('BoardRooms/' + room.key).set(room);
+        console.log('refreshed');
+        fire.database().ref(`BoardRooms/${room.key}`).transaction(currentRoom => {
+          if (currentRoom.players.indexOf(user) === -1) {
+            currentRoom.players.push(user);
+          }
+          return currentRoom;
+        })
       } else if (!notFull && notAlreadyIn) {
         navigate('/CodeRunLobby');
       }
@@ -117,7 +155,7 @@ class GameRoom extends React.Component {
 
   handleLeave () {
     if (this.props.room !== undefined) {
-      let user = this.props.user;
+      let user = this.props.currentUser.username;
       let room = this.props.room;
       room.players = room.players.filter(player => player !== user);
       // let boardStart = room.board[0][0];
@@ -131,7 +169,11 @@ class GameRoom extends React.Component {
         this.setState({
           canEnter : false
         });
-        fire.database().ref('BoardRooms/' + room.key).set(room);
+        //fire.database().ref('BoardRooms/' + room.key).set(room);
+        fire.database().ref(`BoardRooms/${room.key}`).transaction(room => {
+          room.players = room.players.filter(player => player !== user);
+          return room;
+        })
       }
     }
   }
@@ -144,7 +186,8 @@ class GameRoom extends React.Component {
   }
 
   render () {
-    let user = this.props.user;
+    let currentUser = this.props.currentUser;
+    let user = currentUser.username;
     let room = this.props.room;
     if (room === undefined) {
       return <div>
@@ -167,7 +210,7 @@ class GameRoom extends React.Component {
       if (room.gameStarted && userInfo) {
         startButton = null;
         message = 'Run run run your code hastily down the board';
-        board = <Board board={room.board} whirlpools={room.whirlpools}/>;
+        board = <Board board={room.board} whirlpools={room.whirlpools} currentUser={currentUser}/>;
         diceResult = <div className='dice'>{'Moves Left: ' + room.playerInfo[user].diceResult}</div>;
         if (userInfo.canMove) {
           canMove = <div className='playerTurn'>{`You can move`}</div>;
@@ -176,10 +219,10 @@ class GameRoom extends React.Component {
           }
         } else {
           codePage = <div>
-            <CodeEditor room={room} user={user}/>
-            <TestSuite room={room} user={user}/>
+            <CodeEditor room={room} currentUser={currentUser}/>
+            <TestSuite room={room} currentUser={currentUser}/>
           </div>;
-          canMove = <div className='playerTurn'>{`Do toy problem to continue`}</div>
+          canMove = <div className='playerTurn'>{`Do toy problem BELOW to continue`}</div>
         }
         if (userInfo.diceResult > 0) {
           move = <MovePlayer room={room} user={user}/>;
@@ -214,14 +257,18 @@ class GameRoom extends React.Component {
         <div>{message}</div>
         <div>{playerSpans}</div>
         {startButton}
-        {board}
-        {canMove}
-        <div className='diceContainer'>
-          {diceResult}
-          {dice}
+        <div className='playView'>
+          {board}
+          <div className='controlSystem'>
+            {canMove}
+            <div className='diceContainer'>
+              {diceResult}<br/>
+              {dice}
+            </div>
+            {move}
+            {attack}
+          </div>
         </div>
-        {move}
-        {attack}
         <div id="editorAndTestSuite">
           {codePage}
         </div>
@@ -237,7 +284,7 @@ class GameRoom extends React.Component {
 
 const mapStoP = (state) => {
   return {
-    user: fire.auth().currentUser.email.split('@')[0],
+    currentUser: state.currentUser,
     room: state.boardRooms ? state.boardRooms[state.router.location.pathname.split('/')[2]] : undefined
   }
 }

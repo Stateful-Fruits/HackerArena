@@ -6,11 +6,12 @@ const ProblemDescription = (props) => {
   return (
     <div>
       <textarea 
-          className="form-control formProblemDescription"
-          value={problem.problemDescription} 
-          onChange={handleChange}
-          rows="10"
-          data-property='description'/>
+        id='problemDescriptionTextArea'
+        className="form-control formProblemDescription"
+        value={problem.problemDescription} 
+        onChange={handleChange}
+        rows="10"
+        data-property='description'/>
     </div>
   )
 }

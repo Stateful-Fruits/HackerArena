@@ -1,8 +1,5 @@
 import React from 'react';
 
-// import firebase from '../Firebase/firebase';
-// import provider from '../Firebase/oauth/oauth.js';
-
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -114,11 +111,11 @@ constructor(props) {
           <div className="signUpButtons">
               <button className="btn loginButton" onClick={() => navigate('/Login') }> Login </button>
               <button className="btn googleLogin" onClick={this.signInWithGoogle}>
-              <img className="googleLogo" src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2000px-Google_%22G%22_Logo.svg.png'/>
+              <img className="googleLogo" alt='goog' src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2000px-Google_%22G%22_Logo.svg.png'/>
               Log in with google
               </button>
               <button className="btn facebookLogin" onClick={this.signInWithFacebook}>
-              <img className="fbLogo" src="http://www.classiclitho.com/wp-content/uploads/2015/05/facebook-logo-png-transparent-background-1024x1024.png"/>
+              <img className="fbLogo" alt='fb' src="http://www.classiclitho.com/wp-content/uploads/2015/05/facebook-logo-png-transparent-background-1024x1024.png"/>
               Log in with facebook
               </button> 
             </div>

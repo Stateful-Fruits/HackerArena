@@ -35,15 +35,14 @@ class CodeEditor extends React.Component {
   // ~~~~~~~~~~~ LIFECYCLE FUNCTIONS ~~~~~~~~~~ //
 
   componentDidMount() {
-    let { currentRoom, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { currentRoom, roomId, currentUser } = this.props;
+    let username = currentUser.username
 
     this.resetEditor();
 
     // Watches for cheating
     this.ace.editor.on("paste", () => {
       window.swal('You little cheater', '', 'warning');
-      
       this.resetEditor();
     });
 
@@ -63,9 +62,8 @@ class CodeEditor extends React.Component {
 
   componentWillUpdate() {
     // Alert users if someone has won the game
-    let { currentRoom } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];    
-    
+    let { currentRoom, currentUser } = this.props;
+    let username = currentUser.username;
     // Check for disruptions sent to the user
     let disruptions = currentRoom.players[username].disruptions || [];
     if(disruptions.length > 1) {
@@ -81,8 +79,8 @@ class CodeEditor extends React.Component {
 
   handleSubmit() {
     let code = this.ace.editor.getValue();
-    let { currentRoom, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { currentRoom, roomId, currentUser } = this.props;
+    let username = currentUser.username;
     
     //TEST SUITE LOGIC
     let testStatus = runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
@@ -110,7 +108,7 @@ class CodeEditor extends React.Component {
     let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
     let newCode = consoleLogChange + code;
     try { // eslint-disable-next-line
-      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
+      !eval(newCode).includes('let results = ""; // eslint-disable-next-line') ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
     }  catch(e) {
       $('#aceConsole').append(`<li>undefined</li>`);
     }
@@ -121,17 +119,17 @@ class CodeEditor extends React.Component {
   }
 
   liveInputs() {
+    const { currentUser } = this.props;
     // Sends live inputs of user to database
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let username = currentUser.username;  
     let liveInput = this.ace.editor.getValue();
     fire.database().ref(`rooms/${this.props.roomId}/players/${username}/liveInput`).set(liveInput)
   }
 
   sendDisruptions(e) {
     e.stopPropagation();
-    console.log('trying to send a disruption')
-    let { currentRoom, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let { currentRoom, roomId, currentUser } = this.props;
+    let username = currentUser.username;
     // Sends disruptions to oppposite player
     let targetId = e.target.id || e.target.parentElement.id;
 
@@ -164,8 +162,8 @@ class CodeEditor extends React.Component {
   }
 
   clearDisruption(e) {
-    let { currentRoom, removePendingEvent, roomId } = this.props;    
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let { currentRoom, removePendingEvent, roomId, currentUser } = this.props;    
+    let username = currentUser.username;
         
     let disruptionFuncName = e.target.id.split(" ")[0];
     let blockCost = e.target.id.split(" ")[1];
@@ -178,7 +176,7 @@ class CodeEditor extends React.Component {
       if (didClear) {
         activity.push(`${username} successfully blocked ${disruptionFuncName}!`)
       } else {
-        parseInt(blockCost, 10) ? activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`) : null;
+        if(parseInt(blockCost, 10)) activity.push(`${username} wasted ${blockCost} credits defending against a ${disruptionFuncName} that didn't exist!`);
       }
 
       fire.database().ref(`rooms/${roomId}/activity`).set(activity);
@@ -201,7 +199,6 @@ class CodeEditor extends React.Component {
           let disruptionName = disruption[0];
 
           let clearCode = setTimeout(() => {
-            console.log('disruption activating!!', disruptionName)
             this.receiveDisruption(disruptionName);
             removePendingEvent(disruptionName, false)
           }, 5000);
@@ -229,23 +226,20 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // send win event (in room.players), update results object (in room), and increment user's wins (in database)
-    let room = this.props.currentRoom;
-    let roomId = this.props.roomId;
+    let { currentRoom, roomId, currentUser } = this.props
+    let username = currentUser.username;
+    let { players, problem, teams } = currentRoom
 
-    room.timeEnd = Date.now();
-    room.timeTaken = (room.timeEnd - room.timeStart)/1000;
+    currentRoom.timeEnd = Date.now();
+    currentRoom.timeTaken = (currentRoom.timeEnd - currentRoom.timeStart)/1000;
 
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let players = room.players;
-    let playerNames = Object.keys(room.players);
-    let problem = room.problem; 
-    let teams = room.teams;
+    let playerNames = Object.keys(currentRoom.players);
     let timeStamp = Date.now();
 
-    let resultForThisRound = prepResultsObjectFromWinner(username, players, teams, problem, room.timeTaken, timeStamp);
+    let resultForThisRound = prepResultsObjectFromWinner(username, players, teams, problem, currentRoom.timeTaken, timeStamp);
 
-    room.results = room.results || [];
-    room.results.push(resultForThisRound);
+    currentRoom.results = currentRoom.results || [];
+    currentRoom.results.push(resultForThisRound);
     
     let winEvent = {
       eventName: 'winner',
@@ -254,12 +248,14 @@ class CodeEditor extends React.Component {
 
     playerNames.forEach(name => players[name].events = [...(players[name].events || []), winEvent]);
 
-    fire.database().ref(`rooms/${roomId}`).set(room);
+    fire.database().ref(`rooms/${roomId}`).set(currentRoom);
   }
 
   resetEditor() {
     setTimeout( () => {
-      this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+        let oldHistory = this.ace.editor.getSession().getUndoManager();
+        this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+        this.ace.editor.getSession().setUndoManager(oldHistory);
     }, 500);
   }
 
@@ -270,8 +266,9 @@ class CodeEditor extends React.Component {
   // ~~~~~~~~~~~ RENDER ~~~~~~~~~~ //
 
   render() {
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let { currentRoom } = this.props;
+    let { currentRoom, currentUser } = this.props;
+    let username = currentUser.username;
+    
     return (
       <div id="editorSide">
           <DisruptionsBar 
@@ -292,7 +289,7 @@ class CodeEditor extends React.Component {
             mode="javascript"
             theme="monokai"
             onChange={this.liveInputs}
-            style={{ height: '400px', width: '50vw' }}
+            style={{ height: '400px', width: '50vw', fontSize: '13px' }}
             ref={instance => { this.ace = instance; }} // Let's put things into scope
           />
         <button className="btn submitButton" onClick={this.handleSubmit}> SUBMIT </button> 

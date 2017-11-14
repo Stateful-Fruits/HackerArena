@@ -50,9 +50,9 @@ class GameRoom extends React.Component {
     if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
-      console.log('handleLeaveRunning')
-      let { gameRooms, roomId, username } = this.props;
+        && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
+      let { gameRooms, roomId, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
       // when you're the last player inside, leaving deletes the gameroom
@@ -63,8 +63,8 @@ class GameRoom extends React.Component {
         // otherwise, just remove the user from the players array
         delete gameRoom.players[username];
         // see if the game needs to switch to standby
-        if (playerNames.length - 1 < gameRoom.playerCapacity 
-            && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
+        // if (playerNames.length - 1 < gameRoom.playerCapacity 
+        //     && gameRoom.roomStatus !== 'completed') gameRoom.roomStatus = 'standby';
         // don't allow handle enter to run again 
         this.setState({ allowEnter: false });
         
@@ -78,7 +78,8 @@ class GameRoom extends React.Component {
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
-      let { gameRooms, roomId, username, currentUser, navigate } = this.props;
+      let { gameRooms, roomId, currentUser, navigate } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
@@ -86,7 +87,7 @@ class GameRoom extends React.Component {
       // if you're already in the game room, do nothing
       if (playerNames.includes(username)) {
         return;
-      } else if (playerNames.length >= room.playerCapacity || (room.roomStatus !== 'standby' && room.roomStatus !== 'completed')) {
+      } else if (playerNames.length >= room.playerCapacity) {
         // if the gameRoom is full or closed, redirect the user to spectate the game
         navigate(`/Spectate/${roomId}`);
       } else {
@@ -115,7 +116,6 @@ class GameRoom extends React.Component {
 
         fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
         .then(() => {
-          console.log('added uid, about the add the other stuff to the room');
           return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
         })
         .then(() => console.log('wooo! set gameroom'))
@@ -158,8 +158,8 @@ class GameRoom extends React.Component {
     // If we haven't retrieved gameRooms from firebase or our room doesn't exist
     if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    let { gameRooms, roomId, isPairRoom } = this.props;
+        || !this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) return (<GameRoomLoading />);
+    let { gameRooms, roomId, isPairRoom, currentUser } = this.props;
     let room = gameRooms[roomId];
     let { roomStatus, results } = room;
     let resultsByPlayer = results ? calculateResultsByPlayer(results) : null;
@@ -167,18 +167,18 @@ class GameRoom extends React.Component {
     let champions = mostTotalWins ? mostTotalWins.winners : null;
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
-      return (<div className="completeWaiting"><WaitingForPlayer room={room}/></div>);
+      return (<div className="completeWaiting"><WaitingForPlayer room={room} currentUser={currentUser}/></div>);
     } else if (roomStatus === 'completed') {
       return (<WinnerDisplay champions={champions} resultsByPlayer={resultsByPlayer} isPairRoom={isPairRoom} />)
     } else if (roomStatus === 'playing') {
       return (
         <div>
           <div>
-            <ProgressBar room={room} roomId={roomId}/>
+            <ProgressBar room={room} roomId={roomId} currentUser={currentUser}/>
           </div>
           <div id="editorAndTestSuite">
-            <CodeEditor currentRoom={room} roomId={roomId}/>
-            <TestSuite currentRoom={room} roomId={roomId}/>
+            <CodeEditor currentRoom={room} roomId={roomId} currentUser={currentUser}/>
+            <TestSuite currentRoom={room} roomId={roomId} currentUser={currentUser}/>
           </div>
         </div>
       );
@@ -190,7 +190,6 @@ class GameRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[2],
-  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
   gameRooms: state.gameRooms,
   problems: state.problems,
   currentUser: state.currentUser

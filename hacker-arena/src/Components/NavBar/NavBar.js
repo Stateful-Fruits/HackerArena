@@ -17,12 +17,18 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <ul className="navbar-nav ml-auto mr-auto">
-          <li className="navbarLogo nav-item leftNav navbar-brand" onClick={ () => { navigate('/'); }}>
-           <strong>Hacker Arena Logo Here</strong></li>
+           <img className="HAlogo navbarLogo " alt="nav logo" src="/assets/HAlogo.png" onClick={ () => { navigate('/') }}/>
+          
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/'); }}>
             Home </li>
             <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Classic'); }}>
             Classic </li>
+            <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
+          Pair Match </li>
+          <li className="nav-item rightNav navbar-brand codeRunLobby" onClick={ () => { navigate('/CodeRunLobby'); }}>
+          Code Run </li>
+          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Solo'); }}>
+          Solo </li>
           {isAdmin ? 
             <li 
               className="nav-item rightNav navbar-brand" 
@@ -32,12 +38,7 @@ class NavBar extends Component {
             :
             null
           }
-          <li className="nav-item rightNav navbar-brand codeRunLobby" onClick={ () => { navigate('/CodeRunLobby'); }}>
-            Code Run </li>
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Pair'); }}>
-          Pair Match </li>
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Solo'); }}>
-          Solo </li>
+          
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Random'); }}>
           Random </li>
           {/* <a href='/' className='leftNav nav-item navbar-brand'>Home</a>
@@ -45,7 +46,7 @@ class NavBar extends Component {
           <a href='/AddProblem' className='leftNav nav-item navbar-brand'>Add Problem</a>
           <a href='/CodeRunLobby' className='leftNav nav-item navbar-brand'>Code Run</a> */}
           {
-            fire.auth().currentUser ? (
+            currentUser ? (
               <li
                 className="nav-item rightNav navbar-brand"
                 onClick={
@@ -60,13 +61,13 @@ class NavBar extends Component {
           }
           {
             currentUser.email ? (
-              <li className="navbarProfile nav-item rightNav" onClick={() => navigate('/User/' + username)}>
+              <a href="" className="navbarProfile nav-item rightNav" style={{top: '-15px', right: '-15px'}} onClick={() => navigate('/User/' + username)}>
                 Hi { username }! {' '}
-                <img className="profile-photo"
+                <img className="profile-photo corner-profile-pic"
                   src={currentUser.photoURL || 'https://static.pexels.com/photos/428339/pexels-photo-428339.jpeg'}
                   alt='profile'
                 />
-              </li>
+              </a>
             ) : null
           }
         </ul>
@@ -78,5 +79,8 @@ class NavBar extends Component {
 export default NavBar;
 
 
-{/* <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}>
-About </li> */}
+/*
+<li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/About'); }}> About </li> 
+<li className="navbarLogo nav-item leftNav navbar-brand" onClick={ () => { navigate('/'); }}>
+<strong>Hacker Arena Logo Here</strong></li>
+*/

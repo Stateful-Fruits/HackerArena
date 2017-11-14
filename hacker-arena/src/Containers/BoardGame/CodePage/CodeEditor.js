@@ -24,8 +24,8 @@ class CodeEditor extends React.Component {
   }
   
   componentDidMount() {
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let userInfo = room.playerInfo[username];
     let userPos = userInfo.position;
     let problem = room.board[userPos[0]][userPos[1]][1];
@@ -59,12 +59,12 @@ class CodeEditor extends React.Component {
 
   componentWillUpdate(){
     // Alert users if someone has won the game
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];   
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let disruptions = room.playerInfo[username].disruptions;
     // Check for disruptions sent to the user
 
-    if(disruptions.length){
+    if (disruptions[0] !== '') {
       room.playerInfo[username].disruptions.forEach(disruption => {
         if(disruption !== "") this.receiveDisruptions(disruption);
       });
@@ -74,28 +74,32 @@ class CodeEditor extends React.Component {
 
   liveInputs(){
     // Sends live inputs of user to database
-    let {room} = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     let liveInput = this.ace.editor.getValue();
     //fire.database().ref(`rooms/${this.props.room.key}/players/${username}/liveInput`).set(liveInput);
-    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).set(liveInput);
+    fire.database().ref(`BoardRooms/${room.key}/playerInfo/${username}/liveInput`).transaction(live => {
+      return liveInput;
+    })
+    //.set(liveInput)
+    // .catch(err => {
+    //   console.log('err in liveinput', err);
+    // });
   }
 
   sendDisruptions(e){
     let { room } = this.props;
-    let username = this.props.user;
+    let username = this.props.currentUser.username;
     let disruptions = room.playerInfo[username].disruptions;
     let playerInfo = room.playerInfo[username];
     // Sends disruptions to oppposite player
     let disruptionFunc = e.target.id.split(" ")[0];
     let disruptionCost = e.target.id.split(" ")[1];
-    console.log('dissssssrupt', disruptionFunc, disruptionCost, disruptions);
     // make sure the user has enough credits to send this disruption
     if (playerInfo.credits >= disruptionCost) {
       room.players.forEach((playerName) => {
         if (playerName !== username) {
           let currentDisruptions = disruptions;
-          console.log('playername', playerName);
           fire.database().ref(`BoardRooms/${room.key}/playerInfo/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
           //fire.database().ref(`rooms/${room.key}/players/${playerName}/disruptions`).set([...currentDisruptions, disruptionFunc]);
         }
@@ -113,13 +117,13 @@ class CodeEditor extends React.Component {
 
   endRoundWithClientAsVictor() {
     // Instead set canMove to true here;
-    let { room, user } = this.props;
+    let { room, currentUser } = this.props;
+    let user = currentUser.username;
     let userInfo = room.playerInfo[user];
     userInfo.canMove = !userInfo.canMove;
     room.playerInfo[user].testStatus = [];
     let powers = Object.keys(Powers);
     let random = Math.floor(Math.random() * powers.length);
-    console.log(powers, random);
     userInfo.attack = powers[random];
     userInfo.credits = Math.ceil(5*this.state.problem.difficulty + userInfo.credits);
     const moveGoblin = (room, Goblin) => {
@@ -137,13 +141,22 @@ class CodeEditor extends React.Component {
       } 
     }
     moveGoblin(room, room.Goblin);
-    fire.database().ref('BoardRooms/' + room.key).set(room);
+    //fire.database().ref('BoardRooms/' + room.key).set(room);
+    fire.database().ref(`BoardRooms/${room.key}/`).transaction(currentRoom => {
+      let fireUserInfo = currentRoom.playerInfo[user];
+      fireUserInfo.canMove = userInfo.canMove;
+      fireUserInfo.testStatus = [];
+      fireUserInfo.attack = powers[random];
+      fireUserInfo.credits = userInfo.credits;
+      moveGoblin(currentRoom, currentRoom.Goblin);
+      return currentRoom;
+    });
   }
 
   handleSubmit(){
     let code = this.ace.editor.getValue();
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
     //TEST SUITE LOGIC
     //let userInfo = room.playerInfo[username];
     //let userPos = userInfo.position;
@@ -189,8 +202,9 @@ class CodeEditor extends React.Component {
   }
   
   render() {
-    let username = fire.auth().currentUser.email.split('@')[0];
-    let { room } = this.props;
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
+
     return (
       <div id="editorSide">
           <DisruptionsBar 

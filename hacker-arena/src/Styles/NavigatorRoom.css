@@ -58,3 +58,41 @@
 .activity-log > ::-webkit-scrollbar {
   display: initial;
 }
+
+.pairNav .spectator-editors {
+  width: 50vw;
+}
+
+#pairNav > #editorAndTestSuite > .spectator-editors > .ace_editor {
+  width: 47vw !important;
+  left: 15px;
+}
+
+.pair-spectator-editor {
+  width: 47vw;
+}
+
+.console-container {
+  width: 47vw;
+  margin: 16px;
+}
+
+.consoleHeaderPair {
+  width: 100%;
+}
+
+.aceConsolePair {
+  width: 100% !important;
+}
+
+.activity-message {
+  text-align: left;
+}
+
+ul#aceConsole > li:before {
+  content: "\00BB \0020";
+}
+ul#aceConsole > li {
+  color: greenyellow;
+  text-align: left;
+}

@@ -27,7 +27,6 @@ class SoloRoom extends React.Component {
   componentDidMount () {
     window.addEventListener('beforeunload', this.handleLeave);
     this.handleEnter();
-    console.log("LOGGG", this.props.gameRooms[this.props.roomId])
   }
 
   componentWillUpdate() {
@@ -47,8 +46,9 @@ class SoloRoom extends React.Component {
     if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
-      let { gameRooms, roomId, username } = this.props;
+        && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
+      let { gameRooms, roomId, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
       // when you're the last player inside, leaving deletes the gameroom
@@ -73,7 +73,8 @@ class SoloRoom extends React.Component {
     // has been retrieved from Firebase and the room you are in exists 
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
-      let { gameRooms, roomId, username, navigate } = this.props;
+      let { gameRooms, roomId, currentUser, navigate } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       // if the players object is undefined (you're creating the room) set it to an empty object
       if (!room.players) room.players = {};
@@ -95,7 +96,7 @@ class SoloRoom extends React.Component {
         }
 
         // to make writing database rules easier
-        gameRoom[fire.auth().currentUser.uid] = true;    
+        gameRoom[currentUser.uid] = true;    
 
         // add you username to the gameroom
         gameRoom.players[username] = {
@@ -105,9 +106,8 @@ class SoloRoom extends React.Component {
           liveInput: ''
         };
         // and update the database
-        fire.database().ref(`/rooms/${roomId}/${fire.auth().currentUser.uid}`).set(true)
+        fire.database().ref(`/rooms/${roomId}/${currentUser.uid}`).set(true)
         .then(() => {
-          console.log('added user, about the add the other stuff to the room');
           return fire.database().ref(`/rooms/${roomId}`).set(gameRoom)
         })
         .then(() => console.log('wooo! set gameroom'))
@@ -122,7 +122,7 @@ class SoloRoom extends React.Component {
       let roomId = this.props.roomId;
       let room = this.props.gameRooms[roomId];
       let problems = this.props.problems;
-      let username = fire.auth().currentUser.email.split('@')[0];
+      let username = this.props.currentUser.username;
       let player = room.players[username];
       let events = player.events;
       if (events !== '' && room.roomStatus === 'playing') {
@@ -150,8 +150,8 @@ class SoloRoom extends React.Component {
     // If we haven't retrieved gameRooms from firebase or our room doesn't exist
     if (!this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
-    let { gameRooms, roomId } = this.props;
+        || !this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) return (<GameRoomLoading />);
+    let { gameRooms, roomId, currentUser } = this.props;
     let room = gameRooms[roomId];
     room.key = roomId;
     let { roomStatus } = room;
@@ -160,8 +160,8 @@ class SoloRoom extends React.Component {
       return (
         <div>
           <div id="editorAndTestSuite">
-            <SoloEditor currentRoom={room}/>
-            <TestSuite currentRoom={room}/>
+            <SoloEditor currentRoom={room} currentUser={currentUser}/>
+            <TestSuite currentRoom={room} currentUser={currentUser}/>
           </div>
         </div>
       );
@@ -172,9 +172,9 @@ class SoloRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[3],
-  username: fire.auth().currentUser.email.split('@')[0],
   gameRooms: state.gameRooms,
-  problems: state.problems
+  problems: state.problems,
+  currentUser: state.currentUser
 });
 
 const mapDispatcherToProps = (dispatch) => ({

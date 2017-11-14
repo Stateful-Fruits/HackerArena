@@ -2,18 +2,11 @@ let start = {
   description: '',
   difficulty: '',
   tests: [],
+  tags: '',
   title: '',
   userFn: '',
   addingTest: 'Test.assertEquals( userFn(  ),  )'
 }
-// {
-//   title: '',
-//   problemDescription: '',
-//   difficulty: '',
-//   fxnName: '',
-//   allTests: [],
-//   oneTest: ''
-// };
 
 const addingProblem = (state=start, action) => {
   let problem = Object.assign({},state);

@@ -15,6 +15,7 @@ class SoloEditor extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClear =  this.handleClear.bind(this);
     this.liveInputs = this.liveInputs.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
   
   componentDidMount() {
@@ -30,15 +31,15 @@ class SoloEditor extends React.Component {
 
   liveInputs(){
     // Sends live inputs of user to database
-    let username = fire.auth().currentUser.email.split('@')[0];  
+    let username = this.props.currentUser.username;
     let liveInput = this.ace.editor.getValue();
     fire.database().ref(`rooms/${this.props.currentRoom.key}/players/${username}/liveInput`).set(liveInput)
   }
 
   handleSubmit(){
     let code = this.ace.editor.getValue();
-    let { currentRoom } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { currentRoom, currentUser } = this.props;
+    let username = currentUser.username;
     //TEST SUITE LOGIC
     let testStatus =  runTestsOnUserAnswer((code), currentRoom.problem.tests, currentRoom.problem.userFn);
     if(Array.isArray(testStatus) && testStatus.every(item => item.passed === true)){
@@ -50,7 +51,6 @@ class SoloEditor extends React.Component {
       testStatus.forEach(items => {
         if(items.actual === undefined) items.actual = null;
       });
-      console.log("hey look at me", testStatus, this.props.currentRoom)
       fire.database().ref(`rooms/${currentRoom.key}/players/${username}/testStatus`).set(testStatus);
     } else {
       window.swal('Oops...', 'Something went wrong!', 'error');
@@ -66,7 +66,7 @@ class SoloEditor extends React.Component {
     let consoleLogChange = "let console = {}\nconsole.log=" + newLog + "\n";
     let newCode = consoleLogChange + code;
     try { // eslint-disable-next-line
-      eval(code) ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
+      !eval(newCode).includes('let results = ""; // eslint-disable-next-line') ? $('#aceConsole').append(`<li>${eval(newCode)}</li>`) : $('#aceConsole').append(`<li>undefined</li>`);
     }  catch(e) {
       $('#aceConsole').append(`<li>undefined</li>`);
     }
@@ -76,6 +76,10 @@ class SoloEditor extends React.Component {
     $('#aceConsole').empty(); // Clears the console
   }
   
+  handleReset() {
+    this.ace.editor.setValue(`function ${this.props.currentRoom.problem.userFn}() {\n\n}`);
+  }
+
   render() {
     return (
       <div id="editorSideSolo">
@@ -84,10 +88,11 @@ class SoloEditor extends React.Component {
             mode="javascript"
             theme="monokai"
             onChange={this.liveInputs}
-            style={{ height: '400px', width: '50vw' }}
+            style={{ height: '400px', width: '50vw', fontSize: '13px' }}
             ref={instance => { this.ace = instance; }} // Let's put things into scope
           />
         <button className="btn submitButton" onClick={this.handleSubmit}> SUBMIT </button> 
+        <button className="btn resetButton" onClick={this.handleReset}> RESET </button>
         <button className="btn consoleHeader" color="secondary" size="lg" >
           <span>Console</span>
           <span className="clearConsole" onClick={this.handleClear}>X</span>

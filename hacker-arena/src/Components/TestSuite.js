@@ -1,10 +1,10 @@
 import React from 'react';
-import fire from '../Firebase/firebase';
 import '../Styles/TestSuite.css';
 
 /* Check if user is challenger or creator*/
 const TestSuite = props => {
-  let username = fire.auth().currentUser.email.split('@')[0];
+  let currentUser = props.currentUser;
+  let username = currentUser.username;
   let usernameWhoseTestsShouldBeRendered = props.partnerName || username;
   let checkMark = <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
                     <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
@@ -16,10 +16,10 @@ const TestSuite = props => {
               </svg>
     return(
       <div id="testSuite">
-        <h3 className="problemTitle"> {props.currentRoom.problem.title} </h3>
-        <h4> PROBLEM DESCRIPTION  </h4>
-        <p id="description">{props.currentRoom.problem.description}</p>
-        <h4 className="testTitle"> TESTS </h4>
+        <h1 className="problemTitle"> {props.currentRoom.problem.title} </h1>
+        <h3> PROBLEM DESCRIPTION  </h3>
+        <p className="testDescriptions" id="description">{props.currentRoom.problem.description}</p>
+        <h3 className="testTitle"> TESTS </h3>
         {(props.currentRoom.players[usernameWhoseTestsShouldBeRendered].testStatus && props.currentRoom.players[usernameWhoseTestsShouldBeRendered].testStatus.length > 1) ? 
           (<div className="testHolder">{props.currentRoom.players[usernameWhoseTestsShouldBeRendered].testStatus.map((tests, i) => {
             let passing = "PASSED!"
@@ -31,7 +31,7 @@ const TestSuite = props => {
               <span className="failure">{xMark}{passing} </span>
               : <span className="success">{checkMark} {passing} </span>
               }
-              <span>{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
+              <span className="testDescriptions" >{` Inputs: "${tests.inputs}" Expected: "${tests.expected}" Actual: "${tests.actual}"`}</span>
             </div>
           })}</div>) : null
           }

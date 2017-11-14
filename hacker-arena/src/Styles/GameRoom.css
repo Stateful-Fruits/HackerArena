@@ -30,7 +30,7 @@
 }
 
 .progress-bar-success {
-  background-color: rgb(64, 91, 198);
+  background-color: rgb(64, 91, 198) !important;
 }
 
 .progress-bar-warning {
@@ -44,4 +44,16 @@
 .thebars {
   clear:both;
   display:flex;
+}
+
+.controlSystem {
+  width: 25%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 250px;
+}
+
+.playView {
+  height: 800px
 }

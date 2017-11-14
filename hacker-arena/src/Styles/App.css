@@ -7,9 +7,16 @@ input {
 }
 .App-header {
   background-color: #222;
-  height: 100px;
+  height: 120px;
   padding: 7px 0px 10px 0px;
   color: white;
+}
+
+.fullLogo {
+  position: relative;
+  width: 400px;
+  height: auto;
+  top: -45px;
 }
 
 .App-title {
@@ -61,6 +68,14 @@ input {
   background-position: center center;
 }
 
+.corner-profile-pic2 {
+  height: 80px;
+  width: 80px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+  background-size: cover;
+  background-position: center center;
+}
+
 .navbar {
   position: sticky !important;
   top: 0;
@@ -71,10 +86,10 @@ input {
 }
 
 .navbarLogo {
-  left: 10px;
+  left: 19px;
   position: absolute;
   display: none;
-  font-size: 21px !important;
+  top: -10px;
 }
 
 .navbarProfile {
@@ -83,6 +98,11 @@ input {
   position: absolute;
   right: 10px;
   font-size: 18px !important;
+}
+
+.navbarProfile:hover {
+  color: #b24411;
+  text-decoration: none;
 }
 
 .navbar-brand {
@@ -105,7 +125,7 @@ input {
   border-bottom: 2px solid #b24411;
 }
 
-.active {
+.navbar-nav > .active {
   color: #b24411 !important;
 
   /* text-shadow: 1px 1px 2px rgba(178, 17, 17, 1), 0 0 25px rgba(178, 17, 17, 1), 0 0 5px rgba(178, 17, 17, 1); */
@@ -159,4 +179,15 @@ input {
   font-size: 90px;
   height: 500px;
   color: pink;
+}
+
+.HAlogo {
+  width: 75px;
+  height: 72px;
+}
+.HAlogo:hover {
+  cursor: pointer;
+}
+body{
+  overflow-x:hidden;
 }

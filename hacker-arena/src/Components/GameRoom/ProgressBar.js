@@ -12,8 +12,8 @@ class ProgressBar extends Component {
   }
 
   componentWillUpdate() {
-    let { room, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, roomId, currentUser } = this.props;
+    let username = currentUser.username;
 
     let isSpectator = !(Object.keys(room.players).includes(username));
     let partnerName = getPartnerName(room, username)
@@ -38,8 +38,8 @@ class ProgressBar extends Component {
   }
 
   handleTargetChange(otherUserName) {
-    let { room, roomId } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, roomId, currentUser } = this.props;
+    let username = currentUser.username;
     let partnerName = getPartnerName(room, username);
 
     // firebase query to update this user's targetedPlayer obejct in firebase
@@ -50,8 +50,8 @@ class ProgressBar extends Component {
     let eachPlayerTestProgress = {}
     let otherUsers = [];
 
-    let { room } = this.props;
-    let username = fire.auth().currentUser.email.split('@')[0];
+    let { room, currentUser } = this.props;
+    let username = currentUser.username;
 
     let totalTests = room.problem.tests.length;
     
@@ -72,6 +72,9 @@ class ProgressBar extends Component {
       let playerProgress = room.players[playerName].testStatus ? room.players[playerName].testStatus.filter((items) => items.passed).length : 0;
       eachPlayerTestProgress[playerName] = (playerProgress / totalTests) * 100;
     }
+
+    let colors = this.props.colors;
+
     return (
       <div className="over-prog-container">
         { 
@@ -102,9 +105,9 @@ class ProgressBar extends Component {
               key={otherUserName+i}
               onClick={isSpectator ? null : () => this.handleTargetChange(otherUserName)}
             >
-              <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '20px solid red'} : {}}>
+              <div style={(!isSpectator && targetedPlayer && targetedPlayer === otherUserName) ? { border: '1px solid rgba(255, 0, 0, 0.5)', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', borderRadius: '15px', marginRight: '5%'} : {}}>
                 <span className="opponentLabels">Player: </span>
-                <span className="opponent">{otherUserName}</span>
+                <span className="opponent" style={colors ? {color: colors[i]} : {}}>{otherUserName}</span>
                 <div className="thebars">
                   <div className="progress">
                     <div 

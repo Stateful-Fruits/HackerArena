@@ -61,6 +61,6 @@ describe ('Board Game navigation should be fine', async () => {
     let url = await page.click(`#root > div > nav > ul > li:nth-child(7)`)
     //.screenshot(folder+'end.png')
     .url();
-    expect(url).toBe(`http://localhost:3000/Login`);
+    expect(url).toBe(`http://localhost:3000/`);
   },10000)
 })

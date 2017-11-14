@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 // import { List } from 'immutable';
 // import mapDispatchToProps from './actions';
 import SimpleWebRTC from 'simplewebrtc';
-import{ connect} from 'react-redux';
+// import{ connect} from 'react-redux';
 import '../../Styles/Webrtc.css';
 // import fire from '../../Firebase/firebase';
 
@@ -17,36 +17,37 @@ class Webrtc extends Component {
       paused: false
     }
   }
-   componentDidMount() {
+  
+  componentDidMount() {
     //    const{onReady} =this.props
-    const {room } = this.props;
-        const webrtc = new SimpleWebRTC({
-        localVideoEl: this.refs.local,
-        remoteVideosEl: "",
-        // remoteVideosEl: '',
-        
-        autoRequestMedia: true,
-        detectSpeakingEvents: true,
-      });
-
-    webrtc.on('videoAdded', function (video, peer) {
-      console.log('video added', peer);
-      var remotes = document.getElementById('remoteVideo');
-        if (remotes) {
-          var container = document.createElement('div');
-            container.className = 'videoContainer';
-            container.id = 'container_' + webrtc.getDomId(peer);
-            container.appendChild(video);
-
-            // suppress contextmenu
-            video.oncontextmenu = function () { return false; };
-
-            remotes.appendChild(container);
-        }
+    const { roomId } = this.props;
+    const webrtc = new SimpleWebRTC({
+      localVideoEl: this.refs.local,
+      remoteVideosEl: "",
+      // remoteVideosEl: '',
+    
+      autoRequestMedia: true,
+      detectSpeakingEvents: true,
     });
 
+    console.log('componentDidMount');
+    // webrtc.on('videoAdded', function (video, peer) {
+    //   console.log('bbbin didmount')
+    //   var remotes = document.getElementById('remoteVideo');
+    //     if (remotes) {
+    //       var container = document.createElement('div');
+    //         container.className = 'videoContainer';
+    //         container.id = 'container_' + webrtc.getDomId(peer);
+    //         container.appendChild(video);
+
+    //         // suppress contextmenu
+    //         video.oncontextmenu = function () { return false; };
+
+    //         remotes.appendChild(container);
+    //     }
+    // }); 
     webrtc.on('videoRemoved', function(video,peer) {
-      console.log('video removed', peer);
+      console.log('removed')
       // var removedVideo = document.getElementById('container_' + webrtc.getDomId(peer));
       Element.prototype.getElementById = function(id) {
         return document.getElementById(id);
@@ -56,27 +57,53 @@ class Webrtc extends Component {
         document.getElementById('remoteVideo').getElementById('container_' + webrtc.getDomId(peer)).remove();
       }
     })
+  
+    webrtc.on('videoAdded', function (video, peer) {
+      console.log('videoAdd is triggered', video, peer);
+      var remotes = document.getElementById('remoteVideo');
+        if (remotes) {
+          var container = document.createElement('div');
+            container.className = 'videoContainer';
+            container.id = 'container_' + webrtc.getDomId(peer);
+            container.appendChild(video);
+  
+            // suppress contextmenu
+            video.oncontextmenu = function () { return false; };
+  
+            remotes.appendChild(container);
+        }
+    });
+    
     //   this.webrtc = webrtc;
-      webrtc.on('readyToCall', function () {
-        // you can name it anything
-      });
-      webrtc.joinRoom(`spectator/${room.key}`);
+    webrtc.on('readyToCall', function () {
+      console.log('readytocall')
+      webrtc.joinRoom(`spectator/${roomId}`);
+      // you can name it anything
+    });
+
+    console.log('roomid in webrtc', roomId)
     this.webrtc = webrtc;
-    console.log('video object', this.refs.remote);
-    console.log('hello',room);    
-    console.log(this.webrtc)
-    }
+    console.log('webrtc', webrtc)
+  }
+  
+componentDidUpdate() {
+  console.log('Componentwillupdate called')
+  //let webrtc = this.webrtc
+}
 
 componentWillReceiveProps(nextProps) {
-console.log('video object', this.refs.remote);
 }
 
 componentWillUnmount(){
   // console.log(localMediaStream);
   // MediaStreamTrack.stop();
+ 
   this.webrtc.stopLocalVideo();
+   this.webrtc.leaveRoom() 
 }
-// shouldComponentUpdate = shouldPureComponentUpdate;
+shouldComponentUpdate(nextProps, nextState) {
+  return true;
+}
 mute(){
   if(this.state.muted){
     this.webrtc.unmute();
@@ -97,7 +124,6 @@ pause(){
       
     this.setState({paused:true});
   }
-  console.log(this.webrtc);
 }
 
 render() {

@@ -46,7 +46,7 @@ class PairGameRoom extends React.Component {
   }
 
   componentWillUpdate() {
-    let navigate = this.props.navigate;
+    // let navigate = this.props.navigate;
     // if (this.props.username 
     //   && this.props.gameRooms
     //   && this.props.gameRooms[this.props.roomId]
@@ -78,8 +78,9 @@ class PairGameRoom extends React.Component {
     if (this.props.gameRooms 
         && this.props.gameRooms[this.props.roomId] 
         && this.props.gameRooms[this.props.roomId].players
-        && this.props.gameRooms[this.props.roomId].players[this.props.username]) {
-      let { gameRooms, roomId, username } = this.props;
+        && this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) {
+      let { gameRooms, roomId, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
       let playerNames = Object.keys(room.players);
       // when you're the last player inside, leaving deletes the gameroom
@@ -118,7 +119,8 @@ class PairGameRoom extends React.Component {
     // TODO and that game room is open for you to join
     if (this.props.gameRooms && this.props.gameRooms[this.props.roomId] && this.state.allowEnter) {
       console.log('handleenter allowed')      
-      let { gameRooms, roomId, username, navigate, currentUser } = this.props;
+      let { gameRooms, roomId, navigate, currentUser } = this.props;
+      let username = currentUser.username;
       let room = gameRooms[roomId];
 
       let recentRoom = {teams: room.recentTeams}
@@ -228,7 +230,7 @@ class PairGameRoom extends React.Component {
       codeToClear,
     }
 
-    otherIdentifiers ? event.otherIdentifiers = otherIdentifiers : null;
+    if (otherIdentifiers) event.otherIdentifiers = otherIdentifiers;
 
     pendingEvents = pendingEvents.slice()
     
@@ -278,9 +280,9 @@ class PairGameRoom extends React.Component {
         || !Object.keys(this.props.gameRooms).length 
         || !this.props.gameRooms[this.props.roomId]
         || !this.props.gameRooms[this.props.roomId].players
-        || !this.props.gameRooms[this.props.roomId].players[this.props.username]) return (<GameRoomLoading />);
+        || !this.props.gameRooms[this.props.roomId].players[this.props.currentUser.username]) return (<GameRoomLoading />);
 
-    let { gameRooms, roomId, pendingEvents, updatePendingEvents } = this.props;
+    let { gameRooms, roomId, currentUser } = this.props;
     let room = gameRooms[roomId];
     let roomStatus = room.roomStatus;
     console.log('roomStatus is currently', roomStatus);
@@ -290,7 +292,7 @@ class PairGameRoom extends React.Component {
     let champions = mostTotalWins ? mostTotalWins.winners : null;
     let isPairRoom = room.isPairRoom;
 
-    let username = this.props.username;
+    let username = currentUser.username;
 
     let role = getRoleFromUsername(room, username);
     let partnerName = getPartnerName(room, username);
@@ -305,6 +307,7 @@ class PairGameRoom extends React.Component {
       partnerRole={partnerRole}
       addPendingEvent={this.addPendingEvent}
       removePendingEvent={this.removePendingEvent}
+      currentUser={currentUser}
     />
 
     let driverRoom = <DriverRoom
@@ -315,6 +318,7 @@ class PairGameRoom extends React.Component {
       partnerRole={partnerRole}
       addPendingEvent={this.addPendingEvent}
       removePendingEvent={this.removePendingEvent}
+      currentUser={currentUser}
     />
 
     if (roomStatus === 'standby' || roomStatus === 'intermission') {
@@ -327,6 +331,7 @@ class PairGameRoom extends React.Component {
             partnerName ={partnerName}
             partnerRole={partnerRole}
             teams={teams}
+            currentUser={currentUser}
           />
         </div>
       );
@@ -352,7 +357,6 @@ class PairGameRoom extends React.Component {
 
 const mapStateToProps = (state) => ({
   roomId: state.router.location.pathname.split('/')[3],
-  username: fire.auth().currentUser ? fire.auth().currentUser.email.split('@')[0] : null,
   gameRooms: state.gameRooms,
   problems: state.problems,
   pendingEvents: state.pendingEvents,

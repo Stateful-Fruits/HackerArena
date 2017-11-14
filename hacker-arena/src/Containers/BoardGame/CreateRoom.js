@@ -42,8 +42,9 @@ class CreateRoom extends React.Component {
     let minDifficulty = parseInt(sliderValues[0], 10);
     let maxDifficulty = parseInt(sliderValues[1], 10);
     let allProblems = this.props.problems;
+    let currentUser = this.props.currentUser;
+    let user = currentUser.username;
     let problems = filterProblemsByDifficulty(minDifficulty, maxDifficulty, allProblems);
-    let user = fire.auth().currentUser.email.split('@')[0];
     let whirlpools = helper.setWhirlPools(7);
     let room = {
       players: [user],
@@ -98,8 +99,11 @@ class CreateRoom extends React.Component {
   render () {
     return (
       <div>
-        <div className="slider-container">
-          <div id="slider"></div>
+        <div className='diffBarContainer'>
+          <div className='diff diffborderized diffBar'>Difficulty</div>
+          <div className="slider-container borderized diffBar">
+            <div id="slider"></div>
+          </div>
         </div>
         <button className='btn createGameButton createBoardroom' onClick={this.createRoom}><h3>Create Board Room</h3></button>
       </div>
@@ -108,7 +112,8 @@ class CreateRoom extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    problems: state.problems
+    problems: state.problems,
+    currentUser: state.currentUser
   }
 }
 
