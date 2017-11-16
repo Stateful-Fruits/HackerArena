@@ -30,17 +30,19 @@ class NavBar extends Component {
           <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Solo'); }}>
           Solo </li>
           {isAdmin ? 
+            <div>
             <li 
               className="nav-item rightNav navbar-brand" 
               onClick={ () => navigate('/AddProblem')}
             >
             Add Problem </li>
+            <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Random'); }}>
+            Random </li>
+            </div>
             :
             null
           }
           
-          <li className="nav-item rightNav navbar-brand" onClick={ () => { navigate('/Random'); }}>
-          Random </li>
           {/* <a href='/' className='leftNav nav-item navbar-brand'>Home</a>
           <a href='/About' className='leftNav nav-item navbar-brand'>About</a>
           <a href='/AddProblem' className='leftNav nav-item navbar-brand'>Add Problem</a>
