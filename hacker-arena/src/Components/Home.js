@@ -95,10 +95,11 @@ const Home = (props) => {
   </div>
 </progress>
     <div className="hero">  
-      {/* <div>
-          <h4  style={{position: 'absolute'}} > Connect and Code </h4>
-        </div> */}
       {Form}
+      {<div className="homeDescription">
+          <h3 style={{fontSize: '50px'}}> Connect and Code </h3>
+          <p style={{width: '500px'}}> Hacker Arena is an online multiplayer application where programmers can compete against others in real time to finish coding challenges. </p>
+        </div>}
     </div>
     <div className="introduction" style={{ padding: '3%' }}>
 
