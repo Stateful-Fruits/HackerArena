@@ -92,6 +92,7 @@ class SignUp extends React.Component {
                 value = {this.state.email}
                 onChange= {this.onChange}
                 type= 'email'
+                id="email"
                 name= 'email'
                 className = 'form-control'
               />
@@ -103,6 +104,7 @@ class SignUp extends React.Component {
                 onChange= {this.onChange}
                 type= 'password'
                 name= 'password'
+                id="password"
                 className = 'form-control'
               />
 

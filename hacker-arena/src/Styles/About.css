@@ -280,11 +280,11 @@ progress::-webkit-progress-value {
     color: rgba(255, 255, 255, 0.872);
     left: 50vw;
     top: 40vh;
-    text-shadow: 1px 1px 2px black;
+    text-shadow: 5px 5px 5px black, 5px 3px 5px black;
     font-size: 20px;
     font-weight: 100;
     /* border: 1px solid rgb(193, 193, 193); */
     border-radius: 30px;
     padding: 10px;
-    background: rgba(123, 45, 45, 0.721)
+    /* background: rgba(123, 45, 45, 0.721) */
 }
