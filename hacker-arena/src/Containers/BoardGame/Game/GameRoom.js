@@ -157,10 +157,10 @@ class GameRoom extends React.Component {
     if (this.props.room !== undefined) {
       let user = this.props.currentUser.username;
       let room = this.props.room;
-      room.players = room.players.filter(player => player !== user);
+      // room.players = room.players.filter(player => player !== user);
       // let boardStart = room.board[0][0];
       // boardStart[0] = boardStart[0].filter(ele => ele !== user);      
-      if (room.players.length === 0) {
+      if (room.players.length <= 1) {
         this.setState({
           canEnter : false
         });
