@@ -50,6 +50,7 @@ class NavBar extends Component {
           {
             currentUser ? (
               <li
+               id='logout'
                 className="nav-item rightNav navbar-brand"
                 onClick={
                   () =>  fire.auth().signOut().then(() => {
